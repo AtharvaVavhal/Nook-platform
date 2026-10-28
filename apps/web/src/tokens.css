@@ -1,0 +1,135 @@
+/* Canonical Nook UI tokens. Palette choice: Option A, Indigo/Violet. */
+:root {
+  color-scheme: light;
+  --color-brand-primary: #171338;
+  --color-brand-accent: #7657f6;
+  --color-brand-subtle: #f4f1ff;
+  --color-accent-text: #6e4df5;
+  --color-accent-hover: #6a48f5;
+  --color-accent-pressed: #5630f4;
+  --color-background: #f9f8fc;
+  --color-surface: #ffffff;
+  --color-surface-raised: #ffffff;
+  --color-text-primary: #26233d;
+  --color-text-secondary: #625e78;
+  --color-text-on-accent: #ffffff;
+  --color-text-on-dark: #f4f1ff;
+  --color-border-subtle: #e5e1f0;
+  --color-border-strong: #9585c2;
+  --color-focus: #7657f6;
+  --color-disabled-background: #eeeaf5;
+  --color-disabled-text: #6c677b;
+  --color-success-text: #157b55;
+  --color-success-solid: #16845b;
+  --color-success-tint: #e6f4ed;
+  --color-warning-text: #9d5e11;
+  --color-warning-solid: #a66312;
+  --color-warning-tint: #fbf0e0;
+  --color-danger-text: #b42318;
+  --color-danger-solid: #b42318;
+  --color-danger-tint: #fcebe9;
+  --color-info-text: #2361eb;
+  --color-info-solid: #2563eb;
+  --color-info-tint: #e9f0fe;
+  --color-neutral-text: #4a4560;
+  --color-neutral-solid: #4a4560;
+  --color-neutral-tint: #f1eff7;
+  --color-chart-1: #7657f6;
+  --color-chart-2: #16845b;
+  --color-chart-3: #a66312;
+  --color-chart-4: #b42318;
+  --color-chart-5: #2563eb;
+  --color-chart-grid: #e5e1f0;
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+    --color-brand-primary: #0d0a1f;
+    --color-brand-accent: #7657f6;
+    --color-brand-subtle: #221d4a;
+    --color-accent-text: #9076f8;
+    --color-accent-hover: #6a48f5;
+    --color-accent-pressed: #5630f4;
+    --color-background: #0d0a1f;
+    --color-surface: #171338;
+    --color-surface-raised: #221d4a;
+    --color-text-primary: #f4f1ff;
+    --color-text-secondary: #a9a3c4;
+    --color-text-on-accent: #ffffff;
+    --color-text-on-dark: #f4f1ff;
+    --color-border-subtle: #2e2857;
+    --color-border-strong: #6459b3;
+    --color-focus: #7657f6;
+    --color-disabled-background: #201c42;
+    --color-disabled-text: #8c86a8;
+    --color-success-text: #1ba572;
+    --color-success-solid: #157d56;
+    --color-success-tint: #102e25;
+    --color-warning-text: #cb7916;
+    --color-warning-solid: #9f5f11;
+    --color-warning-tint: #33220d;
+    --color-danger-text: #e85c52;
+    --color-danger-solid: #d3291c;
+    --color-danger-tint: #331512;
+    --color-info-text: #5888f0;
+    --color-info-solid: #2664eb;
+    --color-info-tint: #121f3d;
+    --color-neutral-text: #a9a3c4;
+    --color-neutral-solid: #6459b3;
+    --color-neutral-tint: #232046;
+    --color-chart-1: #9076f8;
+    --color-chart-2: #1ba572;
+    --color-chart-3: #cb7916;
+    --color-chart-4: #e85c52;
+    --color-chart-5: #5888f0;
+    --color-chart-grid: #2e2857;
+  }
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --color-brand-primary: #0d0a1f;
+  --color-brand-accent: #7657f6;
+  --color-brand-subtle: #221d4a;
+  --color-accent-text: #9076f8;
+  --color-accent-hover: #6a48f5;
+  --color-accent-pressed: #5630f4;
+  --color-background: #0d0a1f;
+  --color-surface: #171338;
+  --color-surface-raised: #221d4a;
+  --color-text-primary: #f4f1ff;
+  --color-text-secondary: #a9a3c4;
+  --color-text-on-accent: #ffffff;
+  --color-text-on-dark: #f4f1ff;
+  --color-border-subtle: #2e2857;
+  --color-border-strong: #6459b3;
+  --color-focus: #7657f6;
+  --color-disabled-background: #201c42;
+  --color-disabled-text: #8c86a8;
+  --color-success-text: #1ba572;
+  --color-success-solid: #157d56;
+  --color-success-tint: #102e25;
+  --color-warning-text: #cb7916;
+  --color-warning-solid: #9f5f11;
+  --color-warning-tint: #33220d;
+  --color-danger-text: #e85c52;
+  --color-danger-solid: #d3291c;
+  --color-danger-tint: #331512;
+  --color-info-text: #5888f0;
+  --color-info-solid: #2664eb;
+  --color-info-tint: #121f3d;
+  --color-neutral-text: #a9a3c4;
+  --color-neutral-solid: #6459b3;
+  --color-neutral-tint: #232046;
+  --color-chart-1: #9076f8;
+  --color-chart-2: #1ba572;
+  --color-chart-3: #cb7916;
+  --color-chart-4: #e85c52;
+  --color-chart-5: #5888f0;
+  --color-chart-grid: #2e2857;
+}

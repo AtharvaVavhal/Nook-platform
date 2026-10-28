@@ -1,0 +1,26 @@
+# Dependencies and build output
+node_modules/
+**/node_modules/
+dist/
+coverage/
+.npm/
+.vite/
+*.tsbuildinfo
+
+# Local secrets/configuration
+.env
+.env.*
+!.env.example
+**/.env
+**/.env.*
+!**/.env.example
+
+# Local database and generated files
+postgres-data/
+prisma/generated/
+.DS_Store
+*.log
+
+# Editor/OS
+.idea/
+.vscode/

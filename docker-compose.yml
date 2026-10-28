@@ -1,0 +1,20 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: nook
+      POSTGRES_PASSWORD: nook_local_only
+      POSTGRES_DB: nook_dev
+    ports:
+      - '5432:5432'
+    volumes:
+      - nook_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U nook -d nook_dev']
+      interval: 5s
+      timeout: 3s
+      retries: 15
+    restart: unless-stopped
+
+volumes:
+  nook_postgres_data:

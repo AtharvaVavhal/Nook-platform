@@ -1,0 +1,9 @@
+// Milestone 0 intentionally defines no domain models or migrations.
+// Add domain schema only after the conceptual model and affected business rules are approved.
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}

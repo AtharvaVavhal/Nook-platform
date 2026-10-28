@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24.22.1
+          cache: npm
+      - name: Install locked dependencies
+        run: npm ci
+      - name: Formatting
+        run: npm run format:check
+      - name: Lint
+        run: npm run lint
+      - name: Type-check
+        run: npm run typecheck
+      - name: Unit tests
+        run: npm test
+      - name: Build
+        run: npm run build
+      - name: Prisma schema validation
+        env:
+          DATABASE_URL: postgresql://nook:nook_local_only@localhost:5432/nook_dev?schema=public
+        run: npm run prisma:validate
+      - name: Verify Milestone 0 scope
+        run: npm run verify:m0-scope
+      - name: Baseline secret scan
+        run: npm run verify:secrets
+      - name: Dependency audit
+        run: npm audit --audit-level=high

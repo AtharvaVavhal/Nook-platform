@@ -1,0 +1,42 @@
+{
+  "name": "nook-platform",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Nook Milestone 0 scaffold — engineering foundation only",
+  "type": "module",
+  "packageManager": "npm@11.6.2",
+  "engines": {
+    "node": ">=24.22.1 <25",
+    "npm": ">=11.6.2 <12"
+  },
+  "workspaces": [
+    "apps/api",
+    "apps/web"
+  ],
+  "scripts": {
+    "dev:api": "npm run dev --workspace @nook/api",
+    "dev:web": "npm run dev --workspace @nook/web",
+    "build": "npm run build --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "lint": "eslint .",
+    "format:check": "prettier --check .",
+    "format:write": "prettier --write .",
+    "test": "npm run test --workspaces --if-present",
+    "prisma:validate": "prisma validate",
+    "verify:secrets": "python3 scripts/secret_scan.py",
+    "verify:m0-scope": "python3 scripts/verify_m0_scope.py"
+  },
+  "devDependencies": {
+    "@eslint/js": "9.39.1",
+    "eslint": "9.39.1",
+    "globals": "16.5.0",
+    "prettier": "3.6.2",
+    "prisma": "7.10.1",
+    "tsx": "4.20.6",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.46.2"
+  },
+  "overrides": {
+    "multer": "2.5.0"
+  }
+}
