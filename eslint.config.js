@@ -13,6 +13,11 @@ export default [
     languageOptions: { globals: globals.node },
   },
   {
+    // Browser globals are used inside page.evaluate callbacks that run in Chromium.
+    files: ['scripts/verify_property_ui.js'],
+    languageOptions: { globals: { ...globals.node, ...globals.browser } },
+  },
+  {
     files: ['apps/web/**/*.{ts,tsx}'],
     languageOptions: { globals: globals.browser },
   },
