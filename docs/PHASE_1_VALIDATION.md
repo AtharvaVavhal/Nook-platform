@@ -2,7 +2,7 @@
 
 Phase 1 is a **frontend-only demonstration**. Nothing here is connected to an API, database or resident record.
 
-**Recommendation: ACCEPT WITH DOCUMENTED LIMITATIONS** (2026-10-28). The Phase 1 UI passed the browser checks listed below in Chrome only. The product slice is accepted for demonstration use; the platform is **not** release-ready because of the unresolved Multer advisory and the unverified PostgreSQL/CI runtime (see "Unresolved blockers").
+**Recommendation: ACCEPT WITH DOCUMENTED LIMITATIONS** (2026-10-28). The Phase 1 UI passed the browser checks listed below in Chrome only. The product slice is accepted for demonstration use. The Multer advisory was subsequently fixed (see "Security fix"); the platform is still **not** release-ready because PostgreSQL, the API beyond a health-route boot check, and hosted CI remain unverified (see "Unresolved blockers").
 
 ## What exists
 
@@ -74,10 +74,26 @@ The `marketing/` directory is not part of Phase 1 and was left untouched. The re
 
 ## Unresolved blockers
 
-- **Multer advisory GHSA-q7qp-rjg7-q26m is NOT resolved.** Evidence: `package-lock.json` and installed `node_modules/multer` are both **2.4.0**; the root `overrides` entry (`2.5.0`) is not applied; `npm ls multer` shows `@nestjs/platform-express@12.2.0 -> multer@2.4.0`. A live `npm audit` (registry reachable on 2026-10-28) reports **2 high-severity findings** (multer and `@nestjs/platform-express`). `npm audit --offline` printing "0 vulnerabilities" is not evidence of safety. Read-only `npm view` shows `@nestjs/platform-express@12.3.2` depends on `multer 2.5.0` and accepts `@nestjs/core`/`common` `^12.0.0`, so pinning it in `apps/api/package.json` is a candidate fix. Applying it is a dependency change that needs owner approval and a reinstall/test, so it was **not** made, and `npm audit fix --force` was not used.
+- **Multer advisory GHSA-q7qp-rjg7-q26m: fixed in the dependency tree, 2026-10-28.** See "Security fix" below. At the time of the Phase 1 browser QA it was open (installed multer 2.4.0, 2 high-severity findings in a live `npm audit`); that state is why the Phase 1 commit message records it as open.
 - The registry was reachable during this run, unlike the Milestone 0 report. The registry connectivity problem is therefore not currently reproducing, but earlier results in `MILESTONE_0_VALIDATION.md` have not been re-derived.
 - PostgreSQL runtime, the API, and hosted CI remain unverified.
-- Git: a local repo with one commit exists (no `.git` in the M0 report). Phase 1 changes are **uncommitted**; nothing has been pushed and no remote is configured by this phase.
+- Git: a local repo exists (no `.git` in the M0 report). Phase 1 and the Multer fix are committed locally as two separate commits; nothing has been pushed. A GitHub remote `origin` (`AtharvaVavhal/Nook-platform`) is configured and local `main` is ahead of `origin/main` by those two commits. An earlier draft of this report incorrectly said no remote existed.
+
+## Security fix: Multer GHSA-q7qp-rjg7-q26m (2026-10-28)
+
+Change: `@nestjs/common`, `@nestjs/core` and `@nestjs/platform-express` aligned from `12.2.0` to `12.3.2` (exact pins) in `apps/api/package.json`, applied with `npm install -w @nook/api --save-exact ...`. `package-lock.json` was written by npm, not edited by hand. `npm audit fix --force` was not used.
+
+Compatibility basis: only `multer` (2.4.0 to 2.5.0) differs in `platform-express` dependencies; `@nestjs/common` moves `file-type` 22.1.1 to 22.2.0 (and its transitive `@tokenizer/inflate` 0.4.1 to 0.5.2); `@nestjs/core` dependencies are unchanged. NestJS 12.3.0 release notes list bug fixes, including Express adapter error mapping, plus an opt-in native `platform-node` adapter that this project does not use. Tag comparison 12.3.0 to 12.3.2 touches only `platform-node`, dependency patch updates and release metadata. The API source contains no file uploads, interceptors or direct `multer`/`express` imports. 12.3.x was published 2026-10-27, so it is very recent.
+
+Evidence after install:
+
+- `npm ls multer`: `@nestjs/platform-express@12.3.2 -> multer@2.5.0`; installed `node_modules/multer` is `2.5.0`; lockfile entry is `2.5.0`.
+- Live `npm audit`: **0 vulnerabilities**, exit 0 (registry reachable).
+- `npm test` 0 (15 tests), `npm run typecheck` 0, `npm run build` 0, `npm run verify:secrets` 0, `npm run verify:m0-scope` 22/22, `prisma:validate` 0, scoped eslint and prettier 0, browser smoke script PASS (both result lines printed; its exit code was not captured in this shell).
+- Built API booted on 12.3.2 with placeholder config: `GET /api/v1/health` returned 200 and the Helmet headers were present; `GET /api/v1/health/database` returned 503 "degraded" because no PostgreSQL is running.
+- Repo-wide `npm run lint` and `npm run format:check` still exit 1, solely because of the untracked `marketing/instagram/nook-brand-intro/` scripts and README.
+
+Not verified: upload or multipart behaviour (none exists in the API), any database-backed route, and hosted CI. The root `overrides.multer` entry (`2.5.0`) is now redundant and was left in place. Npm also re-sorted `devDependencies` in `apps/api/package.json`; this is cosmetic.
 
 ## Git hygiene review
 
