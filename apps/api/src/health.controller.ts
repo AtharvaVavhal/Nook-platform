@@ -1,9 +1,17 @@
-import { Controller, Get, HttpCode, HttpStatus, ServiceUnavailableException } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Inject,
+  ServiceUnavailableException,
+} from '@nestjs/common';
 import { DatabaseService } from './database/database.service.js';
 
 @Controller('health')
 export class HealthController {
-  constructor(private readonly database: DatabaseService) {}
+  // Explicit @Inject: tsx does not emit decorator metadata, so implicit injection yields undefined.
+  constructor(@Inject(DatabaseService) private readonly database: DatabaseService) {}
 
   @Get()
   @HttpCode(HttpStatus.OK)
