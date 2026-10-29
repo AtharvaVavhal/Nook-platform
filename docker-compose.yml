@@ -1,12 +1,12 @@
 services:
   postgres:
-    image: postgres:17-alpine
+    image: postgres:17.11-alpine
     environment:
       POSTGRES_USER: nook
       POSTGRES_PASSWORD: nook_local_only
       POSTGRES_DB: nook_dev
     ports:
-      - '5432:5432'
+      - '127.0.0.1:5433:5432'
     volumes:
       - nook_postgres_data:/var/lib/postgresql/data
     healthcheck:
