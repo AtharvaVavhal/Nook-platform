@@ -1,0 +1,160 @@
+{
+  "_comment": "Single reviewed source of approved Phase 2 scope. Changing this file is a scope change and needs owner review. Rules S1-S14 are enforced by scripts/verify_phase_scope.py and proven by scripts/test_phase_scope.py.",
+  "version": 1,
+  "legacyGuard": {
+    "path": "scripts/verify_m0_scope.py",
+    "sha256": "90150af7abce2e3acc5632dd79a53202d5d2e474cc589aadbe33292a01fb8f04",
+    "retired": false,
+    "replacementRef": ""
+  },
+  "requiredFiles": [
+    "README.md",
+    ".env.example",
+    ".gitignore",
+    "docker-compose.yml",
+    ".github/workflows/ci.yml",
+    "apps/api/src/main.ts",
+    "apps/api/src/config.ts",
+    "apps/api/src/health.controller.ts",
+    "apps/api/src/database/database.service.ts",
+    "apps/web/src/main.tsx",
+    "apps/web/src/tokens.css",
+    "prisma/schema.prisma",
+    "docs/MILESTONE_0_SCOPE.md",
+    "scripts/secret_scan.py",
+    "scripts/verify_m0_scope.py",
+    "scripts/verify_phase_scope.py",
+    "scripts/phase_scope.json",
+    "scripts/test_phase_scope.py"
+  ],
+  "scopeDocPhrases": ["real resident data", "production deployment"],
+  "slices": {
+    "2.2": {
+      "status": "approved",
+      "approver": "AtharvaVavhal",
+      "date": "2026-10-29",
+      "ref": "docs/nook-phase-2/PHASE_2_DECISION_LOG.md#4a-second-batch-2026-10-29",
+      "description": "D-3 minimal 9-table tenant-isolated model (owner decision 2A). No layout tables.",
+      "models": [
+        "Organization",
+        "User",
+        "Membership",
+        "Session",
+        "AuditEvent",
+        "Property",
+        "Floor",
+        "Room",
+        "Bed"
+      ],
+      "enums": [
+        "OrganizationStatus",
+        "UserStatus",
+        "MembershipStatus",
+        "MembershipRole",
+        "BedOperationalStatus"
+      ],
+      "tables": [
+        "organizations",
+        "users",
+        "memberships",
+        "sessions",
+        "audit_events",
+        "properties",
+        "floors",
+        "rooms",
+        "beds"
+      ],
+      "functions": [],
+      "extensions": [],
+      "routes": []
+    }
+  },
+  "baselineRoutes": ["GET /api/v1/health", "GET /api/v1/health/database"],
+  "dependencies": {
+    "package.json": {
+      "@eslint/js": "9.39.1",
+      "eslint": "9.39.1",
+      "globals": "16.5.0",
+      "prettier": "3.6.2",
+      "prisma": "7.10.1",
+      "tsx": "4.20.6",
+      "typescript": "5.9.3",
+      "typescript-eslint": "8.46.2"
+    },
+    "apps/api/package.json": {
+      "@nestjs/common": "12.3.2",
+      "@nestjs/core": "12.3.2",
+      "@nestjs/platform-express": "12.3.2",
+      "@prisma/client": "7.10.1",
+      "@types/node": "24.10.0",
+      "@types/pg": "8.15.5",
+      "dotenv": "17.2.3",
+      "helmet": "8.1.0",
+      "pg": "8.16.3",
+      "reflect-metadata": "0.2.2",
+      "rxjs": "7.8.2",
+      "tsx": "4.20.6",
+      "typescript": "5.9.3"
+    },
+    "apps/web/package.json": {
+      "@types/react": "19.2.7",
+      "@types/react-dom": "19.2.3",
+      "@vitejs/plugin-react": "6.1.2",
+      "react": "19.3.1",
+      "react-dom": "19.3.1",
+      "tsx": "4.20.6",
+      "typescript": "5.9.3",
+      "vite": "8.3.5"
+    }
+  },
+  "approvedDependencyAdditions": [
+    {
+      "file": "apps/api/package.json",
+      "name": "@prisma/adapter-pg",
+      "version": "7.10.1",
+      "ref": "docs/nook-phase-2/PHASE_2_DECISION_LOG.md#4a-second-batch-2026-10-29"
+    }
+  ],
+  "forbiddenWords": [
+    "resident",
+    "stay",
+    "booking",
+    "hold",
+    "enquiry",
+    "charge",
+    "payment",
+    "invoice",
+    "receipt",
+    "deposit",
+    "refund",
+    "settlement",
+    "ledger",
+    "rent",
+    "fee",
+    "balance",
+    "price",
+    "amount",
+    "document",
+    "upload",
+    "kyc",
+    "aadhaar",
+    "otp",
+    "sms",
+    "whatsapp"
+  ],
+  "allowedIdentifiers": [],
+  "forbiddenDependencyPatterns": [
+    "razorpay",
+    "stripe",
+    "twilio",
+    "msg91",
+    "paytm",
+    "cashfree",
+    "paypal",
+    "plaid",
+    "braintree",
+    "sendgrid",
+    "nodemailer"
+  ],
+  "rawSqlAllowedFiles": []
+}

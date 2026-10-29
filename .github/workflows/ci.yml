@@ -21,6 +21,12 @@ jobs:
           cache: npm
       - name: Install locked dependencies
         run: npm ci
+      - name: Scope guard self-tests
+        env:
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: python3 -m unittest scripts/test_phase_scope.py scripts/test_db_guard.py
+      - name: Verify Phase 2 scope
+        run: npm run verify:scope
       - name: Formatting
         run: npm run format:check
       - name: Lint
