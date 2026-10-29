@@ -21,4 +21,10 @@ export default [
     files: ['apps/web/**/*.{ts,tsx}'],
     languageOptions: { globals: globals.browser },
   },
+  {
+    // Brand and documentation render scripts. CommonJS, run with node directly.
+    // Browser globals are used inside page.evaluate callbacks that run in Chromium.
+    files: ['marketing/**/*.cjs', 'docs/assets/**/*.cjs'],
+    languageOptions: { globals: { ...globals.node, ...globals.browser } },
+  },
 ];
