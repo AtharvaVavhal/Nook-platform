@@ -21,6 +21,7 @@ function parseHash(hash: string): { path: string; routeId: RouteId } {
   const clean = hash.replace(/^#\/?/, '').split('?')[0] || 'overview';
   const validRouteIds: RouteId[] = [
     'overview',
+    'dashboard',
     'floor-plan',
     'inventory',
     'enquiries',

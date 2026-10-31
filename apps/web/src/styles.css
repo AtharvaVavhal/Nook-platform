@@ -1628,3 +1628,56 @@ h1 {
   white-space: nowrap;
 }
 
+/* Phase C: Floor Plan List View */
+.floor-list-view {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 8px;
+  padding: 24px;
+}
+.floor-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.floor-list-header h3 {
+  margin: 0 0 4px;
+  font-size: 20px;
+  color: var(--color-text-primary);
+}
+.floor-list-header p {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: 14px;
+}
+.is-selected-row {
+  background: var(--color-brand-subtle) !important;
+}
+.maintenance-note-inline {
+  color: var(--color-warning-text);
+  font-weight: 500;
+  font-size: 13px;
+}
+
+/* Phase C: Mobile and Responsive Tweaks */
+@media (max-width: 640px) {
+  .admission-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .receipt-modal-view {
+    padding: 20px !important;
+  }
+  .state-card {
+    flex-direction: column;
+    padding: 20px;
+    gap: 16px;
+  }
+  .state-icon-wrap {
+    width: 44px;
+    height: 44px;
+  }
+}
+

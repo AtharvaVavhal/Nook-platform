@@ -2,6 +2,7 @@ import { PERMISSIONS, type Permission } from '../auth/permissions';
 
 export type RouteId =
   | 'overview'
+  | 'dashboard'
   | 'floor-plan'
   | 'inventory'
   | 'enquiries'
@@ -29,10 +30,18 @@ export const APP_ROUTES: RouteConfig[] = [
     staffOnly: true,
   },
   {
+    id: 'dashboard',
+    path: '#/dashboard',
+    label: 'Owner dashboard',
+    iconName: 'layers',
+    requiredPermission: PERMISSIONS.FINANCE_READ,
+    staffOnly: true,
+  },
+  {
     id: 'floor-plan',
     path: '#/floor-plan',
     label: 'Interactive floor plan',
-    iconName: 'layers',
+    iconName: 'grid',
     requiredPermission: PERMISSIONS.OCCUPANCY_READ,
     staffOnly: true,
   },
