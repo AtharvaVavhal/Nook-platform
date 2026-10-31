@@ -23,6 +23,7 @@
     "format:write": "prettier --write .",
     "test": "npm run test --workspaces --if-present",
     "prisma:validate": "prisma validate",
+    "verify:migration": "python3 scripts/verify_initial_migration.py",
     "verify:secrets": "python3 scripts/secret_scan.py",
     "verify:m0-scope": "python3 scripts/verify_m0_scope.py",
     "test:scope": "python3 -m unittest scripts/test_phase_scope.py scripts/test_db_guard.py",

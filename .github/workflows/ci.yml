@@ -41,9 +41,47 @@ jobs:
         env:
           DATABASE_URL: postgresql://nook:nook_local_only@localhost:5432/nook_dev?schema=public
         run: npm run prisma:validate
-      - name: Verify Milestone 0 scope
-        run: npm run verify:m0-scope
       - name: Baseline secret scan
         run: npm run verify:secrets
       - name: Dependency audit
         run: npm audit --audit-level=high
+
+  database:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: nook_ci
+          POSTGRES_PASSWORD: nook_ci
+          POSTGRES_DB: nook_ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U nook_ci -d nook_ci"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24.22.1
+          cache: npm
+      - name: Install locked dependencies
+        run: npm ci
+      - name: Verify Phase 2 scope
+        run: npm run verify:scope
+      - name: Verify migration contents
+        run: npm run verify:migration
+      - name: Apply migrations to empty PostgreSQL
+        env:
+          DATABASE_URL: postgresql://nook_ci:nook_ci@localhost:5432/nook_ci?schema=public
+        run: npx prisma migrate deploy
+      - name: Run mandatory database integration tests
+        env:
+          DATABASE_URL: postgresql://nook_ci:nook_ci@localhost:5432/nook_ci?schema=public
+          NOOK_DATABASE_TESTS_REQUIRED: '1'
+        run: npm run test:database --workspace @nook/api

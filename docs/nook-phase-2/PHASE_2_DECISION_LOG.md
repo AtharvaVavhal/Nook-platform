@@ -158,9 +158,9 @@ Status words are used as in §4A: `APPROVED` means the owner accepted the direct
 | Awaiting live disposable PostgreSQL test | Nullable composite foreign-key behaviour and column order; creation and enforcement of the partial unique indexes; drift comparison; nine-table isolation tests; least-privilege behaviour; shared-pool use of the adapter. See [the disposable test plan](PHASE_2_SLICE_2_2_DISPOSABLE_TEST_PLAN.md)                                                                                                                                                                       |
 | Not implemented                          | Every item in production: schema, migration, generator block, `DatabaseService` change, roles script, tests, CI job, manifest and guard changes                                                                                                                                                                                                                                                                                                                             |
 
-### Not recorded as approved
+### Superseded unresolved items
 
-`Q-3` (generated client committed or built), `Q-8` (`rowVersion`, bed-reason and session CHECK constraints), `Q-9` (seed placement), `Q-10` (lint fix, README and assets, public publishing) and `N-5` (whether `A3` needs a separate `nook_dev` run) are **unresolved**. Two further items from the same review were not in the owner's list and are also unresolved: the **migration-generation method** and the **amended wording** of the plan's unverified predictions.
+The owner decisions recorded in §4C supersede the corresponding unresolved statuses below. Q-3's generator/output direction is also fixed by the approved Milestone 1 implementation instruction. Q-10 and the amended wording of the plan's unverified predictions remain outside this migration work.
 
 ### Conflicts with existing documents (recorded, not reconciled)
 
@@ -170,6 +170,22 @@ Status words are used as in §4A: `APPROVED` means the owner accepted the direct
 4. [The Slice 2.2 implementation plan](PHASE_2_SLICE_2_2_IMPLEMENTATION_PLAN.md) still grants `DELETE` on eight tables (section 7, step 6), marks `Q-1` to `Q-10` open, and states `F-2` and `F-5` more strongly than the spike results support. It is stale against this section and has not been edited.
 5. The MVP plan and the preparation plan name `prisma migrate dev --create-only` on `nook_dev`; the implementation plan names `prisma migrate diff --from-empty`. Neither is approved.
 6. Section 5 below lists `U-10`, `U-14`, `U-15`, `U-16`, `U-18` and `U-25` as `PROPOSED`. They are **partly** addressed by `Q-2`, `Q-4`, `N-1`, `Q-5` and `Q-6`; their register rows stay `PROPOSED` until annotated.
+
+## 4C. Migration decisions, 2026-10-31
+
+The owner approved the following migration design directions. These approvals authorize repository implementation only; they do not authorize Prisma client generation, SQL execution, PostgreSQL access, role provisioning, Docker operations or deployment.
+
+| Decision | Owner-approved direction |
+|---|---|
+| Q-4 | Use active-row partial unique indexes on `properties (organization_id, code)`, `floors (property_id, ordinal)`, `floors (property_id, label)`, `rooms (property_id, label)` and `beds (room_id, label)`, each with `WHERE archived_at IS NULL`. |
+| Q-4b | Use reviewed SQL-only partial indexes in Prisma migrations. Do not enable Prisma's `partialIndexes` preview feature. |
+| Q-7/N-3 | Provision roles separately from Prisma migrations. The migrator owns tables; the runtime role owns none and receives least-privilege access. Runtime audit access is `INSERT` and `SELECT` only. |
+| Q-8 | Defer `row_version` and additional `CHECK` constraints from the initial migration. |
+| Q-9 | Do not include production seed data in the initial migration. |
+| N-1 | Use revocation-only sessions; do not grant runtime `DELETE` by default. |
+| Migration generation | Use the standard reviewed Prisma migration workflow, inspect generated SQL, and append only approved SQL-only objects. |
+| N-4 | Require an empty-PostgreSQL CI migration job and mandatory database integration tests. |
+| N-5/A3 | Use explicitly documented, separately authorized disposable PostgreSQL 17 verification as the compatibility evidence route. Do not access `nook_dev` without separate authorization. |
 
 ## 5. Still `PROPOSED`, not decided by the owner
 

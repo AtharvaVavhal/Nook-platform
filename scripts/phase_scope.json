@@ -4,8 +4,8 @@
   "legacyGuard": {
     "path": "scripts/verify_m0_scope.py",
     "sha256": "90150af7abce2e3acc5632dd79a53202d5d2e474cc589aadbe33292a01fb8f04",
-    "retired": false,
-    "replacementRef": ""
+    "retired": true,
+    "replacementRef": "docs/nook-phase-2/PHASE_2_DECISION_LOG.md#4b-third-batch-2026-10-29"
   },
   "requiredFiles": [
     "README.md",

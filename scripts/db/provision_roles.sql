@@ -1,0 +1,20 @@
+-- Reviewed role-provisioning template. Execute only through a separately
+-- authorized operator procedure with credentials supplied out of band.
+-- This file intentionally contains no usernames, passwords or CREATE ROLE.
+--
+-- Required inputs supplied by the operator:
+--   <MIGRATOR_ROLE>
+--   <RUNTIME_ROLE>
+--   <DATABASE_NAME>
+--
+-- The operator procedure must:
+--   1. Create or verify the migrator role and make it own all nine tables.
+--   2. Create or verify the runtime role without granting ownership.
+--   3. Grant runtime access only to the approved application tables/operations.
+--   4. Grant runtime INSERT and SELECT on audit_events only; no UPDATE or DELETE.
+--   5. Grant no DELETE on business tables and no DELETE on sessions by default.
+--   6. Apply credentials through the secret manager or an ignored local secret.
+--   7. Fail closed if a role, database, table or privilege target is ambiguous.
+--
+-- Exact role names and the complete non-audit runtime grant matrix require
+-- separate review before this template is made executable.

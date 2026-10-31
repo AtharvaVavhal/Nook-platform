@@ -229,15 +229,15 @@ class ScopeGuardTests(unittest.TestCase):
     # S11 approval completeness
     def test_S11_blank_approver(self):
         self.manifest(lambda d: d["slices"]["2.2"].update(approver=""))
-        self.assertOnly("S11")
+        self.assertOnly("S11", "S2")
 
     def test_S11_missing_reference_file(self):
         self.manifest(lambda d: d["slices"]["2.2"].update(ref="docs/missing.md#x"))
-        self.assertOnly("S11")
+        self.assertOnly("S11", "S2")
 
     def test_S11_missing_anchor(self):
         self.manifest(lambda d: d["slices"]["2.2"].update(ref=f"{APPROVED_REF}#no-such-heading"))
-        self.assertOnly("S11")
+        self.assertOnly("S11", "S2")
 
     # S12 the guard's own tests exist for every rule
     def test_S12_missing_self_tests(self):
@@ -246,8 +246,9 @@ class ScopeGuardTests(unittest.TestCase):
 
     # S13 legacy guard integrity
     def test_S13_edited_legacy_guard(self):
+        self.manifest(lambda d: d["legacyGuard"].update(retired=False))
         self.write("scripts/verify_m0_scope.py", "\n# one extra comment\n", "a")
-        self.assertOnly("S13")
+        self.assertOnly("S13", "S14")
 
     # S14 a guard always runs in package scripts and CI
     def test_S14_ci_without_guard_step(self):
