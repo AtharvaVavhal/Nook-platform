@@ -405,7 +405,8 @@ export const ModelName = {
   Property: 'Property',
   Floor: 'Floor',
   Room: 'Room',
-  Bed: 'Bed'
+  Bed: 'Bed',
+  Resident: 'Resident'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -421,7 +422,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "organization" | "user" | "membership" | "session" | "auditEvent" | "property" | "floor" | "room" | "bed"
+    modelProps: "organization" | "user" | "membership" | "session" | "auditEvent" | "property" | "floor" | "room" | "bed" | "resident"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1091,6 +1092,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Resident: {
+      payload: Prisma.$ResidentPayload<ExtArgs>
+      fields: Prisma.ResidentFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ResidentFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResidentPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ResidentFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResidentPayload>
+        }
+        findFirst: {
+          args: Prisma.ResidentFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResidentPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ResidentFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResidentPayload>
+        }
+        findMany: {
+          args: Prisma.ResidentFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResidentPayload>[]
+        }
+        create: {
+          args: Prisma.ResidentCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResidentPayload>
+        }
+        createMany: {
+          args: Prisma.ResidentCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ResidentCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResidentPayload>[]
+        }
+        delete: {
+          args: Prisma.ResidentDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResidentPayload>
+        }
+        update: {
+          args: Prisma.ResidentUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResidentPayload>
+        }
+        deleteMany: {
+          args: Prisma.ResidentDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ResidentUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ResidentUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResidentPayload>[]
+        }
+        upsert: {
+          args: Prisma.ResidentUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResidentPayload>
+        }
+        aggregate: {
+          args: Prisma.ResidentAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateResident>
+        }
+        groupBy: {
+          args: Prisma.ResidentGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ResidentGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ResidentCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ResidentCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1257,6 +1332,30 @@ export const BedScalarFieldEnum = {
 export type BedScalarFieldEnum = (typeof BedScalarFieldEnum)[keyof typeof BedScalarFieldEnum]
 
 
+export const ResidentScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  firstName: 'firstName',
+  lastName: 'lastName',
+  dateOfBirth: 'dateOfBirth',
+  gender: 'gender',
+  phone: 'phone',
+  email: 'email',
+  address: 'address',
+  emergencyContactName: 'emergencyContactName',
+  emergencyContactPhone: 'emergencyContactPhone',
+  emergencyContactRelation: 'emergencyContactRelation',
+  documentMetadata: 'documentMetadata',
+  documentUrl: 'documentUrl',
+  documentVerificationStatus: 'documentVerificationStatus',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ResidentScalarFieldEnum = (typeof ResidentScalarFieldEnum)[keyof typeof ResidentScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1270,6 +1369,14 @@ export const JsonNullValueInput = {
 } as const
 
 export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
+
+
+export const NullableJsonNullValueInput = {
+  DbNull: DbNull,
+  JsonNull: JsonNull
+} as const
+
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
 export const QueryMode = {
@@ -1426,6 +1533,34 @@ export type EnumBedOperationalStatusFieldRefInput<$PrismaModel> = FieldRefInputT
  * Reference to a field of type 'BedOperationalStatus[]'
  */
 export type ListEnumBedOperationalStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BedOperationalStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'DocumentVerificationStatus'
+ */
+export type EnumDocumentVerificationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DocumentVerificationStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'DocumentVerificationStatus[]'
+ */
+export type ListEnumDocumentVerificationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DocumentVerificationStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'ResidentStatus'
+ */
+export type EnumResidentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ResidentStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'ResidentStatus[]'
+ */
+export type ListEnumResidentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ResidentStatus[]'>
     
 
 
@@ -1602,6 +1737,7 @@ export type GlobalOmitConfig = {
   floor?: Prisma.FloorOmit
   room?: Prisma.RoomOmit
   bed?: Prisma.BedOmit
+  resident?: Prisma.ResidentOmit
 }
 
 /* Types for Logging */

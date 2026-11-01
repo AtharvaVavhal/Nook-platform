@@ -86,3 +86,8 @@ export type Room = Prisma.RoomModel
  * 
  */
 export type Bed = Prisma.BedModel
+/**
+ * Model Resident
+ * 
+ */
+export type Resident = Prisma.ResidentModel

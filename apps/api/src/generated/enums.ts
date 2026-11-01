@@ -47,3 +47,21 @@ export const BedOperationalStatus = {
 } as const
 
 export type BedOperationalStatus = (typeof BedOperationalStatus)[keyof typeof BedOperationalStatus]
+
+
+export const ResidentStatus = {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE',
+  ARCHIVED: 'ARCHIVED'
+} as const
+
+export type ResidentStatus = (typeof ResidentStatus)[keyof typeof ResidentStatus]
+
+
+export const DocumentVerificationStatus = {
+  PENDING: 'PENDING',
+  VERIFIED: 'VERIFIED',
+  REJECTED: 'REJECTED'
+} as const
+
+export type DocumentVerificationStatus = (typeof DocumentVerificationStatus)[keyof typeof DocumentVerificationStatus]

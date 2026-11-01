@@ -59,7 +59,8 @@ export const ModelName = {
   Property: 'Property',
   Floor: 'Floor',
   Room: 'Room',
-  Bed: 'Bed'
+  Bed: 'Bed',
+  Resident: 'Resident'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -205,6 +206,30 @@ export const BedScalarFieldEnum = {
 export type BedScalarFieldEnum = (typeof BedScalarFieldEnum)[keyof typeof BedScalarFieldEnum]
 
 
+export const ResidentScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  firstName: 'firstName',
+  lastName: 'lastName',
+  dateOfBirth: 'dateOfBirth',
+  gender: 'gender',
+  phone: 'phone',
+  email: 'email',
+  address: 'address',
+  emergencyContactName: 'emergencyContactName',
+  emergencyContactPhone: 'emergencyContactPhone',
+  emergencyContactRelation: 'emergencyContactRelation',
+  documentMetadata: 'documentMetadata',
+  documentUrl: 'documentUrl',
+  documentVerificationStatus: 'documentVerificationStatus',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ResidentScalarFieldEnum = (typeof ResidentScalarFieldEnum)[keyof typeof ResidentScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -218,6 +243,14 @@ export const JsonNullValueInput = {
 } as const
 
 export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
+
+
+export const NullableJsonNullValueInput = {
+  DbNull: DbNull,
+  JsonNull: JsonNull
+} as const
+
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
 export const QueryMode = {

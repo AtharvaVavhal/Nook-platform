@@ -32,6 +32,18 @@ enum BedOperationalStatus {
   OUT_OF_SERVICE
 }
 
+enum ResidentStatus {
+  ACTIVE
+  INACTIVE
+  ARCHIVED
+}
+
+enum DocumentVerificationStatus {
+  PENDING
+  VERIFIED
+  REJECTED
+}
+
 model Organization {
   id          String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name        String
@@ -41,6 +53,7 @@ model Organization {
   memberships Membership[]
   properties  Property[]
   auditEvents AuditEvent[]
+  residents   Resident[]
 
   @@map("organizations")
 }
@@ -179,4 +192,28 @@ model Bed {
 
   @@index([roomId, propertyId, organizationId])
   @@map("beds")
+}
+
+model Resident {
+  id                     String                    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  organizationId         String                    @map("organization_id") @db.Uuid
+  firstName              String                    @map("first_name")
+  lastName               String                    @map("last_name")
+  dateOfBirth            DateTime?                 @map("date_of_birth") @db.Timestamptz(6)
+  gender                 String?
+  phone                  String?
+  email                  String?
+  address                String?
+  emergencyContactName   String?                   @map("emergency_contact_name")
+  emergencyContactPhone  String?                   @map("emergency_contact_phone")
+  emergencyContactRelation String?                @map("emergency_contact_relation")
+  documentMetadata       Json?                     @map("document_metadata") @db.JsonB
+  documentUrl            String?                   @map("document_url")
+  documentVerificationStatus DocumentVerificationStatus @default(PENDING) @map("document_verification_status")
+  status                 ResidentStatus            @default(ACTIVE)
+  createdAt              DateTime                  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt              DateTime                  @updatedAt @map("updated_at") @db.Timestamptz(6)
+  organization           Organization              @relation(fields: [organizationId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+
+  @@map("residents")
 }

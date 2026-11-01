@@ -185,6 +185,7 @@ export type OrganizationWhereInput = {
   memberships?: Prisma.MembershipListRelationFilter
   properties?: Prisma.PropertyListRelationFilter
   auditEvents?: Prisma.AuditEventListRelationFilter
+  residents?: Prisma.ResidentListRelationFilter
 }
 
 export type OrganizationOrderByWithRelationInput = {
@@ -196,6 +197,7 @@ export type OrganizationOrderByWithRelationInput = {
   memberships?: Prisma.MembershipOrderByRelationAggregateInput
   properties?: Prisma.PropertyOrderByRelationAggregateInput
   auditEvents?: Prisma.AuditEventOrderByRelationAggregateInput
+  residents?: Prisma.ResidentOrderByRelationAggregateInput
 }
 
 export type OrganizationWhereUniqueInput = Prisma.AtLeast<{
@@ -210,6 +212,7 @@ export type OrganizationWhereUniqueInput = Prisma.AtLeast<{
   memberships?: Prisma.MembershipListRelationFilter
   properties?: Prisma.PropertyListRelationFilter
   auditEvents?: Prisma.AuditEventListRelationFilter
+  residents?: Prisma.ResidentListRelationFilter
 }, "id">
 
 export type OrganizationOrderByWithAggregationInput = {
@@ -243,6 +246,7 @@ export type OrganizationCreateInput = {
   memberships?: Prisma.MembershipCreateNestedManyWithoutOrganizationInput
   properties?: Prisma.PropertyCreateNestedManyWithoutOrganizationInput
   auditEvents?: Prisma.AuditEventCreateNestedManyWithoutOrganizationInput
+  residents?: Prisma.ResidentCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateInput = {
@@ -254,6 +258,7 @@ export type OrganizationUncheckedCreateInput = {
   memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutOrganizationInput
   properties?: Prisma.PropertyUncheckedCreateNestedManyWithoutOrganizationInput
   auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  residents?: Prisma.ResidentUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUpdateInput = {
@@ -265,6 +270,7 @@ export type OrganizationUpdateInput = {
   memberships?: Prisma.MembershipUpdateManyWithoutOrganizationNestedInput
   properties?: Prisma.PropertyUpdateManyWithoutOrganizationNestedInput
   auditEvents?: Prisma.AuditEventUpdateManyWithoutOrganizationNestedInput
+  residents?: Prisma.ResidentUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateInput = {
@@ -276,6 +282,7 @@ export type OrganizationUncheckedUpdateInput = {
   memberships?: Prisma.MembershipUncheckedUpdateManyWithoutOrganizationNestedInput
   properties?: Prisma.PropertyUncheckedUpdateManyWithoutOrganizationNestedInput
   auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  residents?: Prisma.ResidentUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateManyInput = {
@@ -392,6 +399,20 @@ export type OrganizationUpdateOneRequiredWithoutPropertiesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutPropertiesInput, Prisma.OrganizationUpdateWithoutPropertiesInput>, Prisma.OrganizationUncheckedUpdateWithoutPropertiesInput>
 }
 
+export type OrganizationCreateNestedOneWithoutResidentsInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutResidentsInput, Prisma.OrganizationUncheckedCreateWithoutResidentsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutResidentsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+}
+
+export type OrganizationUpdateOneRequiredWithoutResidentsNestedInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutResidentsInput, Prisma.OrganizationUncheckedCreateWithoutResidentsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutResidentsInput
+  upsert?: Prisma.OrganizationUpsertWithoutResidentsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutResidentsInput, Prisma.OrganizationUpdateWithoutResidentsInput>, Prisma.OrganizationUncheckedUpdateWithoutResidentsInput>
+}
+
 export type OrganizationCreateWithoutMembershipsInput = {
   id?: string
   name: string
@@ -400,6 +421,7 @@ export type OrganizationCreateWithoutMembershipsInput = {
   updatedAt?: Date | string
   properties?: Prisma.PropertyCreateNestedManyWithoutOrganizationInput
   auditEvents?: Prisma.AuditEventCreateNestedManyWithoutOrganizationInput
+  residents?: Prisma.ResidentCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutMembershipsInput = {
@@ -410,6 +432,7 @@ export type OrganizationUncheckedCreateWithoutMembershipsInput = {
   updatedAt?: Date | string
   properties?: Prisma.PropertyUncheckedCreateNestedManyWithoutOrganizationInput
   auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  residents?: Prisma.ResidentUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutMembershipsInput = {
@@ -436,6 +459,7 @@ export type OrganizationUpdateWithoutMembershipsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   properties?: Prisma.PropertyUpdateManyWithoutOrganizationNestedInput
   auditEvents?: Prisma.AuditEventUpdateManyWithoutOrganizationNestedInput
+  residents?: Prisma.ResidentUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutMembershipsInput = {
@@ -446,6 +470,7 @@ export type OrganizationUncheckedUpdateWithoutMembershipsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   properties?: Prisma.PropertyUncheckedUpdateManyWithoutOrganizationNestedInput
   auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  residents?: Prisma.ResidentUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutAuditEventsInput = {
@@ -456,6 +481,7 @@ export type OrganizationCreateWithoutAuditEventsInput = {
   updatedAt?: Date | string
   memberships?: Prisma.MembershipCreateNestedManyWithoutOrganizationInput
   properties?: Prisma.PropertyCreateNestedManyWithoutOrganizationInput
+  residents?: Prisma.ResidentCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutAuditEventsInput = {
@@ -466,6 +492,7 @@ export type OrganizationUncheckedCreateWithoutAuditEventsInput = {
   updatedAt?: Date | string
   memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutOrganizationInput
   properties?: Prisma.PropertyUncheckedCreateNestedManyWithoutOrganizationInput
+  residents?: Prisma.ResidentUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutAuditEventsInput = {
@@ -492,6 +519,7 @@ export type OrganizationUpdateWithoutAuditEventsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.MembershipUpdateManyWithoutOrganizationNestedInput
   properties?: Prisma.PropertyUpdateManyWithoutOrganizationNestedInput
+  residents?: Prisma.ResidentUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutAuditEventsInput = {
@@ -502,6 +530,7 @@ export type OrganizationUncheckedUpdateWithoutAuditEventsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.MembershipUncheckedUpdateManyWithoutOrganizationNestedInput
   properties?: Prisma.PropertyUncheckedUpdateManyWithoutOrganizationNestedInput
+  residents?: Prisma.ResidentUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutPropertiesInput = {
@@ -512,6 +541,7 @@ export type OrganizationCreateWithoutPropertiesInput = {
   updatedAt?: Date | string
   memberships?: Prisma.MembershipCreateNestedManyWithoutOrganizationInput
   auditEvents?: Prisma.AuditEventCreateNestedManyWithoutOrganizationInput
+  residents?: Prisma.ResidentCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutPropertiesInput = {
@@ -522,6 +552,7 @@ export type OrganizationUncheckedCreateWithoutPropertiesInput = {
   updatedAt?: Date | string
   memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutOrganizationInput
   auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  residents?: Prisma.ResidentUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutPropertiesInput = {
@@ -548,6 +579,7 @@ export type OrganizationUpdateWithoutPropertiesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.MembershipUpdateManyWithoutOrganizationNestedInput
   auditEvents?: Prisma.AuditEventUpdateManyWithoutOrganizationNestedInput
+  residents?: Prisma.ResidentUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutPropertiesInput = {
@@ -557,6 +589,67 @@ export type OrganizationUncheckedUpdateWithoutPropertiesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.MembershipUncheckedUpdateManyWithoutOrganizationNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  residents?: Prisma.ResidentUncheckedUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationCreateWithoutResidentsInput = {
+  id?: string
+  name: string
+  status?: $Enums.OrganizationStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.MembershipCreateNestedManyWithoutOrganizationInput
+  properties?: Prisma.PropertyCreateNestedManyWithoutOrganizationInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationUncheckedCreateWithoutResidentsInput = {
+  id?: string
+  name: string
+  status?: $Enums.OrganizationStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutOrganizationInput
+  properties?: Prisma.PropertyUncheckedCreateNestedManyWithoutOrganizationInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationCreateOrConnectWithoutResidentsInput = {
+  where: Prisma.OrganizationWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutResidentsInput, Prisma.OrganizationUncheckedCreateWithoutResidentsInput>
+}
+
+export type OrganizationUpsertWithoutResidentsInput = {
+  update: Prisma.XOR<Prisma.OrganizationUpdateWithoutResidentsInput, Prisma.OrganizationUncheckedUpdateWithoutResidentsInput>
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutResidentsInput, Prisma.OrganizationUncheckedCreateWithoutResidentsInput>
+  where?: Prisma.OrganizationWhereInput
+}
+
+export type OrganizationUpdateToOneWithWhereWithoutResidentsInput = {
+  where?: Prisma.OrganizationWhereInput
+  data: Prisma.XOR<Prisma.OrganizationUpdateWithoutResidentsInput, Prisma.OrganizationUncheckedUpdateWithoutResidentsInput>
+}
+
+export type OrganizationUpdateWithoutResidentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.MembershipUpdateManyWithoutOrganizationNestedInput
+  properties?: Prisma.PropertyUpdateManyWithoutOrganizationNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationUncheckedUpdateWithoutResidentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.MembershipUncheckedUpdateManyWithoutOrganizationNestedInput
+  properties?: Prisma.PropertyUncheckedUpdateManyWithoutOrganizationNestedInput
   auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
@@ -569,12 +662,14 @@ export type OrganizationCountOutputType = {
   memberships: number
   properties: number
   auditEvents: number
+  residents: number
 }
 
 export type OrganizationCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   memberships?: boolean | OrganizationCountOutputTypeCountMembershipsArgs
   properties?: boolean | OrganizationCountOutputTypeCountPropertiesArgs
   auditEvents?: boolean | OrganizationCountOutputTypeCountAuditEventsArgs
+  residents?: boolean | OrganizationCountOutputTypeCountResidentsArgs
 }
 
 /**
@@ -608,6 +703,13 @@ export type OrganizationCountOutputTypeCountAuditEventsArgs<ExtArgs extends runt
   where?: Prisma.AuditEventWhereInput
 }
 
+/**
+ * OrganizationCountOutputType without action
+ */
+export type OrganizationCountOutputTypeCountResidentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ResidentWhereInput
+}
+
 
 export type OrganizationSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -618,6 +720,7 @@ export type OrganizationSelect<ExtArgs extends runtime.Types.Extensions.Internal
   memberships?: boolean | Prisma.Organization$membershipsArgs<ExtArgs>
   properties?: boolean | Prisma.Organization$propertiesArgs<ExtArgs>
   auditEvents?: boolean | Prisma.Organization$auditEventsArgs<ExtArgs>
+  residents?: boolean | Prisma.Organization$residentsArgs<ExtArgs>
   _count?: boolean | Prisma.OrganizationCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["organization"]>
 
@@ -650,6 +753,7 @@ export type OrganizationInclude<ExtArgs extends runtime.Types.Extensions.Interna
   memberships?: boolean | Prisma.Organization$membershipsArgs<ExtArgs>
   properties?: boolean | Prisma.Organization$propertiesArgs<ExtArgs>
   auditEvents?: boolean | Prisma.Organization$auditEventsArgs<ExtArgs>
+  residents?: boolean | Prisma.Organization$residentsArgs<ExtArgs>
   _count?: boolean | Prisma.OrganizationCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type OrganizationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -661,6 +765,7 @@ export type $OrganizationPayload<ExtArgs extends runtime.Types.Extensions.Intern
     memberships: Prisma.$MembershipPayload<ExtArgs>[]
     properties: Prisma.$PropertyPayload<ExtArgs>[]
     auditEvents: Prisma.$AuditEventPayload<ExtArgs>[]
+    residents: Prisma.$ResidentPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1065,6 +1170,7 @@ export interface Prisma__OrganizationClient<T, Null = never, ExtArgs extends run
   memberships<T extends Prisma.Organization$membershipsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$membershipsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MembershipPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   properties<T extends Prisma.Organization$propertiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$propertiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PropertyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   auditEvents<T extends Prisma.Organization$auditEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$auditEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuditEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  residents<T extends Prisma.Organization$residentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$residentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ResidentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1561,6 +1667,30 @@ export type Organization$auditEventsArgs<ExtArgs extends runtime.Types.Extension
   take?: number
   skip?: number
   distinct?: Prisma.AuditEventScalarFieldEnum | Prisma.AuditEventScalarFieldEnum[]
+}
+
+/**
+ * Organization.residents
+ */
+export type Organization$residentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Resident
+   */
+  select?: Prisma.ResidentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Resident
+   */
+  omit?: Prisma.ResidentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ResidentInclude<ExtArgs> | null
+  where?: Prisma.ResidentWhereInput
+  orderBy?: Prisma.ResidentOrderByWithRelationInput | Prisma.ResidentOrderByWithRelationInput[]
+  cursor?: Prisma.ResidentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ResidentScalarFieldEnum | Prisma.ResidentScalarFieldEnum[]
 }
 
 /**
