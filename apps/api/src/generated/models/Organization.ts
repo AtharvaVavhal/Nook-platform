@@ -188,6 +188,7 @@ export type OrganizationWhereInput = {
   residents?: Prisma.ResidentListRelationFilter
   enquiries?: Prisma.EnquiryListRelationFilter
   bookings?: Prisma.BookingListRelationFilter
+  admissions?: Prisma.AdmissionListRelationFilter
 }
 
 export type OrganizationOrderByWithRelationInput = {
@@ -202,6 +203,7 @@ export type OrganizationOrderByWithRelationInput = {
   residents?: Prisma.ResidentOrderByRelationAggregateInput
   enquiries?: Prisma.EnquiryOrderByRelationAggregateInput
   bookings?: Prisma.BookingOrderByRelationAggregateInput
+  admissions?: Prisma.AdmissionOrderByRelationAggregateInput
 }
 
 export type OrganizationWhereUniqueInput = Prisma.AtLeast<{
@@ -219,6 +221,7 @@ export type OrganizationWhereUniqueInput = Prisma.AtLeast<{
   residents?: Prisma.ResidentListRelationFilter
   enquiries?: Prisma.EnquiryListRelationFilter
   bookings?: Prisma.BookingListRelationFilter
+  admissions?: Prisma.AdmissionListRelationFilter
 }, "id">
 
 export type OrganizationOrderByWithAggregationInput = {
@@ -255,6 +258,7 @@ export type OrganizationCreateInput = {
   residents?: Prisma.ResidentCreateNestedManyWithoutOrganizationInput
   enquiries?: Prisma.EnquiryCreateNestedManyWithoutOrganizationInput
   bookings?: Prisma.BookingCreateNestedManyWithoutOrganizationInput
+  admissions?: Prisma.AdmissionCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateInput = {
@@ -269,6 +273,7 @@ export type OrganizationUncheckedCreateInput = {
   residents?: Prisma.ResidentUncheckedCreateNestedManyWithoutOrganizationInput
   enquiries?: Prisma.EnquiryUncheckedCreateNestedManyWithoutOrganizationInput
   bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutOrganizationInput
+  admissions?: Prisma.AdmissionUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUpdateInput = {
@@ -283,6 +288,7 @@ export type OrganizationUpdateInput = {
   residents?: Prisma.ResidentUpdateManyWithoutOrganizationNestedInput
   enquiries?: Prisma.EnquiryUpdateManyWithoutOrganizationNestedInput
   bookings?: Prisma.BookingUpdateManyWithoutOrganizationNestedInput
+  admissions?: Prisma.AdmissionUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateInput = {
@@ -297,6 +303,7 @@ export type OrganizationUncheckedUpdateInput = {
   residents?: Prisma.ResidentUncheckedUpdateManyWithoutOrganizationNestedInput
   enquiries?: Prisma.EnquiryUncheckedUpdateManyWithoutOrganizationNestedInput
   bookings?: Prisma.BookingUncheckedUpdateManyWithoutOrganizationNestedInput
+  admissions?: Prisma.AdmissionUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateManyInput = {
@@ -441,6 +448,20 @@ export type OrganizationUpdateOneRequiredWithoutBookingsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutBookingsInput, Prisma.OrganizationUpdateWithoutBookingsInput>, Prisma.OrganizationUncheckedUpdateWithoutBookingsInput>
 }
 
+export type OrganizationCreateNestedOneWithoutAdmissionsInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutAdmissionsInput, Prisma.OrganizationUncheckedCreateWithoutAdmissionsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutAdmissionsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+}
+
+export type OrganizationUpdateOneRequiredWithoutAdmissionsNestedInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutAdmissionsInput, Prisma.OrganizationUncheckedCreateWithoutAdmissionsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutAdmissionsInput
+  upsert?: Prisma.OrganizationUpsertWithoutAdmissionsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutAdmissionsInput, Prisma.OrganizationUpdateWithoutAdmissionsInput>, Prisma.OrganizationUncheckedUpdateWithoutAdmissionsInput>
+}
+
 export type OrganizationCreateNestedOneWithoutEnquiriesInput = {
   create?: Prisma.XOR<Prisma.OrganizationCreateWithoutEnquiriesInput, Prisma.OrganizationUncheckedCreateWithoutEnquiriesInput>
   connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutEnquiriesInput
@@ -466,6 +487,7 @@ export type OrganizationCreateWithoutMembershipsInput = {
   residents?: Prisma.ResidentCreateNestedManyWithoutOrganizationInput
   enquiries?: Prisma.EnquiryCreateNestedManyWithoutOrganizationInput
   bookings?: Prisma.BookingCreateNestedManyWithoutOrganizationInput
+  admissions?: Prisma.AdmissionCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutMembershipsInput = {
@@ -479,6 +501,7 @@ export type OrganizationUncheckedCreateWithoutMembershipsInput = {
   residents?: Prisma.ResidentUncheckedCreateNestedManyWithoutOrganizationInput
   enquiries?: Prisma.EnquiryUncheckedCreateNestedManyWithoutOrganizationInput
   bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutOrganizationInput
+  admissions?: Prisma.AdmissionUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutMembershipsInput = {
@@ -508,6 +531,7 @@ export type OrganizationUpdateWithoutMembershipsInput = {
   residents?: Prisma.ResidentUpdateManyWithoutOrganizationNestedInput
   enquiries?: Prisma.EnquiryUpdateManyWithoutOrganizationNestedInput
   bookings?: Prisma.BookingUpdateManyWithoutOrganizationNestedInput
+  admissions?: Prisma.AdmissionUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutMembershipsInput = {
@@ -521,6 +545,7 @@ export type OrganizationUncheckedUpdateWithoutMembershipsInput = {
   residents?: Prisma.ResidentUncheckedUpdateManyWithoutOrganizationNestedInput
   enquiries?: Prisma.EnquiryUncheckedUpdateManyWithoutOrganizationNestedInput
   bookings?: Prisma.BookingUncheckedUpdateManyWithoutOrganizationNestedInput
+  admissions?: Prisma.AdmissionUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutAuditEventsInput = {
@@ -534,6 +559,7 @@ export type OrganizationCreateWithoutAuditEventsInput = {
   residents?: Prisma.ResidentCreateNestedManyWithoutOrganizationInput
   enquiries?: Prisma.EnquiryCreateNestedManyWithoutOrganizationInput
   bookings?: Prisma.BookingCreateNestedManyWithoutOrganizationInput
+  admissions?: Prisma.AdmissionCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutAuditEventsInput = {
@@ -547,6 +573,7 @@ export type OrganizationUncheckedCreateWithoutAuditEventsInput = {
   residents?: Prisma.ResidentUncheckedCreateNestedManyWithoutOrganizationInput
   enquiries?: Prisma.EnquiryUncheckedCreateNestedManyWithoutOrganizationInput
   bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutOrganizationInput
+  admissions?: Prisma.AdmissionUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutAuditEventsInput = {
@@ -576,6 +603,7 @@ export type OrganizationUpdateWithoutAuditEventsInput = {
   residents?: Prisma.ResidentUpdateManyWithoutOrganizationNestedInput
   enquiries?: Prisma.EnquiryUpdateManyWithoutOrganizationNestedInput
   bookings?: Prisma.BookingUpdateManyWithoutOrganizationNestedInput
+  admissions?: Prisma.AdmissionUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutAuditEventsInput = {
@@ -589,6 +617,7 @@ export type OrganizationUncheckedUpdateWithoutAuditEventsInput = {
   residents?: Prisma.ResidentUncheckedUpdateManyWithoutOrganizationNestedInput
   enquiries?: Prisma.EnquiryUncheckedUpdateManyWithoutOrganizationNestedInput
   bookings?: Prisma.BookingUncheckedUpdateManyWithoutOrganizationNestedInput
+  admissions?: Prisma.AdmissionUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutPropertiesInput = {
@@ -602,6 +631,7 @@ export type OrganizationCreateWithoutPropertiesInput = {
   residents?: Prisma.ResidentCreateNestedManyWithoutOrganizationInput
   enquiries?: Prisma.EnquiryCreateNestedManyWithoutOrganizationInput
   bookings?: Prisma.BookingCreateNestedManyWithoutOrganizationInput
+  admissions?: Prisma.AdmissionCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutPropertiesInput = {
@@ -615,6 +645,7 @@ export type OrganizationUncheckedCreateWithoutPropertiesInput = {
   residents?: Prisma.ResidentUncheckedCreateNestedManyWithoutOrganizationInput
   enquiries?: Prisma.EnquiryUncheckedCreateNestedManyWithoutOrganizationInput
   bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutOrganizationInput
+  admissions?: Prisma.AdmissionUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutPropertiesInput = {
@@ -644,6 +675,7 @@ export type OrganizationUpdateWithoutPropertiesInput = {
   residents?: Prisma.ResidentUpdateManyWithoutOrganizationNestedInput
   enquiries?: Prisma.EnquiryUpdateManyWithoutOrganizationNestedInput
   bookings?: Prisma.BookingUpdateManyWithoutOrganizationNestedInput
+  admissions?: Prisma.AdmissionUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutPropertiesInput = {
@@ -657,6 +689,7 @@ export type OrganizationUncheckedUpdateWithoutPropertiesInput = {
   residents?: Prisma.ResidentUncheckedUpdateManyWithoutOrganizationNestedInput
   enquiries?: Prisma.EnquiryUncheckedUpdateManyWithoutOrganizationNestedInput
   bookings?: Prisma.BookingUncheckedUpdateManyWithoutOrganizationNestedInput
+  admissions?: Prisma.AdmissionUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutResidentsInput = {
@@ -670,6 +703,7 @@ export type OrganizationCreateWithoutResidentsInput = {
   auditEvents?: Prisma.AuditEventCreateNestedManyWithoutOrganizationInput
   enquiries?: Prisma.EnquiryCreateNestedManyWithoutOrganizationInput
   bookings?: Prisma.BookingCreateNestedManyWithoutOrganizationInput
+  admissions?: Prisma.AdmissionCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutResidentsInput = {
@@ -683,6 +717,7 @@ export type OrganizationUncheckedCreateWithoutResidentsInput = {
   auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutOrganizationInput
   enquiries?: Prisma.EnquiryUncheckedCreateNestedManyWithoutOrganizationInput
   bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutOrganizationInput
+  admissions?: Prisma.AdmissionUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutResidentsInput = {
@@ -712,6 +747,7 @@ export type OrganizationUpdateWithoutResidentsInput = {
   auditEvents?: Prisma.AuditEventUpdateManyWithoutOrganizationNestedInput
   enquiries?: Prisma.EnquiryUpdateManyWithoutOrganizationNestedInput
   bookings?: Prisma.BookingUpdateManyWithoutOrganizationNestedInput
+  admissions?: Prisma.AdmissionUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutResidentsInput = {
@@ -725,6 +761,7 @@ export type OrganizationUncheckedUpdateWithoutResidentsInput = {
   auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
   enquiries?: Prisma.EnquiryUncheckedUpdateManyWithoutOrganizationNestedInput
   bookings?: Prisma.BookingUncheckedUpdateManyWithoutOrganizationNestedInput
+  admissions?: Prisma.AdmissionUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutBookingsInput = {
@@ -738,6 +775,7 @@ export type OrganizationCreateWithoutBookingsInput = {
   auditEvents?: Prisma.AuditEventCreateNestedManyWithoutOrganizationInput
   residents?: Prisma.ResidentCreateNestedManyWithoutOrganizationInput
   enquiries?: Prisma.EnquiryCreateNestedManyWithoutOrganizationInput
+  admissions?: Prisma.AdmissionCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutBookingsInput = {
@@ -751,6 +789,7 @@ export type OrganizationUncheckedCreateWithoutBookingsInput = {
   auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutOrganizationInput
   residents?: Prisma.ResidentUncheckedCreateNestedManyWithoutOrganizationInput
   enquiries?: Prisma.EnquiryUncheckedCreateNestedManyWithoutOrganizationInput
+  admissions?: Prisma.AdmissionUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutBookingsInput = {
@@ -780,6 +819,7 @@ export type OrganizationUpdateWithoutBookingsInput = {
   auditEvents?: Prisma.AuditEventUpdateManyWithoutOrganizationNestedInput
   residents?: Prisma.ResidentUpdateManyWithoutOrganizationNestedInput
   enquiries?: Prisma.EnquiryUpdateManyWithoutOrganizationNestedInput
+  admissions?: Prisma.AdmissionUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutBookingsInput = {
@@ -793,6 +833,79 @@ export type OrganizationUncheckedUpdateWithoutBookingsInput = {
   auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
   residents?: Prisma.ResidentUncheckedUpdateManyWithoutOrganizationNestedInput
   enquiries?: Prisma.EnquiryUncheckedUpdateManyWithoutOrganizationNestedInput
+  admissions?: Prisma.AdmissionUncheckedUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationCreateWithoutAdmissionsInput = {
+  id?: string
+  name: string
+  status?: $Enums.OrganizationStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.MembershipCreateNestedManyWithoutOrganizationInput
+  properties?: Prisma.PropertyCreateNestedManyWithoutOrganizationInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutOrganizationInput
+  residents?: Prisma.ResidentCreateNestedManyWithoutOrganizationInput
+  enquiries?: Prisma.EnquiryCreateNestedManyWithoutOrganizationInput
+  bookings?: Prisma.BookingCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationUncheckedCreateWithoutAdmissionsInput = {
+  id?: string
+  name: string
+  status?: $Enums.OrganizationStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutOrganizationInput
+  properties?: Prisma.PropertyUncheckedCreateNestedManyWithoutOrganizationInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  residents?: Prisma.ResidentUncheckedCreateNestedManyWithoutOrganizationInput
+  enquiries?: Prisma.EnquiryUncheckedCreateNestedManyWithoutOrganizationInput
+  bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationCreateOrConnectWithoutAdmissionsInput = {
+  where: Prisma.OrganizationWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutAdmissionsInput, Prisma.OrganizationUncheckedCreateWithoutAdmissionsInput>
+}
+
+export type OrganizationUpsertWithoutAdmissionsInput = {
+  update: Prisma.XOR<Prisma.OrganizationUpdateWithoutAdmissionsInput, Prisma.OrganizationUncheckedUpdateWithoutAdmissionsInput>
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutAdmissionsInput, Prisma.OrganizationUncheckedCreateWithoutAdmissionsInput>
+  where?: Prisma.OrganizationWhereInput
+}
+
+export type OrganizationUpdateToOneWithWhereWithoutAdmissionsInput = {
+  where?: Prisma.OrganizationWhereInput
+  data: Prisma.XOR<Prisma.OrganizationUpdateWithoutAdmissionsInput, Prisma.OrganizationUncheckedUpdateWithoutAdmissionsInput>
+}
+
+export type OrganizationUpdateWithoutAdmissionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.MembershipUpdateManyWithoutOrganizationNestedInput
+  properties?: Prisma.PropertyUpdateManyWithoutOrganizationNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutOrganizationNestedInput
+  residents?: Prisma.ResidentUpdateManyWithoutOrganizationNestedInput
+  enquiries?: Prisma.EnquiryUpdateManyWithoutOrganizationNestedInput
+  bookings?: Prisma.BookingUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationUncheckedUpdateWithoutAdmissionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.MembershipUncheckedUpdateManyWithoutOrganizationNestedInput
+  properties?: Prisma.PropertyUncheckedUpdateManyWithoutOrganizationNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  residents?: Prisma.ResidentUncheckedUpdateManyWithoutOrganizationNestedInput
+  enquiries?: Prisma.EnquiryUncheckedUpdateManyWithoutOrganizationNestedInput
+  bookings?: Prisma.BookingUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutEnquiriesInput = {
@@ -806,6 +919,7 @@ export type OrganizationCreateWithoutEnquiriesInput = {
   auditEvents?: Prisma.AuditEventCreateNestedManyWithoutOrganizationInput
   residents?: Prisma.ResidentCreateNestedManyWithoutOrganizationInput
   bookings?: Prisma.BookingCreateNestedManyWithoutOrganizationInput
+  admissions?: Prisma.AdmissionCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutEnquiriesInput = {
@@ -819,6 +933,7 @@ export type OrganizationUncheckedCreateWithoutEnquiriesInput = {
   auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutOrganizationInput
   residents?: Prisma.ResidentUncheckedCreateNestedManyWithoutOrganizationInput
   bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutOrganizationInput
+  admissions?: Prisma.AdmissionUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutEnquiriesInput = {
@@ -848,6 +963,7 @@ export type OrganizationUpdateWithoutEnquiriesInput = {
   auditEvents?: Prisma.AuditEventUpdateManyWithoutOrganizationNestedInput
   residents?: Prisma.ResidentUpdateManyWithoutOrganizationNestedInput
   bookings?: Prisma.BookingUpdateManyWithoutOrganizationNestedInput
+  admissions?: Prisma.AdmissionUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutEnquiriesInput = {
@@ -861,6 +977,7 @@ export type OrganizationUncheckedUpdateWithoutEnquiriesInput = {
   auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
   residents?: Prisma.ResidentUncheckedUpdateManyWithoutOrganizationNestedInput
   bookings?: Prisma.BookingUncheckedUpdateManyWithoutOrganizationNestedInput
+  admissions?: Prisma.AdmissionUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 
@@ -875,6 +992,7 @@ export type OrganizationCountOutputType = {
   residents: number
   enquiries: number
   bookings: number
+  admissions: number
 }
 
 export type OrganizationCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -884,6 +1002,7 @@ export type OrganizationCountOutputTypeSelect<ExtArgs extends runtime.Types.Exte
   residents?: boolean | OrganizationCountOutputTypeCountResidentsArgs
   enquiries?: boolean | OrganizationCountOutputTypeCountEnquiriesArgs
   bookings?: boolean | OrganizationCountOutputTypeCountBookingsArgs
+  admissions?: boolean | OrganizationCountOutputTypeCountAdmissionsArgs
 }
 
 /**
@@ -938,6 +1057,13 @@ export type OrganizationCountOutputTypeCountBookingsArgs<ExtArgs extends runtime
   where?: Prisma.BookingWhereInput
 }
 
+/**
+ * OrganizationCountOutputType without action
+ */
+export type OrganizationCountOutputTypeCountAdmissionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AdmissionWhereInput
+}
+
 
 export type OrganizationSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -951,6 +1077,7 @@ export type OrganizationSelect<ExtArgs extends runtime.Types.Extensions.Internal
   residents?: boolean | Prisma.Organization$residentsArgs<ExtArgs>
   enquiries?: boolean | Prisma.Organization$enquiriesArgs<ExtArgs>
   bookings?: boolean | Prisma.Organization$bookingsArgs<ExtArgs>
+  admissions?: boolean | Prisma.Organization$admissionsArgs<ExtArgs>
   _count?: boolean | Prisma.OrganizationCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["organization"]>
 
@@ -986,6 +1113,7 @@ export type OrganizationInclude<ExtArgs extends runtime.Types.Extensions.Interna
   residents?: boolean | Prisma.Organization$residentsArgs<ExtArgs>
   enquiries?: boolean | Prisma.Organization$enquiriesArgs<ExtArgs>
   bookings?: boolean | Prisma.Organization$bookingsArgs<ExtArgs>
+  admissions?: boolean | Prisma.Organization$admissionsArgs<ExtArgs>
   _count?: boolean | Prisma.OrganizationCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type OrganizationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1000,6 +1128,7 @@ export type $OrganizationPayload<ExtArgs extends runtime.Types.Extensions.Intern
     residents: Prisma.$ResidentPayload<ExtArgs>[]
     enquiries: Prisma.$EnquiryPayload<ExtArgs>[]
     bookings: Prisma.$BookingPayload<ExtArgs>[]
+    admissions: Prisma.$AdmissionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1407,6 +1536,7 @@ export interface Prisma__OrganizationClient<T, Null = never, ExtArgs extends run
   residents<T extends Prisma.Organization$residentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$residentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ResidentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   enquiries<T extends Prisma.Organization$enquiriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$enquiriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EnquiryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   bookings<T extends Prisma.Organization$bookingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$bookingsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BookingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  admissions<T extends Prisma.Organization$admissionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$admissionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AdmissionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1975,6 +2105,30 @@ export type Organization$bookingsArgs<ExtArgs extends runtime.Types.Extensions.I
   take?: number
   skip?: number
   distinct?: Prisma.BookingScalarFieldEnum | Prisma.BookingScalarFieldEnum[]
+}
+
+/**
+ * Organization.admissions
+ */
+export type Organization$admissionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Admission
+   */
+  select?: Prisma.AdmissionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Admission
+   */
+  omit?: Prisma.AdmissionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AdmissionInclude<ExtArgs> | null
+  where?: Prisma.AdmissionWhereInput
+  orderBy?: Prisma.AdmissionOrderByWithRelationInput | Prisma.AdmissionOrderByWithRelationInput[]
+  cursor?: Prisma.AdmissionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AdmissionScalarFieldEnum | Prisma.AdmissionScalarFieldEnum[]
 }
 
 /**

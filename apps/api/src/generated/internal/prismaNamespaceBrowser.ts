@@ -62,6 +62,7 @@ export const ModelName = {
   Bed: 'Bed',
   Resident: 'Resident',
   Booking: 'Booking',
+  Admission: 'Admission',
   Enquiry: 'Enquiry',
   EnquiryFollowUp: 'EnquiryFollowUp'
 } as const
@@ -250,6 +251,24 @@ export const BookingScalarFieldEnum = {
 } as const
 
 export type BookingScalarFieldEnum = (typeof BookingScalarFieldEnum)[keyof typeof BookingScalarFieldEnum]
+
+
+export const AdmissionScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  bookingId: 'bookingId',
+  residentId: 'residentId',
+  bedId: 'bedId',
+  propertyId: 'propertyId',
+  roomId: 'roomId',
+  admissionDate: 'admissionDate',
+  status: 'status',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AdmissionScalarFieldEnum = (typeof AdmissionScalarFieldEnum)[keyof typeof AdmissionScalarFieldEnum]
 
 
 export const EnquiryScalarFieldEnum = {

@@ -201,6 +201,7 @@ export type PropertyWhereInput = {
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
   floors?: Prisma.FloorListRelationFilter
   enquiries?: Prisma.EnquiryListRelationFilter
+  admissions?: Prisma.AdmissionListRelationFilter
 }
 
 export type PropertyOrderByWithRelationInput = {
@@ -214,6 +215,7 @@ export type PropertyOrderByWithRelationInput = {
   organization?: Prisma.OrganizationOrderByWithRelationInput
   floors?: Prisma.FloorOrderByRelationAggregateInput
   enquiries?: Prisma.EnquiryOrderByRelationAggregateInput
+  admissions?: Prisma.AdmissionOrderByRelationAggregateInput
 }
 
 export type PropertyWhereUniqueInput = Prisma.AtLeast<{
@@ -231,6 +233,7 @@ export type PropertyWhereUniqueInput = Prisma.AtLeast<{
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
   floors?: Prisma.FloorListRelationFilter
   enquiries?: Prisma.EnquiryListRelationFilter
+  admissions?: Prisma.AdmissionListRelationFilter
 }, "id" | "id_organizationId">
 
 export type PropertyOrderByWithAggregationInput = {
@@ -269,6 +272,7 @@ export type PropertyCreateInput = {
   organization: Prisma.OrganizationCreateNestedOneWithoutPropertiesInput
   floors?: Prisma.FloorCreateNestedManyWithoutPropertyInput
   enquiries?: Prisma.EnquiryCreateNestedManyWithoutPropertyInput
+  admissions?: Prisma.AdmissionCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyUncheckedCreateInput = {
@@ -281,6 +285,7 @@ export type PropertyUncheckedCreateInput = {
   updatedAt?: Date | string
   floors?: Prisma.FloorUncheckedCreateNestedManyWithoutPropertyInput
   enquiries?: Prisma.EnquiryUncheckedCreateNestedManyWithoutPropertyInput
+  admissions?: Prisma.AdmissionUncheckedCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyUpdateInput = {
@@ -293,6 +298,7 @@ export type PropertyUpdateInput = {
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutPropertiesNestedInput
   floors?: Prisma.FloorUpdateManyWithoutPropertyNestedInput
   enquiries?: Prisma.EnquiryUpdateManyWithoutPropertyNestedInput
+  admissions?: Prisma.AdmissionUpdateManyWithoutPropertyNestedInput
 }
 
 export type PropertyUncheckedUpdateInput = {
@@ -305,6 +311,7 @@ export type PropertyUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   floors?: Prisma.FloorUncheckedUpdateManyWithoutPropertyNestedInput
   enquiries?: Prisma.EnquiryUncheckedUpdateManyWithoutPropertyNestedInput
+  admissions?: Prisma.AdmissionUncheckedUpdateManyWithoutPropertyNestedInput
 }
 
 export type PropertyCreateManyInput = {
@@ -447,6 +454,22 @@ export type PropertyUpdateOneRequiredWithoutFloorsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.PropertyUpdateToOneWithWhereWithoutFloorsInput, Prisma.PropertyUpdateWithoutFloorsInput>, Prisma.PropertyUncheckedUpdateWithoutFloorsInput>
 }
 
+export type PropertyCreateNestedOneWithoutAdmissionsInput = {
+  create?: Prisma.XOR<Prisma.PropertyCreateWithoutAdmissionsInput, Prisma.PropertyUncheckedCreateWithoutAdmissionsInput>
+  connectOrCreate?: Prisma.PropertyCreateOrConnectWithoutAdmissionsInput
+  connect?: Prisma.PropertyWhereUniqueInput
+}
+
+export type PropertyUpdateOneWithoutAdmissionsNestedInput = {
+  create?: Prisma.XOR<Prisma.PropertyCreateWithoutAdmissionsInput, Prisma.PropertyUncheckedCreateWithoutAdmissionsInput>
+  connectOrCreate?: Prisma.PropertyCreateOrConnectWithoutAdmissionsInput
+  upsert?: Prisma.PropertyUpsertWithoutAdmissionsInput
+  disconnect?: Prisma.PropertyWhereInput | boolean
+  delete?: Prisma.PropertyWhereInput | boolean
+  connect?: Prisma.PropertyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.PropertyUpdateToOneWithWhereWithoutAdmissionsInput, Prisma.PropertyUpdateWithoutAdmissionsInput>, Prisma.PropertyUncheckedUpdateWithoutAdmissionsInput>
+}
+
 export type PropertyCreateNestedOneWithoutEnquiriesInput = {
   create?: Prisma.XOR<Prisma.PropertyCreateWithoutEnquiriesInput, Prisma.PropertyUncheckedCreateWithoutEnquiriesInput>
   connectOrCreate?: Prisma.PropertyCreateOrConnectWithoutEnquiriesInput
@@ -472,6 +495,7 @@ export type PropertyCreateWithoutOrganizationInput = {
   updatedAt?: Date | string
   floors?: Prisma.FloorCreateNestedManyWithoutPropertyInput
   enquiries?: Prisma.EnquiryCreateNestedManyWithoutPropertyInput
+  admissions?: Prisma.AdmissionCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyUncheckedCreateWithoutOrganizationInput = {
@@ -483,6 +507,7 @@ export type PropertyUncheckedCreateWithoutOrganizationInput = {
   updatedAt?: Date | string
   floors?: Prisma.FloorUncheckedCreateNestedManyWithoutPropertyInput
   enquiries?: Prisma.EnquiryUncheckedCreateNestedManyWithoutPropertyInput
+  admissions?: Prisma.AdmissionUncheckedCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyCreateOrConnectWithoutOrganizationInput = {
@@ -533,6 +558,7 @@ export type PropertyCreateWithoutFloorsInput = {
   updatedAt?: Date | string
   organization: Prisma.OrganizationCreateNestedOneWithoutPropertiesInput
   enquiries?: Prisma.EnquiryCreateNestedManyWithoutPropertyInput
+  admissions?: Prisma.AdmissionCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyUncheckedCreateWithoutFloorsInput = {
@@ -544,6 +570,7 @@ export type PropertyUncheckedCreateWithoutFloorsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   enquiries?: Prisma.EnquiryUncheckedCreateNestedManyWithoutPropertyInput
+  admissions?: Prisma.AdmissionUncheckedCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyCreateOrConnectWithoutFloorsInput = {
@@ -571,6 +598,7 @@ export type PropertyUpdateWithoutFloorsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutPropertiesNestedInput
   enquiries?: Prisma.EnquiryUpdateManyWithoutPropertyNestedInput
+  admissions?: Prisma.AdmissionUpdateManyWithoutPropertyNestedInput
 }
 
 export type PropertyUncheckedUpdateWithoutFloorsInput = {
@@ -581,6 +609,71 @@ export type PropertyUncheckedUpdateWithoutFloorsInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  enquiries?: Prisma.EnquiryUncheckedUpdateManyWithoutPropertyNestedInput
+  admissions?: Prisma.AdmissionUncheckedUpdateManyWithoutPropertyNestedInput
+}
+
+export type PropertyCreateWithoutAdmissionsInput = {
+  id?: string
+  code: string
+  name: string
+  archivedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  organization: Prisma.OrganizationCreateNestedOneWithoutPropertiesInput
+  floors?: Prisma.FloorCreateNestedManyWithoutPropertyInput
+  enquiries?: Prisma.EnquiryCreateNestedManyWithoutPropertyInput
+}
+
+export type PropertyUncheckedCreateWithoutAdmissionsInput = {
+  id?: string
+  organizationId: string
+  code: string
+  name: string
+  archivedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  floors?: Prisma.FloorUncheckedCreateNestedManyWithoutPropertyInput
+  enquiries?: Prisma.EnquiryUncheckedCreateNestedManyWithoutPropertyInput
+}
+
+export type PropertyCreateOrConnectWithoutAdmissionsInput = {
+  where: Prisma.PropertyWhereUniqueInput
+  create: Prisma.XOR<Prisma.PropertyCreateWithoutAdmissionsInput, Prisma.PropertyUncheckedCreateWithoutAdmissionsInput>
+}
+
+export type PropertyUpsertWithoutAdmissionsInput = {
+  update: Prisma.XOR<Prisma.PropertyUpdateWithoutAdmissionsInput, Prisma.PropertyUncheckedUpdateWithoutAdmissionsInput>
+  create: Prisma.XOR<Prisma.PropertyCreateWithoutAdmissionsInput, Prisma.PropertyUncheckedCreateWithoutAdmissionsInput>
+  where?: Prisma.PropertyWhereInput
+}
+
+export type PropertyUpdateToOneWithWhereWithoutAdmissionsInput = {
+  where?: Prisma.PropertyWhereInput
+  data: Prisma.XOR<Prisma.PropertyUpdateWithoutAdmissionsInput, Prisma.PropertyUncheckedUpdateWithoutAdmissionsInput>
+}
+
+export type PropertyUpdateWithoutAdmissionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutPropertiesNestedInput
+  floors?: Prisma.FloorUpdateManyWithoutPropertyNestedInput
+  enquiries?: Prisma.EnquiryUpdateManyWithoutPropertyNestedInput
+}
+
+export type PropertyUncheckedUpdateWithoutAdmissionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  floors?: Prisma.FloorUncheckedUpdateManyWithoutPropertyNestedInput
   enquiries?: Prisma.EnquiryUncheckedUpdateManyWithoutPropertyNestedInput
 }
 
@@ -593,6 +686,7 @@ export type PropertyCreateWithoutEnquiriesInput = {
   updatedAt?: Date | string
   organization: Prisma.OrganizationCreateNestedOneWithoutPropertiesInput
   floors?: Prisma.FloorCreateNestedManyWithoutPropertyInput
+  admissions?: Prisma.AdmissionCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyUncheckedCreateWithoutEnquiriesInput = {
@@ -604,6 +698,7 @@ export type PropertyUncheckedCreateWithoutEnquiriesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   floors?: Prisma.FloorUncheckedCreateNestedManyWithoutPropertyInput
+  admissions?: Prisma.AdmissionUncheckedCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyCreateOrConnectWithoutEnquiriesInput = {
@@ -631,6 +726,7 @@ export type PropertyUpdateWithoutEnquiriesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutPropertiesNestedInput
   floors?: Prisma.FloorUpdateManyWithoutPropertyNestedInput
+  admissions?: Prisma.AdmissionUpdateManyWithoutPropertyNestedInput
 }
 
 export type PropertyUncheckedUpdateWithoutEnquiriesInput = {
@@ -642,6 +738,7 @@ export type PropertyUncheckedUpdateWithoutEnquiriesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   floors?: Prisma.FloorUncheckedUpdateManyWithoutPropertyNestedInput
+  admissions?: Prisma.AdmissionUncheckedUpdateManyWithoutPropertyNestedInput
 }
 
 export type PropertyCreateManyOrganizationInput = {
@@ -662,6 +759,7 @@ export type PropertyUpdateWithoutOrganizationInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   floors?: Prisma.FloorUpdateManyWithoutPropertyNestedInput
   enquiries?: Prisma.EnquiryUpdateManyWithoutPropertyNestedInput
+  admissions?: Prisma.AdmissionUpdateManyWithoutPropertyNestedInput
 }
 
 export type PropertyUncheckedUpdateWithoutOrganizationInput = {
@@ -673,6 +771,7 @@ export type PropertyUncheckedUpdateWithoutOrganizationInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   floors?: Prisma.FloorUncheckedUpdateManyWithoutPropertyNestedInput
   enquiries?: Prisma.EnquiryUncheckedUpdateManyWithoutPropertyNestedInput
+  admissions?: Prisma.AdmissionUncheckedUpdateManyWithoutPropertyNestedInput
 }
 
 export type PropertyUncheckedUpdateManyWithoutOrganizationInput = {
@@ -692,11 +791,13 @@ export type PropertyUncheckedUpdateManyWithoutOrganizationInput = {
 export type PropertyCountOutputType = {
   floors: number
   enquiries: number
+  admissions: number
 }
 
 export type PropertyCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   floors?: boolean | PropertyCountOutputTypeCountFloorsArgs
   enquiries?: boolean | PropertyCountOutputTypeCountEnquiriesArgs
+  admissions?: boolean | PropertyCountOutputTypeCountAdmissionsArgs
 }
 
 /**
@@ -723,6 +824,13 @@ export type PropertyCountOutputTypeCountEnquiriesArgs<ExtArgs extends runtime.Ty
   where?: Prisma.EnquiryWhereInput
 }
 
+/**
+ * PropertyCountOutputType without action
+ */
+export type PropertyCountOutputTypeCountAdmissionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AdmissionWhereInput
+}
+
 
 export type PropertySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -735,6 +843,7 @@ export type PropertySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   floors?: boolean | Prisma.Property$floorsArgs<ExtArgs>
   enquiries?: boolean | Prisma.Property$enquiriesArgs<ExtArgs>
+  admissions?: boolean | Prisma.Property$admissionsArgs<ExtArgs>
   _count?: boolean | Prisma.PropertyCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["property"]>
 
@@ -775,6 +884,7 @@ export type PropertyInclude<ExtArgs extends runtime.Types.Extensions.InternalArg
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   floors?: boolean | Prisma.Property$floorsArgs<ExtArgs>
   enquiries?: boolean | Prisma.Property$enquiriesArgs<ExtArgs>
+  admissions?: boolean | Prisma.Property$admissionsArgs<ExtArgs>
   _count?: boolean | Prisma.PropertyCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type PropertyIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -790,6 +900,7 @@ export type $PropertyPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     organization: Prisma.$OrganizationPayload<ExtArgs>
     floors: Prisma.$FloorPayload<ExtArgs>[]
     enquiries: Prisma.$EnquiryPayload<ExtArgs>[]
+    admissions: Prisma.$AdmissionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1196,6 +1307,7 @@ export interface Prisma__PropertyClient<T, Null = never, ExtArgs extends runtime
   organization<T extends Prisma.OrganizationDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrganizationDefaultArgs<ExtArgs>>): Prisma.Prisma__OrganizationClient<runtime.Types.Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   floors<T extends Prisma.Property$floorsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Property$floorsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FloorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   enquiries<T extends Prisma.Property$enquiriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Property$enquiriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EnquiryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  admissions<T extends Prisma.Property$admissionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Property$admissionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AdmissionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1678,6 +1790,30 @@ export type Property$enquiriesArgs<ExtArgs extends runtime.Types.Extensions.Inte
   take?: number
   skip?: number
   distinct?: Prisma.EnquiryScalarFieldEnum | Prisma.EnquiryScalarFieldEnum[]
+}
+
+/**
+ * Property.admissions
+ */
+export type Property$admissionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Admission
+   */
+  select?: Prisma.AdmissionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Admission
+   */
+  omit?: Prisma.AdmissionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AdmissionInclude<ExtArgs> | null
+  where?: Prisma.AdmissionWhereInput
+  orderBy?: Prisma.AdmissionOrderByWithRelationInput | Prisma.AdmissionOrderByWithRelationInput[]
+  cursor?: Prisma.AdmissionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AdmissionScalarFieldEnum | Prisma.AdmissionScalarFieldEnum[]
 }
 
 /**

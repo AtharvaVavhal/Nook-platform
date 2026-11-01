@@ -108,3 +108,12 @@ export const PaymentStatus = {
 } as const
 
 export type PaymentStatus = (typeof PaymentStatus)[keyof typeof PaymentStatus]
+
+
+export const AdmissionStatus = {
+  PENDING: 'PENDING',
+  ADMITTED: 'ADMITTED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type AdmissionStatus = (typeof AdmissionStatus)[keyof typeof AdmissionStatus]

@@ -1,9 +1,10 @@
-import { useReducer, useState } from 'react';
+import { useReducer, useState, useEffect } from 'react';
 import { demoFloors, demoProperty, bedStatuses, statusLabels, summarize } from './propertyDemo';
 import { floorPlanReducer, initialFloorPlanState } from './floorPlanState';
 import { Icon, PropertyIllustration } from './components/BrandIllustration';
 import { FloorPlan } from './components/FloorPlan';
 import { InventoryOverview } from './components/InventoryOverview';
+import { AdmissionList } from './components/AdmissionList';
 
 export function App() {
   const [state, dispatch] = useReducer(floorPlanReducer, initialFloorPlanState);
@@ -58,6 +59,10 @@ export function App() {
             <a className="nav-item" href="#inventory">
               <Icon name="grid" />
               Inventory overview
+            </a>
+            <a className="nav-item" href="#admissions">
+              <Icon name="layers" />
+              Admissions
             </a>
           </nav>
           <div className="planned-modules">
@@ -190,6 +195,10 @@ export function App() {
             dispatch({ type: 'floor', floorId, ...(status ? { status } : {}) })
           }
         />
+        <section id="admissions" aria-labelledby="admissions-title">
+          <h2 id="admissions-title">Admissions</h2>
+          <AdmissionList />
+        </section>
         <footer className="footer-note">
           <span>Thoughtfully organised. Simply nook.</span>
           <span>Frontend demonstration · No changes are saved</span>

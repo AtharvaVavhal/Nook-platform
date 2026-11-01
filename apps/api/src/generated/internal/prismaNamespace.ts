@@ -408,6 +408,7 @@ export const ModelName = {
   Bed: 'Bed',
   Resident: 'Resident',
   Booking: 'Booking',
+  Admission: 'Admission',
   Enquiry: 'Enquiry',
   EnquiryFollowUp: 'EnquiryFollowUp'
 } as const
@@ -425,7 +426,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "organization" | "user" | "membership" | "session" | "auditEvent" | "property" | "floor" | "room" | "bed" | "resident" | "booking" | "enquiry" | "enquiryFollowUp"
+    modelProps: "organization" | "user" | "membership" | "session" | "auditEvent" | "property" | "floor" | "room" | "bed" | "resident" | "booking" | "admission" | "enquiry" | "enquiryFollowUp"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1243,6 +1244,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Admission: {
+      payload: Prisma.$AdmissionPayload<ExtArgs>
+      fields: Prisma.AdmissionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AdmissionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdmissionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AdmissionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdmissionPayload>
+        }
+        findFirst: {
+          args: Prisma.AdmissionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdmissionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AdmissionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdmissionPayload>
+        }
+        findMany: {
+          args: Prisma.AdmissionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdmissionPayload>[]
+        }
+        create: {
+          args: Prisma.AdmissionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdmissionPayload>
+        }
+        createMany: {
+          args: Prisma.AdmissionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AdmissionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdmissionPayload>[]
+        }
+        delete: {
+          args: Prisma.AdmissionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdmissionPayload>
+        }
+        update: {
+          args: Prisma.AdmissionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdmissionPayload>
+        }
+        deleteMany: {
+          args: Prisma.AdmissionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AdmissionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AdmissionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdmissionPayload>[]
+        }
+        upsert: {
+          args: Prisma.AdmissionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdmissionPayload>
+        }
+        aggregate: {
+          args: Prisma.AdmissionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAdmission>
+        }
+        groupBy: {
+          args: Prisma.AdmissionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AdmissionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AdmissionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AdmissionCountAggregateOutputType> | number
+        }
+      }
+    }
     Enquiry: {
       payload: Prisma.$EnquiryPayload<ExtArgs>
       fields: Prisma.EnquiryFieldRefs
@@ -1600,6 +1675,24 @@ export const BookingScalarFieldEnum = {
 export type BookingScalarFieldEnum = (typeof BookingScalarFieldEnum)[keyof typeof BookingScalarFieldEnum]
 
 
+export const AdmissionScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  bookingId: 'bookingId',
+  residentId: 'residentId',
+  bedId: 'bedId',
+  propertyId: 'propertyId',
+  roomId: 'roomId',
+  admissionDate: 'admissionDate',
+  status: 'status',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AdmissionScalarFieldEnum = (typeof AdmissionScalarFieldEnum)[keyof typeof AdmissionScalarFieldEnum]
+
+
 export const EnquiryScalarFieldEnum = {
   id: 'id',
   organizationId: 'organizationId',
@@ -1888,6 +1981,20 @@ export type ListEnumPaymentStatusFieldRefInput<$PrismaModel> = FieldRefInputType
 
 
 /**
+ * Reference to a field of type 'AdmissionStatus'
+ */
+export type EnumAdmissionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AdmissionStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'AdmissionStatus[]'
+ */
+export type ListEnumAdmissionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AdmissionStatus[]'>
+    
+
+
+/**
  * Reference to a field of type 'EnquirySource'
  */
 export type EnumEnquirySourceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EnquirySource'>
@@ -2090,6 +2197,7 @@ export type GlobalOmitConfig = {
   bed?: Prisma.BedOmit
   resident?: Prisma.ResidentOmit
   booking?: Prisma.BookingOmit
+  admission?: Prisma.AdmissionOmit
   enquiry?: Prisma.EnquiryOmit
   enquiryFollowUp?: Prisma.EnquiryFollowUpOmit
 }

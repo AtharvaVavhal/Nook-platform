@@ -73,6 +73,11 @@ export type Resident = Prisma.ResidentModel
  */
 export type Booking = Prisma.BookingModel
 /**
+ * Model Admission
+ * 
+ */
+export type Admission = Prisma.AdmissionModel
+/**
  * Model Enquiry
  * 
  */

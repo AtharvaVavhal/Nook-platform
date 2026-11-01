@@ -75,6 +75,12 @@ enum PaymentStatus {
   REFUNDED
 }
 
+enum AdmissionStatus {
+  PENDING
+  ADMITTED
+  CANCELLED
+}
+
 model Organization {
   id          String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name        String
@@ -87,6 +93,7 @@ model Organization {
   residents   Resident[]
   enquiries   Enquiry[]
   bookings    Booking[]
+  admissions  Admission[]
 
   @@map("organizations")
 }
@@ -173,6 +180,7 @@ model Property {
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Restrict, onUpdate: Restrict)
   floors         Floor[]
   enquiries      Enquiry[]
+  admissions     Admission[]
 
   @@unique([id, organizationId])
   @@map("properties")
@@ -196,16 +204,17 @@ model Floor {
 }
 
 model Room {
-  id             String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  organizationId String    @map("organization_id") @db.Uuid
-  propertyId     String    @map("property_id") @db.Uuid
-  floorId        String    @map("floor_id") @db.Uuid
+  id             String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  organizationId String      @map("organization_id") @db.Uuid
+  propertyId     String      @map("property_id") @db.Uuid
+  floorId        String      @map("floor_id") @db.Uuid
   label          String
-  archivedAt     DateTime? @map("archived_at") @db.Timestamptz(6)
-  createdAt      DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt      DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
-  floor          Floor     @relation(fields: [floorId, propertyId, organizationId], references: [id, propertyId, organizationId], onDelete: Restrict, onUpdate: Restrict)
+  archivedAt     DateTime?   @map("archived_at") @db.Timestamptz(6)
+  createdAt      DateTime    @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime    @updatedAt @map("updated_at") @db.Timestamptz(6)
+  floor          Floor       @relation(fields: [floorId, propertyId, organizationId], references: [id, propertyId, organizationId], onDelete: Restrict, onUpdate: Restrict)
   beds           Bed[]
+  admissions     Admission[]
 
   @@unique([id, propertyId, organizationId])
   @@index([floorId, propertyId, organizationId])
@@ -226,6 +235,7 @@ model Bed {
   price              Decimal              @default(0) @map("price") @db.Decimal(10, 2)
   room               Room                 @relation(fields: [roomId, propertyId, organizationId], references: [id, propertyId, organizationId], onDelete: Restrict, onUpdate: Restrict)
   bookings           Booking[]
+  admissions         Admission[]
 
   @@index([roomId, propertyId, organizationId])
   @@map("beds")
@@ -253,6 +263,7 @@ model Resident {
   organization               Organization               @relation(fields: [organizationId], references: [id], onDelete: Restrict, onUpdate: Restrict)
   enquiry                    Enquiry?
   bookings                   Booking[]
+  admissions                 Admission[]
 
   @@map("residents")
 }
@@ -274,10 +285,36 @@ model Booking {
   organization Organization @relation(fields: [organizationId], references: [id], onDelete: Restrict, onUpdate: Restrict)
   resident     Resident     @relation(fields: [residentId], references: [id], onDelete: Restrict, onUpdate: Restrict)
   bed          Bed          @relation(fields: [bedId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  admission    Admission?
 
   @@index([organizationId, status])
   @@index([bedId, startDate, endDate])
   @@map("bookings")
+}
+
+model Admission {
+  id             String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  organizationId String          @map("organization_id") @db.Uuid
+  bookingId      String          @unique @map("booking_id") @db.Uuid
+  residentId     String          @map("resident_id") @db.Uuid
+  bedId          String          @map("bed_id") @db.Uuid
+  propertyId     String?         @map("property_id") @db.Uuid
+  roomId         String?         @map("room_id") @db.Uuid
+  admissionDate  DateTime        @map("admission_date") @db.Timestamptz(6)
+  status         AdmissionStatus @default(PENDING)
+  notes          String?
+  createdAt      DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime        @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  booking      Booking      @relation(fields: [bookingId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  resident     Resident     @relation(fields: [residentId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  bed          Bed          @relation(fields: [bedId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  property     Property?    @relation(fields: [propertyId], references: [id], onDelete: SetNull, onUpdate: Restrict)
+  room         Room?        @relation(fields: [roomId], references: [id], onDelete: SetNull, onUpdate: Restrict)
+
+  @@index([organizationId, status])
+  @@map("admissions")
 }
 
 model Enquiry {
