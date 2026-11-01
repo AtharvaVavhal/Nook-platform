@@ -111,3 +111,13 @@ export type Enquiry = Prisma.EnquiryModel
  * 
  */
 export type EnquiryFollowUp = Prisma.EnquiryFollowUpModel
+/**
+ * Model CheckIn
+ * 
+ */
+export type CheckIn = Prisma.CheckInModel
+/**
+ * Model CheckOut
+ * 
+ */
+export type CheckOut = Prisma.CheckOutModel

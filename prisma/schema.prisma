@@ -75,6 +75,11 @@ enum PaymentStatus {
   REFUNDED
 }
 
+enum CheckInStatus {
+  ACTIVE
+  CHECKED_OUT
+}
+
 enum AdmissionStatus {
   PENDING
   ADMITTED
@@ -94,6 +99,8 @@ model Organization {
   enquiries   Enquiry[]
   bookings    Booking[]
   admissions  Admission[]
+  checkIns    CheckIn[]
+  checkOuts   CheckOut[]
 
   @@map("organizations")
 }
@@ -236,6 +243,8 @@ model Bed {
   room               Room                 @relation(fields: [roomId, propertyId, organizationId], references: [id, propertyId, organizationId], onDelete: Restrict, onUpdate: Restrict)
   bookings           Booking[]
   admissions         Admission[]
+  checkIns           CheckIn[]
+  checkOuts          CheckOut[]
 
   @@index([roomId, propertyId, organizationId])
   @@map("beds")
@@ -264,6 +273,8 @@ model Resident {
   enquiry                    Enquiry?
   bookings                   Booking[]
   admissions                 Admission[]
+  checkIns                   CheckIn[]
+  checkOuts                  CheckOut[]
 
   @@map("residents")
 }
@@ -286,6 +297,8 @@ model Booking {
   resident     Resident     @relation(fields: [residentId], references: [id], onDelete: Restrict, onUpdate: Restrict)
   bed          Bed          @relation(fields: [bedId], references: [id], onDelete: Restrict, onUpdate: Restrict)
   admission    Admission?
+  checkIns     CheckIn[]
+  checkOuts    CheckOut[]
 
   @@index([organizationId, status])
   @@index([bedId, startDate, endDate])
@@ -312,6 +325,7 @@ model Admission {
   bed          Bed          @relation(fields: [bedId], references: [id], onDelete: Restrict, onUpdate: Restrict)
   property     Property?    @relation(fields: [propertyId], references: [id], onDelete: SetNull, onUpdate: Restrict)
   room         Room?        @relation(fields: [roomId], references: [id], onDelete: SetNull, onUpdate: Restrict)
+  checkIn      CheckIn?
 
   @@index([organizationId, status])
   @@map("admissions")
@@ -359,4 +373,51 @@ model EnquiryFollowUp {
 
   @@index([enquiryId, followUpAt])
   @@map("enquiry_follow_ups")
+}
+
+model CheckIn {
+  id             String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  organizationId String        @map("organization_id") @db.Uuid
+  admissionId    String        @unique @map("admission_id") @db.Uuid
+  residentId     String        @map("resident_id") @db.Uuid
+  bedId          String        @map("bed_id") @db.Uuid
+  bookingId      String        @map("booking_id") @db.Uuid
+  checkInAt      DateTime      @map("check_in_at") @db.Timestamptz(6)
+  status         CheckInStatus @default(ACTIVE) @map("status")
+  notes          String?
+  createdAt      DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime      @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  admission    Admission    @relation(fields: [admissionId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  resident     Resident     @relation(fields: [residentId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  bed          Bed          @relation(fields: [bedId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  booking      Booking      @relation(fields: [bookingId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  checkOut     CheckOut?
+
+  @@index([organizationId, status])
+  @@map("check_ins")
+}
+
+model CheckOut {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  organizationId String   @map("organization_id") @db.Uuid
+  checkInId      String   @unique @map("check_in_id") @db.Uuid
+  residentId     String   @map("resident_id") @db.Uuid
+  bedId          String   @map("bed_id") @db.Uuid
+  bookingId      String   @map("booking_id") @db.Uuid
+  checkOutAt     DateTime @map("check_out_at") @db.Timestamptz(6)
+  reason         String?
+  notes          String?
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  checkIn      CheckIn      @relation(fields: [checkInId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  resident     Resident     @relation(fields: [residentId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  bed          Bed          @relation(fields: [bedId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  booking      Booking      @relation(fields: [bookingId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+
+  @@index([organizationId])
+  @@map("check_outs")
 }

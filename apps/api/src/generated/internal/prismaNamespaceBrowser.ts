@@ -64,7 +64,9 @@ export const ModelName = {
   Booking: 'Booking',
   Admission: 'Admission',
   Enquiry: 'Enquiry',
-  EnquiryFollowUp: 'EnquiryFollowUp'
+  EnquiryFollowUp: 'EnquiryFollowUp',
+  CheckIn: 'CheckIn',
+  CheckOut: 'CheckOut'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -306,6 +308,40 @@ export const EnquiryFollowUpScalarFieldEnum = {
 } as const
 
 export type EnquiryFollowUpScalarFieldEnum = (typeof EnquiryFollowUpScalarFieldEnum)[keyof typeof EnquiryFollowUpScalarFieldEnum]
+
+
+export const CheckInScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  admissionId: 'admissionId',
+  residentId: 'residentId',
+  bedId: 'bedId',
+  bookingId: 'bookingId',
+  checkInAt: 'checkInAt',
+  status: 'status',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CheckInScalarFieldEnum = (typeof CheckInScalarFieldEnum)[keyof typeof CheckInScalarFieldEnum]
+
+
+export const CheckOutScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  checkInId: 'checkInId',
+  residentId: 'residentId',
+  bedId: 'bedId',
+  bookingId: 'bookingId',
+  checkOutAt: 'checkOutAt',
+  reason: 'reason',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CheckOutScalarFieldEnum = (typeof CheckOutScalarFieldEnum)[keyof typeof CheckOutScalarFieldEnum]
 
 
 export const SortOrder = {

@@ -410,7 +410,9 @@ export const ModelName = {
   Booking: 'Booking',
   Admission: 'Admission',
   Enquiry: 'Enquiry',
-  EnquiryFollowUp: 'EnquiryFollowUp'
+  EnquiryFollowUp: 'EnquiryFollowUp',
+  CheckIn: 'CheckIn',
+  CheckOut: 'CheckOut'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -426,7 +428,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "organization" | "user" | "membership" | "session" | "auditEvent" | "property" | "floor" | "room" | "bed" | "resident" | "booking" | "admission" | "enquiry" | "enquiryFollowUp"
+    modelProps: "organization" | "user" | "membership" | "session" | "auditEvent" | "property" | "floor" | "room" | "bed" | "resident" | "booking" | "admission" | "enquiry" | "enquiryFollowUp" | "checkIn" | "checkOut"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1466,6 +1468,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    CheckIn: {
+      payload: Prisma.$CheckInPayload<ExtArgs>
+      fields: Prisma.CheckInFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CheckInFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CheckInPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CheckInFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CheckInPayload>
+        }
+        findFirst: {
+          args: Prisma.CheckInFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CheckInPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CheckInFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CheckInPayload>
+        }
+        findMany: {
+          args: Prisma.CheckInFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CheckInPayload>[]
+        }
+        create: {
+          args: Prisma.CheckInCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CheckInPayload>
+        }
+        createMany: {
+          args: Prisma.CheckInCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CheckInCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CheckInPayload>[]
+        }
+        delete: {
+          args: Prisma.CheckInDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CheckInPayload>
+        }
+        update: {
+          args: Prisma.CheckInUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CheckInPayload>
+        }
+        deleteMany: {
+          args: Prisma.CheckInDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CheckInUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CheckInUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CheckInPayload>[]
+        }
+        upsert: {
+          args: Prisma.CheckInUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CheckInPayload>
+        }
+        aggregate: {
+          args: Prisma.CheckInAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCheckIn>
+        }
+        groupBy: {
+          args: Prisma.CheckInGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CheckInGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CheckInCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CheckInCountAggregateOutputType> | number
+        }
+      }
+    }
+    CheckOut: {
+      payload: Prisma.$CheckOutPayload<ExtArgs>
+      fields: Prisma.CheckOutFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CheckOutFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CheckOutPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CheckOutFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CheckOutPayload>
+        }
+        findFirst: {
+          args: Prisma.CheckOutFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CheckOutPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CheckOutFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CheckOutPayload>
+        }
+        findMany: {
+          args: Prisma.CheckOutFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CheckOutPayload>[]
+        }
+        create: {
+          args: Prisma.CheckOutCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CheckOutPayload>
+        }
+        createMany: {
+          args: Prisma.CheckOutCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CheckOutCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CheckOutPayload>[]
+        }
+        delete: {
+          args: Prisma.CheckOutDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CheckOutPayload>
+        }
+        update: {
+          args: Prisma.CheckOutUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CheckOutPayload>
+        }
+        deleteMany: {
+          args: Prisma.CheckOutDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CheckOutUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CheckOutUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CheckOutPayload>[]
+        }
+        upsert: {
+          args: Prisma.CheckOutUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CheckOutPayload>
+        }
+        aggregate: {
+          args: Prisma.CheckOutAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCheckOut>
+        }
+        groupBy: {
+          args: Prisma.CheckOutGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CheckOutGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CheckOutCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CheckOutCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1728,6 +1878,40 @@ export const EnquiryFollowUpScalarFieldEnum = {
 } as const
 
 export type EnquiryFollowUpScalarFieldEnum = (typeof EnquiryFollowUpScalarFieldEnum)[keyof typeof EnquiryFollowUpScalarFieldEnum]
+
+
+export const CheckInScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  admissionId: 'admissionId',
+  residentId: 'residentId',
+  bedId: 'bedId',
+  bookingId: 'bookingId',
+  checkInAt: 'checkInAt',
+  status: 'status',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CheckInScalarFieldEnum = (typeof CheckInScalarFieldEnum)[keyof typeof CheckInScalarFieldEnum]
+
+
+export const CheckOutScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  checkInId: 'checkInId',
+  residentId: 'residentId',
+  bedId: 'bedId',
+  bookingId: 'bookingId',
+  checkOutAt: 'checkOutAt',
+  reason: 'reason',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CheckOutScalarFieldEnum = (typeof CheckOutScalarFieldEnum)[keyof typeof CheckOutScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -2023,6 +2207,20 @@ export type ListEnumEnquiryStatusFieldRefInput<$PrismaModel> = FieldRefInputType
 
 
 /**
+ * Reference to a field of type 'CheckInStatus'
+ */
+export type EnumCheckInStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CheckInStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'CheckInStatus[]'
+ */
+export type ListEnumCheckInStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CheckInStatus[]'>
+    
+
+
+/**
  * Reference to a field of type 'Float'
  */
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -2200,6 +2398,8 @@ export type GlobalOmitConfig = {
   admission?: Prisma.AdmissionOmit
   enquiry?: Prisma.EnquiryOmit
   enquiryFollowUp?: Prisma.EnquiryFollowUpOmit
+  checkIn?: Prisma.CheckInOmit
+  checkOut?: Prisma.CheckOutOmit
 }
 
 /* Types for Logging */

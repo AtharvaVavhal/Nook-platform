@@ -8,9 +8,10 @@ import { ResidentModule } from './resident/resident.module.js';
 import { EnquiryModule } from './enquiry/enquiry.module.js';
 import { BookingModule } from './booking/booking.module.js';
 import { AdmissionModule } from './admission/admission.module.js';
+import { CheckInModule } from './checkin/checkin.module.js';
 
 @Module({
-  imports: [AuthModule, InventoryModule, ResidentModule, EnquiryModule, BookingModule, AdmissionModule],
+  imports: [AuthModule, InventoryModule, ResidentModule, EnquiryModule, BookingModule, AdmissionModule, CheckInModule],
   controllers: [HealthController],
   providers: [DatabaseService, PrismaService],
 })

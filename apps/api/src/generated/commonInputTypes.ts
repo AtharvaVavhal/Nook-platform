@@ -576,6 +576,23 @@ export type EnumEnquiryStatusWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumEnquiryStatusFilter<$PrismaModel>
 }
 
+export type EnumCheckInStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.CheckInStatus | Prisma.EnumCheckInStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.CheckInStatus[] | Prisma.ListEnumCheckInStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CheckInStatus[] | Prisma.ListEnumCheckInStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCheckInStatusFilter<$PrismaModel> | $Enums.CheckInStatus
+}
+
+export type EnumCheckInStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.CheckInStatus | Prisma.EnumCheckInStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.CheckInStatus[] | Prisma.ListEnumCheckInStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CheckInStatus[] | Prisma.ListEnumCheckInStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCheckInStatusWithAggregatesFilter<$PrismaModel> | $Enums.CheckInStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumCheckInStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumCheckInStatusFilter<$PrismaModel>
+}
+
 export type NestedUuidFilter<$PrismaModel = never> = {
   equals?: string | Prisma.StringFieldRefInput<$PrismaModel>
   in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
@@ -1091,6 +1108,23 @@ export type NestedEnumEnquiryStatusWithAggregatesFilter<$PrismaModel = never> = 
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumEnquiryStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumEnquiryStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumCheckInStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.CheckInStatus | Prisma.EnumCheckInStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.CheckInStatus[] | Prisma.ListEnumCheckInStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CheckInStatus[] | Prisma.ListEnumCheckInStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCheckInStatusFilter<$PrismaModel> | $Enums.CheckInStatus
+}
+
+export type NestedEnumCheckInStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.CheckInStatus | Prisma.EnumCheckInStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.CheckInStatus[] | Prisma.ListEnumCheckInStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CheckInStatus[] | Prisma.ListEnumCheckInStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCheckInStatusWithAggregatesFilter<$PrismaModel> | $Enums.CheckInStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumCheckInStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumCheckInStatusFilter<$PrismaModel>
 }
 
 

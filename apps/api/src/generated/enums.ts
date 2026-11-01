@@ -110,6 +110,14 @@ export const PaymentStatus = {
 export type PaymentStatus = (typeof PaymentStatus)[keyof typeof PaymentStatus]
 
 
+export const CheckInStatus = {
+  ACTIVE: 'ACTIVE',
+  CHECKED_OUT: 'CHECKED_OUT'
+} as const
+
+export type CheckInStatus = (typeof CheckInStatus)[keyof typeof CheckInStatus]
+
+
 export const AdmissionStatus = {
   PENDING: 'PENDING',
   ADMITTED: 'ADMITTED',
