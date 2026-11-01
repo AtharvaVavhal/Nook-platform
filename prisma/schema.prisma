@@ -63,6 +63,18 @@ enum EnquirySource {
   OTHER
 }
 
+enum BookingStatus {
+  CONFIRMED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  OVERDUE
+  REFUNDED
+}
+
 model Organization {
   id          String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name        String
@@ -74,22 +86,23 @@ model Organization {
   auditEvents AuditEvent[]
   residents   Resident[]
   enquiries   Enquiry[]
+  bookings    Booking[]
 
   @@map("organizations")
 }
 
 model User {
-  id              String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  loginIdentifier String       @unique @map("login_identifier")
-  passwordHash    String       @map("password_hash")
-  displayName     String       @map("display_name")
-  status          UserStatus   @default(ACTIVE)
-  lastLoginAt     DateTime?    @map("last_login_at") @db.Timestamptz(6)
-  createdAt       DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt       DateTime     @updatedAt @map("updated_at") @db.Timestamptz(6)
-  memberships     Membership[]
-  sessions        Session[]
-  auditEvents     AuditEvent[]
+  id               String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  loginIdentifier  String            @unique @map("login_identifier")
+  passwordHash     String            @map("password_hash")
+  displayName      String            @map("display_name")
+  status           UserStatus        @default(ACTIVE)
+  lastLoginAt      DateTime?         @map("last_login_at") @db.Timestamptz(6)
+  createdAt        DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime          @updatedAt @map("updated_at") @db.Timestamptz(6)
+  memberships      Membership[]
+  sessions         Session[]
+  auditEvents      AuditEvent[]
   enquiryFollowUps EnquiryFollowUp[]
 
   @@map("users")
@@ -210,59 +223,85 @@ model Bed {
   archivedAt         DateTime?            @map("archived_at") @db.Timestamptz(6)
   createdAt          DateTime             @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt          DateTime             @updatedAt @map("updated_at") @db.Timestamptz(6)
+  price              Decimal              @default(0) @map("price") @db.Decimal(10, 2)
   room               Room                 @relation(fields: [roomId, propertyId, organizationId], references: [id, propertyId, organizationId], onDelete: Restrict, onUpdate: Restrict)
+  bookings           Booking[]
 
   @@index([roomId, propertyId, organizationId])
   @@map("beds")
 }
 
 model Resident {
-  id                     String                    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  organizationId         String                    @map("organization_id") @db.Uuid
-  firstName              String                    @map("first_name")
-  lastName               String                    @map("last_name")
-  dateOfBirth            DateTime?                 @map("date_of_birth") @db.Timestamptz(6)
-  gender                 String?
-  phone                  String?
-  email                  String?
-  address                String?
-  emergencyContactName   String?                   @map("emergency_contact_name")
-  emergencyContactPhone  String?                   @map("emergency_contact_phone")
-  emergencyContactRelation String?                @map("emergency_contact_relation")
-  documentMetadata       Json?                     @map("document_metadata") @db.JsonB
-  documentUrl            String?                   @map("document_url")
+  id                         String                     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  organizationId             String                     @map("organization_id") @db.Uuid
+  firstName                  String                     @map("first_name")
+  lastName                   String                     @map("last_name")
+  dateOfBirth                DateTime?                  @map("date_of_birth") @db.Timestamptz(6)
+  gender                     String?
+  phone                      String?
+  email                      String?
+  address                    String?
+  emergencyContactName       String?                    @map("emergency_contact_name")
+  emergencyContactPhone      String?                    @map("emergency_contact_phone")
+  emergencyContactRelation   String?                    @map("emergency_contact_relation")
+  documentMetadata           Json?                      @map("document_metadata") @db.JsonB
+  documentUrl                String?                    @map("document_url")
   documentVerificationStatus DocumentVerificationStatus @default(PENDING) @map("document_verification_status")
-  status                 ResidentStatus            @default(ACTIVE)
-  createdAt              DateTime                  @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt              DateTime                  @updatedAt @map("updated_at") @db.Timestamptz(6)
-  organization           Organization              @relation(fields: [organizationId], references: [id], onDelete: Restrict, onUpdate: Restrict)
-  enquiry                Enquiry?
+  status                     ResidentStatus             @default(ACTIVE)
+  createdAt                  DateTime                   @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt                  DateTime                   @updatedAt @map("updated_at") @db.Timestamptz(6)
+  organization               Organization               @relation(fields: [organizationId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  enquiry                    Enquiry?
+  bookings                   Booking[]
 
   @@map("residents")
 }
 
+model Booking {
+  id             String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  organizationId String        @map("organization_id") @db.Uuid
+  residentId     String        @map("resident_id") @db.Uuid
+  bedId          String        @map("bed_id") @db.Uuid
+  startDate      DateTime      @map("start_date") @db.Timestamptz(6)
+  endDate        DateTime      @map("end_date") @db.Timestamptz(6)
+  status         BookingStatus @default(CONFIRMED)
+  paymentStatus  PaymentStatus @default(PENDING) @map("payment_status")
+  monthlyPrice   Decimal       @map("monthly_price") @db.Decimal(10, 2)
+  notes          String?
+  createdAt      DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime      @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  resident     Resident     @relation(fields: [residentId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  bed          Bed          @relation(fields: [bedId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+
+  @@index([organizationId, status])
+  @@index([bedId, startDate, endDate])
+  @@map("bookings")
+}
+
 model Enquiry {
-  id                     String                    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  organizationId         String                    @map("organization_id") @db.Uuid
-  propertyId             String?                   @map("property_id") @db.Uuid
-  firstName              String                    @map("first_name")
-  lastName               String                    @map("last_name")
-  phone                  String                    @map("phone")
+  id                     String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  organizationId         String            @map("organization_id") @db.Uuid
+  propertyId             String?           @map("property_id") @db.Uuid
+  firstName              String            @map("first_name")
+  lastName               String            @map("last_name")
+  phone                  String            @map("phone")
   email                  String?
-  preferredRoomType      String?                   @map("preferred_room_type")
-  expectedMoveInDate     DateTime?                 @map("expected_move_in_date") @db.Timestamptz(6)
-  expectedDurationOfStay Int?                      @map("expected_duration_of_stay")
-  numberOfOccupants      Int?                      @map("number_of_occupants")
-  source                 EnquirySource             @default(OTHER) @map("source")
+  preferredRoomType      String?           @map("preferred_room_type")
+  expectedMoveInDate     DateTime?         @map("expected_move_in_date") @db.Timestamptz(6)
+  expectedDurationOfStay Int?              @map("expected_duration_of_stay")
+  numberOfOccupants      Int?              @map("number_of_occupants")
+  source                 EnquirySource     @default(OTHER) @map("source")
   notes                  String?
-  status                 EnquiryStatus             @default(NEW) @map("status")
-  assignedUserId         String?                   @map("assigned_user_id") @db.Uuid
-  residentId             String?                   @unique @map("resident_id") @db.Uuid
-  createdAt              DateTime                  @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt              DateTime                  @updatedAt @map("updated_at") @db.Timestamptz(6)
-  organization           Organization              @relation(fields: [organizationId], references: [id], onDelete: Restrict, onUpdate: Restrict)
-  property               Property?                 @relation(fields: [propertyId], references: [id], onDelete: SetNull, onUpdate: Restrict)
-  resident               Resident?                 @relation(fields: [residentId], references: [id], onDelete: SetNull, onUpdate: Restrict)
+  status                 EnquiryStatus     @default(NEW) @map("status")
+  assignedUserId         String?           @map("assigned_user_id") @db.Uuid
+  residentId             String?           @unique @map("resident_id") @db.Uuid
+  createdAt              DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt              DateTime          @updatedAt @map("updated_at") @db.Timestamptz(6)
+  organization           Organization      @relation(fields: [organizationId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  property               Property?         @relation(fields: [propertyId], references: [id], onDelete: SetNull, onUpdate: Restrict)
+  resident               Resident?         @relation(fields: [residentId], references: [id], onDelete: SetNull, onUpdate: Restrict)
   followUps              EnquiryFollowUp[]
 
   @@index([organizationId, status])
@@ -271,15 +310,15 @@ model Enquiry {
 }
 
 model EnquiryFollowUp {
-  id          String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  enquiryId   String        @map("enquiry_id") @db.Uuid
-  userId      String        @map("user_id") @db.Uuid
-  notes       String
-  followUpAt  DateTime      @map("follow_up_at") @db.Timestamptz(6)
-  outcome     String?
-  createdAt   DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
-  enquiry     Enquiry       @relation(fields: [enquiryId], references: [id], onDelete: Cascade, onUpdate: Restrict)
-  user        User          @relation(fields: [userId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  enquiryId  String   @map("enquiry_id") @db.Uuid
+  userId     String   @map("user_id") @db.Uuid
+  notes      String
+  followUpAt DateTime @map("follow_up_at") @db.Timestamptz(6)
+  outcome    String?
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  enquiry    Enquiry  @relation(fields: [enquiryId], references: [id], onDelete: Cascade, onUpdate: Restrict)
+  user       User     @relation(fields: [userId], references: [id], onDelete: Restrict, onUpdate: Restrict)
 
   @@index([enquiryId, followUpAt])
   @@map("enquiry_follow_ups")

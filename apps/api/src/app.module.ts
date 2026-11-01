@@ -6,9 +6,10 @@ import { AuthModule } from './auth/auth.module.js';
 import { InventoryModule } from './inventory/inventory.module.js';
 import { ResidentModule } from './resident/resident.module.js';
 import { EnquiryModule } from './enquiry/enquiry.module.js';
+import { BookingModule } from './booking/booking.module.js';
 
 @Module({
-  imports: [AuthModule, InventoryModule, ResidentModule, EnquiryModule],
+  imports: [AuthModule, InventoryModule, ResidentModule, EnquiryModule, BookingModule],
   controllers: [HealthController],
   providers: [DatabaseService, PrismaService],
 })

@@ -61,6 +61,7 @@ export const ModelName = {
   Room: 'Room',
   Bed: 'Bed',
   Resident: 'Resident',
+  Booking: 'Booking',
   Enquiry: 'Enquiry',
   EnquiryFollowUp: 'EnquiryFollowUp'
 } as const
@@ -202,7 +203,8 @@ export const BedScalarFieldEnum = {
   outOfServiceReason: 'outOfServiceReason',
   archivedAt: 'archivedAt',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  price: 'price'
 } as const
 
 export type BedScalarFieldEnum = (typeof BedScalarFieldEnum)[keyof typeof BedScalarFieldEnum]
@@ -230,6 +232,24 @@ export const ResidentScalarFieldEnum = {
 } as const
 
 export type ResidentScalarFieldEnum = (typeof ResidentScalarFieldEnum)[keyof typeof ResidentScalarFieldEnum]
+
+
+export const BookingScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  residentId: 'residentId',
+  bedId: 'bedId',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  status: 'status',
+  paymentStatus: 'paymentStatus',
+  monthlyPrice: 'monthlyPrice',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BookingScalarFieldEnum = (typeof BookingScalarFieldEnum)[keyof typeof BookingScalarFieldEnum]
 
 
 export const EnquiryScalarFieldEnum = {
