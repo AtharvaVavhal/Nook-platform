@@ -406,7 +406,9 @@ export const ModelName = {
   Floor: 'Floor',
   Room: 'Room',
   Bed: 'Bed',
-  Resident: 'Resident'
+  Resident: 'Resident',
+  Enquiry: 'Enquiry',
+  EnquiryFollowUp: 'EnquiryFollowUp'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -422,7 +424,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "organization" | "user" | "membership" | "session" | "auditEvent" | "property" | "floor" | "room" | "bed" | "resident"
+    modelProps: "organization" | "user" | "membership" | "session" | "auditEvent" | "property" | "floor" | "room" | "bed" | "resident" | "enquiry" | "enquiryFollowUp"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1166,6 +1168,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Enquiry: {
+      payload: Prisma.$EnquiryPayload<ExtArgs>
+      fields: Prisma.EnquiryFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.EnquiryFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EnquiryPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.EnquiryFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EnquiryPayload>
+        }
+        findFirst: {
+          args: Prisma.EnquiryFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EnquiryPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.EnquiryFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EnquiryPayload>
+        }
+        findMany: {
+          args: Prisma.EnquiryFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EnquiryPayload>[]
+        }
+        create: {
+          args: Prisma.EnquiryCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EnquiryPayload>
+        }
+        createMany: {
+          args: Prisma.EnquiryCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.EnquiryCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EnquiryPayload>[]
+        }
+        delete: {
+          args: Prisma.EnquiryDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EnquiryPayload>
+        }
+        update: {
+          args: Prisma.EnquiryUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EnquiryPayload>
+        }
+        deleteMany: {
+          args: Prisma.EnquiryDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.EnquiryUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.EnquiryUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EnquiryPayload>[]
+        }
+        upsert: {
+          args: Prisma.EnquiryUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EnquiryPayload>
+        }
+        aggregate: {
+          args: Prisma.EnquiryAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateEnquiry>
+        }
+        groupBy: {
+          args: Prisma.EnquiryGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EnquiryGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.EnquiryCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EnquiryCountAggregateOutputType> | number
+        }
+      }
+    }
+    EnquiryFollowUp: {
+      payload: Prisma.$EnquiryFollowUpPayload<ExtArgs>
+      fields: Prisma.EnquiryFollowUpFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.EnquiryFollowUpFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EnquiryFollowUpPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.EnquiryFollowUpFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EnquiryFollowUpPayload>
+        }
+        findFirst: {
+          args: Prisma.EnquiryFollowUpFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EnquiryFollowUpPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.EnquiryFollowUpFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EnquiryFollowUpPayload>
+        }
+        findMany: {
+          args: Prisma.EnquiryFollowUpFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EnquiryFollowUpPayload>[]
+        }
+        create: {
+          args: Prisma.EnquiryFollowUpCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EnquiryFollowUpPayload>
+        }
+        createMany: {
+          args: Prisma.EnquiryFollowUpCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.EnquiryFollowUpCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EnquiryFollowUpPayload>[]
+        }
+        delete: {
+          args: Prisma.EnquiryFollowUpDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EnquiryFollowUpPayload>
+        }
+        update: {
+          args: Prisma.EnquiryFollowUpUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EnquiryFollowUpPayload>
+        }
+        deleteMany: {
+          args: Prisma.EnquiryFollowUpDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.EnquiryFollowUpUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.EnquiryFollowUpUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EnquiryFollowUpPayload>[]
+        }
+        upsert: {
+          args: Prisma.EnquiryFollowUpUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EnquiryFollowUpPayload>
+        }
+        aggregate: {
+          args: Prisma.EnquiryFollowUpAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateEnquiryFollowUp>
+        }
+        groupBy: {
+          args: Prisma.EnquiryFollowUpGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EnquiryFollowUpGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.EnquiryFollowUpCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EnquiryFollowUpCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1354,6 +1504,43 @@ export const ResidentScalarFieldEnum = {
 } as const
 
 export type ResidentScalarFieldEnum = (typeof ResidentScalarFieldEnum)[keyof typeof ResidentScalarFieldEnum]
+
+
+export const EnquiryScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  propertyId: 'propertyId',
+  firstName: 'firstName',
+  lastName: 'lastName',
+  phone: 'phone',
+  email: 'email',
+  preferredRoomType: 'preferredRoomType',
+  expectedMoveInDate: 'expectedMoveInDate',
+  expectedDurationOfStay: 'expectedDurationOfStay',
+  numberOfOccupants: 'numberOfOccupants',
+  source: 'source',
+  notes: 'notes',
+  status: 'status',
+  assignedUserId: 'assignedUserId',
+  residentId: 'residentId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type EnquiryScalarFieldEnum = (typeof EnquiryScalarFieldEnum)[keyof typeof EnquiryScalarFieldEnum]
+
+
+export const EnquiryFollowUpScalarFieldEnum = {
+  id: 'id',
+  enquiryId: 'enquiryId',
+  userId: 'userId',
+  notes: 'notes',
+  followUpAt: 'followUpAt',
+  outcome: 'outcome',
+  createdAt: 'createdAt'
+} as const
+
+export type EnquiryFollowUpScalarFieldEnum = (typeof EnquiryFollowUpScalarFieldEnum)[keyof typeof EnquiryFollowUpScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1565,6 +1752,34 @@ export type ListEnumResidentStatusFieldRefInput<$PrismaModel> = FieldRefInputTyp
 
 
 /**
+ * Reference to a field of type 'EnquirySource'
+ */
+export type EnumEnquirySourceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EnquirySource'>
+    
+
+
+/**
+ * Reference to a field of type 'EnquirySource[]'
+ */
+export type ListEnumEnquirySourceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EnquirySource[]'>
+    
+
+
+/**
+ * Reference to a field of type 'EnquiryStatus'
+ */
+export type EnumEnquiryStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EnquiryStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'EnquiryStatus[]'
+ */
+export type ListEnumEnquiryStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EnquiryStatus[]'>
+    
+
+
+/**
  * Reference to a field of type 'Float'
  */
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -1738,6 +1953,8 @@ export type GlobalOmitConfig = {
   room?: Prisma.RoomOmit
   bed?: Prisma.BedOmit
   resident?: Prisma.ResidentOmit
+  enquiry?: Prisma.EnquiryOmit
+  enquiryFollowUp?: Prisma.EnquiryFollowUpOmit
 }
 
 /* Types for Logging */

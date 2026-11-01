@@ -65,3 +65,28 @@ export const DocumentVerificationStatus = {
 } as const
 
 export type DocumentVerificationStatus = (typeof DocumentVerificationStatus)[keyof typeof DocumentVerificationStatus]
+
+
+export const EnquiryStatus = {
+  NEW: 'NEW',
+  CONTACTED: 'CONTACTED',
+  FOLLOW_UP: 'FOLLOW_UP',
+  INTERESTED: 'INTERESTED',
+  CONVERTED: 'CONVERTED',
+  LOST: 'LOST',
+  ARCHIVED: 'ARCHIVED'
+} as const
+
+export type EnquiryStatus = (typeof EnquiryStatus)[keyof typeof EnquiryStatus]
+
+
+export const EnquirySource = {
+  WEBSITE: 'WEBSITE',
+  PHONE_CALL: 'PHONE_CALL',
+  WALK_IN: 'WALK_IN',
+  REFERRAL: 'REFERRAL',
+  SOCIAL_MEDIA: 'SOCIAL_MEDIA',
+  OTHER: 'OTHER'
+} as const
+
+export type EnquirySource = (typeof EnquirySource)[keyof typeof EnquirySource]

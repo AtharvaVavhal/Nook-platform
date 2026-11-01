@@ -60,7 +60,9 @@ export const ModelName = {
   Floor: 'Floor',
   Room: 'Room',
   Bed: 'Bed',
-  Resident: 'Resident'
+  Resident: 'Resident',
+  Enquiry: 'Enquiry',
+  EnquiryFollowUp: 'EnquiryFollowUp'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -228,6 +230,43 @@ export const ResidentScalarFieldEnum = {
 } as const
 
 export type ResidentScalarFieldEnum = (typeof ResidentScalarFieldEnum)[keyof typeof ResidentScalarFieldEnum]
+
+
+export const EnquiryScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  propertyId: 'propertyId',
+  firstName: 'firstName',
+  lastName: 'lastName',
+  phone: 'phone',
+  email: 'email',
+  preferredRoomType: 'preferredRoomType',
+  expectedMoveInDate: 'expectedMoveInDate',
+  expectedDurationOfStay: 'expectedDurationOfStay',
+  numberOfOccupants: 'numberOfOccupants',
+  source: 'source',
+  notes: 'notes',
+  status: 'status',
+  assignedUserId: 'assignedUserId',
+  residentId: 'residentId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type EnquiryScalarFieldEnum = (typeof EnquiryScalarFieldEnum)[keyof typeof EnquiryScalarFieldEnum]
+
+
+export const EnquiryFollowUpScalarFieldEnum = {
+  id: 'id',
+  enquiryId: 'enquiryId',
+  userId: 'userId',
+  notes: 'notes',
+  followUpAt: 'followUpAt',
+  outcome: 'outcome',
+  createdAt: 'createdAt'
+} as const
+
+export type EnquiryFollowUpScalarFieldEnum = (typeof EnquiryFollowUpScalarFieldEnum)[keyof typeof EnquiryFollowUpScalarFieldEnum]
 
 
 export const SortOrder = {

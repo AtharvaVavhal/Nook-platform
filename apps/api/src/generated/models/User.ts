@@ -209,6 +209,7 @@ export type UserWhereInput = {
   memberships?: Prisma.MembershipListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
   auditEvents?: Prisma.AuditEventListRelationFilter
+  enquiryFollowUps?: Prisma.EnquiryFollowUpListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -223,6 +224,7 @@ export type UserOrderByWithRelationInput = {
   memberships?: Prisma.MembershipOrderByRelationAggregateInput
   sessions?: Prisma.SessionOrderByRelationAggregateInput
   auditEvents?: Prisma.AuditEventOrderByRelationAggregateInput
+  enquiryFollowUps?: Prisma.EnquiryFollowUpOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -240,6 +242,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   memberships?: Prisma.MembershipListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
   auditEvents?: Prisma.AuditEventListRelationFilter
+  enquiryFollowUps?: Prisma.EnquiryFollowUpListRelationFilter
 }, "id" | "loginIdentifier">
 
 export type UserOrderByWithAggregationInput = {
@@ -282,6 +285,7 @@ export type UserCreateInput = {
   memberships?: Prisma.MembershipCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
+  enquiryFollowUps?: Prisma.EnquiryFollowUpCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -296,6 +300,7 @@ export type UserUncheckedCreateInput = {
   memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
+  enquiryFollowUps?: Prisma.EnquiryFollowUpUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -310,6 +315,7 @@ export type UserUpdateInput = {
   memberships?: Prisma.MembershipUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
+  enquiryFollowUps?: Prisma.EnquiryFollowUpUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -324,6 +330,7 @@ export type UserUncheckedUpdateInput = {
   memberships?: Prisma.MembershipUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
+  enquiryFollowUps?: Prisma.EnquiryFollowUpUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -454,6 +461,20 @@ export type UserUpdateOneWithoutAuditEventsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAuditEventsInput, Prisma.UserUpdateWithoutAuditEventsInput>, Prisma.UserUncheckedUpdateWithoutAuditEventsInput>
 }
 
+export type UserCreateNestedOneWithoutEnquiryFollowUpsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutEnquiryFollowUpsInput, Prisma.UserUncheckedCreateWithoutEnquiryFollowUpsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutEnquiryFollowUpsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutEnquiryFollowUpsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutEnquiryFollowUpsInput, Prisma.UserUncheckedCreateWithoutEnquiryFollowUpsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutEnquiryFollowUpsInput
+  upsert?: Prisma.UserUpsertWithoutEnquiryFollowUpsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutEnquiryFollowUpsInput, Prisma.UserUpdateWithoutEnquiryFollowUpsInput>, Prisma.UserUncheckedUpdateWithoutEnquiryFollowUpsInput>
+}
+
 export type UserCreateWithoutMembershipsInput = {
   id?: string
   loginIdentifier: string
@@ -465,6 +486,7 @@ export type UserCreateWithoutMembershipsInput = {
   updatedAt?: Date | string
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
+  enquiryFollowUps?: Prisma.EnquiryFollowUpCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutMembershipsInput = {
@@ -478,6 +500,7 @@ export type UserUncheckedCreateWithoutMembershipsInput = {
   updatedAt?: Date | string
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
+  enquiryFollowUps?: Prisma.EnquiryFollowUpUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutMembershipsInput = {
@@ -507,6 +530,7 @@ export type UserUpdateWithoutMembershipsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
+  enquiryFollowUps?: Prisma.EnquiryFollowUpUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutMembershipsInput = {
@@ -520,6 +544,7 @@ export type UserUncheckedUpdateWithoutMembershipsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
+  enquiryFollowUps?: Prisma.EnquiryFollowUpUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSessionsInput = {
@@ -533,6 +558,7 @@ export type UserCreateWithoutSessionsInput = {
   updatedAt?: Date | string
   memberships?: Prisma.MembershipCreateNestedManyWithoutUserInput
   auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
+  enquiryFollowUps?: Prisma.EnquiryFollowUpCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -546,6 +572,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   updatedAt?: Date | string
   memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutUserInput
   auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
+  enquiryFollowUps?: Prisma.EnquiryFollowUpUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -575,6 +602,7 @@ export type UserUpdateWithoutSessionsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.MembershipUpdateManyWithoutUserNestedInput
   auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
+  enquiryFollowUps?: Prisma.EnquiryFollowUpUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -588,6 +616,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.MembershipUncheckedUpdateManyWithoutUserNestedInput
   auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
+  enquiryFollowUps?: Prisma.EnquiryFollowUpUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAuditEventsInput = {
@@ -601,6 +630,7 @@ export type UserCreateWithoutAuditEventsInput = {
   updatedAt?: Date | string
   memberships?: Prisma.MembershipCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  enquiryFollowUps?: Prisma.EnquiryFollowUpCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAuditEventsInput = {
@@ -614,6 +644,7 @@ export type UserUncheckedCreateWithoutAuditEventsInput = {
   updatedAt?: Date | string
   memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  enquiryFollowUps?: Prisma.EnquiryFollowUpUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAuditEventsInput = {
@@ -643,6 +674,7 @@ export type UserUpdateWithoutAuditEventsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.MembershipUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  enquiryFollowUps?: Prisma.EnquiryFollowUpUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAuditEventsInput = {
@@ -656,6 +688,79 @@ export type UserUncheckedUpdateWithoutAuditEventsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.MembershipUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  enquiryFollowUps?: Prisma.EnquiryFollowUpUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutEnquiryFollowUpsInput = {
+  id?: string
+  loginIdentifier: string
+  passwordHash: string
+  displayName: string
+  status?: $Enums.UserStatus
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.MembershipCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
+}
+
+export type UserUncheckedCreateWithoutEnquiryFollowUpsInput = {
+  id?: string
+  loginIdentifier: string
+  passwordHash: string
+  displayName: string
+  status?: $Enums.UserStatus
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
+}
+
+export type UserCreateOrConnectWithoutEnquiryFollowUpsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutEnquiryFollowUpsInput, Prisma.UserUncheckedCreateWithoutEnquiryFollowUpsInput>
+}
+
+export type UserUpsertWithoutEnquiryFollowUpsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutEnquiryFollowUpsInput, Prisma.UserUncheckedUpdateWithoutEnquiryFollowUpsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutEnquiryFollowUpsInput, Prisma.UserUncheckedCreateWithoutEnquiryFollowUpsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutEnquiryFollowUpsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutEnquiryFollowUpsInput, Prisma.UserUncheckedUpdateWithoutEnquiryFollowUpsInput>
+}
+
+export type UserUpdateWithoutEnquiryFollowUpsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  loginIdentifier?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.MembershipUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
+}
+
+export type UserUncheckedUpdateWithoutEnquiryFollowUpsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  loginIdentifier?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.MembershipUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
 }
 
 
@@ -667,12 +772,14 @@ export type UserCountOutputType = {
   memberships: number
   sessions: number
   auditEvents: number
+  enquiryFollowUps: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   memberships?: boolean | UserCountOutputTypeCountMembershipsArgs
   sessions?: boolean | UserCountOutputTypeCountSessionsArgs
   auditEvents?: boolean | UserCountOutputTypeCountAuditEventsArgs
+  enquiryFollowUps?: boolean | UserCountOutputTypeCountEnquiryFollowUpsArgs
 }
 
 /**
@@ -706,6 +813,13 @@ export type UserCountOutputTypeCountAuditEventsArgs<ExtArgs extends runtime.Type
   where?: Prisma.AuditEventWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountEnquiryFollowUpsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.EnquiryFollowUpWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -719,6 +833,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   memberships?: boolean | Prisma.User$membershipsArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   auditEvents?: boolean | Prisma.User$auditEventsArgs<ExtArgs>
+  enquiryFollowUps?: boolean | Prisma.User$enquiryFollowUpsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -760,6 +875,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   memberships?: boolean | Prisma.User$membershipsArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   auditEvents?: boolean | Prisma.User$auditEventsArgs<ExtArgs>
+  enquiryFollowUps?: boolean | Prisma.User$enquiryFollowUpsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -771,6 +887,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     memberships: Prisma.$MembershipPayload<ExtArgs>[]
     sessions: Prisma.$SessionPayload<ExtArgs>[]
     auditEvents: Prisma.$AuditEventPayload<ExtArgs>[]
+    enquiryFollowUps: Prisma.$EnquiryFollowUpPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1178,6 +1295,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   memberships<T extends Prisma.User$membershipsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$membershipsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MembershipPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sessions<T extends Prisma.User$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   auditEvents<T extends Prisma.User$auditEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$auditEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuditEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  enquiryFollowUps<T extends Prisma.User$enquiryFollowUpsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$enquiryFollowUpsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EnquiryFollowUpPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1677,6 +1795,30 @@ export type User$auditEventsArgs<ExtArgs extends runtime.Types.Extensions.Intern
   take?: number
   skip?: number
   distinct?: Prisma.AuditEventScalarFieldEnum | Prisma.AuditEventScalarFieldEnum[]
+}
+
+/**
+ * User.enquiryFollowUps
+ */
+export type User$enquiryFollowUpsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the EnquiryFollowUp
+   */
+  select?: Prisma.EnquiryFollowUpSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the EnquiryFollowUp
+   */
+  omit?: Prisma.EnquiryFollowUpOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EnquiryFollowUpInclude<ExtArgs> | null
+  where?: Prisma.EnquiryFollowUpWhereInput
+  orderBy?: Prisma.EnquiryFollowUpOrderByWithRelationInput | Prisma.EnquiryFollowUpOrderByWithRelationInput[]
+  cursor?: Prisma.EnquiryFollowUpWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.EnquiryFollowUpScalarFieldEnum | Prisma.EnquiryFollowUpScalarFieldEnum[]
 }
 
 /**

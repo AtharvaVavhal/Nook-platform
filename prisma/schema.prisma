@@ -44,6 +44,25 @@ enum DocumentVerificationStatus {
   REJECTED
 }
 
+enum EnquiryStatus {
+  NEW
+  CONTACTED
+  FOLLOW_UP
+  INTERESTED
+  CONVERTED
+  LOST
+  ARCHIVED
+}
+
+enum EnquirySource {
+  WEBSITE
+  PHONE_CALL
+  WALK_IN
+  REFERRAL
+  SOCIAL_MEDIA
+  OTHER
+}
+
 model Organization {
   id          String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name        String
@@ -54,6 +73,7 @@ model Organization {
   properties  Property[]
   auditEvents AuditEvent[]
   residents   Resident[]
+  enquiries   Enquiry[]
 
   @@map("organizations")
 }
@@ -70,6 +90,7 @@ model User {
   memberships     Membership[]
   sessions        Session[]
   auditEvents     AuditEvent[]
+  enquiryFollowUps EnquiryFollowUp[]
 
   @@map("users")
 }
@@ -138,6 +159,7 @@ model Property {
   updatedAt      DateTime     @updatedAt @map("updated_at") @db.Timestamptz(6)
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Restrict, onUpdate: Restrict)
   floors         Floor[]
+  enquiries      Enquiry[]
 
   @@unique([id, organizationId])
   @@map("properties")
@@ -214,6 +236,51 @@ model Resident {
   createdAt              DateTime                  @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt              DateTime                  @updatedAt @map("updated_at") @db.Timestamptz(6)
   organization           Organization              @relation(fields: [organizationId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  enquiry                Enquiry?
 
   @@map("residents")
+}
+
+model Enquiry {
+  id                     String                    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  organizationId         String                    @map("organization_id") @db.Uuid
+  propertyId             String?                   @map("property_id") @db.Uuid
+  firstName              String                    @map("first_name")
+  lastName               String                    @map("last_name")
+  phone                  String                    @map("phone")
+  email                  String?
+  preferredRoomType      String?                   @map("preferred_room_type")
+  expectedMoveInDate     DateTime?                 @map("expected_move_in_date") @db.Timestamptz(6)
+  expectedDurationOfStay Int?                      @map("expected_duration_of_stay")
+  numberOfOccupants      Int?                      @map("number_of_occupants")
+  source                 EnquirySource             @default(OTHER) @map("source")
+  notes                  String?
+  status                 EnquiryStatus             @default(NEW) @map("status")
+  assignedUserId         String?                   @map("assigned_user_id") @db.Uuid
+  residentId             String?                   @unique @map("resident_id") @db.Uuid
+  createdAt              DateTime                  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt              DateTime                  @updatedAt @map("updated_at") @db.Timestamptz(6)
+  organization           Organization              @relation(fields: [organizationId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  property               Property?                 @relation(fields: [propertyId], references: [id], onDelete: SetNull, onUpdate: Restrict)
+  resident               Resident?                 @relation(fields: [residentId], references: [id], onDelete: SetNull, onUpdate: Restrict)
+  followUps              EnquiryFollowUp[]
+
+  @@index([organizationId, status])
+  @@index([organizationId, createdAt])
+  @@map("enquiries")
+}
+
+model EnquiryFollowUp {
+  id          String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  enquiryId   String        @map("enquiry_id") @db.Uuid
+  userId      String        @map("user_id") @db.Uuid
+  notes       String
+  followUpAt  DateTime      @map("follow_up_at") @db.Timestamptz(6)
+  outcome     String?
+  createdAt   DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+  enquiry     Enquiry       @relation(fields: [enquiryId], references: [id], onDelete: Cascade, onUpdate: Restrict)
+  user        User          @relation(fields: [userId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+
+  @@index([enquiryId, followUpAt])
+  @@map("enquiry_follow_ups")
 }
