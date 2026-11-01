@@ -24,3 +24,9 @@ prisma/generated/
 # Editor/OS
 .idea/
 .vscode/
+
+# Python cache
+scripts/__pycache__/
+
+# Compiled Keychain helper binary
+scripts/keychain_helper
