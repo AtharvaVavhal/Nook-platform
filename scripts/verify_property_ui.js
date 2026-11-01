@@ -66,6 +66,7 @@ try {
     await page.$eval(bed('103', 'D'), (element) => element.getAttribute('aria-pressed')),
     'true',
   );
+  await page.evaluate(() => window.scrollTo(0, 0));
   await page.screenshot({ path: `${artifacts}/desktop.png`, fullPage: true });
   await clickText('.room-select', 'Room 101');
   await expectSelection('Room 101');
@@ -111,26 +112,6 @@ try {
   await page.click(bed('101', 'C'));
   for (const width of [320, 390, 768, 1024, 1440, 1600]) {
     await page.setViewport({ width, height: 900 });
-    if (await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)) {
-      console.log(
-        await page.$$eval('body *', (items) =>
-          items
-            .filter(
-              (el) =>
-                el.getBoundingClientRect().right > innerWidth &&
-                !el.closest('.spatial-plan, .inventory-table'),
-            )
-            .map((el) => ({
-              tag: el.tagName,
-              cls: el.className,
-              width: el.getBoundingClientRect().width,
-              right: el.getBoundingClientRect().right,
-            })),
-        ),
-      );
-    }
-
-    await page.setViewport({ width, height: 900 });
     assert.equal(
       await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth),
       true,
@@ -165,6 +146,7 @@ try {
   await expectSelection('Room 103 · Bed D');
   await page.click('.selection-jump');
   assert.equal(await page.evaluate(() => document.activeElement.id), 'selection-details');
+  await page.evaluate(() => window.scrollTo(0, 0));
   await page.screenshot({ path: `${artifacts}/mobile.png`, fullPage: true });
   await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]);
   await page.keyboard.press('Tab');

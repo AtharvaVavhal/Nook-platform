@@ -27,4 +27,23 @@ test('loadRuntimeConfig does not require a database for the API shell', () => {
   });
   assert.equal(config.port, 3100);
   assert.equal(config.databaseUrl, undefined);
+  assert.equal(config.secureCookies, false);
+});
+
+test('production runtime configuration requires an HTTPS application origin', () => {
+  assert.throws(
+    () =>
+      loadRuntimeConfig({
+        APP_ENV: 'production',
+        WEB_ORIGIN: 'http://localhost:5173',
+      }),
+    /HTTPS in production/,
+  );
+  assert.equal(
+    loadRuntimeConfig({
+      APP_ENV: 'production',
+      WEB_ORIGIN: 'https://app.example.com',
+    }).secureCookies,
+    true,
+  );
 });

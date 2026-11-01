@@ -9,7 +9,8 @@
     "start": "node dist/main.js",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "test": "node --import tsx --test test/*.test.ts",
-    "test:database": "node --import tsx --test test/database-migration.test.ts"
+    "test:integration": "node --import tsx --test test/integration/*.test.ts",
+    "test:database": "DOTENV_CONFIG_PATH=../../.env.test node --import dotenv/config --import tsx --test test/database-migration.test.ts"
   },
   "dependencies": {
     "@nestjs/common": "12.3.2",
@@ -26,6 +27,8 @@
   "devDependencies": {
     "@types/node": "24.10.0",
     "@types/pg": "8.15.5",
+    "@types/supertest": "7.2.1",
+    "supertest": "7.3.1",
     "tsx": "4.20.6",
     "typescript": "5.9.3"
   }

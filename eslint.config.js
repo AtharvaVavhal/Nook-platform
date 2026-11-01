@@ -26,5 +26,7 @@ export default [
     // Browser globals are used inside page.evaluate callbacks that run in Chromium.
     files: ['marketing/**/*.cjs', 'docs/assets/**/*.cjs'],
     languageOptions: { globals: { ...globals.node, ...globals.browser } },
+    // CommonJS has no other module syntax, so require() is expected here.
+    rules: { '@typescript-eslint/no-require-imports': 'off' },
   },
 ];

@@ -1,6 +1,9 @@
 <div align="center">
 
-<img src="docs/assets/readme-banner.png" alt="nook — the hostel and PG management platform, a product of Forge" width="100%">
+<picture>
+  <source srcset="docs/assets/readme-hero.svg" type="image/svg+xml">
+  <img src="docs/assets/readme-hero.png" alt="nook — bed-level inventory across a building's floors. A product of Forge." width="100%">
+</picture>
 
 <br>
 

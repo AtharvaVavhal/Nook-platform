@@ -2,6 +2,7 @@ export interface RuntimeConfig {
   readonly appEnv: 'development' | 'test' | 'production';
   readonly port: number;
   readonly webOrigin: string;
+  readonly secureCookies: boolean;
   readonly databaseUrl?: string;
 }
 
@@ -30,7 +31,10 @@ export function parseDatabaseUrl(raw: string | undefined): string | undefined {
 }
 
 export function loadRuntimeConfig(env: NodeJS.ProcessEnv = process.env): RuntimeConfig {
-  const rawEnv = env.APP_ENV ?? 'development';
+  const rawEnv = env.APP_ENV;
+  if (rawEnv === undefined) {
+    throw new Error('APP_ENV must be explicitly configured.');
+  }
   if (!['development', 'test', 'production'].includes(rawEnv)) {
     throw new Error('APP_ENV must be development, test, or production.');
   }
@@ -47,11 +51,15 @@ export function loadRuntimeConfig(env: NodeJS.ProcessEnv = process.env): Runtime
   ) {
     throw new Error('WEB_ORIGIN must be a valid HTTP(S) origin without a path.');
   }
+  if (rawEnv === 'production' && webOrigin.startsWith('http://')) {
+    throw new Error('WEB_ORIGIN must use HTTPS in production.');
+  }
   const databaseUrl = parseDatabaseUrl(env.DATABASE_URL);
   return {
     appEnv: rawEnv as RuntimeConfig['appEnv'],
     port: parsePort(env.PORT),
     webOrigin: origin.origin,
+    secureCookies: rawEnv === 'production',
     ...(databaseUrl === undefined ? {} : { databaseUrl }),
   };
 }
