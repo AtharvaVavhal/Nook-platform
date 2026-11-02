@@ -10,6 +10,7 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
+import { Inject } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { CsrfGuard, OriginGuard, SessionGuard } from '../auth/auth.guards.js';
 import type { AuthenticatedRequest } from '../auth/auth.types.js';
@@ -21,7 +22,7 @@ import { CreateResidentDto, UpdateResidentDto, ResidentQueryDto } from './reside
 @UseGuards(SessionGuard)
 @Controller('residents')
 export class ResidentController {
-  constructor(private readonly residentService: ResidentService) {}
+  constructor(@Inject(ResidentService) private readonly residentService: ResidentService) {}
 
   @Post()
   @UseGuards(OriginGuard, CsrfGuard)
@@ -48,7 +49,11 @@ export class ResidentController {
   @Put(':id')
   @UseGuards(OriginGuard, CsrfGuard)
   @ApiOperation({ summary: 'Update a resident' })
-  async update(@Req() req: AuthenticatedRequest, @Param('id') id: string, @Body() dto: UpdateResidentDto) {
+  async update(
+    @Req() req: AuthenticatedRequest,
+    @Param('id') id: string,
+    @Body() dto: UpdateResidentDto,
+  ) {
     const organizationId = req.auth!.organizationId;
     return this.residentService.update(organizationId, id, dto);
   }

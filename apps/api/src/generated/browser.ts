@@ -97,3 +97,33 @@ export type CheckIn = Prisma.CheckInModel
  * 
  */
 export type CheckOut = Prisma.CheckOutModel
+/**
+ * Model Invoice
+ * 
+ */
+export type Invoice = Prisma.InvoiceModel
+/**
+ * Model Payment
+ * 
+ */
+export type Payment = Prisma.PaymentModel
+/**
+ * Model PaymentReversal
+ * Append-only: a payment is never edited; reversing it records one row here.
+ */
+export type PaymentReversal = Prisma.PaymentReversalModel
+/**
+ * Model InvoiceAdjustment
+ * Append-only credit against an issued invoice. Credits are stored as negative amounts.
+ */
+export type InvoiceAdjustment = Prisma.InvoiceAdjustmentModel
+/**
+ * Model PaymentIdempotencyKey
+ * Append-only record of a client-supplied Idempotency-Key and the payment it produced.
+ */
+export type PaymentIdempotencyKey = Prisma.PaymentIdempotencyKeyModel
+/**
+ * Model LoginThrottle
+ * Persistent sign-in throttling. Keys are SHA-256 hashes, so no e-mail address or IP address is stored.
+ */
+export type LoginThrottle = Prisma.LoginThrottleModel

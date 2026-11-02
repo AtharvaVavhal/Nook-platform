@@ -1,24 +1,24 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../database/prisma.service.js';
+import { pickResidentFields } from './resident.fields.js';
+import { parsePagination } from '../common/ids.js';
 import { CreateResidentDto, UpdateResidentDto, ResidentQueryDto } from './resident.dto.js';
 import type { Resident } from '../generated/client.js';
 
 @Injectable()
 export class ResidentService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(@Inject(PrismaService) private readonly prisma: PrismaService) {}
 
   async create(organizationId: string, dto: CreateResidentDto) {
     return this.prisma.db.resident.create({
-      data: {
-        ...dto,
-        organizationId,
-        dateOfBirth: dto.dateOfBirth ? new Date(dto.dateOfBirth) : null,
-      },
+      // Only allow-listed fields; the organization is always the session's.
+      data: { ...pickResidentFields(dto, false), organizationId } as never,
     });
   }
 
   async findAll(organizationId: string, query: ResidentQueryDto) {
-    const { search, status, documentVerificationStatus, page = 1, limit = 20 } = query;
+    const { search, status, documentVerificationStatus, page: rawPage, limit: rawLimit } = query;
+    const { page, limit } = parsePagination(rawPage, rawLimit);
     const where: Record<string, any> = { organizationId };
 
     if (search) {
@@ -55,11 +55,11 @@ export class ResidentService {
 
   async update(organizationId: string, id: string, dto: UpdateResidentDto) {
     await this.findOne(organizationId, id);
-    const data: Record<string, any> = { ...dto };
-    if (dto.dateOfBirth) data.dateOfBirth = new Date(dto.dateOfBirth);
+    // Allow-listed fields only: a body can never carry organizationId, id or timestamps into the update.
+    const data = pickResidentFields(dto, true);
     return this.prisma.db.resident.update({
       where: { id },
-      data,
+      data: data as never,
     });
   }
 

@@ -1,13 +1,54 @@
-import { Injectable, NotFoundException, ForbiddenException, BadRequestException } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  NotFoundException,
+  ForbiddenException,
+  BadRequestException,
+} from '@nestjs/common';
 import { PrismaService } from '../database/prisma.service.js';
-import { CreateEnquiryDto, UpdateEnquiryDto, EnquiryQueryDto, CreateFollowUpDto } from './enquiry.dto.js';
+import { optionalUuid, parsePagination, requireUuid } from '../common/ids.js';
+import { pickResidentFields } from '../resident/resident.fields.js';
+import {
+  CreateEnquiryDto,
+  UpdateEnquiryDto,
+  EnquiryQueryDto,
+  CreateFollowUpDto,
+} from './enquiry.dto.js';
 import { Prisma } from '../generated/client.js';
 
 @Injectable()
 export class EnquiryService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(@Inject(PrismaService) private readonly prisma: PrismaService) {}
+
+  /** The preferred property must belong to the caller's organization; unknown and foreign ids look the same. */
+  private async assertOwnProperty(
+    organizationId: string,
+    propertyId: string | null,
+  ): Promise<void> {
+    if (!propertyId) return;
+    const property = await this.prisma.db.property.findFirst({
+      where: { id: propertyId, organizationId },
+      select: { id: true },
+    });
+    if (!property) throw new NotFoundException('Property not found');
+  }
+
+  /** An enquiry can only be assigned to an active member of the caller's own organization. */
+  private async resolveAssignee(organizationId: string, value: unknown): Promise<string | null> {
+    if (value === undefined || value === null || value === '') return null;
+    const userId = requireUuid(value, 'assignedUserId');
+    const member = await this.prisma.db.membership.findFirst({
+      where: { organizationId, userId, status: 'ACTIVE' },
+      select: { id: true },
+    });
+    if (!member) throw new NotFoundException('Assignee not found');
+    return userId;
+  }
 
   async create(organizationId: string, dto: CreateEnquiryDto) {
+    const assignedUserId = await this.resolveAssignee(organizationId, dto.assignedUserId);
+    const preferredPropertyId = optionalUuid(dto.preferredPropertyId, 'preferredPropertyId');
+    await this.assertOwnProperty(organizationId, preferredPropertyId);
     const data: Prisma.EnquiryCreateInput = {
       firstName: dto.firstName,
       lastName: dto.lastName,
@@ -21,16 +62,26 @@ export class EnquiryService {
       notes: dto.notes ?? null,
       status: 'NEW',
       organization: { connect: { id: organizationId } },
-      assignedUserId: dto.assignedUserId ?? null,
+      assignedUserId,
     };
-    if (dto.preferredPropertyId) {
-      data.property = { connect: { id: dto.preferredPropertyId } };
+    if (preferredPropertyId) {
+      data.property = { connect: { id: preferredPropertyId } };
     }
     return this.prisma.db.enquiry.create({ data });
   }
 
   async findAll(organizationId: string, query: EnquiryQueryDto) {
-    const { search, status, source, propertyId, fromDate, toDate, page = 1, limit = 20 } = query;
+    const {
+      search,
+      status,
+      source,
+      propertyId,
+      fromDate,
+      toDate,
+      page: rawPage,
+      limit: rawLimit,
+    } = query;
+    const { page, limit } = parsePagination(rawPage, rawLimit);
     const where: Prisma.EnquiryWhereInput = { organizationId };
 
     if (search) {
@@ -75,23 +126,32 @@ export class EnquiryService {
 
   async update(organizationId: string, id: string, dto: UpdateEnquiryDto) {
     await this.findOne(organizationId, id);
+    const preferredPropertyId =
+      dto.preferredPropertyId === undefined
+        ? undefined
+        : optionalUuid(dto.preferredPropertyId, 'preferredPropertyId');
+    if (preferredPropertyId) await this.assertOwnProperty(organizationId, preferredPropertyId);
     const data: Prisma.EnquiryUpdateInput = {};
     if (dto.firstName !== undefined) data.firstName = dto.firstName;
     if (dto.lastName !== undefined) data.lastName = dto.lastName;
     if (dto.phone !== undefined) data.phone = dto.phone;
     if (dto.email !== undefined) data.email = dto.email ?? null;
     if (dto.preferredRoomType !== undefined) data.preferredRoomType = dto.preferredRoomType ?? null;
-    if (dto.expectedMoveInDate !== undefined) data.expectedMoveInDate = dto.expectedMoveInDate ? new Date(dto.expectedMoveInDate) : null;
-    if (dto.expectedDurationOfStay !== undefined) data.expectedDurationOfStay = dto.expectedDurationOfStay ?? null;
+    if (dto.expectedMoveInDate !== undefined)
+      data.expectedMoveInDate = dto.expectedMoveInDate ? new Date(dto.expectedMoveInDate) : null;
+    if (dto.expectedDurationOfStay !== undefined)
+      data.expectedDurationOfStay = dto.expectedDurationOfStay ?? null;
     if (dto.numberOfOccupants !== undefined) data.numberOfOccupants = dto.numberOfOccupants ?? null;
     if (dto.source !== undefined) data.source = dto.source as any;
     if (dto.notes !== undefined) data.notes = dto.notes ?? null;
     if (dto.status !== undefined) data.status = dto.status as any;
-    if (dto.preferredPropertyId !== undefined) {
-      if (dto.preferredPropertyId) data.property = { connect: { id: dto.preferredPropertyId } };
+    if (preferredPropertyId !== undefined) {
+      if (preferredPropertyId) data.property = { connect: { id: preferredPropertyId } };
       else data.property = { disconnect: true };
     }
-    if (dto.assignedUserId !== undefined) data.assignedUserId = dto.assignedUserId ?? null;
+    if (dto.assignedUserId !== undefined) {
+      data.assignedUserId = await this.resolveAssignee(organizationId, dto.assignedUserId);
+    }
     return this.prisma.db.enquiry.update({ where: { id }, data });
   }
 
@@ -103,7 +163,12 @@ export class EnquiryService {
     });
   }
 
-  async addFollowUp(organizationId: string, enquiryId: string, userId: string, dto: CreateFollowUpDto) {
+  async addFollowUp(
+    organizationId: string,
+    enquiryId: string,
+    userId: string,
+    dto: CreateFollowUpDto,
+  ) {
     await this.findOne(organizationId, enquiryId);
     return this.prisma.db.enquiryFollowUp.create({
       data: {
@@ -126,14 +191,23 @@ export class EnquiryService {
   }
 
   async convert(organizationId: string, enquiryId: string, residentData: any) {
+    requireUuid(enquiryId, 'enquiryId');
+    // Optional overrides for the new resident: allow-listed fields only (no organizationId, no id).
+    const overrides =
+      residentData && Object.keys(residentData).length > 0
+        ? pickResidentFieldsLoose(residentData)
+        : {};
     return this.prisma.db.$transaction(async (tx) => {
+      // Serialize concurrent conversions of the same enquiry: the second waits here, then sees it converted.
+      await tx.$queryRaw`SELECT id FROM enquiries WHERE id = ${enquiryId}::uuid AND organization_id = ${organizationId}::uuid FOR UPDATE`;
       const enquiry = await tx.enquiry.findFirst({
         where: { id: enquiryId, organizationId },
         include: { resident: true },
       });
       if (!enquiry) throw new NotFoundException('Enquiry not found');
       if (enquiry.residentId) throw new BadRequestException('Enquiry already converted');
-      if (enquiry.status === 'CONVERTED') throw new BadRequestException('Enquiry already converted');
+      if (enquiry.status === 'CONVERTED')
+        throw new BadRequestException('Enquiry already converted');
 
       // Create resident
       const resident = await tx.resident.create({
@@ -143,8 +217,8 @@ export class EnquiryService {
           lastName: enquiry.lastName,
           phone: enquiry.phone,
           email: enquiry.email,
-          ...residentData,
-        },
+          ...overrides,
+        } as never,
       });
 
       // Update enquiry
@@ -183,4 +257,9 @@ export class EnquiryService {
       orderBy: { followUpAt: 'asc' },
     });
   }
+}
+
+/** Conversion overrides are partial: validate whatever resident fields were sent, drop everything else. */
+function pickResidentFieldsLoose(input: unknown): Record<string, unknown> {
+  return pickResidentFields(input, true);
 }

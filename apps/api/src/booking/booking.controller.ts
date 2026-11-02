@@ -10,6 +10,8 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
+import { BadRequestException, Inject } from '@nestjs/common';
+import { optionalUuid } from '../common/ids.js';
 import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { CsrfGuard, OriginGuard, SessionGuard } from '../auth/auth.guards.js';
 import type { AuthenticatedRequest } from '../auth/auth.types.js';
@@ -21,7 +23,7 @@ import { CreateBookingDto, UpdateBookingDto, BookingQueryDto } from './booking.d
 @UseGuards(SessionGuard)
 @Controller('bookings')
 export class BookingController {
-  constructor(private readonly bookingService: BookingService) {}
+  constructor(@Inject(BookingService) private readonly bookingService: BookingService) {}
 
   @Post()
   @UseGuards(OriginGuard, CsrfGuard)
@@ -66,7 +68,17 @@ export class BookingController {
   async getAvailableBeds(@Req() req: any, @Query() query: any) {
     const organizationId = req.auth!.organizationId;
     const { startDate, endDate, propertyId } = query;
-    if (!startDate || !endDate) throw new Error('startDate and endDate required');
-    return this.bookingService.getAvailableBeds(organizationId, new Date(startDate), new Date(endDate), propertyId);
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    if (!startDate || !endDate || Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) {
+      throw new BadRequestException('startDate and endDate are required valid dates');
+    }
+    if (end <= start) throw new BadRequestException('endDate must be after startDate');
+    return this.bookingService.getAvailableBeds(
+      organizationId,
+      start,
+      end,
+      optionalUuid(propertyId, 'propertyId') ?? undefined,
+    );
   }
 }

@@ -261,6 +261,8 @@ export type CheckInOrderByWithRelationInput = {
 export type CheckInWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   admissionId?: string
+  id_organizationId?: Prisma.CheckInIdOrganizationIdCompoundUniqueInput
+  admissionId_organizationId?: Prisma.CheckInAdmissionIdOrganizationIdCompoundUniqueInput
   AND?: Prisma.CheckInWhereInput | Prisma.CheckInWhereInput[]
   OR?: Prisma.CheckInWhereInput[]
   NOT?: Prisma.CheckInWhereInput | Prisma.CheckInWhereInput[]
@@ -279,7 +281,7 @@ export type CheckInWhereUniqueInput = Prisma.AtLeast<{
   bed?: Prisma.XOR<Prisma.BedScalarRelationFilter, Prisma.BedWhereInput>
   booking?: Prisma.XOR<Prisma.BookingScalarRelationFilter, Prisma.BookingWhereInput>
   checkOut?: Prisma.XOR<Prisma.CheckOutNullableScalarRelationFilter, Prisma.CheckOutWhereInput> | null
-}, "id" | "admissionId">
+}, "id" | "admissionId" | "id_organizationId" | "admissionId_organizationId">
 
 export type CheckInOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -425,6 +427,16 @@ export type CheckInOrderByRelationAggregateInput = {
 export type CheckInNullableScalarRelationFilter = {
   is?: Prisma.CheckInWhereInput | null
   isNot?: Prisma.CheckInWhereInput | null
+}
+
+export type CheckInIdOrganizationIdCompoundUniqueInput = {
+  id: string
+  organizationId: string
+}
+
+export type CheckInAdmissionIdOrganizationIdCompoundUniqueInput = {
+  admissionId: string
+  organizationId: string
 }
 
 export type CheckInCountOrderByAggregateInput = {
@@ -779,7 +791,6 @@ export type CheckInCreateWithoutBedInput = {
 
 export type CheckInUncheckedCreateWithoutBedInput = {
   id?: string
-  organizationId: string
   admissionId: string
   residentId: string
   bookingId: string
@@ -833,7 +844,6 @@ export type CheckInCreateWithoutResidentInput = {
 
 export type CheckInUncheckedCreateWithoutResidentInput = {
   id?: string
-  organizationId: string
   admissionId: string
   bedId: string
   bookingId: string
@@ -887,7 +897,6 @@ export type CheckInCreateWithoutBookingInput = {
 
 export type CheckInUncheckedCreateWithoutBookingInput = {
   id?: string
-  organizationId: string
   admissionId: string
   residentId: string
   bedId: string
@@ -941,7 +950,6 @@ export type CheckInCreateWithoutAdmissionInput = {
 
 export type CheckInUncheckedCreateWithoutAdmissionInput = {
   id?: string
-  organizationId: string
   residentId: string
   bedId: string
   bookingId: string
@@ -985,7 +993,6 @@ export type CheckInUpdateWithoutAdmissionInput = {
 
 export type CheckInUncheckedUpdateWithoutAdmissionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   residentId?: Prisma.StringFieldUpdateOperationsInput | string
   bedId?: Prisma.StringFieldUpdateOperationsInput | string
   bookingId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1125,7 +1132,6 @@ export type CheckInUncheckedUpdateManyWithoutOrganizationInput = {
 
 export type CheckInCreateManyBedInput = {
   id?: string
-  organizationId: string
   admissionId: string
   residentId: string
   bookingId: string
@@ -1152,7 +1158,6 @@ export type CheckInUpdateWithoutBedInput = {
 
 export type CheckInUncheckedUpdateWithoutBedInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   admissionId?: Prisma.StringFieldUpdateOperationsInput | string
   residentId?: Prisma.StringFieldUpdateOperationsInput | string
   bookingId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1166,7 +1171,6 @@ export type CheckInUncheckedUpdateWithoutBedInput = {
 
 export type CheckInUncheckedUpdateManyWithoutBedInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   admissionId?: Prisma.StringFieldUpdateOperationsInput | string
   residentId?: Prisma.StringFieldUpdateOperationsInput | string
   bookingId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1179,7 +1183,6 @@ export type CheckInUncheckedUpdateManyWithoutBedInput = {
 
 export type CheckInCreateManyResidentInput = {
   id?: string
-  organizationId: string
   admissionId: string
   bedId: string
   bookingId: string
@@ -1206,7 +1209,6 @@ export type CheckInUpdateWithoutResidentInput = {
 
 export type CheckInUncheckedUpdateWithoutResidentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   admissionId?: Prisma.StringFieldUpdateOperationsInput | string
   bedId?: Prisma.StringFieldUpdateOperationsInput | string
   bookingId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1220,7 +1222,6 @@ export type CheckInUncheckedUpdateWithoutResidentInput = {
 
 export type CheckInUncheckedUpdateManyWithoutResidentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   admissionId?: Prisma.StringFieldUpdateOperationsInput | string
   bedId?: Prisma.StringFieldUpdateOperationsInput | string
   bookingId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1233,7 +1234,6 @@ export type CheckInUncheckedUpdateManyWithoutResidentInput = {
 
 export type CheckInCreateManyBookingInput = {
   id?: string
-  organizationId: string
   admissionId: string
   residentId: string
   bedId: string
@@ -1260,7 +1260,6 @@ export type CheckInUpdateWithoutBookingInput = {
 
 export type CheckInUncheckedUpdateWithoutBookingInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   admissionId?: Prisma.StringFieldUpdateOperationsInput | string
   residentId?: Prisma.StringFieldUpdateOperationsInput | string
   bedId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1274,7 +1273,6 @@ export type CheckInUncheckedUpdateWithoutBookingInput = {
 
 export type CheckInUncheckedUpdateManyWithoutBookingInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   admissionId?: Prisma.StringFieldUpdateOperationsInput | string
   residentId?: Prisma.StringFieldUpdateOperationsInput | string
   bedId?: Prisma.StringFieldUpdateOperationsInput | string

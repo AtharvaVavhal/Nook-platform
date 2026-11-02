@@ -8,6 +8,12 @@ import { loadRuntimeConfig } from './config.js';
 async function bootstrap(): Promise<void> {
   const config = loadRuntimeConfig();
   const app = await NestFactory.create(AppModule, { abortOnError: true });
+  // Behind a reverse proxy the client address (used for sign-in throttling) comes from X-Forwarded-For. That
+  // header is trusted only when the operator states how many proxies sit in front of the API.
+  const proxyHops = Number(process.env.TRUST_PROXY_HOPS ?? '0');
+  if (Number.isInteger(proxyHops) && proxyHops > 0) {
+    app.getHttpAdapter().getInstance().set('trust proxy', proxyHops);
+  }
   app.use(helmet());
   app.enableCors({ origin: config.webOrigin, credentials: true });
   app.setGlobalPrefix('api/v1');

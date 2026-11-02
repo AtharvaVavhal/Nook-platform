@@ -63,6 +63,7 @@ export class SessionService {
       organizationName: session.membership.organization.name,
       displayName: session.user.displayName,
       role: session.membership.role,
+      passwordChangeRequired: session.user.passwordChangeRequired,
     };
   }
 

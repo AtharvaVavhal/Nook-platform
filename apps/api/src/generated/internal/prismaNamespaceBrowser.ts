@@ -66,7 +66,13 @@ export const ModelName = {
   Enquiry: 'Enquiry',
   EnquiryFollowUp: 'EnquiryFollowUp',
   CheckIn: 'CheckIn',
-  CheckOut: 'CheckOut'
+  CheckOut: 'CheckOut',
+  Invoice: 'Invoice',
+  Payment: 'Payment',
+  PaymentReversal: 'PaymentReversal',
+  InvoiceAdjustment: 'InvoiceAdjustment',
+  PaymentIdempotencyKey: 'PaymentIdempotencyKey',
+  LoginThrottle: 'LoginThrottle'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -102,6 +108,7 @@ export const UserScalarFieldEnum = {
   passwordHash: 'passwordHash',
   displayName: 'displayName',
   status: 'status',
+  passwordChangeRequired: 'passwordChangeRequired',
   lastLoginAt: 'lastLoginAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -342,6 +349,98 @@ export const CheckOutScalarFieldEnum = {
 } as const
 
 export type CheckOutScalarFieldEnum = (typeof CheckOutScalarFieldEnum)[keyof typeof CheckOutScalarFieldEnum]
+
+
+export const InvoiceScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  residentId: 'residentId',
+  bookingId: 'bookingId',
+  number: 'number',
+  periodStart: 'periodStart',
+  periodEnd: 'periodEnd',
+  amount: 'amount',
+  paidAmount: 'paidAmount',
+  adjustmentTotal: 'adjustmentTotal',
+  status: 'status',
+  dueDate: 'dueDate',
+  issuedAt: 'issuedAt',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InvoiceScalarFieldEnum = (typeof InvoiceScalarFieldEnum)[keyof typeof InvoiceScalarFieldEnum]
+
+
+export const PaymentScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  invoiceId: 'invoiceId',
+  residentId: 'residentId',
+  amount: 'amount',
+  method: 'method',
+  reference: 'reference',
+  receivedAt: 'receivedAt',
+  notes: 'notes',
+  correctsPaymentId: 'correctsPaymentId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PaymentScalarFieldEnum = (typeof PaymentScalarFieldEnum)[keyof typeof PaymentScalarFieldEnum]
+
+
+export const PaymentReversalScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  paymentId: 'paymentId',
+  invoiceId: 'invoiceId',
+  reason: 'reason',
+  reversedBy: 'reversedBy',
+  createdAt: 'createdAt'
+} as const
+
+export type PaymentReversalScalarFieldEnum = (typeof PaymentReversalScalarFieldEnum)[keyof typeof PaymentReversalScalarFieldEnum]
+
+
+export const InvoiceAdjustmentScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  invoiceId: 'invoiceId',
+  residentId: 'residentId',
+  amount: 'amount',
+  reason: 'reason',
+  createdBy: 'createdBy',
+  createdAt: 'createdAt'
+} as const
+
+export type InvoiceAdjustmentScalarFieldEnum = (typeof InvoiceAdjustmentScalarFieldEnum)[keyof typeof InvoiceAdjustmentScalarFieldEnum]
+
+
+export const PaymentIdempotencyKeyScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  key: 'key',
+  requestHash: 'requestHash',
+  paymentId: 'paymentId',
+  response: 'response',
+  createdAt: 'createdAt'
+} as const
+
+export type PaymentIdempotencyKeyScalarFieldEnum = (typeof PaymentIdempotencyKeyScalarFieldEnum)[keyof typeof PaymentIdempotencyKeyScalarFieldEnum]
+
+
+export const LoginThrottleScalarFieldEnum = {
+  scope: 'scope',
+  keyHash: 'keyHash',
+  failures: 'failures',
+  windowStartedAt: 'windowStartedAt',
+  lockedUntil: 'lockedUntil',
+  updatedAt: 'updatedAt'
+} as const
+
+export type LoginThrottleScalarFieldEnum = (typeof LoginThrottleScalarFieldEnum)[keyof typeof LoginThrottleScalarFieldEnum]
 
 
 export const SortOrder = {

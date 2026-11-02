@@ -1,97 +1,89 @@
-import {
-  bedStatuses,
-  demoFloors,
-  statusLabels,
-  summarize,
-  type StatusFilter,
-} from '../propertyDemo';
+import { useState, type FormEvent } from 'react';
+import { EmptyState, ErrorState, LoadingState, useAsync } from '../finance/shared';
+import { PageHead } from '../ops/ui';
+import { opsApi, type InventorySummary } from '../ops/opsApi';
+import { opsLinks } from '../ops/opsRoute';
 import { Icon } from './BrandIllustration';
 
-export function InventoryOverview({
-  onExplore,
-}: {
-  onExplore: (floorId: string, status?: StatusFilter) => void;
-}) {
-  const totals = summarize(demoFloors.flatMap((floor) => floor.rooms));
+export function InventoryOverview() {
+  const { data, loading, error, reload } = useAsync(
+    () => opsApi.inventory.summary(),
+    [],
+  );
   return (
     <section id="inventory" className="inventory-section" aria-labelledby="inventory-heading">
-      <div className="section-heading">
-        <div>
-          <h2 id="inventory-heading">Inventory at a glance</h2>
-          <p>One property. Every room and bed accounted for.</p>
+      <PageHead
+        title="Inventory at a glance"
+        action={
+          <a className="primary-button" href={opsLinks.properties}>
+            Manage properties
+          </a>
+        }
+      />
+      {loading && !data ? <LoadingState label="Loading inventory…" /> : null}
+      {error ? <ErrorState message={error} onRetry={reload} /> : null}
+      {data ? (
+        <div
+          className="inventory-table-wrap"
+          role="region"
+          aria-label="Inventory summary"
+          tabIndex={0}
+        >
+          <table className="inventory-table">
+            <caption className="sr-only">
+              Inventory summary by organization.
+            </caption>
+            <thead>
+              <tr>
+                <th scope="col">Metric</th>
+                <th scope="col">Count</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Properties</th>
+                <td>{data.properties}</td>
+              </tr>
+              <tr>
+                <th scope="row">Floors</th>
+                <td>{data.floors}</td>
+              </tr>
+              <tr>
+                <th scope="row">Rooms</th>
+                <td>{data.rooms}</td>
+              </tr>
+              <tr>
+                <th scope="row">Total beds</th>
+                <td>{data.beds}</td>
+              </tr>
+              <tr>
+                <th scope="row">In service</th>
+                <td className="available-text">
+                  {data.bedsInService}
+                  <span className="sr-only"> (operational status, not availability)</span>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Out of service</th>
+                <td className="unavailable-text">
+                  {data.bedsOutOfService}
+                  <span className="sr-only"> (operational status, not occupancy)</span>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Archived</th>
+                <td>{data.bedsArchived}</td>
+              </tr>
+            </tbody>
+          </table>
+          <p className="fin-form-error" style={{ marginTop: 12, fontSize: 11, color: 'var(--color-text-secondary)' }}>
+            <Icon name="search" size={12} />
+            "In service" = operational status (not booked/occupied).
+            "Out of service" = held for maintenance.
+            Occupancy is determined by active bookings and check-ins.
+          </p>
         </div>
-        <span className="environment-badge">DEMO INVENTORY</span>
-      </div>
-      <div
-        className="inventory-table-wrap"
-        role="region"
-        aria-label="Floor inventory, scroll horizontally on small screens"
-        tabIndex={0}
-      >
-        <table className="inventory-table">
-          <caption className="sr-only">
-            Synthetic inventory by floor. Availability is not live.
-          </caption>
-          <thead>
-            <tr>
-              <th scope="col">Floor</th>
-              <th scope="col">Rooms</th>
-              <th scope="col">Beds</th>
-              {bedStatuses.map((status) => (
-                <th key={status} scope="col">
-                  {statusLabels[status]}
-                </th>
-              ))}
-              <th scope="col">
-                <span className="sr-only">Explore</span>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {demoFloors.map((floor, index) => {
-              const counts = summarize(floor.rooms);
-              return (
-                <tr key={floor.id}>
-                  <th scope="row">
-                    <span className="inventory-floor">
-                      <span className="floor-number">{index.toString().padStart(2, '0')}</span>
-                      {floor.name}
-                    </span>
-                  </th>
-                  <td>{counts.rooms}</td>
-                  <td>{counts.beds}</td>
-                  {bedStatuses.map((status) => (
-                    <td key={status}>
-                      <span className={`inventory-count ${status}`}>{counts[status]}</span>
-                    </td>
-                  ))}
-                  <td>
-                    <a
-                      href="#floor-plan"
-                      className="text-link"
-                      aria-label={`Explore ${floor.name}`}
-                      onClick={() => onExplore(floor.id)}
-                    >
-                      View plan <Icon name="arrow" size={14} />
-                    </a>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-          <tfoot>
-            <tr>
-              <th scope="row">Property total</th>
-              <td>{totals.rooms}</td>
-              <td>{totals.beds}</td>
-              {bedStatuses.map((status) => (
-                <td key={status}>{totals[status]}</td>
-              ))}
-              <td>Demo data</td>
-            </tr>
-          </tfoot>
-        </table>
-      </div>
+      ) : null}
     </section>
   );
 }

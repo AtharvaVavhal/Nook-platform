@@ -8,7 +8,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import db_guard  # noqa: E402
 
-GOOD = "postgresql://nook:nook_local_only@127.0.0.1:5433/nook_dev?schema=public"
+GOOD = "postgresql://nook:<password>@127.0.0.1:5433/nook_dev?schema=public"
 
 
 class DbGuardTests(unittest.TestCase):

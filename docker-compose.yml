@@ -3,7 +3,7 @@ services:
     image: postgres:17.11-alpine
     environment:
       POSTGRES_USER: nook
-      POSTGRES_PASSWORD: nook_local_only
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in your local .env}
       POSTGRES_DB: nook_dev
     ports:
       - '127.0.0.1:5433:5432'

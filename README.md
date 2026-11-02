@@ -96,7 +96,7 @@ a generic status and never returns connection details.
 Validate the empty schema without a database connection:
 
 ```bash
-DATABASE_URL='postgresql://nook:nook_local_only@127.0.0.1:5433/nook_dev' npm run prisma:validate
+DATABASE_URL='postgresql://nook:<password>@127.0.0.1:5433/nook_dev' npm run prisma:validate
 ```
 
 <br>

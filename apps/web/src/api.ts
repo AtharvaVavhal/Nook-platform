@@ -1,15 +1,17 @@
-const API_BASE = import.meta.env.VITE_API_BASE || '/api';
+import { API_BASE, csrfToken, notifyUnauthorized } from './apiConfig';
 
 async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
   const res = await fetch(`${API_BASE}${path}`, {
     credentials: 'include',
+    ...options,
     headers: {
       'Content-Type': 'application/json',
+      ...(options.method && options.method !== 'GET' ? { 'x-csrf-token': csrfToken() } : {}),
       ...(options.headers || {}),
     },
-    ...options,
   });
   if (!res.ok) {
+    if (res.status === 401) notifyUnauthorized();
     const err = await res.json().catch(() => ({}));
     throw new Error(err.message || `HTTP ${res.status}`);
   }

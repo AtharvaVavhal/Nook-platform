@@ -10,6 +10,7 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
+import { Inject } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { CsrfGuard, OriginGuard, SessionGuard } from '../auth/auth.guards.js';
 import type { AuthenticatedRequest } from '../auth/auth.types.js';
@@ -20,9 +21,10 @@ import { AdmissionService } from './admission.service.js';
 @UseGuards(SessionGuard)
 @Controller('admissions')
 export class AdmissionController {
-  constructor(private readonly admissionService: AdmissionService) {}
+  constructor(@Inject(AdmissionService) private readonly admissionService: AdmissionService) {}
 
   @Post()
+  @UseGuards(OriginGuard, CsrfGuard)
   @ApiOperation({ summary: 'Create a new admission from a confirmed booking' })
   async create(@Req() req: any, @Body() dto: any) {
     const organizationId = req.auth!.organizationId;
@@ -45,6 +47,7 @@ export class AdmissionController {
   }
 
   @Put(':id')
+  @UseGuards(OriginGuard, CsrfGuard)
   @ApiOperation({ summary: 'Update an admission' })
   async update(@Req() req: any, @Param('id') id: string, @Body() dto: any) {
     const organizationId = req.auth!.organizationId;
@@ -52,6 +55,7 @@ export class AdmissionController {
   }
 
   @Delete(':id')
+  @UseGuards(OriginGuard, CsrfGuard)
   @ApiOperation({ summary: 'Cancel an admission' })
   async cancel(@Req() req: any, @Param('id') id: string) {
     const organizationId = req.auth!.organizationId;

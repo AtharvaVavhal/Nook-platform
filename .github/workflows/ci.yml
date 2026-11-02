@@ -8,6 +8,10 @@ on:
 permissions:
   contents: read
 
+# Password of the throwaway PostgreSQL service container that exists only inside the CI runner.
+env:
+  CI_DB_PASSWORD: ci-throwaway-database
+
 jobs:
   quality:
     runs-on: ubuntu-latest
@@ -39,7 +43,7 @@ jobs:
         run: npm run build
       - name: Prisma schema validation
         env:
-          DATABASE_URL: postgresql://nook:nook_local_only@localhost:5432/nook_dev?schema=public
+          DATABASE_URL: postgresql://nook:<password>@localhost:5432/nook_dev?schema=public
         run: npm run prisma:validate
       - name: Baseline secret scan
         run: npm run verify:secrets
@@ -53,7 +57,7 @@ jobs:
         image: postgres:17
         env:
           POSTGRES_USER: nook_ci
-          POSTGRES_PASSWORD: nook_ci
+          POSTGRES_PASSWORD: ${{ env.CI_DB_PASSWORD }}
           POSTGRES_DB: nook_ci
         ports:
           - 5432:5432
@@ -78,10 +82,10 @@ jobs:
         run: npm run verify:migration
       - name: Apply migrations to empty PostgreSQL
         env:
-          DATABASE_URL: postgresql://nook_ci:nook_ci@localhost:5432/nook_ci?schema=public
+          DATABASE_URL: postgresql://nook_ci:${{ env.CI_DB_PASSWORD }}@localhost:5432/nook_ci?schema=public
         run: npx prisma migrate deploy
       - name: Run mandatory database integration tests
         env:
-          DATABASE_URL: postgresql://nook_ci:nook_ci@localhost:5432/nook_ci?schema=public
+          DATABASE_URL: postgresql://nook_ci:${{ env.CI_DB_PASSWORD }}@localhost:5432/nook_ci?schema=public
           NOOK_DATABASE_TESTS_REQUIRED: '1'
         run: npm run test:database --workspace @nook/api

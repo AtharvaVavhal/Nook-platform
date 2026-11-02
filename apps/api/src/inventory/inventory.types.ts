@@ -61,6 +61,15 @@ export interface InventoryRepository {
     },
   ): Promise<unknown | null>;
   archiveBed(organizationId: string, bedId: string): Promise<unknown | null>;
+  getInventorySummary(organizationId: string): Promise<{
+    properties: number;
+    floors: number;
+    rooms: number;
+    beds: number;
+    bedsInService: number;
+    bedsOutOfService: number;
+    bedsArchived: number;
+  }>;
 }
 
 export function canManageInventory(context: AuthenticatedContext): boolean {

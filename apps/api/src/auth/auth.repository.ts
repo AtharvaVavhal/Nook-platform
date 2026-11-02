@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto';
 import { Inject, Injectable } from '@nestjs/common';
 import { PrismaService } from '../database/prisma.service.js';
 import type {
@@ -69,6 +70,41 @@ export class PrismaAuthRepository implements AuthRepository {
     await this.prisma.db.session.update({
       where: { id: sessionId },
       data: { lastSeenAt, idleExpiresAt },
+    });
+  }
+
+  async findUserById(userId: string): Promise<AuthUserRecord | null> {
+    const user = await this.prisma.db.user.findUnique({ where: { id: userId } });
+    return user as AuthUserRecord | null;
+  }
+
+  async changePassword(input: {
+    userId: string;
+    organizationId: string;
+    passwordHash: string;
+    keepSessionId: string;
+  }): Promise<{ revokedSessions: number }> {
+    return this.prisma.db.$transaction(async (tx) => {
+      await tx.user.update({
+        where: { id: input.userId },
+        data: { passwordHash: input.passwordHash, passwordChangeRequired: false },
+      });
+      const revoked = await tx.session.updateMany({
+        where: { userId: input.userId, revokedAt: null, id: { not: input.keepSessionId } },
+        data: { revokedAt: new Date(), revokedReason: 'password_changed' },
+      });
+      await tx.auditEvent.create({
+        data: {
+          organizationId: input.organizationId,
+          actorUserId: input.userId,
+          action: 'auth.password.changed',
+          targetType: 'user',
+          targetId: input.userId,
+          requestId: randomUUID(),
+          metadata: { revokedOtherSessions: revoked.count },
+        },
+      });
+      return { revokedSessions: revoked.count };
     });
   }
 

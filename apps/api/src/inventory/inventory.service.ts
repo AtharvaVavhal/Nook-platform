@@ -185,11 +185,24 @@ export class InventoryService {
     };
   }
 
-  async archiveBed(context: AuthenticatedContext, bedId: string) {
+async archiveBed(context: AuthenticatedContext, bedId: string) {
     this.assertRole(context);
-    return {
-      data: await this.update(() => this.repository.archiveBed(context.organizationId, bedId)),
-    };
+    try {
+      return {
+        data: await this.update(() => this.repository.archiveBed(context.organizationId, bedId)),
+      };
+    } catch (error) {
+      if (error instanceof Error && error.message === 'BED_OCCUPIED') {
+        throw new ConflictException({ code: 'BED_OCCUPIED' });
+      }
+      throw error;
+    }
+  }
+
+  async getInventorySummary(context: AuthenticatedContext) {
+    this.assertRole(context);
+    const summary = await this.repository.getInventorySummary(context.organizationId);
+    return { data: summary };
   }
 
   private async create<T>(operation: () => Promise<T>): Promise<T> {

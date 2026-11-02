@@ -19,6 +19,10 @@ from pathlib import Path
 from typing import Callable, NamedTuple
 
 
+# The example env file must carry this non-secret marker, never a real password.
+ENV_EXAMPLE_PLACEHOLDER = "<password>"
+
+
 class Result(NamedTuple):
     rule: str
     name: str
@@ -126,7 +130,7 @@ def s1(root, m):
     out.append(Result("S1", "no real .env file", not (root / ".env").exists()))
     example = read(root, ".env.example")
     out.append(Result("S1", "env example uses local placeholder credentials",
-                      "nook_local_only" in example and "localhost" in example))
+                      ENV_EXAMPLE_PLACEHOLDER in example and "localhost" in example))
     out.append(Result("S1", "no obsolete verify:docs reference", "docs/verify_reconciliation.py" not in read(root, "package.json")))
     corpus = (read(root, "docs/MILESTONE_0_SCOPE.md") + "\n" + read(root, "README.md")).lower()
     gone = [p for p in m["scopeDocPhrases"] if p not in corpus]
@@ -154,10 +158,12 @@ def s3(root, m):
         label = f.parent.name
         first = next((ln.strip() for ln in raw.splitlines() if ln.strip()), "")
         tag = re.match(r"^--\s*phase-scope:\s*slice-([\d.]+)\s*$", first)
-        if not tag:
-            bad.append(f"{label}: missing first-line '-- phase-scope: slice-<n>' tag")
-        elif tag.group(1) not in ok_slices:
-            bad.append(f"{label}: slice {tag.group(1)} is not approved")
+        # Applied migrations must never be edited (S5, Prisma checksums), so later ones are mapped in the manifest.
+        slice_id = tag.group(1) if tag else m.get("migrationSlices", {}).get(label)
+        if not slice_id:
+            bad.append(f"{label}: missing first-line '-- phase-scope: slice-<n>' tag and no migrationSlices entry")
+        elif slice_id not in ok_slices:
+            bad.append(f"{label}: slice {slice_id} is not approved")
         sql = strip_sql(raw)
         targets = []
         for pat in (rf"(?:CREATE|ALTER)\s+TABLE\s+(?:IF\s+NOT\s+EXISTS\s+)?(?:ONLY\s+)?{ident}",
@@ -211,7 +217,7 @@ def s5(root, m):
 
 
 def s6(root, m):
-    forbidden = set(m["forbiddenWords"])
+    forbidden = set(m["forbiddenWords"]) - union(approved(root, m), "allowsVocabulary")
     allowed = set(m.get("allowedIdentifiers", []))
     hits: list[str] = []
 
@@ -233,8 +239,9 @@ def s6(root, m):
 
 
 def s7(root, m):
-    found = sorted(set(re.findall(r"\b(Decimal|Float|Money)\b", strip_prisma_comments(read(root, "prisma/schema.prisma")))))
-    return [Result("S7", "schema uses no Decimal, Float or Money types", not found, ", ".join(found))]
+    allowed = union(approved(root, m), "allowsTypes")
+    found = sorted(set(re.findall(r"\b(Decimal|Float|Money)\b", strip_prisma_comments(read(root, "prisma/schema.prisma")))) - allowed)
+    return [Result("S7", "schema uses no Decimal, Float or Money types beyond those an approved slice declares", not found, ", ".join(found))]
 
 
 def s8(root, m):

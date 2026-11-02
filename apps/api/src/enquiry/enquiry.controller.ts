@@ -10,6 +10,7 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
+import { Inject } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { CsrfGuard, OriginGuard, SessionGuard } from '../auth/auth.guards.js';
 import type { AuthenticatedRequest } from '../auth/auth.types.js';
@@ -21,7 +22,7 @@ import { CreateEnquiryDto, UpdateEnquiryDto, EnquiryQueryDto, CreateFollowUpDto 
 @UseGuards(SessionGuard)
 @Controller('enquiries')
 export class EnquiryController {
-  constructor(private readonly enquiryService: EnquiryService) {}
+  constructor(@Inject(EnquiryService) private readonly enquiryService: EnquiryService) {}
 
   @Post()
   @UseGuards(OriginGuard, CsrfGuard)

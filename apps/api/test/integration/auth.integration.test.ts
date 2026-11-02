@@ -3,12 +3,12 @@ import test from 'node:test';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from '../../src/app.module.js';
 import request from 'supertest';
+import { requireTestDatabaseUrl } from './helpers/env.js';
 
 // ---- Test configuration ----
 process.env.APP_ENV = 'test';
 process.env.WEB_ORIGIN = 'http://localhost:5173';
-process.env.DATABASE_URL =
-  'postgresql://nook_phase3c_runtime:HCZ3ycYIgnACzCp3dDF6-uljyEf16VrxJkT5RL5zDHaODqmFHya2gqRX2fOPqhOC@127.0.0.1:5433/nook_test?schema=public';
+requireTestDatabaseUrl();
 
 const fixturePassword = process.env.TEST_OWNER_PASSWORD;
 if (!fixturePassword) {

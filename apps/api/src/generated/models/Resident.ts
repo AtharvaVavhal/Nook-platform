@@ -288,6 +288,8 @@ export type ResidentWhereInput = {
   admissions?: Prisma.AdmissionListRelationFilter
   checkIns?: Prisma.CheckInListRelationFilter
   checkOuts?: Prisma.CheckOutListRelationFilter
+  invoices?: Prisma.InvoiceListRelationFilter
+  payments?: Prisma.PaymentListRelationFilter
 }
 
 export type ResidentOrderByWithRelationInput = {
@@ -315,10 +317,13 @@ export type ResidentOrderByWithRelationInput = {
   admissions?: Prisma.AdmissionOrderByRelationAggregateInput
   checkIns?: Prisma.CheckInOrderByRelationAggregateInput
   checkOuts?: Prisma.CheckOutOrderByRelationAggregateInput
+  invoices?: Prisma.InvoiceOrderByRelationAggregateInput
+  payments?: Prisma.PaymentOrderByRelationAggregateInput
 }
 
 export type ResidentWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  id_organizationId?: Prisma.ResidentIdOrganizationIdCompoundUniqueInput
   AND?: Prisma.ResidentWhereInput | Prisma.ResidentWhereInput[]
   OR?: Prisma.ResidentWhereInput[]
   NOT?: Prisma.ResidentWhereInput | Prisma.ResidentWhereInput[]
@@ -345,7 +350,9 @@ export type ResidentWhereUniqueInput = Prisma.AtLeast<{
   admissions?: Prisma.AdmissionListRelationFilter
   checkIns?: Prisma.CheckInListRelationFilter
   checkOuts?: Prisma.CheckOutListRelationFilter
-}, "id">
+  invoices?: Prisma.InvoiceListRelationFilter
+  payments?: Prisma.PaymentListRelationFilter
+}, "id" | "id_organizationId">
 
 export type ResidentOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -419,6 +426,8 @@ export type ResidentCreateInput = {
   admissions?: Prisma.AdmissionCreateNestedManyWithoutResidentInput
   checkIns?: Prisma.CheckInCreateNestedManyWithoutResidentInput
   checkOuts?: Prisma.CheckOutCreateNestedManyWithoutResidentInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutResidentInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutResidentInput
 }
 
 export type ResidentUncheckedCreateInput = {
@@ -445,6 +454,8 @@ export type ResidentUncheckedCreateInput = {
   admissions?: Prisma.AdmissionUncheckedCreateNestedManyWithoutResidentInput
   checkIns?: Prisma.CheckInUncheckedCreateNestedManyWithoutResidentInput
   checkOuts?: Prisma.CheckOutUncheckedCreateNestedManyWithoutResidentInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutResidentInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutResidentInput
 }
 
 export type ResidentUpdateInput = {
@@ -471,6 +482,8 @@ export type ResidentUpdateInput = {
   admissions?: Prisma.AdmissionUpdateManyWithoutResidentNestedInput
   checkIns?: Prisma.CheckInUpdateManyWithoutResidentNestedInput
   checkOuts?: Prisma.CheckOutUpdateManyWithoutResidentNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutResidentNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutResidentNestedInput
 }
 
 export type ResidentUncheckedUpdateInput = {
@@ -497,6 +510,8 @@ export type ResidentUncheckedUpdateInput = {
   admissions?: Prisma.AdmissionUncheckedUpdateManyWithoutResidentNestedInput
   checkIns?: Prisma.CheckInUncheckedUpdateManyWithoutResidentNestedInput
   checkOuts?: Prisma.CheckOutUncheckedUpdateManyWithoutResidentNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutResidentNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutResidentNestedInput
 }
 
 export type ResidentCreateManyInput = {
@@ -569,6 +584,11 @@ export type ResidentListRelationFilter = {
 
 export type ResidentOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
+}
+
+export type ResidentIdOrganizationIdCompoundUniqueInput = {
+  id: string
+  organizationId: string
 }
 
 export type ResidentCountOrderByAggregateInput = {
@@ -764,6 +784,34 @@ export type ResidentUpdateOneRequiredWithoutCheckOutsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ResidentUpdateToOneWithWhereWithoutCheckOutsInput, Prisma.ResidentUpdateWithoutCheckOutsInput>, Prisma.ResidentUncheckedUpdateWithoutCheckOutsInput>
 }
 
+export type ResidentCreateNestedOneWithoutInvoicesInput = {
+  create?: Prisma.XOR<Prisma.ResidentCreateWithoutInvoicesInput, Prisma.ResidentUncheckedCreateWithoutInvoicesInput>
+  connectOrCreate?: Prisma.ResidentCreateOrConnectWithoutInvoicesInput
+  connect?: Prisma.ResidentWhereUniqueInput
+}
+
+export type ResidentUpdateOneRequiredWithoutInvoicesNestedInput = {
+  create?: Prisma.XOR<Prisma.ResidentCreateWithoutInvoicesInput, Prisma.ResidentUncheckedCreateWithoutInvoicesInput>
+  connectOrCreate?: Prisma.ResidentCreateOrConnectWithoutInvoicesInput
+  upsert?: Prisma.ResidentUpsertWithoutInvoicesInput
+  connect?: Prisma.ResidentWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ResidentUpdateToOneWithWhereWithoutInvoicesInput, Prisma.ResidentUpdateWithoutInvoicesInput>, Prisma.ResidentUncheckedUpdateWithoutInvoicesInput>
+}
+
+export type ResidentCreateNestedOneWithoutPaymentsInput = {
+  create?: Prisma.XOR<Prisma.ResidentCreateWithoutPaymentsInput, Prisma.ResidentUncheckedCreateWithoutPaymentsInput>
+  connectOrCreate?: Prisma.ResidentCreateOrConnectWithoutPaymentsInput
+  connect?: Prisma.ResidentWhereUniqueInput
+}
+
+export type ResidentUpdateOneRequiredWithoutPaymentsNestedInput = {
+  create?: Prisma.XOR<Prisma.ResidentCreateWithoutPaymentsInput, Prisma.ResidentUncheckedCreateWithoutPaymentsInput>
+  connectOrCreate?: Prisma.ResidentCreateOrConnectWithoutPaymentsInput
+  upsert?: Prisma.ResidentUpsertWithoutPaymentsInput
+  connect?: Prisma.ResidentWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ResidentUpdateToOneWithWhereWithoutPaymentsInput, Prisma.ResidentUpdateWithoutPaymentsInput>, Prisma.ResidentUncheckedUpdateWithoutPaymentsInput>
+}
+
 export type ResidentCreateWithoutOrganizationInput = {
   id?: string
   firstName: string
@@ -787,6 +835,8 @@ export type ResidentCreateWithoutOrganizationInput = {
   admissions?: Prisma.AdmissionCreateNestedManyWithoutResidentInput
   checkIns?: Prisma.CheckInCreateNestedManyWithoutResidentInput
   checkOuts?: Prisma.CheckOutCreateNestedManyWithoutResidentInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutResidentInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutResidentInput
 }
 
 export type ResidentUncheckedCreateWithoutOrganizationInput = {
@@ -812,6 +862,8 @@ export type ResidentUncheckedCreateWithoutOrganizationInput = {
   admissions?: Prisma.AdmissionUncheckedCreateNestedManyWithoutResidentInput
   checkIns?: Prisma.CheckInUncheckedCreateNestedManyWithoutResidentInput
   checkOuts?: Prisma.CheckOutUncheckedCreateNestedManyWithoutResidentInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutResidentInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutResidentInput
 }
 
 export type ResidentCreateOrConnectWithoutOrganizationInput = {
@@ -887,6 +939,8 @@ export type ResidentCreateWithoutBookingsInput = {
   admissions?: Prisma.AdmissionCreateNestedManyWithoutResidentInput
   checkIns?: Prisma.CheckInCreateNestedManyWithoutResidentInput
   checkOuts?: Prisma.CheckOutCreateNestedManyWithoutResidentInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutResidentInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutResidentInput
 }
 
 export type ResidentUncheckedCreateWithoutBookingsInput = {
@@ -912,6 +966,8 @@ export type ResidentUncheckedCreateWithoutBookingsInput = {
   admissions?: Prisma.AdmissionUncheckedCreateNestedManyWithoutResidentInput
   checkIns?: Prisma.CheckInUncheckedCreateNestedManyWithoutResidentInput
   checkOuts?: Prisma.CheckOutUncheckedCreateNestedManyWithoutResidentInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutResidentInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutResidentInput
 }
 
 export type ResidentCreateOrConnectWithoutBookingsInput = {
@@ -953,6 +1009,8 @@ export type ResidentUpdateWithoutBookingsInput = {
   admissions?: Prisma.AdmissionUpdateManyWithoutResidentNestedInput
   checkIns?: Prisma.CheckInUpdateManyWithoutResidentNestedInput
   checkOuts?: Prisma.CheckOutUpdateManyWithoutResidentNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutResidentNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutResidentNestedInput
 }
 
 export type ResidentUncheckedUpdateWithoutBookingsInput = {
@@ -978,6 +1036,8 @@ export type ResidentUncheckedUpdateWithoutBookingsInput = {
   admissions?: Prisma.AdmissionUncheckedUpdateManyWithoutResidentNestedInput
   checkIns?: Prisma.CheckInUncheckedUpdateManyWithoutResidentNestedInput
   checkOuts?: Prisma.CheckOutUncheckedUpdateManyWithoutResidentNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutResidentNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutResidentNestedInput
 }
 
 export type ResidentCreateWithoutAdmissionsInput = {
@@ -1003,6 +1063,8 @@ export type ResidentCreateWithoutAdmissionsInput = {
   bookings?: Prisma.BookingCreateNestedManyWithoutResidentInput
   checkIns?: Prisma.CheckInCreateNestedManyWithoutResidentInput
   checkOuts?: Prisma.CheckOutCreateNestedManyWithoutResidentInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutResidentInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutResidentInput
 }
 
 export type ResidentUncheckedCreateWithoutAdmissionsInput = {
@@ -1028,6 +1090,8 @@ export type ResidentUncheckedCreateWithoutAdmissionsInput = {
   bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutResidentInput
   checkIns?: Prisma.CheckInUncheckedCreateNestedManyWithoutResidentInput
   checkOuts?: Prisma.CheckOutUncheckedCreateNestedManyWithoutResidentInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutResidentInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutResidentInput
 }
 
 export type ResidentCreateOrConnectWithoutAdmissionsInput = {
@@ -1069,6 +1133,8 @@ export type ResidentUpdateWithoutAdmissionsInput = {
   bookings?: Prisma.BookingUpdateManyWithoutResidentNestedInput
   checkIns?: Prisma.CheckInUpdateManyWithoutResidentNestedInput
   checkOuts?: Prisma.CheckOutUpdateManyWithoutResidentNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutResidentNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutResidentNestedInput
 }
 
 export type ResidentUncheckedUpdateWithoutAdmissionsInput = {
@@ -1094,6 +1160,8 @@ export type ResidentUncheckedUpdateWithoutAdmissionsInput = {
   bookings?: Prisma.BookingUncheckedUpdateManyWithoutResidentNestedInput
   checkIns?: Prisma.CheckInUncheckedUpdateManyWithoutResidentNestedInput
   checkOuts?: Prisma.CheckOutUncheckedUpdateManyWithoutResidentNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutResidentNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutResidentNestedInput
 }
 
 export type ResidentCreateWithoutEnquiryInput = {
@@ -1119,6 +1187,8 @@ export type ResidentCreateWithoutEnquiryInput = {
   admissions?: Prisma.AdmissionCreateNestedManyWithoutResidentInput
   checkIns?: Prisma.CheckInCreateNestedManyWithoutResidentInput
   checkOuts?: Prisma.CheckOutCreateNestedManyWithoutResidentInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutResidentInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutResidentInput
 }
 
 export type ResidentUncheckedCreateWithoutEnquiryInput = {
@@ -1144,6 +1214,8 @@ export type ResidentUncheckedCreateWithoutEnquiryInput = {
   admissions?: Prisma.AdmissionUncheckedCreateNestedManyWithoutResidentInput
   checkIns?: Prisma.CheckInUncheckedCreateNestedManyWithoutResidentInput
   checkOuts?: Prisma.CheckOutUncheckedCreateNestedManyWithoutResidentInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutResidentInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutResidentInput
 }
 
 export type ResidentCreateOrConnectWithoutEnquiryInput = {
@@ -1185,6 +1257,8 @@ export type ResidentUpdateWithoutEnquiryInput = {
   admissions?: Prisma.AdmissionUpdateManyWithoutResidentNestedInput
   checkIns?: Prisma.CheckInUpdateManyWithoutResidentNestedInput
   checkOuts?: Prisma.CheckOutUpdateManyWithoutResidentNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutResidentNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutResidentNestedInput
 }
 
 export type ResidentUncheckedUpdateWithoutEnquiryInput = {
@@ -1210,6 +1284,8 @@ export type ResidentUncheckedUpdateWithoutEnquiryInput = {
   admissions?: Prisma.AdmissionUncheckedUpdateManyWithoutResidentNestedInput
   checkIns?: Prisma.CheckInUncheckedUpdateManyWithoutResidentNestedInput
   checkOuts?: Prisma.CheckOutUncheckedUpdateManyWithoutResidentNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutResidentNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutResidentNestedInput
 }
 
 export type ResidentCreateWithoutCheckInsInput = {
@@ -1235,6 +1311,8 @@ export type ResidentCreateWithoutCheckInsInput = {
   bookings?: Prisma.BookingCreateNestedManyWithoutResidentInput
   admissions?: Prisma.AdmissionCreateNestedManyWithoutResidentInput
   checkOuts?: Prisma.CheckOutCreateNestedManyWithoutResidentInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutResidentInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutResidentInput
 }
 
 export type ResidentUncheckedCreateWithoutCheckInsInput = {
@@ -1260,6 +1338,8 @@ export type ResidentUncheckedCreateWithoutCheckInsInput = {
   bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutResidentInput
   admissions?: Prisma.AdmissionUncheckedCreateNestedManyWithoutResidentInput
   checkOuts?: Prisma.CheckOutUncheckedCreateNestedManyWithoutResidentInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutResidentInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutResidentInput
 }
 
 export type ResidentCreateOrConnectWithoutCheckInsInput = {
@@ -1301,6 +1381,8 @@ export type ResidentUpdateWithoutCheckInsInput = {
   bookings?: Prisma.BookingUpdateManyWithoutResidentNestedInput
   admissions?: Prisma.AdmissionUpdateManyWithoutResidentNestedInput
   checkOuts?: Prisma.CheckOutUpdateManyWithoutResidentNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutResidentNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutResidentNestedInput
 }
 
 export type ResidentUncheckedUpdateWithoutCheckInsInput = {
@@ -1326,6 +1408,8 @@ export type ResidentUncheckedUpdateWithoutCheckInsInput = {
   bookings?: Prisma.BookingUncheckedUpdateManyWithoutResidentNestedInput
   admissions?: Prisma.AdmissionUncheckedUpdateManyWithoutResidentNestedInput
   checkOuts?: Prisma.CheckOutUncheckedUpdateManyWithoutResidentNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutResidentNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutResidentNestedInput
 }
 
 export type ResidentCreateWithoutCheckOutsInput = {
@@ -1351,6 +1435,8 @@ export type ResidentCreateWithoutCheckOutsInput = {
   bookings?: Prisma.BookingCreateNestedManyWithoutResidentInput
   admissions?: Prisma.AdmissionCreateNestedManyWithoutResidentInput
   checkIns?: Prisma.CheckInCreateNestedManyWithoutResidentInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutResidentInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutResidentInput
 }
 
 export type ResidentUncheckedCreateWithoutCheckOutsInput = {
@@ -1376,6 +1462,8 @@ export type ResidentUncheckedCreateWithoutCheckOutsInput = {
   bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutResidentInput
   admissions?: Prisma.AdmissionUncheckedCreateNestedManyWithoutResidentInput
   checkIns?: Prisma.CheckInUncheckedCreateNestedManyWithoutResidentInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutResidentInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutResidentInput
 }
 
 export type ResidentCreateOrConnectWithoutCheckOutsInput = {
@@ -1417,6 +1505,8 @@ export type ResidentUpdateWithoutCheckOutsInput = {
   bookings?: Prisma.BookingUpdateManyWithoutResidentNestedInput
   admissions?: Prisma.AdmissionUpdateManyWithoutResidentNestedInput
   checkIns?: Prisma.CheckInUpdateManyWithoutResidentNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutResidentNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutResidentNestedInput
 }
 
 export type ResidentUncheckedUpdateWithoutCheckOutsInput = {
@@ -1442,6 +1532,256 @@ export type ResidentUncheckedUpdateWithoutCheckOutsInput = {
   bookings?: Prisma.BookingUncheckedUpdateManyWithoutResidentNestedInput
   admissions?: Prisma.AdmissionUncheckedUpdateManyWithoutResidentNestedInput
   checkIns?: Prisma.CheckInUncheckedUpdateManyWithoutResidentNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutResidentNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutResidentNestedInput
+}
+
+export type ResidentCreateWithoutInvoicesInput = {
+  id?: string
+  firstName: string
+  lastName: string
+  dateOfBirth?: Date | string | null
+  gender?: string | null
+  phone?: string | null
+  email?: string | null
+  address?: string | null
+  emergencyContactName?: string | null
+  emergencyContactPhone?: string | null
+  emergencyContactRelation?: string | null
+  documentMetadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  documentUrl?: string | null
+  documentVerificationStatus?: $Enums.DocumentVerificationStatus
+  status?: $Enums.ResidentStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  organization: Prisma.OrganizationCreateNestedOneWithoutResidentsInput
+  enquiry?: Prisma.EnquiryCreateNestedOneWithoutResidentInput
+  bookings?: Prisma.BookingCreateNestedManyWithoutResidentInput
+  admissions?: Prisma.AdmissionCreateNestedManyWithoutResidentInput
+  checkIns?: Prisma.CheckInCreateNestedManyWithoutResidentInput
+  checkOuts?: Prisma.CheckOutCreateNestedManyWithoutResidentInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutResidentInput
+}
+
+export type ResidentUncheckedCreateWithoutInvoicesInput = {
+  id?: string
+  organizationId: string
+  firstName: string
+  lastName: string
+  dateOfBirth?: Date | string | null
+  gender?: string | null
+  phone?: string | null
+  email?: string | null
+  address?: string | null
+  emergencyContactName?: string | null
+  emergencyContactPhone?: string | null
+  emergencyContactRelation?: string | null
+  documentMetadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  documentUrl?: string | null
+  documentVerificationStatus?: $Enums.DocumentVerificationStatus
+  status?: $Enums.ResidentStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  enquiry?: Prisma.EnquiryUncheckedCreateNestedOneWithoutResidentInput
+  bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutResidentInput
+  admissions?: Prisma.AdmissionUncheckedCreateNestedManyWithoutResidentInput
+  checkIns?: Prisma.CheckInUncheckedCreateNestedManyWithoutResidentInput
+  checkOuts?: Prisma.CheckOutUncheckedCreateNestedManyWithoutResidentInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutResidentInput
+}
+
+export type ResidentCreateOrConnectWithoutInvoicesInput = {
+  where: Prisma.ResidentWhereUniqueInput
+  create: Prisma.XOR<Prisma.ResidentCreateWithoutInvoicesInput, Prisma.ResidentUncheckedCreateWithoutInvoicesInput>
+}
+
+export type ResidentUpsertWithoutInvoicesInput = {
+  update: Prisma.XOR<Prisma.ResidentUpdateWithoutInvoicesInput, Prisma.ResidentUncheckedUpdateWithoutInvoicesInput>
+  create: Prisma.XOR<Prisma.ResidentCreateWithoutInvoicesInput, Prisma.ResidentUncheckedCreateWithoutInvoicesInput>
+  where?: Prisma.ResidentWhereInput
+}
+
+export type ResidentUpdateToOneWithWhereWithoutInvoicesInput = {
+  where?: Prisma.ResidentWhereInput
+  data: Prisma.XOR<Prisma.ResidentUpdateWithoutInvoicesInput, Prisma.ResidentUncheckedUpdateWithoutInvoicesInput>
+}
+
+export type ResidentUpdateWithoutInvoicesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyContactName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyContactPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyContactRelation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  documentMetadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  documentUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  documentVerificationStatus?: Prisma.EnumDocumentVerificationStatusFieldUpdateOperationsInput | $Enums.DocumentVerificationStatus
+  status?: Prisma.EnumResidentStatusFieldUpdateOperationsInput | $Enums.ResidentStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutResidentsNestedInput
+  enquiry?: Prisma.EnquiryUpdateOneWithoutResidentNestedInput
+  bookings?: Prisma.BookingUpdateManyWithoutResidentNestedInput
+  admissions?: Prisma.AdmissionUpdateManyWithoutResidentNestedInput
+  checkIns?: Prisma.CheckInUpdateManyWithoutResidentNestedInput
+  checkOuts?: Prisma.CheckOutUpdateManyWithoutResidentNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutResidentNestedInput
+}
+
+export type ResidentUncheckedUpdateWithoutInvoicesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyContactName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyContactPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyContactRelation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  documentMetadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  documentUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  documentVerificationStatus?: Prisma.EnumDocumentVerificationStatusFieldUpdateOperationsInput | $Enums.DocumentVerificationStatus
+  status?: Prisma.EnumResidentStatusFieldUpdateOperationsInput | $Enums.ResidentStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  enquiry?: Prisma.EnquiryUncheckedUpdateOneWithoutResidentNestedInput
+  bookings?: Prisma.BookingUncheckedUpdateManyWithoutResidentNestedInput
+  admissions?: Prisma.AdmissionUncheckedUpdateManyWithoutResidentNestedInput
+  checkIns?: Prisma.CheckInUncheckedUpdateManyWithoutResidentNestedInput
+  checkOuts?: Prisma.CheckOutUncheckedUpdateManyWithoutResidentNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutResidentNestedInput
+}
+
+export type ResidentCreateWithoutPaymentsInput = {
+  id?: string
+  firstName: string
+  lastName: string
+  dateOfBirth?: Date | string | null
+  gender?: string | null
+  phone?: string | null
+  email?: string | null
+  address?: string | null
+  emergencyContactName?: string | null
+  emergencyContactPhone?: string | null
+  emergencyContactRelation?: string | null
+  documentMetadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  documentUrl?: string | null
+  documentVerificationStatus?: $Enums.DocumentVerificationStatus
+  status?: $Enums.ResidentStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  organization: Prisma.OrganizationCreateNestedOneWithoutResidentsInput
+  enquiry?: Prisma.EnquiryCreateNestedOneWithoutResidentInput
+  bookings?: Prisma.BookingCreateNestedManyWithoutResidentInput
+  admissions?: Prisma.AdmissionCreateNestedManyWithoutResidentInput
+  checkIns?: Prisma.CheckInCreateNestedManyWithoutResidentInput
+  checkOuts?: Prisma.CheckOutCreateNestedManyWithoutResidentInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutResidentInput
+}
+
+export type ResidentUncheckedCreateWithoutPaymentsInput = {
+  id?: string
+  organizationId: string
+  firstName: string
+  lastName: string
+  dateOfBirth?: Date | string | null
+  gender?: string | null
+  phone?: string | null
+  email?: string | null
+  address?: string | null
+  emergencyContactName?: string | null
+  emergencyContactPhone?: string | null
+  emergencyContactRelation?: string | null
+  documentMetadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  documentUrl?: string | null
+  documentVerificationStatus?: $Enums.DocumentVerificationStatus
+  status?: $Enums.ResidentStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  enquiry?: Prisma.EnquiryUncheckedCreateNestedOneWithoutResidentInput
+  bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutResidentInput
+  admissions?: Prisma.AdmissionUncheckedCreateNestedManyWithoutResidentInput
+  checkIns?: Prisma.CheckInUncheckedCreateNestedManyWithoutResidentInput
+  checkOuts?: Prisma.CheckOutUncheckedCreateNestedManyWithoutResidentInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutResidentInput
+}
+
+export type ResidentCreateOrConnectWithoutPaymentsInput = {
+  where: Prisma.ResidentWhereUniqueInput
+  create: Prisma.XOR<Prisma.ResidentCreateWithoutPaymentsInput, Prisma.ResidentUncheckedCreateWithoutPaymentsInput>
+}
+
+export type ResidentUpsertWithoutPaymentsInput = {
+  update: Prisma.XOR<Prisma.ResidentUpdateWithoutPaymentsInput, Prisma.ResidentUncheckedUpdateWithoutPaymentsInput>
+  create: Prisma.XOR<Prisma.ResidentCreateWithoutPaymentsInput, Prisma.ResidentUncheckedCreateWithoutPaymentsInput>
+  where?: Prisma.ResidentWhereInput
+}
+
+export type ResidentUpdateToOneWithWhereWithoutPaymentsInput = {
+  where?: Prisma.ResidentWhereInput
+  data: Prisma.XOR<Prisma.ResidentUpdateWithoutPaymentsInput, Prisma.ResidentUncheckedUpdateWithoutPaymentsInput>
+}
+
+export type ResidentUpdateWithoutPaymentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyContactName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyContactPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyContactRelation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  documentMetadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  documentUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  documentVerificationStatus?: Prisma.EnumDocumentVerificationStatusFieldUpdateOperationsInput | $Enums.DocumentVerificationStatus
+  status?: Prisma.EnumResidentStatusFieldUpdateOperationsInput | $Enums.ResidentStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutResidentsNestedInput
+  enquiry?: Prisma.EnquiryUpdateOneWithoutResidentNestedInput
+  bookings?: Prisma.BookingUpdateManyWithoutResidentNestedInput
+  admissions?: Prisma.AdmissionUpdateManyWithoutResidentNestedInput
+  checkIns?: Prisma.CheckInUpdateManyWithoutResidentNestedInput
+  checkOuts?: Prisma.CheckOutUpdateManyWithoutResidentNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutResidentNestedInput
+}
+
+export type ResidentUncheckedUpdateWithoutPaymentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyContactName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyContactPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyContactRelation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  documentMetadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  documentUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  documentVerificationStatus?: Prisma.EnumDocumentVerificationStatusFieldUpdateOperationsInput | $Enums.DocumentVerificationStatus
+  status?: Prisma.EnumResidentStatusFieldUpdateOperationsInput | $Enums.ResidentStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  enquiry?: Prisma.EnquiryUncheckedUpdateOneWithoutResidentNestedInput
+  bookings?: Prisma.BookingUncheckedUpdateManyWithoutResidentNestedInput
+  admissions?: Prisma.AdmissionUncheckedUpdateManyWithoutResidentNestedInput
+  checkIns?: Prisma.CheckInUncheckedUpdateManyWithoutResidentNestedInput
+  checkOuts?: Prisma.CheckOutUncheckedUpdateManyWithoutResidentNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutResidentNestedInput
 }
 
 export type ResidentCreateManyOrganizationInput = {
@@ -1487,6 +1827,8 @@ export type ResidentUpdateWithoutOrganizationInput = {
   admissions?: Prisma.AdmissionUpdateManyWithoutResidentNestedInput
   checkIns?: Prisma.CheckInUpdateManyWithoutResidentNestedInput
   checkOuts?: Prisma.CheckOutUpdateManyWithoutResidentNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutResidentNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutResidentNestedInput
 }
 
 export type ResidentUncheckedUpdateWithoutOrganizationInput = {
@@ -1512,6 +1854,8 @@ export type ResidentUncheckedUpdateWithoutOrganizationInput = {
   admissions?: Prisma.AdmissionUncheckedUpdateManyWithoutResidentNestedInput
   checkIns?: Prisma.CheckInUncheckedUpdateManyWithoutResidentNestedInput
   checkOuts?: Prisma.CheckOutUncheckedUpdateManyWithoutResidentNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutResidentNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutResidentNestedInput
 }
 
 export type ResidentUncheckedUpdateManyWithoutOrganizationInput = {
@@ -1544,6 +1888,8 @@ export type ResidentCountOutputType = {
   admissions: number
   checkIns: number
   checkOuts: number
+  invoices: number
+  payments: number
 }
 
 export type ResidentCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1551,6 +1897,8 @@ export type ResidentCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensio
   admissions?: boolean | ResidentCountOutputTypeCountAdmissionsArgs
   checkIns?: boolean | ResidentCountOutputTypeCountCheckInsArgs
   checkOuts?: boolean | ResidentCountOutputTypeCountCheckOutsArgs
+  invoices?: boolean | ResidentCountOutputTypeCountInvoicesArgs
+  payments?: boolean | ResidentCountOutputTypeCountPaymentsArgs
 }
 
 /**
@@ -1591,6 +1939,20 @@ export type ResidentCountOutputTypeCountCheckOutsArgs<ExtArgs extends runtime.Ty
   where?: Prisma.CheckOutWhereInput
 }
 
+/**
+ * ResidentCountOutputType without action
+ */
+export type ResidentCountOutputTypeCountInvoicesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.InvoiceWhereInput
+}
+
+/**
+ * ResidentCountOutputType without action
+ */
+export type ResidentCountOutputTypeCountPaymentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PaymentWhereInput
+}
+
 
 export type ResidentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1617,6 +1979,8 @@ export type ResidentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   admissions?: boolean | Prisma.Resident$admissionsArgs<ExtArgs>
   checkIns?: boolean | Prisma.Resident$checkInsArgs<ExtArgs>
   checkOuts?: boolean | Prisma.Resident$checkOutsArgs<ExtArgs>
+  invoices?: boolean | Prisma.Resident$invoicesArgs<ExtArgs>
+  payments?: boolean | Prisma.Resident$paymentsArgs<ExtArgs>
   _count?: boolean | Prisma.ResidentCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["resident"]>
 
@@ -1693,6 +2057,8 @@ export type ResidentInclude<ExtArgs extends runtime.Types.Extensions.InternalArg
   admissions?: boolean | Prisma.Resident$admissionsArgs<ExtArgs>
   checkIns?: boolean | Prisma.Resident$checkInsArgs<ExtArgs>
   checkOuts?: boolean | Prisma.Resident$checkOutsArgs<ExtArgs>
+  invoices?: boolean | Prisma.Resident$invoicesArgs<ExtArgs>
+  payments?: boolean | Prisma.Resident$paymentsArgs<ExtArgs>
   _count?: boolean | Prisma.ResidentCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ResidentIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1711,6 +2077,8 @@ export type $ResidentPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     admissions: Prisma.$AdmissionPayload<ExtArgs>[]
     checkIns: Prisma.$CheckInPayload<ExtArgs>[]
     checkOuts: Prisma.$CheckOutPayload<ExtArgs>[]
+    invoices: Prisma.$InvoicePayload<ExtArgs>[]
+    payments: Prisma.$PaymentPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2131,6 +2499,8 @@ export interface Prisma__ResidentClient<T, Null = never, ExtArgs extends runtime
   admissions<T extends Prisma.Resident$admissionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Resident$admissionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AdmissionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   checkIns<T extends Prisma.Resident$checkInsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Resident$checkInsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CheckInPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   checkOuts<T extends Prisma.Resident$checkOutsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Resident$checkOutsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CheckOutPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  invoices<T extends Prisma.Resident$invoicesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Resident$invoicesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  payments<T extends Prisma.Resident$paymentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Resident$paymentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2691,6 +3061,54 @@ export type Resident$checkOutsArgs<ExtArgs extends runtime.Types.Extensions.Inte
   take?: number
   skip?: number
   distinct?: Prisma.CheckOutScalarFieldEnum | Prisma.CheckOutScalarFieldEnum[]
+}
+
+/**
+ * Resident.invoices
+ */
+export type Resident$invoicesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Invoice
+   */
+  select?: Prisma.InvoiceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Invoice
+   */
+  omit?: Prisma.InvoiceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InvoiceInclude<ExtArgs> | null
+  where?: Prisma.InvoiceWhereInput
+  orderBy?: Prisma.InvoiceOrderByWithRelationInput | Prisma.InvoiceOrderByWithRelationInput[]
+  cursor?: Prisma.InvoiceWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.InvoiceScalarFieldEnum | Prisma.InvoiceScalarFieldEnum[]
+}
+
+/**
+ * Resident.payments
+ */
+export type Resident$paymentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Payment
+   */
+  select?: Prisma.PaymentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Payment
+   */
+  omit?: Prisma.PaymentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PaymentInclude<ExtArgs> | null
+  where?: Prisma.PaymentWhereInput
+  orderBy?: Prisma.PaymentOrderByWithRelationInput | Prisma.PaymentOrderByWithRelationInput[]
+  cursor?: Prisma.PaymentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PaymentScalarFieldEnum | Prisma.PaymentScalarFieldEnum[]
 }
 
 /**

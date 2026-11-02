@@ -292,6 +292,7 @@ export type BedOrderByWithRelationInput = {
 
 export type BedWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  id_organizationId?: Prisma.BedIdOrganizationIdCompoundUniqueInput
   AND?: Prisma.BedWhereInput | Prisma.BedWhereInput[]
   OR?: Prisma.BedWhereInput[]
   NOT?: Prisma.BedWhereInput | Prisma.BedWhereInput[]
@@ -310,7 +311,7 @@ export type BedWhereUniqueInput = Prisma.AtLeast<{
   admissions?: Prisma.AdmissionListRelationFilter
   checkIns?: Prisma.CheckInListRelationFilter
   checkOuts?: Prisma.CheckOutListRelationFilter
-}, "id">
+}, "id" | "id_organizationId">
 
 export type BedOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -463,6 +464,11 @@ export type BedListRelationFilter = {
 
 export type BedOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
+}
+
+export type BedIdOrganizationIdCompoundUniqueInput = {
+  id: string
+  organizationId: string
 }
 
 export type BedCountOrderByAggregateInput = {

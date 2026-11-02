@@ -1,0 +1,517 @@
+/* Finance screens. Uses the canonical tokens only (tokens.css). */
+.fin .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+.fin h2 {
+  margin: 0;
+  font-size: 20px;
+  letter-spacing: -0.4px;
+}
+.fin h3 {
+  margin: 22px 0 10px;
+  font-size: 15px;
+}
+.fin a {
+  color: var(--color-accent-text);
+}
+.fin a.primary-button {
+  color: var(--color-text-on-accent);
+}
+.fin a.outline-button {
+  color: var(--color-text-primary);
+}
+.fin-tabs {
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid var(--color-border-subtle);
+  margin-bottom: 22px;
+  overflow-x: auto;
+}
+.fin-tabs a {
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--color-text-secondary);
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+}
+.fin-tabs a[aria-current='page'] {
+  color: var(--color-brand-primary);
+  border-bottom-color: var(--color-brand-accent);
+}
+.fin-card,
+.fin-stat {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 12px;
+  padding: 18px;
+}
+.fin-card {
+  margin-bottom: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.fin-card h3 {
+  margin-top: 0;
+}
+.fin-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.fin-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.fin-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 14px;
+  margin-bottom: 14px;
+}
+.fin-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.fin-stat strong {
+  font-size: 22px;
+  letter-spacing: -0.5px;
+  color: var(--color-text-primary);
+  font-variant-numeric: tabular-nums;
+}
+.fin-stat-success strong {
+  color: var(--color-success-text);
+}
+.fin-stat-danger strong {
+  color: var(--color-danger-text);
+}
+.fin-note {
+  color: var(--color-text-secondary);
+  font-size: 12px;
+  line-height: 1.6;
+  margin: 0 0 14px;
+}
+.fin-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 18px;
+  align-items: start;
+}
+.fin-toolbar {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+.fin-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}
+.fin-field input,
+.fin-field select,
+.fin-field textarea {
+  min-height: 40px;
+  padding: 8px 10px;
+  border: 1px solid var(--color-border-strong);
+  border-radius: 8px;
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+  font: inherit;
+  font-weight: 400;
+}
+.fin-field input:focus-visible,
+.fin-field select:focus-visible,
+.fin-field textarea:focus-visible,
+.fin-tabs a:focus-visible,
+.fin a:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+.fin-check {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 13px;
+}
+.fin-chosen {
+  font-weight: 600;
+  color: var(--color-text-primary);
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  min-height: 40px;
+}
+.fin-link-button {
+  background: none;
+  border: 0;
+  padding: 0;
+  color: var(--color-accent-text);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+  align-self: flex-start;
+}
+.fin-suggest {
+  list-style: none;
+  margin: -6px 0 0;
+  padding: 4px;
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 8px;
+  background: var(--color-surface);
+}
+.fin-suggest button {
+  width: 100%;
+  text-align: left;
+  padding: 8px 10px;
+  background: none;
+  border: 0;
+  border-radius: 6px;
+  cursor: pointer;
+  font: inherit;
+  color: var(--color-text-primary);
+}
+.fin-suggest button:hover,
+.fin-suggest button:focus-visible {
+  background: var(--color-brand-subtle);
+}
+.fin-table-wrap {
+  overflow-x: auto;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 12px;
+}
+.fin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.fin-table th {
+  text-align: left;
+  padding: 11px 14px;
+  font-size: 11px;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+  background: var(--color-brand-subtle);
+  white-space: nowrap;
+}
+.fin-table td {
+  padding: 12px 14px;
+  border-top: 1px solid var(--color-border-subtle);
+}
+.fin-table .num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.fin-overdue-days {
+  color: var(--color-danger-text);
+}
+.fin-badge {
+  display: inline-block;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  background: var(--color-neutral-tint);
+  color: var(--color-neutral-text);
+  vertical-align: middle;
+}
+.fin-badge-paid {
+  background: var(--color-success-tint);
+  color: var(--color-success-text);
+}
+.fin-badge-issued {
+  background: var(--color-info-tint);
+  color: var(--color-info-text);
+}
+.fin-badge-partially-paid {
+  background: var(--color-warning-tint);
+  color: var(--color-warning-text);
+}
+.fin-badge-overdue {
+  background: var(--color-danger-tint);
+  color: var(--color-danger-text);
+}
+.fin-pager {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 16px;
+  font-size: 13px;
+}
+.fin-state {
+  padding: 22px;
+  border: 1px dashed var(--color-border-subtle);
+  border-radius: 12px;
+  color: var(--color-text-secondary);
+  text-align: center;
+}
+.fin-state p {
+  margin: 0 0 10px;
+}
+.fin-state-error {
+  border-style: solid;
+  border-color: var(--color-danger-solid);
+  background: var(--color-danger-tint);
+  color: var(--color-danger-text);
+}
+.fin-empty strong {
+  display: block;
+  color: var(--color-text-primary);
+  margin-bottom: 4px;
+}
+.fin-success {
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: var(--color-success-tint);
+  color: var(--color-success-text);
+  font-size: 13px;
+  margin: 0 0 14px;
+}
+.fin-form-error {
+  margin: 0;
+  color: var(--color-danger-text);
+  font-size: 13px;
+}
+.fin-bars {
+  list-style: none;
+  display: flex;
+  gap: 14px;
+  align-items: flex-end;
+  height: 170px;
+  margin: 8px 0 0;
+  padding: 0;
+}
+.fin-bars li {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+}
+.fin-bar-pair {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+}
+.fin-bar {
+  display: block;
+  width: 36%;
+  max-width: 28px;
+  min-height: 2px;
+  border-radius: 4px 4px 0 0;
+}
+.fin-bar-invoiced {
+  background: var(--color-brand-primary);
+}
+.fin-bar-collected {
+  background: var(--color-brand-accent);
+}
+.fin-legend {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  margin: 0;
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+.fin-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  margin-right: 5px;
+}
+.fin-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgb(23 19 56 / 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 50;
+}
+.fin-modal {
+  width: min(460px, 100%);
+  max-height: 92vh;
+  overflow-y: auto;
+  background: var(--color-surface);
+  border-radius: 14px;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.fin-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+.fin-receipt {
+  background: #ffffff;
+  color: #26233d;
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 12px;
+  padding: 28px;
+  max-width: 640px;
+  margin: 0 auto 22px;
+  break-inside: avoid;
+}
+.fin-receipt header {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  border-bottom: 2px solid #171338;
+  padding-bottom: 14px;
+  margin-bottom: 18px;
+}
+.fin-receipt-org {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: #171338;
+}
+.fin-receipt-kicker {
+  margin: 2px 0 0;
+  font-size: 12px;
+  color: #625e78;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+.fin-receipt-number {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  font-size: 12px;
+}
+.fin-receipt-number code {
+  font-size: 11px;
+  word-break: break-all;
+}
+.fin-receipt dl {
+  display: grid;
+  gap: 10px;
+  margin: 0 0 18px;
+}
+.fin-receipt dl > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 13px;
+}
+.fin-receipt dt {
+  color: #625e78;
+}
+.fin-receipt dd {
+  margin: 0;
+  text-align: right;
+  font-weight: 600;
+}
+.fin-receipt-amount {
+  background: #f4f1ff;
+  border-radius: 10px;
+  padding: 14px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 0 18px;
+}
+.fin-receipt-amount strong {
+  font-size: 24px;
+  color: #171338;
+  font-variant-numeric: tabular-nums;
+}
+.fin-receipt footer {
+  font-size: 11px;
+  color: #625e78;
+  border-top: 1px solid #e5e1f0;
+  padding-top: 12px;
+}
+@media (max-width: 640px) {
+  .fin-stat strong {
+    font-size: 19px;
+  }
+  .fin-receipt {
+    padding: 18px;
+  }
+}
+@media print {
+  .sidebar,
+  .topbar,
+  .footer-note,
+  .fin-noprint,
+  .skip-link {
+    display: none !important;
+  }
+  .app-shell,
+  .main-content {
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #fff !important;
+  }
+  .fin-receipt {
+    border: 1px solid #999;
+    border-radius: 0;
+    margin: 0 auto 24px;
+    page-break-after: always;
+    box-shadow: none;
+  }
+  .fin-table-wrap {
+    border: 0;
+    overflow: visible;
+  }
+}
+
+/* Corrections */
+.fin-tag {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: var(--nook-soft-lavender, #f4f1ff);
+  color: var(--nook-midnight-indigo, #171338);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+.fin-struck td:not(.fin-noprint) {
+  color: #6b6786;
+}
+.fin-struck td.num {
+  text-decoration: line-through;
+}
+.fin-receipt-reversed {
+  margin: 12px 0 0;
+  padding: 8px 12px;
+  border: 1px solid #b3261e;
+  border-radius: 8px;
+  color: #b3261e;
+  font-weight: 700;
+}

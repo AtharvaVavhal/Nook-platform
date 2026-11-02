@@ -15,6 +15,9 @@ export const SESSION_COOKIE = 'nook_session';
 export const CSRF_COOKIE = 'nook_csrf';
 export const CSRF_HEADER = 'x-csrf-token';
 
+/** While a temporary password is still in use, only these endpoints work. */
+const PASSWORD_CHANGE_ALLOWED_PATHS = ['/auth/me', '/auth/logout', '/auth/password', '/auth/csrf'];
+
 export function parseCookies(header: string | undefined): Map<string, string> {
   const cookies = new Map<string, string>();
   for (const part of header?.split(';') ?? []) {
@@ -41,6 +44,12 @@ export class SessionGuard implements CanActivate {
     const auth = await this.sessions.authenticate(secret ?? '');
     if (!auth) throw new UnauthorizedException({ code: 'UNAUTHENTICATED' });
     request.auth = auth;
+    if (auth.passwordChangeRequired) {
+      const path = (request.originalUrl ?? '').split('?')[0] ?? '';
+      if (!PASSWORD_CHANGE_ALLOWED_PATHS.some((allowed) => path.endsWith(allowed))) {
+        throw new ForbiddenException({ code: 'PASSWORD_CHANGE_REQUIRED' });
+      }
+    }
     return true;
   }
 }

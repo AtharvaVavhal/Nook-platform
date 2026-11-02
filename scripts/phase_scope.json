@@ -25,9 +25,13 @@
     "scripts/verify_m0_scope.py",
     "scripts/verify_phase_scope.py",
     "scripts/phase_scope.json",
-    "scripts/test_phase_scope.py"
+    "scripts/test_phase_scope.py",
+    "docs/nook-phase-3/PHASE_3_SCOPE_REGISTER.md"
   ],
-  "scopeDocPhrases": ["real resident data", "production deployment"],
+  "scopeDocPhrases": [
+    "real resident data",
+    "production deployment"
+  ],
   "slices": {
     "2.2": {
       "status": "approved",
@@ -67,9 +71,266 @@
       "functions": [],
       "extensions": [],
       "routes": []
+    },
+    "2.3": {
+      "status": "approved",
+      "approver": "AtharvaVavhal",
+      "date": "2026-11-01",
+      "ref": "docs/nook-phase-3/PHASE_3_SCOPE_REGISTER.md#slice-23-authentication-and-inventory-api",
+      "description": "Session auth endpoints and the property/floor/room/bed inventory API on the Slice 2.2 tables (commit 2c95f32). Recorded retroactively.",
+      "models": [],
+      "enums": [],
+      "tables": [],
+      "functions": [],
+      "extensions": [],
+      "routes": [
+        "GET /api/v1/auth/csrf",
+        "GET /api/v1/auth/me",
+        "GET /api/v1/inventory/summary",
+        "GET /api/v1/properties",
+        "GET /api/v1/properties/:propertyId",
+        "GET /api/v1/properties/:propertyId/floors",
+        "GET /api/v1/properties/:propertyId/rooms",
+        "GET /api/v1/rooms/:roomId/beds",
+        "PATCH /api/v1/beds/:bedId",
+        "PATCH /api/v1/floors/:floorId",
+        "PATCH /api/v1/properties/:propertyId",
+        "PATCH /api/v1/rooms/:roomId",
+        "POST /api/v1/auth/login",
+        "POST /api/v1/auth/logout",
+        "POST /api/v1/beds/:bedId/archive",
+        "POST /api/v1/floors/:floorId/archive",
+        "POST /api/v1/properties",
+        "POST /api/v1/properties/:propertyId/archive",
+        "POST /api/v1/properties/:propertyId/floors",
+        "POST /api/v1/properties/:propertyId/rooms",
+        "POST /api/v1/rooms/:roomId/archive",
+        "POST /api/v1/rooms/:roomId/beds"
+      ]
+    },
+    "3.1": {
+      "status": "approved",
+      "approver": "AtharvaVavhal",
+      "date": "2026-11-01",
+      "ref": "docs/nook-phase-3/PHASE_3_SCOPE_REGISTER.md#slice-31-resident-management",
+      "description": "Resident model and organization-scoped CRUD (commit c7118b5). Recorded retroactively.",
+      "models": [
+        "Resident"
+      ],
+      "enums": [
+        "ResidentStatus",
+        "DocumentVerificationStatus"
+      ],
+      "tables": [
+        "residents"
+      ],
+      "functions": [],
+      "extensions": [],
+      "routes": [
+        "DELETE /api/v1/residents/:id",
+        "GET /api/v1/residents",
+        "GET /api/v1/residents/:id",
+        "POST /api/v1/residents",
+        "PUT /api/v1/residents/:id"
+      ],
+      "allowsVocabulary": [
+        "resident",
+        "document"
+      ]
+    },
+    "3.2": {
+      "status": "approved",
+      "approver": "AtharvaVavhal",
+      "date": "2026-11-01",
+      "ref": "docs/nook-phase-3/PHASE_3_SCOPE_REGISTER.md#slice-32-enquiry-and-lead-management",
+      "description": "Enquiry and follow-up models, CRUD and conversion (commits 40c2b36 and the archive follow-up). Recorded retroactively.",
+      "models": [
+        "Enquiry",
+        "EnquiryFollowUp"
+      ],
+      "enums": [
+        "EnquiryStatus",
+        "EnquirySource"
+      ],
+      "tables": [
+        "enquiries",
+        "enquiry_follow_ups"
+      ],
+      "functions": [],
+      "extensions": [],
+      "routes": [
+        "DELETE /api/v1/enquiries/:id",
+        "GET /api/v1/enquiries",
+        "GET /api/v1/enquiries/:id",
+        "GET /api/v1/enquiries/:id/follow-ups",
+        "GET /api/v1/enquiries/follow-ups/overdue",
+        "GET /api/v1/enquiries/follow-ups/upcoming",
+        "POST /api/v1/enquiries",
+        "POST /api/v1/enquiries/:id/convert",
+        "POST /api/v1/enquiries/:id/follow-ups",
+        "PUT /api/v1/enquiries/:id"
+      ],
+      "allowsVocabulary": [
+        "enquiry",
+        "stay",
+        "resident"
+      ]
+    },
+    "3.3": {
+      "status": "approved",
+      "approver": "AtharvaVavhal",
+      "date": "2026-11-01",
+      "ref": "docs/nook-phase-3/PHASE_3_SCOPE_REGISTER.md#slice-33-booking-and-reservation-management",
+      "description": "Booking model, bed availability and CRUD (commit c01bb93). Recorded retroactively.",
+      "models": [
+        "Booking"
+      ],
+      "enums": [
+        "BookingStatus",
+        "PaymentStatus"
+      ],
+      "tables": [
+        "bookings"
+      ],
+      "functions": [],
+      "extensions": [],
+      "routes": [
+        "DELETE /api/v1/bookings/:id",
+        "GET /api/v1/bookings",
+        "GET /api/v1/bookings/:id",
+        "GET /api/v1/bookings/beds/available",
+        "POST /api/v1/bookings",
+        "PUT /api/v1/bookings/:id"
+      ],
+      "allowsVocabulary": [
+        "booking",
+        "price",
+        "payment"
+      ]
+    },
+    "3.4": {
+      "status": "approved",
+      "approver": "AtharvaVavhal",
+      "date": "2026-11-01",
+      "ref": "docs/nook-phase-3/PHASE_3_SCOPE_REGISTER.md#slice-34-admission-and-bed-allocation",
+      "description": "Admission model and CRUD (commit 7238b78). Recorded retroactively.",
+      "models": [
+        "Admission"
+      ],
+      "enums": [
+        "AdmissionStatus"
+      ],
+      "tables": [
+        "admissions"
+      ],
+      "functions": [],
+      "extensions": [],
+      "routes": [
+        "DELETE /api/v1/admissions/:id",
+        "GET /api/v1/admissions",
+        "GET /api/v1/admissions/:id",
+        "POST /api/v1/admissions",
+        "PUT /api/v1/admissions/:id"
+      ]
+    },
+    "3.5": {
+      "status": "approved",
+      "approver": "AtharvaVavhal",
+      "date": "2026-11-01",
+      "ref": "docs/nook-phase-3/PHASE_3_SCOPE_REGISTER.md#slice-35-check-in-and-check-out-management",
+      "description": "CheckIn and CheckOut models and CRUD (commit 7edcf70). Recorded retroactively.",
+      "models": [
+        "CheckIn",
+        "CheckOut"
+      ],
+      "enums": [
+        "CheckInStatus"
+      ],
+      "tables": [
+        "check_ins",
+        "check_outs"
+      ],
+      "functions": [],
+      "extensions": [],
+      "routes": [
+        "GET /api/v1/check-ins",
+        "GET /api/v1/check-ins/:id",
+        "GET /api/v1/check-ins/occupancy",
+        "POST /api/v1/check-ins",
+        "POST /api/v1/check-ins/:id/check-out",
+        "PUT /api/v1/check-ins/:id"
+      ]
+    },
+    "3.6": {
+      "status": "approved",
+      "approver": "AtharvaVavhal",
+      "date": "2026-11-02",
+      "ref": "docs/nook-phase-3/PHASE_3_SCOPE_REGISTER.md#slice-36-finance-and-billing",
+      "description": "Invoices, payments, idempotency, reversals, credits and the tenant-integrity hardening approved in session on 2026-11-01 and 2026-11-02.",
+      "models": [
+        "Invoice",
+        "Payment",
+        "PaymentIdempotencyKey",
+        "PaymentReversal",
+        "InvoiceAdjustment",
+        "LoginThrottle"
+      ],
+      "enums": [
+        "InvoiceStatus",
+        "PaymentMethod"
+      ],
+      "tables": [
+        "invoices",
+        "payments",
+        "payment_idempotency_keys",
+        "payment_reversals",
+        "invoice_adjustments",
+        "login_throttles"
+      ],
+      "functions": [
+        "finance_forbid_payment_change",
+        "finance_guard_invoice",
+        "finance_forbid_idempotency_change",
+        "finance_forbid_correction_change",
+        "finance_check_payment_correction",
+        "check_admission_location",
+        "check_admission_matches_booking",
+        "check_check_in_matches_admission",
+        "check_check_out_matches_check_in",
+        "check_enquiry_links",
+        "check_enquiry_assignee"
+      ],
+      "extensions": [],
+      "routes": [
+        "GET /api/v1/finance/corrections",
+        "GET /api/v1/finance/invoices",
+        "GET /api/v1/finance/invoices/:id",
+        "GET /api/v1/finance/invoices/:id/receipt",
+        "GET /api/v1/finance/outstanding",
+        "GET /api/v1/finance/reports/monthly",
+        "POST /api/v1/finance/invoices",
+        "POST /api/v1/finance/invoices/:id/adjustments",
+        "POST /api/v1/finance/invoices/:id/issue",
+        "POST /api/v1/finance/invoices/generate-monthly",
+        "POST /api/v1/finance/payments",
+        "POST /api/v1/finance/payments/:id/reverse",
+        "POST /api/v1/auth/password"
+      ],
+      "allowsVocabulary": [
+        "amount",
+        "invoice",
+        "payment",
+        "receipt"
+      ],
+      "allowsTypes": [
+        "Decimal"
+      ]
     }
   },
-  "baselineRoutes": ["GET /api/v1/health", "GET /api/v1/health/database"],
+  "baselineRoutes": [
+    "GET /api/v1/health",
+    "GET /api/v1/health/database"
+  ],
   "dependencies": {
     "package.json": {
       "@eslint/js": "9.39.1",
@@ -113,6 +374,42 @@
       "name": "@prisma/adapter-pg",
       "version": "7.10.1",
       "ref": "docs/nook-phase-2/PHASE_2_DECISION_LOG.md#4a-second-batch-2026-10-29"
+    },
+    {
+      "file": "apps/api/package.json",
+      "name": "@nestjs/swagger",
+      "version": "12.0.5",
+      "ref": "docs/nook-phase-3/PHASE_3_SCOPE_REGISTER.md#dependency-additions-since-phase-2"
+    },
+    {
+      "file": "apps/api/package.json",
+      "name": "class-validator",
+      "version": "0.15.1",
+      "ref": "docs/nook-phase-3/PHASE_3_SCOPE_REGISTER.md#dependency-additions-since-phase-2"
+    },
+    {
+      "file": "apps/api/package.json",
+      "name": "class-transformer",
+      "version": "0.5.1",
+      "ref": "docs/nook-phase-3/PHASE_3_SCOPE_REGISTER.md#dependency-additions-since-phase-2"
+    },
+    {
+      "file": "apps/api/package.json",
+      "name": "supertest",
+      "version": "7.3.1",
+      "ref": "docs/nook-phase-3/PHASE_3_SCOPE_REGISTER.md#dependency-additions-since-phase-2"
+    },
+    {
+      "file": "apps/api/package.json",
+      "name": "@types/supertest",
+      "version": "7.2.1",
+      "ref": "docs/nook-phase-3/PHASE_3_SCOPE_REGISTER.md#dependency-additions-since-phase-2"
+    },
+    {
+      "file": "package.json",
+      "name": "node-pty",
+      "version": "1.1.0",
+      "ref": "docs/nook-phase-3/PHASE_3_SCOPE_REGISTER.md#dependency-additions-since-phase-2"
     }
   ],
   "forbiddenWords": [
@@ -156,5 +453,27 @@
     "sendgrid",
     "nodemailer"
   ],
-  "rawSqlAllowedFiles": []
+  "rawSqlAllowedFiles": [
+    "apps/api/src/auth/auth.repository.ts",
+    "apps/api/src/booking/booking.service.ts",
+    "apps/api/src/enquiry/enquiry.service.ts",
+    "apps/api/src/finance/finance.service.ts",
+    "apps/api/src/auth/throttle.service.ts",
+    "apps/api/src/admission/admission.service.ts",
+    "apps/api/src/checkin/checkin.service.ts"
+  ],
+  "migrationSlices": {
+    "20261101093228_add_resident_model": "3.1",
+    "20261101101417_add_enquiry_lead_management": "3.2",
+    "20261101101956_add_archived_enquiry_status": "3.2",
+    "20261101104957_add_booking_reservation": "3.3",
+    "20261101110350_add_admission_model": "3.4",
+    "20261101113306_add_checkin_checkout": "3.5",
+    "20261101130000_add_finance_billing": "3.6",
+    "20261101150000_add_payment_idempotency": "3.6",
+    "20261101170000_add_financial_corrections": "3.6",
+    "20261101190000_tenant_composite_keys_phase_3_3_to_3_5": "3.6",
+    "20261101210000_admission_and_lifecycle_integrity": "3.6",
+    "20261102100000_account_security": "3.6"
+  }
 }

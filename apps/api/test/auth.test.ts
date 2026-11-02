@@ -54,7 +54,26 @@ class FakeAuthRepository implements AuthRepository {
   async revokeSession(sessionId: string, reason: string): Promise<void> {
     this.revoked = { sessionId, reason };
   }
+
+  async findUserById(): Promise<AuthUserRecord | null> {
+    return this.user;
+  }
+
+  async changePassword(): Promise<{ revokedSessions: number }> {
+    return { revokedSessions: 0 };
+  }
 }
+
+// Throttle and audit behaviour is covered by the database-backed integration suite; these unit tests
+// exercise credential checking only, so inert fakes stand in for both collaborators.
+const noThrottle = {
+  async lockedUntil() {
+    return null;
+  },
+  async recordFailure() {},
+  async reset() {},
+} as never;
+const noAudit = { async record() {} } as never;
 
 function membership(
   status: 'ACTIVE' | 'REVOKED' = 'ACTIVE',
@@ -80,6 +99,7 @@ function user(passwordHash: string, status: 'ACTIVE' | 'DISABLED' = 'ACTIVE') {
     passwordHash,
     displayName: 'Owner',
     status,
+    passwordChangeRequired: false,
     memberships: [membership()],
   };
 }
@@ -120,7 +140,13 @@ test('login normalizes email and rejects disabled users or revoked memberships',
   const hasher = new PasswordHasher();
   const passwordHash = await hasher.hash('password');
   repository.user = user(passwordHash);
-  const service = new AuthService(repository, hasher, new SessionService(repository));
+  const service = new AuthService(
+    repository,
+    hasher,
+    new SessionService(repository),
+    noThrottle,
+    noAudit,
+  );
 
   const result = await service.login('  OWNER@EXAMPLE.COM ', 'password');
   assert.equal(result.context.organizationId, 'organization-1');

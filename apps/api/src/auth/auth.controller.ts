@@ -59,7 +59,7 @@ export class AuthController {
     } catch {
       throw new UnauthorizedException({ code: 'INVALID_CREDENTIALS' });
     }
-    const result = await this.auth.login(input.email, input.password);
+    const result = await this.auth.login(input.email, input.password, request.ip ?? 'unknown');
     response.cookie(SESSION_COOKIE, result.secret, {
       ...cookieOptions(this.secureCookies()),
       maxAge: 8 * 60 * 60 * 1000,
@@ -81,13 +81,26 @@ export class AuthController {
     @Req() request: AuthenticatedRequest,
     @Res({ passthrough: true }) response: HttpResponse,
   ) {
-    await this.sessions.revoke(request.auth!.sessionId);
+    await this.auth.logout(request.auth!);
     response.clearCookie(SESSION_COOKIE, cookieOptions(this.secureCookies()));
     response.clearCookie(CSRF_COOKIE, {
       ...cookieOptions(this.secureCookies()),
       httpOnly: false,
     });
     return { data: { loggedOut: true } };
+  }
+
+  @Post('password')
+  @UseGuards(OriginGuard, SessionGuard, CsrfGuard)
+  @HttpCode(HttpStatus.OK)
+  async changePassword(@Req() request: AuthenticatedRequest) {
+    const body = (request.body ?? {}) as Record<string, unknown>;
+    const result = await this.auth.changePassword(
+      request.auth!,
+      body.currentPassword,
+      body.newPassword,
+    );
+    return { data: { changed: true, otherSessionsRevoked: result.revokedSessions } };
   }
 
   @Get('me')
@@ -120,5 +133,6 @@ function publicContext(context: AuthenticatedContext) {
       name: context.organizationName,
     },
     role: context.role,
+    passwordChangeRequired: context.passwordChangeRequired,
   };
 }

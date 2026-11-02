@@ -191,6 +191,11 @@ export type OrganizationWhereInput = {
   admissions?: Prisma.AdmissionListRelationFilter
   checkIns?: Prisma.CheckInListRelationFilter
   checkOuts?: Prisma.CheckOutListRelationFilter
+  invoices?: Prisma.InvoiceListRelationFilter
+  payments?: Prisma.PaymentListRelationFilter
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyListRelationFilter
+  paymentReversals?: Prisma.PaymentReversalListRelationFilter
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentListRelationFilter
 }
 
 export type OrganizationOrderByWithRelationInput = {
@@ -208,6 +213,11 @@ export type OrganizationOrderByWithRelationInput = {
   admissions?: Prisma.AdmissionOrderByRelationAggregateInput
   checkIns?: Prisma.CheckInOrderByRelationAggregateInput
   checkOuts?: Prisma.CheckOutOrderByRelationAggregateInput
+  invoices?: Prisma.InvoiceOrderByRelationAggregateInput
+  payments?: Prisma.PaymentOrderByRelationAggregateInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyOrderByRelationAggregateInput
+  paymentReversals?: Prisma.PaymentReversalOrderByRelationAggregateInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentOrderByRelationAggregateInput
 }
 
 export type OrganizationWhereUniqueInput = Prisma.AtLeast<{
@@ -228,6 +238,11 @@ export type OrganizationWhereUniqueInput = Prisma.AtLeast<{
   admissions?: Prisma.AdmissionListRelationFilter
   checkIns?: Prisma.CheckInListRelationFilter
   checkOuts?: Prisma.CheckOutListRelationFilter
+  invoices?: Prisma.InvoiceListRelationFilter
+  payments?: Prisma.PaymentListRelationFilter
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyListRelationFilter
+  paymentReversals?: Prisma.PaymentReversalListRelationFilter
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentListRelationFilter
 }, "id">
 
 export type OrganizationOrderByWithAggregationInput = {
@@ -267,6 +282,11 @@ export type OrganizationCreateInput = {
   admissions?: Prisma.AdmissionCreateNestedManyWithoutOrganizationInput
   checkIns?: Prisma.CheckInCreateNestedManyWithoutOrganizationInput
   checkOuts?: Prisma.CheckOutCreateNestedManyWithoutOrganizationInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutOrganizationInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutOrganizationInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyCreateNestedManyWithoutOrganizationInput
+  paymentReversals?: Prisma.PaymentReversalCreateNestedManyWithoutOrganizationInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateInput = {
@@ -284,6 +304,11 @@ export type OrganizationUncheckedCreateInput = {
   admissions?: Prisma.AdmissionUncheckedCreateNestedManyWithoutOrganizationInput
   checkIns?: Prisma.CheckInUncheckedCreateNestedManyWithoutOrganizationInput
   checkOuts?: Prisma.CheckOutUncheckedCreateNestedManyWithoutOrganizationInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutOrganizationInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentReversals?: Prisma.PaymentReversalUncheckedCreateNestedManyWithoutOrganizationInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUpdateInput = {
@@ -301,6 +326,11 @@ export type OrganizationUpdateInput = {
   admissions?: Prisma.AdmissionUpdateManyWithoutOrganizationNestedInput
   checkIns?: Prisma.CheckInUpdateManyWithoutOrganizationNestedInput
   checkOuts?: Prisma.CheckOutUpdateManyWithoutOrganizationNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutOrganizationNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutOrganizationNestedInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyUpdateManyWithoutOrganizationNestedInput
+  paymentReversals?: Prisma.PaymentReversalUpdateManyWithoutOrganizationNestedInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateInput = {
@@ -318,6 +348,11 @@ export type OrganizationUncheckedUpdateInput = {
   admissions?: Prisma.AdmissionUncheckedUpdateManyWithoutOrganizationNestedInput
   checkIns?: Prisma.CheckInUncheckedUpdateManyWithoutOrganizationNestedInput
   checkOuts?: Prisma.CheckOutUncheckedUpdateManyWithoutOrganizationNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentReversals?: Prisma.PaymentReversalUncheckedUpdateManyWithoutOrganizationNestedInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateManyInput = {
@@ -518,6 +553,76 @@ export type OrganizationUpdateOneRequiredWithoutCheckOutsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutCheckOutsInput, Prisma.OrganizationUpdateWithoutCheckOutsInput>, Prisma.OrganizationUncheckedUpdateWithoutCheckOutsInput>
 }
 
+export type OrganizationCreateNestedOneWithoutInvoicesInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutInvoicesInput, Prisma.OrganizationUncheckedCreateWithoutInvoicesInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutInvoicesInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+}
+
+export type OrganizationUpdateOneRequiredWithoutInvoicesNestedInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutInvoicesInput, Prisma.OrganizationUncheckedCreateWithoutInvoicesInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutInvoicesInput
+  upsert?: Prisma.OrganizationUpsertWithoutInvoicesInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutInvoicesInput, Prisma.OrganizationUpdateWithoutInvoicesInput>, Prisma.OrganizationUncheckedUpdateWithoutInvoicesInput>
+}
+
+export type OrganizationCreateNestedOneWithoutPaymentsInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutPaymentsInput, Prisma.OrganizationUncheckedCreateWithoutPaymentsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutPaymentsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+}
+
+export type OrganizationUpdateOneRequiredWithoutPaymentsNestedInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutPaymentsInput, Prisma.OrganizationUncheckedCreateWithoutPaymentsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutPaymentsInput
+  upsert?: Prisma.OrganizationUpsertWithoutPaymentsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutPaymentsInput, Prisma.OrganizationUpdateWithoutPaymentsInput>, Prisma.OrganizationUncheckedUpdateWithoutPaymentsInput>
+}
+
+export type OrganizationCreateNestedOneWithoutPaymentReversalsInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutPaymentReversalsInput, Prisma.OrganizationUncheckedCreateWithoutPaymentReversalsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutPaymentReversalsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+}
+
+export type OrganizationUpdateOneRequiredWithoutPaymentReversalsNestedInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutPaymentReversalsInput, Prisma.OrganizationUncheckedCreateWithoutPaymentReversalsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutPaymentReversalsInput
+  upsert?: Prisma.OrganizationUpsertWithoutPaymentReversalsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutPaymentReversalsInput, Prisma.OrganizationUpdateWithoutPaymentReversalsInput>, Prisma.OrganizationUncheckedUpdateWithoutPaymentReversalsInput>
+}
+
+export type OrganizationCreateNestedOneWithoutInvoiceAdjustmentsInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutInvoiceAdjustmentsInput, Prisma.OrganizationUncheckedCreateWithoutInvoiceAdjustmentsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutInvoiceAdjustmentsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+}
+
+export type OrganizationUpdateOneRequiredWithoutInvoiceAdjustmentsNestedInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutInvoiceAdjustmentsInput, Prisma.OrganizationUncheckedCreateWithoutInvoiceAdjustmentsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutInvoiceAdjustmentsInput
+  upsert?: Prisma.OrganizationUpsertWithoutInvoiceAdjustmentsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutInvoiceAdjustmentsInput, Prisma.OrganizationUpdateWithoutInvoiceAdjustmentsInput>, Prisma.OrganizationUncheckedUpdateWithoutInvoiceAdjustmentsInput>
+}
+
+export type OrganizationCreateNestedOneWithoutPaymentIdempotencyKeysInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutPaymentIdempotencyKeysInput, Prisma.OrganizationUncheckedCreateWithoutPaymentIdempotencyKeysInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutPaymentIdempotencyKeysInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+}
+
+export type OrganizationUpdateOneRequiredWithoutPaymentIdempotencyKeysNestedInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutPaymentIdempotencyKeysInput, Prisma.OrganizationUncheckedCreateWithoutPaymentIdempotencyKeysInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutPaymentIdempotencyKeysInput
+  upsert?: Prisma.OrganizationUpsertWithoutPaymentIdempotencyKeysInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutPaymentIdempotencyKeysInput, Prisma.OrganizationUpdateWithoutPaymentIdempotencyKeysInput>, Prisma.OrganizationUncheckedUpdateWithoutPaymentIdempotencyKeysInput>
+}
+
 export type OrganizationCreateWithoutMembershipsInput = {
   id?: string
   name: string
@@ -532,6 +637,11 @@ export type OrganizationCreateWithoutMembershipsInput = {
   admissions?: Prisma.AdmissionCreateNestedManyWithoutOrganizationInput
   checkIns?: Prisma.CheckInCreateNestedManyWithoutOrganizationInput
   checkOuts?: Prisma.CheckOutCreateNestedManyWithoutOrganizationInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutOrganizationInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutOrganizationInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyCreateNestedManyWithoutOrganizationInput
+  paymentReversals?: Prisma.PaymentReversalCreateNestedManyWithoutOrganizationInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutMembershipsInput = {
@@ -548,6 +658,11 @@ export type OrganizationUncheckedCreateWithoutMembershipsInput = {
   admissions?: Prisma.AdmissionUncheckedCreateNestedManyWithoutOrganizationInput
   checkIns?: Prisma.CheckInUncheckedCreateNestedManyWithoutOrganizationInput
   checkOuts?: Prisma.CheckOutUncheckedCreateNestedManyWithoutOrganizationInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutOrganizationInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentReversals?: Prisma.PaymentReversalUncheckedCreateNestedManyWithoutOrganizationInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutMembershipsInput = {
@@ -580,6 +695,11 @@ export type OrganizationUpdateWithoutMembershipsInput = {
   admissions?: Prisma.AdmissionUpdateManyWithoutOrganizationNestedInput
   checkIns?: Prisma.CheckInUpdateManyWithoutOrganizationNestedInput
   checkOuts?: Prisma.CheckOutUpdateManyWithoutOrganizationNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutOrganizationNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutOrganizationNestedInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyUpdateManyWithoutOrganizationNestedInput
+  paymentReversals?: Prisma.PaymentReversalUpdateManyWithoutOrganizationNestedInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutMembershipsInput = {
@@ -596,6 +716,11 @@ export type OrganizationUncheckedUpdateWithoutMembershipsInput = {
   admissions?: Prisma.AdmissionUncheckedUpdateManyWithoutOrganizationNestedInput
   checkIns?: Prisma.CheckInUncheckedUpdateManyWithoutOrganizationNestedInput
   checkOuts?: Prisma.CheckOutUncheckedUpdateManyWithoutOrganizationNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentReversals?: Prisma.PaymentReversalUncheckedUpdateManyWithoutOrganizationNestedInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutAuditEventsInput = {
@@ -612,6 +737,11 @@ export type OrganizationCreateWithoutAuditEventsInput = {
   admissions?: Prisma.AdmissionCreateNestedManyWithoutOrganizationInput
   checkIns?: Prisma.CheckInCreateNestedManyWithoutOrganizationInput
   checkOuts?: Prisma.CheckOutCreateNestedManyWithoutOrganizationInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutOrganizationInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutOrganizationInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyCreateNestedManyWithoutOrganizationInput
+  paymentReversals?: Prisma.PaymentReversalCreateNestedManyWithoutOrganizationInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutAuditEventsInput = {
@@ -628,6 +758,11 @@ export type OrganizationUncheckedCreateWithoutAuditEventsInput = {
   admissions?: Prisma.AdmissionUncheckedCreateNestedManyWithoutOrganizationInput
   checkIns?: Prisma.CheckInUncheckedCreateNestedManyWithoutOrganizationInput
   checkOuts?: Prisma.CheckOutUncheckedCreateNestedManyWithoutOrganizationInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutOrganizationInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentReversals?: Prisma.PaymentReversalUncheckedCreateNestedManyWithoutOrganizationInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutAuditEventsInput = {
@@ -660,6 +795,11 @@ export type OrganizationUpdateWithoutAuditEventsInput = {
   admissions?: Prisma.AdmissionUpdateManyWithoutOrganizationNestedInput
   checkIns?: Prisma.CheckInUpdateManyWithoutOrganizationNestedInput
   checkOuts?: Prisma.CheckOutUpdateManyWithoutOrganizationNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutOrganizationNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutOrganizationNestedInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyUpdateManyWithoutOrganizationNestedInput
+  paymentReversals?: Prisma.PaymentReversalUpdateManyWithoutOrganizationNestedInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutAuditEventsInput = {
@@ -676,6 +816,11 @@ export type OrganizationUncheckedUpdateWithoutAuditEventsInput = {
   admissions?: Prisma.AdmissionUncheckedUpdateManyWithoutOrganizationNestedInput
   checkIns?: Prisma.CheckInUncheckedUpdateManyWithoutOrganizationNestedInput
   checkOuts?: Prisma.CheckOutUncheckedUpdateManyWithoutOrganizationNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentReversals?: Prisma.PaymentReversalUncheckedUpdateManyWithoutOrganizationNestedInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutPropertiesInput = {
@@ -692,6 +837,11 @@ export type OrganizationCreateWithoutPropertiesInput = {
   admissions?: Prisma.AdmissionCreateNestedManyWithoutOrganizationInput
   checkIns?: Prisma.CheckInCreateNestedManyWithoutOrganizationInput
   checkOuts?: Prisma.CheckOutCreateNestedManyWithoutOrganizationInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutOrganizationInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutOrganizationInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyCreateNestedManyWithoutOrganizationInput
+  paymentReversals?: Prisma.PaymentReversalCreateNestedManyWithoutOrganizationInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutPropertiesInput = {
@@ -708,6 +858,11 @@ export type OrganizationUncheckedCreateWithoutPropertiesInput = {
   admissions?: Prisma.AdmissionUncheckedCreateNestedManyWithoutOrganizationInput
   checkIns?: Prisma.CheckInUncheckedCreateNestedManyWithoutOrganizationInput
   checkOuts?: Prisma.CheckOutUncheckedCreateNestedManyWithoutOrganizationInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutOrganizationInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentReversals?: Prisma.PaymentReversalUncheckedCreateNestedManyWithoutOrganizationInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutPropertiesInput = {
@@ -740,6 +895,11 @@ export type OrganizationUpdateWithoutPropertiesInput = {
   admissions?: Prisma.AdmissionUpdateManyWithoutOrganizationNestedInput
   checkIns?: Prisma.CheckInUpdateManyWithoutOrganizationNestedInput
   checkOuts?: Prisma.CheckOutUpdateManyWithoutOrganizationNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutOrganizationNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutOrganizationNestedInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyUpdateManyWithoutOrganizationNestedInput
+  paymentReversals?: Prisma.PaymentReversalUpdateManyWithoutOrganizationNestedInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutPropertiesInput = {
@@ -756,6 +916,11 @@ export type OrganizationUncheckedUpdateWithoutPropertiesInput = {
   admissions?: Prisma.AdmissionUncheckedUpdateManyWithoutOrganizationNestedInput
   checkIns?: Prisma.CheckInUncheckedUpdateManyWithoutOrganizationNestedInput
   checkOuts?: Prisma.CheckOutUncheckedUpdateManyWithoutOrganizationNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentReversals?: Prisma.PaymentReversalUncheckedUpdateManyWithoutOrganizationNestedInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutResidentsInput = {
@@ -772,6 +937,11 @@ export type OrganizationCreateWithoutResidentsInput = {
   admissions?: Prisma.AdmissionCreateNestedManyWithoutOrganizationInput
   checkIns?: Prisma.CheckInCreateNestedManyWithoutOrganizationInput
   checkOuts?: Prisma.CheckOutCreateNestedManyWithoutOrganizationInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutOrganizationInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutOrganizationInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyCreateNestedManyWithoutOrganizationInput
+  paymentReversals?: Prisma.PaymentReversalCreateNestedManyWithoutOrganizationInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutResidentsInput = {
@@ -788,6 +958,11 @@ export type OrganizationUncheckedCreateWithoutResidentsInput = {
   admissions?: Prisma.AdmissionUncheckedCreateNestedManyWithoutOrganizationInput
   checkIns?: Prisma.CheckInUncheckedCreateNestedManyWithoutOrganizationInput
   checkOuts?: Prisma.CheckOutUncheckedCreateNestedManyWithoutOrganizationInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutOrganizationInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentReversals?: Prisma.PaymentReversalUncheckedCreateNestedManyWithoutOrganizationInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutResidentsInput = {
@@ -820,6 +995,11 @@ export type OrganizationUpdateWithoutResidentsInput = {
   admissions?: Prisma.AdmissionUpdateManyWithoutOrganizationNestedInput
   checkIns?: Prisma.CheckInUpdateManyWithoutOrganizationNestedInput
   checkOuts?: Prisma.CheckOutUpdateManyWithoutOrganizationNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutOrganizationNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutOrganizationNestedInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyUpdateManyWithoutOrganizationNestedInput
+  paymentReversals?: Prisma.PaymentReversalUpdateManyWithoutOrganizationNestedInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutResidentsInput = {
@@ -836,6 +1016,11 @@ export type OrganizationUncheckedUpdateWithoutResidentsInput = {
   admissions?: Prisma.AdmissionUncheckedUpdateManyWithoutOrganizationNestedInput
   checkIns?: Prisma.CheckInUncheckedUpdateManyWithoutOrganizationNestedInput
   checkOuts?: Prisma.CheckOutUncheckedUpdateManyWithoutOrganizationNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentReversals?: Prisma.PaymentReversalUncheckedUpdateManyWithoutOrganizationNestedInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutBookingsInput = {
@@ -852,6 +1037,11 @@ export type OrganizationCreateWithoutBookingsInput = {
   admissions?: Prisma.AdmissionCreateNestedManyWithoutOrganizationInput
   checkIns?: Prisma.CheckInCreateNestedManyWithoutOrganizationInput
   checkOuts?: Prisma.CheckOutCreateNestedManyWithoutOrganizationInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutOrganizationInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutOrganizationInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyCreateNestedManyWithoutOrganizationInput
+  paymentReversals?: Prisma.PaymentReversalCreateNestedManyWithoutOrganizationInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutBookingsInput = {
@@ -868,6 +1058,11 @@ export type OrganizationUncheckedCreateWithoutBookingsInput = {
   admissions?: Prisma.AdmissionUncheckedCreateNestedManyWithoutOrganizationInput
   checkIns?: Prisma.CheckInUncheckedCreateNestedManyWithoutOrganizationInput
   checkOuts?: Prisma.CheckOutUncheckedCreateNestedManyWithoutOrganizationInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutOrganizationInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentReversals?: Prisma.PaymentReversalUncheckedCreateNestedManyWithoutOrganizationInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutBookingsInput = {
@@ -900,6 +1095,11 @@ export type OrganizationUpdateWithoutBookingsInput = {
   admissions?: Prisma.AdmissionUpdateManyWithoutOrganizationNestedInput
   checkIns?: Prisma.CheckInUpdateManyWithoutOrganizationNestedInput
   checkOuts?: Prisma.CheckOutUpdateManyWithoutOrganizationNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutOrganizationNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutOrganizationNestedInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyUpdateManyWithoutOrganizationNestedInput
+  paymentReversals?: Prisma.PaymentReversalUpdateManyWithoutOrganizationNestedInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutBookingsInput = {
@@ -916,6 +1116,11 @@ export type OrganizationUncheckedUpdateWithoutBookingsInput = {
   admissions?: Prisma.AdmissionUncheckedUpdateManyWithoutOrganizationNestedInput
   checkIns?: Prisma.CheckInUncheckedUpdateManyWithoutOrganizationNestedInput
   checkOuts?: Prisma.CheckOutUncheckedUpdateManyWithoutOrganizationNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentReversals?: Prisma.PaymentReversalUncheckedUpdateManyWithoutOrganizationNestedInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutAdmissionsInput = {
@@ -932,6 +1137,11 @@ export type OrganizationCreateWithoutAdmissionsInput = {
   bookings?: Prisma.BookingCreateNestedManyWithoutOrganizationInput
   checkIns?: Prisma.CheckInCreateNestedManyWithoutOrganizationInput
   checkOuts?: Prisma.CheckOutCreateNestedManyWithoutOrganizationInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutOrganizationInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutOrganizationInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyCreateNestedManyWithoutOrganizationInput
+  paymentReversals?: Prisma.PaymentReversalCreateNestedManyWithoutOrganizationInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutAdmissionsInput = {
@@ -948,6 +1158,11 @@ export type OrganizationUncheckedCreateWithoutAdmissionsInput = {
   bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutOrganizationInput
   checkIns?: Prisma.CheckInUncheckedCreateNestedManyWithoutOrganizationInput
   checkOuts?: Prisma.CheckOutUncheckedCreateNestedManyWithoutOrganizationInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutOrganizationInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentReversals?: Prisma.PaymentReversalUncheckedCreateNestedManyWithoutOrganizationInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutAdmissionsInput = {
@@ -980,6 +1195,11 @@ export type OrganizationUpdateWithoutAdmissionsInput = {
   bookings?: Prisma.BookingUpdateManyWithoutOrganizationNestedInput
   checkIns?: Prisma.CheckInUpdateManyWithoutOrganizationNestedInput
   checkOuts?: Prisma.CheckOutUpdateManyWithoutOrganizationNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutOrganizationNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutOrganizationNestedInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyUpdateManyWithoutOrganizationNestedInput
+  paymentReversals?: Prisma.PaymentReversalUpdateManyWithoutOrganizationNestedInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutAdmissionsInput = {
@@ -996,6 +1216,11 @@ export type OrganizationUncheckedUpdateWithoutAdmissionsInput = {
   bookings?: Prisma.BookingUncheckedUpdateManyWithoutOrganizationNestedInput
   checkIns?: Prisma.CheckInUncheckedUpdateManyWithoutOrganizationNestedInput
   checkOuts?: Prisma.CheckOutUncheckedUpdateManyWithoutOrganizationNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentReversals?: Prisma.PaymentReversalUncheckedUpdateManyWithoutOrganizationNestedInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutEnquiriesInput = {
@@ -1012,6 +1237,11 @@ export type OrganizationCreateWithoutEnquiriesInput = {
   admissions?: Prisma.AdmissionCreateNestedManyWithoutOrganizationInput
   checkIns?: Prisma.CheckInCreateNestedManyWithoutOrganizationInput
   checkOuts?: Prisma.CheckOutCreateNestedManyWithoutOrganizationInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutOrganizationInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutOrganizationInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyCreateNestedManyWithoutOrganizationInput
+  paymentReversals?: Prisma.PaymentReversalCreateNestedManyWithoutOrganizationInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutEnquiriesInput = {
@@ -1028,6 +1258,11 @@ export type OrganizationUncheckedCreateWithoutEnquiriesInput = {
   admissions?: Prisma.AdmissionUncheckedCreateNestedManyWithoutOrganizationInput
   checkIns?: Prisma.CheckInUncheckedCreateNestedManyWithoutOrganizationInput
   checkOuts?: Prisma.CheckOutUncheckedCreateNestedManyWithoutOrganizationInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutOrganizationInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentReversals?: Prisma.PaymentReversalUncheckedCreateNestedManyWithoutOrganizationInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutEnquiriesInput = {
@@ -1060,6 +1295,11 @@ export type OrganizationUpdateWithoutEnquiriesInput = {
   admissions?: Prisma.AdmissionUpdateManyWithoutOrganizationNestedInput
   checkIns?: Prisma.CheckInUpdateManyWithoutOrganizationNestedInput
   checkOuts?: Prisma.CheckOutUpdateManyWithoutOrganizationNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutOrganizationNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutOrganizationNestedInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyUpdateManyWithoutOrganizationNestedInput
+  paymentReversals?: Prisma.PaymentReversalUpdateManyWithoutOrganizationNestedInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutEnquiriesInput = {
@@ -1076,6 +1316,11 @@ export type OrganizationUncheckedUpdateWithoutEnquiriesInput = {
   admissions?: Prisma.AdmissionUncheckedUpdateManyWithoutOrganizationNestedInput
   checkIns?: Prisma.CheckInUncheckedUpdateManyWithoutOrganizationNestedInput
   checkOuts?: Prisma.CheckOutUncheckedUpdateManyWithoutOrganizationNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentReversals?: Prisma.PaymentReversalUncheckedUpdateManyWithoutOrganizationNestedInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutCheckInsInput = {
@@ -1092,6 +1337,11 @@ export type OrganizationCreateWithoutCheckInsInput = {
   bookings?: Prisma.BookingCreateNestedManyWithoutOrganizationInput
   admissions?: Prisma.AdmissionCreateNestedManyWithoutOrganizationInput
   checkOuts?: Prisma.CheckOutCreateNestedManyWithoutOrganizationInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutOrganizationInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutOrganizationInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyCreateNestedManyWithoutOrganizationInput
+  paymentReversals?: Prisma.PaymentReversalCreateNestedManyWithoutOrganizationInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutCheckInsInput = {
@@ -1108,6 +1358,11 @@ export type OrganizationUncheckedCreateWithoutCheckInsInput = {
   bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutOrganizationInput
   admissions?: Prisma.AdmissionUncheckedCreateNestedManyWithoutOrganizationInput
   checkOuts?: Prisma.CheckOutUncheckedCreateNestedManyWithoutOrganizationInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutOrganizationInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentReversals?: Prisma.PaymentReversalUncheckedCreateNestedManyWithoutOrganizationInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutCheckInsInput = {
@@ -1140,6 +1395,11 @@ export type OrganizationUpdateWithoutCheckInsInput = {
   bookings?: Prisma.BookingUpdateManyWithoutOrganizationNestedInput
   admissions?: Prisma.AdmissionUpdateManyWithoutOrganizationNestedInput
   checkOuts?: Prisma.CheckOutUpdateManyWithoutOrganizationNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutOrganizationNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutOrganizationNestedInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyUpdateManyWithoutOrganizationNestedInput
+  paymentReversals?: Prisma.PaymentReversalUpdateManyWithoutOrganizationNestedInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutCheckInsInput = {
@@ -1156,6 +1416,11 @@ export type OrganizationUncheckedUpdateWithoutCheckInsInput = {
   bookings?: Prisma.BookingUncheckedUpdateManyWithoutOrganizationNestedInput
   admissions?: Prisma.AdmissionUncheckedUpdateManyWithoutOrganizationNestedInput
   checkOuts?: Prisma.CheckOutUncheckedUpdateManyWithoutOrganizationNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentReversals?: Prisma.PaymentReversalUncheckedUpdateManyWithoutOrganizationNestedInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutCheckOutsInput = {
@@ -1172,6 +1437,11 @@ export type OrganizationCreateWithoutCheckOutsInput = {
   bookings?: Prisma.BookingCreateNestedManyWithoutOrganizationInput
   admissions?: Prisma.AdmissionCreateNestedManyWithoutOrganizationInput
   checkIns?: Prisma.CheckInCreateNestedManyWithoutOrganizationInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutOrganizationInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutOrganizationInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyCreateNestedManyWithoutOrganizationInput
+  paymentReversals?: Prisma.PaymentReversalCreateNestedManyWithoutOrganizationInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutCheckOutsInput = {
@@ -1188,6 +1458,11 @@ export type OrganizationUncheckedCreateWithoutCheckOutsInput = {
   bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutOrganizationInput
   admissions?: Prisma.AdmissionUncheckedCreateNestedManyWithoutOrganizationInput
   checkIns?: Prisma.CheckInUncheckedCreateNestedManyWithoutOrganizationInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutOrganizationInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentReversals?: Prisma.PaymentReversalUncheckedCreateNestedManyWithoutOrganizationInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutCheckOutsInput = {
@@ -1220,6 +1495,11 @@ export type OrganizationUpdateWithoutCheckOutsInput = {
   bookings?: Prisma.BookingUpdateManyWithoutOrganizationNestedInput
   admissions?: Prisma.AdmissionUpdateManyWithoutOrganizationNestedInput
   checkIns?: Prisma.CheckInUpdateManyWithoutOrganizationNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutOrganizationNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutOrganizationNestedInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyUpdateManyWithoutOrganizationNestedInput
+  paymentReversals?: Prisma.PaymentReversalUpdateManyWithoutOrganizationNestedInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutCheckOutsInput = {
@@ -1236,6 +1516,511 @@ export type OrganizationUncheckedUpdateWithoutCheckOutsInput = {
   bookings?: Prisma.BookingUncheckedUpdateManyWithoutOrganizationNestedInput
   admissions?: Prisma.AdmissionUncheckedUpdateManyWithoutOrganizationNestedInput
   checkIns?: Prisma.CheckInUncheckedUpdateManyWithoutOrganizationNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentReversals?: Prisma.PaymentReversalUncheckedUpdateManyWithoutOrganizationNestedInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationCreateWithoutInvoicesInput = {
+  id?: string
+  name: string
+  status?: $Enums.OrganizationStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.MembershipCreateNestedManyWithoutOrganizationInput
+  properties?: Prisma.PropertyCreateNestedManyWithoutOrganizationInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutOrganizationInput
+  residents?: Prisma.ResidentCreateNestedManyWithoutOrganizationInput
+  enquiries?: Prisma.EnquiryCreateNestedManyWithoutOrganizationInput
+  bookings?: Prisma.BookingCreateNestedManyWithoutOrganizationInput
+  admissions?: Prisma.AdmissionCreateNestedManyWithoutOrganizationInput
+  checkIns?: Prisma.CheckInCreateNestedManyWithoutOrganizationInput
+  checkOuts?: Prisma.CheckOutCreateNestedManyWithoutOrganizationInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutOrganizationInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyCreateNestedManyWithoutOrganizationInput
+  paymentReversals?: Prisma.PaymentReversalCreateNestedManyWithoutOrganizationInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationUncheckedCreateWithoutInvoicesInput = {
+  id?: string
+  name: string
+  status?: $Enums.OrganizationStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutOrganizationInput
+  properties?: Prisma.PropertyUncheckedCreateNestedManyWithoutOrganizationInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  residents?: Prisma.ResidentUncheckedCreateNestedManyWithoutOrganizationInput
+  enquiries?: Prisma.EnquiryUncheckedCreateNestedManyWithoutOrganizationInput
+  bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutOrganizationInput
+  admissions?: Prisma.AdmissionUncheckedCreateNestedManyWithoutOrganizationInput
+  checkIns?: Prisma.CheckInUncheckedCreateNestedManyWithoutOrganizationInput
+  checkOuts?: Prisma.CheckOutUncheckedCreateNestedManyWithoutOrganizationInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentReversals?: Prisma.PaymentReversalUncheckedCreateNestedManyWithoutOrganizationInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationCreateOrConnectWithoutInvoicesInput = {
+  where: Prisma.OrganizationWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutInvoicesInput, Prisma.OrganizationUncheckedCreateWithoutInvoicesInput>
+}
+
+export type OrganizationUpsertWithoutInvoicesInput = {
+  update: Prisma.XOR<Prisma.OrganizationUpdateWithoutInvoicesInput, Prisma.OrganizationUncheckedUpdateWithoutInvoicesInput>
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutInvoicesInput, Prisma.OrganizationUncheckedCreateWithoutInvoicesInput>
+  where?: Prisma.OrganizationWhereInput
+}
+
+export type OrganizationUpdateToOneWithWhereWithoutInvoicesInput = {
+  where?: Prisma.OrganizationWhereInput
+  data: Prisma.XOR<Prisma.OrganizationUpdateWithoutInvoicesInput, Prisma.OrganizationUncheckedUpdateWithoutInvoicesInput>
+}
+
+export type OrganizationUpdateWithoutInvoicesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.MembershipUpdateManyWithoutOrganizationNestedInput
+  properties?: Prisma.PropertyUpdateManyWithoutOrganizationNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutOrganizationNestedInput
+  residents?: Prisma.ResidentUpdateManyWithoutOrganizationNestedInput
+  enquiries?: Prisma.EnquiryUpdateManyWithoutOrganizationNestedInput
+  bookings?: Prisma.BookingUpdateManyWithoutOrganizationNestedInput
+  admissions?: Prisma.AdmissionUpdateManyWithoutOrganizationNestedInput
+  checkIns?: Prisma.CheckInUpdateManyWithoutOrganizationNestedInput
+  checkOuts?: Prisma.CheckOutUpdateManyWithoutOrganizationNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutOrganizationNestedInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyUpdateManyWithoutOrganizationNestedInput
+  paymentReversals?: Prisma.PaymentReversalUpdateManyWithoutOrganizationNestedInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationUncheckedUpdateWithoutInvoicesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.MembershipUncheckedUpdateManyWithoutOrganizationNestedInput
+  properties?: Prisma.PropertyUncheckedUpdateManyWithoutOrganizationNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  residents?: Prisma.ResidentUncheckedUpdateManyWithoutOrganizationNestedInput
+  enquiries?: Prisma.EnquiryUncheckedUpdateManyWithoutOrganizationNestedInput
+  bookings?: Prisma.BookingUncheckedUpdateManyWithoutOrganizationNestedInput
+  admissions?: Prisma.AdmissionUncheckedUpdateManyWithoutOrganizationNestedInput
+  checkIns?: Prisma.CheckInUncheckedUpdateManyWithoutOrganizationNestedInput
+  checkOuts?: Prisma.CheckOutUncheckedUpdateManyWithoutOrganizationNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentReversals?: Prisma.PaymentReversalUncheckedUpdateManyWithoutOrganizationNestedInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationCreateWithoutPaymentsInput = {
+  id?: string
+  name: string
+  status?: $Enums.OrganizationStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.MembershipCreateNestedManyWithoutOrganizationInput
+  properties?: Prisma.PropertyCreateNestedManyWithoutOrganizationInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutOrganizationInput
+  residents?: Prisma.ResidentCreateNestedManyWithoutOrganizationInput
+  enquiries?: Prisma.EnquiryCreateNestedManyWithoutOrganizationInput
+  bookings?: Prisma.BookingCreateNestedManyWithoutOrganizationInput
+  admissions?: Prisma.AdmissionCreateNestedManyWithoutOrganizationInput
+  checkIns?: Prisma.CheckInCreateNestedManyWithoutOrganizationInput
+  checkOuts?: Prisma.CheckOutCreateNestedManyWithoutOrganizationInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutOrganizationInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyCreateNestedManyWithoutOrganizationInput
+  paymentReversals?: Prisma.PaymentReversalCreateNestedManyWithoutOrganizationInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationUncheckedCreateWithoutPaymentsInput = {
+  id?: string
+  name: string
+  status?: $Enums.OrganizationStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutOrganizationInput
+  properties?: Prisma.PropertyUncheckedCreateNestedManyWithoutOrganizationInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  residents?: Prisma.ResidentUncheckedCreateNestedManyWithoutOrganizationInput
+  enquiries?: Prisma.EnquiryUncheckedCreateNestedManyWithoutOrganizationInput
+  bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutOrganizationInput
+  admissions?: Prisma.AdmissionUncheckedCreateNestedManyWithoutOrganizationInput
+  checkIns?: Prisma.CheckInUncheckedCreateNestedManyWithoutOrganizationInput
+  checkOuts?: Prisma.CheckOutUncheckedCreateNestedManyWithoutOrganizationInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentReversals?: Prisma.PaymentReversalUncheckedCreateNestedManyWithoutOrganizationInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationCreateOrConnectWithoutPaymentsInput = {
+  where: Prisma.OrganizationWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutPaymentsInput, Prisma.OrganizationUncheckedCreateWithoutPaymentsInput>
+}
+
+export type OrganizationUpsertWithoutPaymentsInput = {
+  update: Prisma.XOR<Prisma.OrganizationUpdateWithoutPaymentsInput, Prisma.OrganizationUncheckedUpdateWithoutPaymentsInput>
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutPaymentsInput, Prisma.OrganizationUncheckedCreateWithoutPaymentsInput>
+  where?: Prisma.OrganizationWhereInput
+}
+
+export type OrganizationUpdateToOneWithWhereWithoutPaymentsInput = {
+  where?: Prisma.OrganizationWhereInput
+  data: Prisma.XOR<Prisma.OrganizationUpdateWithoutPaymentsInput, Prisma.OrganizationUncheckedUpdateWithoutPaymentsInput>
+}
+
+export type OrganizationUpdateWithoutPaymentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.MembershipUpdateManyWithoutOrganizationNestedInput
+  properties?: Prisma.PropertyUpdateManyWithoutOrganizationNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutOrganizationNestedInput
+  residents?: Prisma.ResidentUpdateManyWithoutOrganizationNestedInput
+  enquiries?: Prisma.EnquiryUpdateManyWithoutOrganizationNestedInput
+  bookings?: Prisma.BookingUpdateManyWithoutOrganizationNestedInput
+  admissions?: Prisma.AdmissionUpdateManyWithoutOrganizationNestedInput
+  checkIns?: Prisma.CheckInUpdateManyWithoutOrganizationNestedInput
+  checkOuts?: Prisma.CheckOutUpdateManyWithoutOrganizationNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutOrganizationNestedInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyUpdateManyWithoutOrganizationNestedInput
+  paymentReversals?: Prisma.PaymentReversalUpdateManyWithoutOrganizationNestedInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationUncheckedUpdateWithoutPaymentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.MembershipUncheckedUpdateManyWithoutOrganizationNestedInput
+  properties?: Prisma.PropertyUncheckedUpdateManyWithoutOrganizationNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  residents?: Prisma.ResidentUncheckedUpdateManyWithoutOrganizationNestedInput
+  enquiries?: Prisma.EnquiryUncheckedUpdateManyWithoutOrganizationNestedInput
+  bookings?: Prisma.BookingUncheckedUpdateManyWithoutOrganizationNestedInput
+  admissions?: Prisma.AdmissionUncheckedUpdateManyWithoutOrganizationNestedInput
+  checkIns?: Prisma.CheckInUncheckedUpdateManyWithoutOrganizationNestedInput
+  checkOuts?: Prisma.CheckOutUncheckedUpdateManyWithoutOrganizationNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentReversals?: Prisma.PaymentReversalUncheckedUpdateManyWithoutOrganizationNestedInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationCreateWithoutPaymentReversalsInput = {
+  id?: string
+  name: string
+  status?: $Enums.OrganizationStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.MembershipCreateNestedManyWithoutOrganizationInput
+  properties?: Prisma.PropertyCreateNestedManyWithoutOrganizationInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutOrganizationInput
+  residents?: Prisma.ResidentCreateNestedManyWithoutOrganizationInput
+  enquiries?: Prisma.EnquiryCreateNestedManyWithoutOrganizationInput
+  bookings?: Prisma.BookingCreateNestedManyWithoutOrganizationInput
+  admissions?: Prisma.AdmissionCreateNestedManyWithoutOrganizationInput
+  checkIns?: Prisma.CheckInCreateNestedManyWithoutOrganizationInput
+  checkOuts?: Prisma.CheckOutCreateNestedManyWithoutOrganizationInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutOrganizationInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutOrganizationInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyCreateNestedManyWithoutOrganizationInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationUncheckedCreateWithoutPaymentReversalsInput = {
+  id?: string
+  name: string
+  status?: $Enums.OrganizationStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutOrganizationInput
+  properties?: Prisma.PropertyUncheckedCreateNestedManyWithoutOrganizationInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  residents?: Prisma.ResidentUncheckedCreateNestedManyWithoutOrganizationInput
+  enquiries?: Prisma.EnquiryUncheckedCreateNestedManyWithoutOrganizationInput
+  bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutOrganizationInput
+  admissions?: Prisma.AdmissionUncheckedCreateNestedManyWithoutOrganizationInput
+  checkIns?: Prisma.CheckInUncheckedCreateNestedManyWithoutOrganizationInput
+  checkOuts?: Prisma.CheckOutUncheckedCreateNestedManyWithoutOrganizationInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutOrganizationInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyUncheckedCreateNestedManyWithoutOrganizationInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationCreateOrConnectWithoutPaymentReversalsInput = {
+  where: Prisma.OrganizationWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutPaymentReversalsInput, Prisma.OrganizationUncheckedCreateWithoutPaymentReversalsInput>
+}
+
+export type OrganizationUpsertWithoutPaymentReversalsInput = {
+  update: Prisma.XOR<Prisma.OrganizationUpdateWithoutPaymentReversalsInput, Prisma.OrganizationUncheckedUpdateWithoutPaymentReversalsInput>
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutPaymentReversalsInput, Prisma.OrganizationUncheckedCreateWithoutPaymentReversalsInput>
+  where?: Prisma.OrganizationWhereInput
+}
+
+export type OrganizationUpdateToOneWithWhereWithoutPaymentReversalsInput = {
+  where?: Prisma.OrganizationWhereInput
+  data: Prisma.XOR<Prisma.OrganizationUpdateWithoutPaymentReversalsInput, Prisma.OrganizationUncheckedUpdateWithoutPaymentReversalsInput>
+}
+
+export type OrganizationUpdateWithoutPaymentReversalsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.MembershipUpdateManyWithoutOrganizationNestedInput
+  properties?: Prisma.PropertyUpdateManyWithoutOrganizationNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutOrganizationNestedInput
+  residents?: Prisma.ResidentUpdateManyWithoutOrganizationNestedInput
+  enquiries?: Prisma.EnquiryUpdateManyWithoutOrganizationNestedInput
+  bookings?: Prisma.BookingUpdateManyWithoutOrganizationNestedInput
+  admissions?: Prisma.AdmissionUpdateManyWithoutOrganizationNestedInput
+  checkIns?: Prisma.CheckInUpdateManyWithoutOrganizationNestedInput
+  checkOuts?: Prisma.CheckOutUpdateManyWithoutOrganizationNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutOrganizationNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutOrganizationNestedInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyUpdateManyWithoutOrganizationNestedInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationUncheckedUpdateWithoutPaymentReversalsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.MembershipUncheckedUpdateManyWithoutOrganizationNestedInput
+  properties?: Prisma.PropertyUncheckedUpdateManyWithoutOrganizationNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  residents?: Prisma.ResidentUncheckedUpdateManyWithoutOrganizationNestedInput
+  enquiries?: Prisma.EnquiryUncheckedUpdateManyWithoutOrganizationNestedInput
+  bookings?: Prisma.BookingUncheckedUpdateManyWithoutOrganizationNestedInput
+  admissions?: Prisma.AdmissionUncheckedUpdateManyWithoutOrganizationNestedInput
+  checkIns?: Prisma.CheckInUncheckedUpdateManyWithoutOrganizationNestedInput
+  checkOuts?: Prisma.CheckOutUncheckedUpdateManyWithoutOrganizationNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyUncheckedUpdateManyWithoutOrganizationNestedInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationCreateWithoutInvoiceAdjustmentsInput = {
+  id?: string
+  name: string
+  status?: $Enums.OrganizationStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.MembershipCreateNestedManyWithoutOrganizationInput
+  properties?: Prisma.PropertyCreateNestedManyWithoutOrganizationInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutOrganizationInput
+  residents?: Prisma.ResidentCreateNestedManyWithoutOrganizationInput
+  enquiries?: Prisma.EnquiryCreateNestedManyWithoutOrganizationInput
+  bookings?: Prisma.BookingCreateNestedManyWithoutOrganizationInput
+  admissions?: Prisma.AdmissionCreateNestedManyWithoutOrganizationInput
+  checkIns?: Prisma.CheckInCreateNestedManyWithoutOrganizationInput
+  checkOuts?: Prisma.CheckOutCreateNestedManyWithoutOrganizationInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutOrganizationInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutOrganizationInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyCreateNestedManyWithoutOrganizationInput
+  paymentReversals?: Prisma.PaymentReversalCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationUncheckedCreateWithoutInvoiceAdjustmentsInput = {
+  id?: string
+  name: string
+  status?: $Enums.OrganizationStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutOrganizationInput
+  properties?: Prisma.PropertyUncheckedCreateNestedManyWithoutOrganizationInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  residents?: Prisma.ResidentUncheckedCreateNestedManyWithoutOrganizationInput
+  enquiries?: Prisma.EnquiryUncheckedCreateNestedManyWithoutOrganizationInput
+  bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutOrganizationInput
+  admissions?: Prisma.AdmissionUncheckedCreateNestedManyWithoutOrganizationInput
+  checkIns?: Prisma.CheckInUncheckedCreateNestedManyWithoutOrganizationInput
+  checkOuts?: Prisma.CheckOutUncheckedCreateNestedManyWithoutOrganizationInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutOrganizationInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentReversals?: Prisma.PaymentReversalUncheckedCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationCreateOrConnectWithoutInvoiceAdjustmentsInput = {
+  where: Prisma.OrganizationWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutInvoiceAdjustmentsInput, Prisma.OrganizationUncheckedCreateWithoutInvoiceAdjustmentsInput>
+}
+
+export type OrganizationUpsertWithoutInvoiceAdjustmentsInput = {
+  update: Prisma.XOR<Prisma.OrganizationUpdateWithoutInvoiceAdjustmentsInput, Prisma.OrganizationUncheckedUpdateWithoutInvoiceAdjustmentsInput>
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutInvoiceAdjustmentsInput, Prisma.OrganizationUncheckedCreateWithoutInvoiceAdjustmentsInput>
+  where?: Prisma.OrganizationWhereInput
+}
+
+export type OrganizationUpdateToOneWithWhereWithoutInvoiceAdjustmentsInput = {
+  where?: Prisma.OrganizationWhereInput
+  data: Prisma.XOR<Prisma.OrganizationUpdateWithoutInvoiceAdjustmentsInput, Prisma.OrganizationUncheckedUpdateWithoutInvoiceAdjustmentsInput>
+}
+
+export type OrganizationUpdateWithoutInvoiceAdjustmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.MembershipUpdateManyWithoutOrganizationNestedInput
+  properties?: Prisma.PropertyUpdateManyWithoutOrganizationNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutOrganizationNestedInput
+  residents?: Prisma.ResidentUpdateManyWithoutOrganizationNestedInput
+  enquiries?: Prisma.EnquiryUpdateManyWithoutOrganizationNestedInput
+  bookings?: Prisma.BookingUpdateManyWithoutOrganizationNestedInput
+  admissions?: Prisma.AdmissionUpdateManyWithoutOrganizationNestedInput
+  checkIns?: Prisma.CheckInUpdateManyWithoutOrganizationNestedInput
+  checkOuts?: Prisma.CheckOutUpdateManyWithoutOrganizationNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutOrganizationNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutOrganizationNestedInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyUpdateManyWithoutOrganizationNestedInput
+  paymentReversals?: Prisma.PaymentReversalUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationUncheckedUpdateWithoutInvoiceAdjustmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.MembershipUncheckedUpdateManyWithoutOrganizationNestedInput
+  properties?: Prisma.PropertyUncheckedUpdateManyWithoutOrganizationNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  residents?: Prisma.ResidentUncheckedUpdateManyWithoutOrganizationNestedInput
+  enquiries?: Prisma.EnquiryUncheckedUpdateManyWithoutOrganizationNestedInput
+  bookings?: Prisma.BookingUncheckedUpdateManyWithoutOrganizationNestedInput
+  admissions?: Prisma.AdmissionUncheckedUpdateManyWithoutOrganizationNestedInput
+  checkIns?: Prisma.CheckInUncheckedUpdateManyWithoutOrganizationNestedInput
+  checkOuts?: Prisma.CheckOutUncheckedUpdateManyWithoutOrganizationNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentReversals?: Prisma.PaymentReversalUncheckedUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationCreateWithoutPaymentIdempotencyKeysInput = {
+  id?: string
+  name: string
+  status?: $Enums.OrganizationStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.MembershipCreateNestedManyWithoutOrganizationInput
+  properties?: Prisma.PropertyCreateNestedManyWithoutOrganizationInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutOrganizationInput
+  residents?: Prisma.ResidentCreateNestedManyWithoutOrganizationInput
+  enquiries?: Prisma.EnquiryCreateNestedManyWithoutOrganizationInput
+  bookings?: Prisma.BookingCreateNestedManyWithoutOrganizationInput
+  admissions?: Prisma.AdmissionCreateNestedManyWithoutOrganizationInput
+  checkIns?: Prisma.CheckInCreateNestedManyWithoutOrganizationInput
+  checkOuts?: Prisma.CheckOutCreateNestedManyWithoutOrganizationInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutOrganizationInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutOrganizationInput
+  paymentReversals?: Prisma.PaymentReversalCreateNestedManyWithoutOrganizationInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationUncheckedCreateWithoutPaymentIdempotencyKeysInput = {
+  id?: string
+  name: string
+  status?: $Enums.OrganizationStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutOrganizationInput
+  properties?: Prisma.PropertyUncheckedCreateNestedManyWithoutOrganizationInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  residents?: Prisma.ResidentUncheckedCreateNestedManyWithoutOrganizationInput
+  enquiries?: Prisma.EnquiryUncheckedCreateNestedManyWithoutOrganizationInput
+  bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutOrganizationInput
+  admissions?: Prisma.AdmissionUncheckedCreateNestedManyWithoutOrganizationInput
+  checkIns?: Prisma.CheckInUncheckedCreateNestedManyWithoutOrganizationInput
+  checkOuts?: Prisma.CheckOutUncheckedCreateNestedManyWithoutOrganizationInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutOrganizationInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentReversals?: Prisma.PaymentReversalUncheckedCreateNestedManyWithoutOrganizationInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationCreateOrConnectWithoutPaymentIdempotencyKeysInput = {
+  where: Prisma.OrganizationWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutPaymentIdempotencyKeysInput, Prisma.OrganizationUncheckedCreateWithoutPaymentIdempotencyKeysInput>
+}
+
+export type OrganizationUpsertWithoutPaymentIdempotencyKeysInput = {
+  update: Prisma.XOR<Prisma.OrganizationUpdateWithoutPaymentIdempotencyKeysInput, Prisma.OrganizationUncheckedUpdateWithoutPaymentIdempotencyKeysInput>
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutPaymentIdempotencyKeysInput, Prisma.OrganizationUncheckedCreateWithoutPaymentIdempotencyKeysInput>
+  where?: Prisma.OrganizationWhereInput
+}
+
+export type OrganizationUpdateToOneWithWhereWithoutPaymentIdempotencyKeysInput = {
+  where?: Prisma.OrganizationWhereInput
+  data: Prisma.XOR<Prisma.OrganizationUpdateWithoutPaymentIdempotencyKeysInput, Prisma.OrganizationUncheckedUpdateWithoutPaymentIdempotencyKeysInput>
+}
+
+export type OrganizationUpdateWithoutPaymentIdempotencyKeysInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.MembershipUpdateManyWithoutOrganizationNestedInput
+  properties?: Prisma.PropertyUpdateManyWithoutOrganizationNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutOrganizationNestedInput
+  residents?: Prisma.ResidentUpdateManyWithoutOrganizationNestedInput
+  enquiries?: Prisma.EnquiryUpdateManyWithoutOrganizationNestedInput
+  bookings?: Prisma.BookingUpdateManyWithoutOrganizationNestedInput
+  admissions?: Prisma.AdmissionUpdateManyWithoutOrganizationNestedInput
+  checkIns?: Prisma.CheckInUpdateManyWithoutOrganizationNestedInput
+  checkOuts?: Prisma.CheckOutUpdateManyWithoutOrganizationNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutOrganizationNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutOrganizationNestedInput
+  paymentReversals?: Prisma.PaymentReversalUpdateManyWithoutOrganizationNestedInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationUncheckedUpdateWithoutPaymentIdempotencyKeysInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.MembershipUncheckedUpdateManyWithoutOrganizationNestedInput
+  properties?: Prisma.PropertyUncheckedUpdateManyWithoutOrganizationNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  residents?: Prisma.ResidentUncheckedUpdateManyWithoutOrganizationNestedInput
+  enquiries?: Prisma.EnquiryUncheckedUpdateManyWithoutOrganizationNestedInput
+  bookings?: Prisma.BookingUncheckedUpdateManyWithoutOrganizationNestedInput
+  admissions?: Prisma.AdmissionUncheckedUpdateManyWithoutOrganizationNestedInput
+  checkIns?: Prisma.CheckInUncheckedUpdateManyWithoutOrganizationNestedInput
+  checkOuts?: Prisma.CheckOutUncheckedUpdateManyWithoutOrganizationNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentReversals?: Prisma.PaymentReversalUncheckedUpdateManyWithoutOrganizationNestedInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 
@@ -1253,6 +2038,11 @@ export type OrganizationCountOutputType = {
   admissions: number
   checkIns: number
   checkOuts: number
+  invoices: number
+  payments: number
+  paymentIdempotencyKeys: number
+  paymentReversals: number
+  invoiceAdjustments: number
 }
 
 export type OrganizationCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1265,6 +2055,11 @@ export type OrganizationCountOutputTypeSelect<ExtArgs extends runtime.Types.Exte
   admissions?: boolean | OrganizationCountOutputTypeCountAdmissionsArgs
   checkIns?: boolean | OrganizationCountOutputTypeCountCheckInsArgs
   checkOuts?: boolean | OrganizationCountOutputTypeCountCheckOutsArgs
+  invoices?: boolean | OrganizationCountOutputTypeCountInvoicesArgs
+  payments?: boolean | OrganizationCountOutputTypeCountPaymentsArgs
+  paymentIdempotencyKeys?: boolean | OrganizationCountOutputTypeCountPaymentIdempotencyKeysArgs
+  paymentReversals?: boolean | OrganizationCountOutputTypeCountPaymentReversalsArgs
+  invoiceAdjustments?: boolean | OrganizationCountOutputTypeCountInvoiceAdjustmentsArgs
 }
 
 /**
@@ -1340,6 +2135,41 @@ export type OrganizationCountOutputTypeCountCheckOutsArgs<ExtArgs extends runtim
   where?: Prisma.CheckOutWhereInput
 }
 
+/**
+ * OrganizationCountOutputType without action
+ */
+export type OrganizationCountOutputTypeCountInvoicesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.InvoiceWhereInput
+}
+
+/**
+ * OrganizationCountOutputType without action
+ */
+export type OrganizationCountOutputTypeCountPaymentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PaymentWhereInput
+}
+
+/**
+ * OrganizationCountOutputType without action
+ */
+export type OrganizationCountOutputTypeCountPaymentIdempotencyKeysArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PaymentIdempotencyKeyWhereInput
+}
+
+/**
+ * OrganizationCountOutputType without action
+ */
+export type OrganizationCountOutputTypeCountPaymentReversalsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PaymentReversalWhereInput
+}
+
+/**
+ * OrganizationCountOutputType without action
+ */
+export type OrganizationCountOutputTypeCountInvoiceAdjustmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.InvoiceAdjustmentWhereInput
+}
+
 
 export type OrganizationSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1356,6 +2186,11 @@ export type OrganizationSelect<ExtArgs extends runtime.Types.Extensions.Internal
   admissions?: boolean | Prisma.Organization$admissionsArgs<ExtArgs>
   checkIns?: boolean | Prisma.Organization$checkInsArgs<ExtArgs>
   checkOuts?: boolean | Prisma.Organization$checkOutsArgs<ExtArgs>
+  invoices?: boolean | Prisma.Organization$invoicesArgs<ExtArgs>
+  payments?: boolean | Prisma.Organization$paymentsArgs<ExtArgs>
+  paymentIdempotencyKeys?: boolean | Prisma.Organization$paymentIdempotencyKeysArgs<ExtArgs>
+  paymentReversals?: boolean | Prisma.Organization$paymentReversalsArgs<ExtArgs>
+  invoiceAdjustments?: boolean | Prisma.Organization$invoiceAdjustmentsArgs<ExtArgs>
   _count?: boolean | Prisma.OrganizationCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["organization"]>
 
@@ -1394,6 +2229,11 @@ export type OrganizationInclude<ExtArgs extends runtime.Types.Extensions.Interna
   admissions?: boolean | Prisma.Organization$admissionsArgs<ExtArgs>
   checkIns?: boolean | Prisma.Organization$checkInsArgs<ExtArgs>
   checkOuts?: boolean | Prisma.Organization$checkOutsArgs<ExtArgs>
+  invoices?: boolean | Prisma.Organization$invoicesArgs<ExtArgs>
+  payments?: boolean | Prisma.Organization$paymentsArgs<ExtArgs>
+  paymentIdempotencyKeys?: boolean | Prisma.Organization$paymentIdempotencyKeysArgs<ExtArgs>
+  paymentReversals?: boolean | Prisma.Organization$paymentReversalsArgs<ExtArgs>
+  invoiceAdjustments?: boolean | Prisma.Organization$invoiceAdjustmentsArgs<ExtArgs>
   _count?: boolean | Prisma.OrganizationCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type OrganizationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1411,6 +2251,11 @@ export type $OrganizationPayload<ExtArgs extends runtime.Types.Extensions.Intern
     admissions: Prisma.$AdmissionPayload<ExtArgs>[]
     checkIns: Prisma.$CheckInPayload<ExtArgs>[]
     checkOuts: Prisma.$CheckOutPayload<ExtArgs>[]
+    invoices: Prisma.$InvoicePayload<ExtArgs>[]
+    payments: Prisma.$PaymentPayload<ExtArgs>[]
+    paymentIdempotencyKeys: Prisma.$PaymentIdempotencyKeyPayload<ExtArgs>[]
+    paymentReversals: Prisma.$PaymentReversalPayload<ExtArgs>[]
+    invoiceAdjustments: Prisma.$InvoiceAdjustmentPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1821,6 +2666,11 @@ export interface Prisma__OrganizationClient<T, Null = never, ExtArgs extends run
   admissions<T extends Prisma.Organization$admissionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$admissionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AdmissionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   checkIns<T extends Prisma.Organization$checkInsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$checkInsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CheckInPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   checkOuts<T extends Prisma.Organization$checkOutsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$checkOutsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CheckOutPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  invoices<T extends Prisma.Organization$invoicesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$invoicesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  payments<T extends Prisma.Organization$paymentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$paymentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  paymentIdempotencyKeys<T extends Prisma.Organization$paymentIdempotencyKeysArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$paymentIdempotencyKeysArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PaymentIdempotencyKeyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  paymentReversals<T extends Prisma.Organization$paymentReversalsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$paymentReversalsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PaymentReversalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  invoiceAdjustments<T extends Prisma.Organization$invoiceAdjustmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$invoiceAdjustmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvoiceAdjustmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2461,6 +3311,126 @@ export type Organization$checkOutsArgs<ExtArgs extends runtime.Types.Extensions.
   take?: number
   skip?: number
   distinct?: Prisma.CheckOutScalarFieldEnum | Prisma.CheckOutScalarFieldEnum[]
+}
+
+/**
+ * Organization.invoices
+ */
+export type Organization$invoicesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Invoice
+   */
+  select?: Prisma.InvoiceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Invoice
+   */
+  omit?: Prisma.InvoiceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InvoiceInclude<ExtArgs> | null
+  where?: Prisma.InvoiceWhereInput
+  orderBy?: Prisma.InvoiceOrderByWithRelationInput | Prisma.InvoiceOrderByWithRelationInput[]
+  cursor?: Prisma.InvoiceWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.InvoiceScalarFieldEnum | Prisma.InvoiceScalarFieldEnum[]
+}
+
+/**
+ * Organization.payments
+ */
+export type Organization$paymentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Payment
+   */
+  select?: Prisma.PaymentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Payment
+   */
+  omit?: Prisma.PaymentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PaymentInclude<ExtArgs> | null
+  where?: Prisma.PaymentWhereInput
+  orderBy?: Prisma.PaymentOrderByWithRelationInput | Prisma.PaymentOrderByWithRelationInput[]
+  cursor?: Prisma.PaymentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PaymentScalarFieldEnum | Prisma.PaymentScalarFieldEnum[]
+}
+
+/**
+ * Organization.paymentIdempotencyKeys
+ */
+export type Organization$paymentIdempotencyKeysArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PaymentIdempotencyKey
+   */
+  select?: Prisma.PaymentIdempotencyKeySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PaymentIdempotencyKey
+   */
+  omit?: Prisma.PaymentIdempotencyKeyOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PaymentIdempotencyKeyInclude<ExtArgs> | null
+  where?: Prisma.PaymentIdempotencyKeyWhereInput
+  orderBy?: Prisma.PaymentIdempotencyKeyOrderByWithRelationInput | Prisma.PaymentIdempotencyKeyOrderByWithRelationInput[]
+  cursor?: Prisma.PaymentIdempotencyKeyWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PaymentIdempotencyKeyScalarFieldEnum | Prisma.PaymentIdempotencyKeyScalarFieldEnum[]
+}
+
+/**
+ * Organization.paymentReversals
+ */
+export type Organization$paymentReversalsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PaymentReversal
+   */
+  select?: Prisma.PaymentReversalSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PaymentReversal
+   */
+  omit?: Prisma.PaymentReversalOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PaymentReversalInclude<ExtArgs> | null
+  where?: Prisma.PaymentReversalWhereInput
+  orderBy?: Prisma.PaymentReversalOrderByWithRelationInput | Prisma.PaymentReversalOrderByWithRelationInput[]
+  cursor?: Prisma.PaymentReversalWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PaymentReversalScalarFieldEnum | Prisma.PaymentReversalScalarFieldEnum[]
+}
+
+/**
+ * Organization.invoiceAdjustments
+ */
+export type Organization$invoiceAdjustmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the InvoiceAdjustment
+   */
+  select?: Prisma.InvoiceAdjustmentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the InvoiceAdjustment
+   */
+  omit?: Prisma.InvoiceAdjustmentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InvoiceAdjustmentInclude<ExtArgs> | null
+  where?: Prisma.InvoiceAdjustmentWhereInput
+  orderBy?: Prisma.InvoiceAdjustmentOrderByWithRelationInput | Prisma.InvoiceAdjustmentOrderByWithRelationInput[]
+  cursor?: Prisma.InvoiceAdjustmentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.InvoiceAdjustmentScalarFieldEnum | Prisma.InvoiceAdjustmentScalarFieldEnum[]
 }
 
 /**

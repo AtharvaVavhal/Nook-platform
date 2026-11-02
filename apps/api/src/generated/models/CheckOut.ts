@@ -259,6 +259,7 @@ export type CheckOutOrderByWithRelationInput = {
 export type CheckOutWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   checkInId?: string
+  checkInId_organizationId?: Prisma.CheckOutCheckInIdOrganizationIdCompoundUniqueInput
   AND?: Prisma.CheckOutWhereInput | Prisma.CheckOutWhereInput[]
   OR?: Prisma.CheckOutWhereInput[]
   NOT?: Prisma.CheckOutWhereInput | Prisma.CheckOutWhereInput[]
@@ -276,7 +277,7 @@ export type CheckOutWhereUniqueInput = Prisma.AtLeast<{
   resident?: Prisma.XOR<Prisma.ResidentScalarRelationFilter, Prisma.ResidentWhereInput>
   bed?: Prisma.XOR<Prisma.BedScalarRelationFilter, Prisma.BedWhereInput>
   booking?: Prisma.XOR<Prisma.BookingScalarRelationFilter, Prisma.BookingWhereInput>
-}, "id" | "checkInId">
+}, "id" | "checkInId" | "checkInId_organizationId">
 
 export type CheckOutOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -418,6 +419,11 @@ export type CheckOutOrderByRelationAggregateInput = {
 export type CheckOutNullableScalarRelationFilter = {
   is?: Prisma.CheckOutWhereInput | null
   isNot?: Prisma.CheckOutWhereInput | null
+}
+
+export type CheckOutCheckInIdOrganizationIdCompoundUniqueInput = {
+  checkInId: string
+  organizationId: string
 }
 
 export type CheckOutCountOrderByAggregateInput = {
@@ -746,7 +752,6 @@ export type CheckOutCreateWithoutBedInput = {
 
 export type CheckOutUncheckedCreateWithoutBedInput = {
   id?: string
-  organizationId: string
   checkInId: string
   residentId: string
   bookingId: string
@@ -798,7 +803,6 @@ export type CheckOutCreateWithoutResidentInput = {
 
 export type CheckOutUncheckedCreateWithoutResidentInput = {
   id?: string
-  organizationId: string
   checkInId: string
   bedId: string
   bookingId: string
@@ -850,7 +854,6 @@ export type CheckOutCreateWithoutBookingInput = {
 
 export type CheckOutUncheckedCreateWithoutBookingInput = {
   id?: string
-  organizationId: string
   checkInId: string
   residentId: string
   bedId: string
@@ -902,7 +905,6 @@ export type CheckOutCreateWithoutCheckInInput = {
 
 export type CheckOutUncheckedCreateWithoutCheckInInput = {
   id?: string
-  organizationId: string
   residentId: string
   bedId: string
   bookingId: string
@@ -944,7 +946,6 @@ export type CheckOutUpdateWithoutCheckInInput = {
 
 export type CheckOutUncheckedUpdateWithoutCheckInInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   residentId?: Prisma.StringFieldUpdateOperationsInput | string
   bedId?: Prisma.StringFieldUpdateOperationsInput | string
   bookingId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1009,7 +1010,6 @@ export type CheckOutUncheckedUpdateManyWithoutOrganizationInput = {
 
 export type CheckOutCreateManyBedInput = {
   id?: string
-  organizationId: string
   checkInId: string
   residentId: string
   bookingId: string
@@ -1035,7 +1035,6 @@ export type CheckOutUpdateWithoutBedInput = {
 
 export type CheckOutUncheckedUpdateWithoutBedInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   checkInId?: Prisma.StringFieldUpdateOperationsInput | string
   residentId?: Prisma.StringFieldUpdateOperationsInput | string
   bookingId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1048,7 +1047,6 @@ export type CheckOutUncheckedUpdateWithoutBedInput = {
 
 export type CheckOutUncheckedUpdateManyWithoutBedInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   checkInId?: Prisma.StringFieldUpdateOperationsInput | string
   residentId?: Prisma.StringFieldUpdateOperationsInput | string
   bookingId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1061,7 +1059,6 @@ export type CheckOutUncheckedUpdateManyWithoutBedInput = {
 
 export type CheckOutCreateManyResidentInput = {
   id?: string
-  organizationId: string
   checkInId: string
   bedId: string
   bookingId: string
@@ -1087,7 +1084,6 @@ export type CheckOutUpdateWithoutResidentInput = {
 
 export type CheckOutUncheckedUpdateWithoutResidentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   checkInId?: Prisma.StringFieldUpdateOperationsInput | string
   bedId?: Prisma.StringFieldUpdateOperationsInput | string
   bookingId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1100,7 +1096,6 @@ export type CheckOutUncheckedUpdateWithoutResidentInput = {
 
 export type CheckOutUncheckedUpdateManyWithoutResidentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   checkInId?: Prisma.StringFieldUpdateOperationsInput | string
   bedId?: Prisma.StringFieldUpdateOperationsInput | string
   bookingId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1113,7 +1108,6 @@ export type CheckOutUncheckedUpdateManyWithoutResidentInput = {
 
 export type CheckOutCreateManyBookingInput = {
   id?: string
-  organizationId: string
   checkInId: string
   residentId: string
   bedId: string
@@ -1139,7 +1133,6 @@ export type CheckOutUpdateWithoutBookingInput = {
 
 export type CheckOutUncheckedUpdateWithoutBookingInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   checkInId?: Prisma.StringFieldUpdateOperationsInput | string
   residentId?: Prisma.StringFieldUpdateOperationsInput | string
   bedId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1152,7 +1145,6 @@ export type CheckOutUncheckedUpdateWithoutBookingInput = {
 
 export type CheckOutUncheckedUpdateManyWithoutBookingInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   checkInId?: Prisma.StringFieldUpdateOperationsInput | string
   residentId?: Prisma.StringFieldUpdateOperationsInput | string
   bedId?: Prisma.StringFieldUpdateOperationsInput | string

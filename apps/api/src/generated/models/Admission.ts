@@ -272,6 +272,8 @@ export type AdmissionOrderByWithRelationInput = {
 export type AdmissionWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   bookingId?: string
+  id_organizationId?: Prisma.AdmissionIdOrganizationIdCompoundUniqueInput
+  bookingId_organizationId?: Prisma.AdmissionBookingIdOrganizationIdCompoundUniqueInput
   AND?: Prisma.AdmissionWhereInput | Prisma.AdmissionWhereInput[]
   OR?: Prisma.AdmissionWhereInput[]
   NOT?: Prisma.AdmissionWhereInput | Prisma.AdmissionWhereInput[]
@@ -292,7 +294,7 @@ export type AdmissionWhereUniqueInput = Prisma.AtLeast<{
   property?: Prisma.XOR<Prisma.PropertyNullableScalarRelationFilter, Prisma.PropertyWhereInput> | null
   room?: Prisma.XOR<Prisma.RoomNullableScalarRelationFilter, Prisma.RoomWhereInput> | null
   checkIn?: Prisma.XOR<Prisma.CheckInNullableScalarRelationFilter, Prisma.CheckInWhereInput> | null
-}, "id" | "bookingId">
+}, "id" | "bookingId" | "id_organizationId" | "bookingId_organizationId">
 
 export type AdmissionOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -446,6 +448,16 @@ export type AdmissionOrderByRelationAggregateInput = {
 export type AdmissionNullableScalarRelationFilter = {
   is?: Prisma.AdmissionWhereInput | null
   isNot?: Prisma.AdmissionWhereInput | null
+}
+
+export type AdmissionIdOrganizationIdCompoundUniqueInput = {
+  id: string
+  organizationId: string
+}
+
+export type AdmissionBookingIdOrganizationIdCompoundUniqueInput = {
+  bookingId: string
+  organizationId: string
 }
 
 export type AdmissionCountOrderByAggregateInput = {
@@ -961,7 +973,6 @@ export type AdmissionCreateWithoutBedInput = {
 
 export type AdmissionUncheckedCreateWithoutBedInput = {
   id?: string
-  organizationId: string
   bookingId: string
   residentId: string
   propertyId?: string | null
@@ -1017,7 +1028,6 @@ export type AdmissionCreateWithoutResidentInput = {
 
 export type AdmissionUncheckedCreateWithoutResidentInput = {
   id?: string
-  organizationId: string
   bookingId: string
   bedId: string
   propertyId?: string | null
@@ -1073,7 +1083,6 @@ export type AdmissionCreateWithoutBookingInput = {
 
 export type AdmissionUncheckedCreateWithoutBookingInput = {
   id?: string
-  organizationId: string
   residentId: string
   bedId: string
   propertyId?: string | null
@@ -1119,7 +1128,6 @@ export type AdmissionUpdateWithoutBookingInput = {
 
 export type AdmissionUncheckedUpdateWithoutBookingInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   residentId?: Prisma.StringFieldUpdateOperationsInput | string
   bedId?: Prisma.StringFieldUpdateOperationsInput | string
   propertyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1384,7 +1392,6 @@ export type AdmissionUncheckedUpdateManyWithoutRoomInput = {
 
 export type AdmissionCreateManyBedInput = {
   id?: string
-  organizationId: string
   bookingId: string
   residentId: string
   propertyId?: string | null
@@ -1413,7 +1420,6 @@ export type AdmissionUpdateWithoutBedInput = {
 
 export type AdmissionUncheckedUpdateWithoutBedInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   bookingId?: Prisma.StringFieldUpdateOperationsInput | string
   residentId?: Prisma.StringFieldUpdateOperationsInput | string
   propertyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1428,7 +1434,6 @@ export type AdmissionUncheckedUpdateWithoutBedInput = {
 
 export type AdmissionUncheckedUpdateManyWithoutBedInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   bookingId?: Prisma.StringFieldUpdateOperationsInput | string
   residentId?: Prisma.StringFieldUpdateOperationsInput | string
   propertyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1442,7 +1447,6 @@ export type AdmissionUncheckedUpdateManyWithoutBedInput = {
 
 export type AdmissionCreateManyResidentInput = {
   id?: string
-  organizationId: string
   bookingId: string
   bedId: string
   propertyId?: string | null
@@ -1471,7 +1475,6 @@ export type AdmissionUpdateWithoutResidentInput = {
 
 export type AdmissionUncheckedUpdateWithoutResidentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   bookingId?: Prisma.StringFieldUpdateOperationsInput | string
   bedId?: Prisma.StringFieldUpdateOperationsInput | string
   propertyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1486,7 +1489,6 @@ export type AdmissionUncheckedUpdateWithoutResidentInput = {
 
 export type AdmissionUncheckedUpdateManyWithoutResidentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   bookingId?: Prisma.StringFieldUpdateOperationsInput | string
   bedId?: Prisma.StringFieldUpdateOperationsInput | string
   propertyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null

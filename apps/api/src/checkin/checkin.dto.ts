@@ -1,22 +1,16 @@
-import { IsUUID, IsDateString, IsOptional, IsString, IsEnum, IsNumber } from 'class-validator';
+import { IsUUID, IsDateString, IsOptional, IsString, IsEnum } from 'class-validator';
 import { Type } from 'class-transformer';
-import { CheckInStatus } from '../generated/enums.js';
 
-export enum CheckInStatusEnum { ACTIVE = 'ACTIVE', CHECKED_OUT = 'CHECKED_OUT' }
+export enum CheckInStatusEnum {
+  ACTIVE = 'ACTIVE',
+  CHECKED_OUT = 'CHECKED_OUT',
+}
 
 export class CreateCheckInDto {
   @IsUUID()
   admissionId!: string;
 
-  @IsDateString()
-  checkInAt!: string;
-
-  @IsOptional()
-  @IsString()
-  notes?: string;
-}
-
-export class UpdateCheckInDto {
+  /** Optional: defaults to the current time. A value without a zone is read as Asia/Kolkata. */
   @IsOptional()
   @IsDateString()
   checkInAt?: string;
@@ -24,18 +18,20 @@ export class UpdateCheckInDto {
   @IsOptional()
   @IsString()
   notes?: string;
+}
 
+/** Only notes are editable; status moves through check-out and the check-in time is not editable. */
+export class UpdateCheckInDto {
   @IsOptional()
-  @IsEnum(CheckInStatus)
-  status?: string;
+  @IsString()
+  notes?: string;
 }
 
 export class CreateCheckOutDto {
-  @IsUUID()
-  checkInId!: string;
-
+  /** Optional: defaults to the current time. A value without a zone is read as Asia/Kolkata. */
+  @IsOptional()
   @IsDateString()
-  checkOutAt!: string;
+  checkOutAt?: string;
 
   @IsOptional()
   @IsString()

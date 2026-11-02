@@ -1,17 +1,17 @@
 import { Client } from 'pg';
+import { requireTestDatabaseUrl } from './env.js';
 
 const migratorUrl = process.env.MIGRATOR_DATABASE_URL;
 if (!migratorUrl) {
   throw new Error('MIGRATOR_DATABASE_URL environment variable is required');
 }
-const RUNTIME_URL = 'postgresql://nook_phase3c_runtime:HCZ3ycYIgnACzCp3dDF6-uljyEf16VrxJkT5RL5zDHaODqmFHya2gqRX2fOPqhOC@127.0.0.1:5433/nook_test?schema=public';
 
 export function createMigratorClient(): Client {
   return new Client({ connectionString: migratorUrl });
 }
 
 export function createRuntimeClient(): Client {
-  return new Client({ connectionString: RUNTIME_URL });
+  return new Client({ connectionString: requireTestDatabaseUrl() });
 }
 
 export async function withMigratorClient<T>(fn: (client: Client) => Promise<T>): Promise<T> {
