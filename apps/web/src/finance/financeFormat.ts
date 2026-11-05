@@ -42,8 +42,30 @@ export function monthLabel(month: string): string {
   });
 }
 
+const IST = 'Asia/Kolkata';
+/** The Asia/Kolkata calendar date (YYYY-MM-DD) of an instant, whatever the browser's time zone is. */
+export function istDate(now: Date = new Date()): string {
+  return new Intl.DateTimeFormat('en-CA', {
+    timeZone: IST,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(now);
+}
+
+/** The current billing month (YYYY-MM) in Asia/Kolkata, the zone the server bills in. */
 export function currentMonth(now: Date = new Date()): string {
-  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+  return istDate(now).slice(0, 7);
+}
+
+/**
+ * The instant sent as `receivedAt` for a chosen received date. Today means "now"; an earlier date is
+ * noon India time, sent with an explicit +05:30 offset so the server never has to guess the zone.
+ */
+export function receivedAtFor(receivedDate: string, now: Date = new Date()): string {
+  return receivedDate === istDate(now)
+    ? now.toISOString()
+    : new Date(`${receivedDate}T12:00:00+05:30`).toISOString();
 }
 
 export const statusLabels: Record<InvoiceStatus, string> = {
@@ -60,6 +82,39 @@ export const methodLabels: Record<PaymentMethod, string> = {
   UPI: 'UPI',
   BANK_TRANSFER: 'Bank transfer',
 };
+
+/**
+ * Whether the Void action is offered. The server and database make the final decision; this only hides an
+ * action that would certainly be refused: voiding needs no cash held and no credits applied, and is terminal.
+ */
+export function canVoidInvoice(invoice: {
+  storedStatus: string;
+  cashReceived: string;
+  adjustmentTotal: string;
+}): boolean {
+  return (
+    invoice.storedStatus !== 'CANCELLED' &&
+    toMinorUnits(invoice.cashReceived.replace('-', '')) === 0n &&
+    toMinorUnits(invoice.adjustmentTotal.replace('-', '')) === 0n
+  );
+}
+
+/** Why a not-yet-void invoice cannot be voided, in words, or null when it can. */
+export function voidBlockedReason(invoice: {
+  storedStatus: string;
+  cashReceived: string;
+  adjustmentTotal: string;
+}): string | null {
+  if (invoice.storedStatus === 'CANCELLED') return null;
+  const reasons: string[] = [];
+  if (toMinorUnits(invoice.adjustmentTotal.replace('-', '')) !== 0n) {
+    reasons.push('credits are applied and cannot be reversed');
+  }
+  if (toMinorUnits(invoice.cashReceived.replace('-', '')) !== 0n) {
+    reasons.push('payments are still held (reverse each one first)');
+  }
+  return reasons.length ? `This invoice cannot be voided: ${reasons.join('; ')}.` : null;
+}
 
 /** Client-side amount check mirroring the server rule: positive, at most 2 decimals. */
 export function isValidAmountInput(value: string): boolean {

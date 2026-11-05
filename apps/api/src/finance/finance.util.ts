@@ -1,4 +1,5 @@
 import { BadRequestException } from '@nestjs/common';
+import { istDateOf, istStartOfDay, todayIst } from '../common/time.js';
 import { Prisma } from '../generated/client.js';
 
 export const Decimal = Prisma.Decimal;
@@ -107,28 +108,82 @@ export function shiftMonth(period: BillingPeriod, offset: number): BillingPeriod
   return parseBillingMonth(shifted.toISOString().slice(0, 7));
 }
 
-// Asia/Kolkata is a fixed +05:30 offset (India observes no daylight saving time).
-const IST_OFFSET_MS = 330 * 60_000;
-
-/** Today's calendar date in Asia/Kolkata, as a UTC-midnight date-only value. */
-export function todayIst(now: Date = new Date()): Date {
-  const ist = new Date(now.getTime() + IST_OFFSET_MS);
-  return new Date(Date.UTC(ist.getUTCFullYear(), ist.getUTCMonth(), ist.getUTCDate()));
-}
+// Asia/Kolkata helpers live in common/time.ts (no dependence on the process time zone).
+export { todayIst, istDateOf, istStartOfDay };
 
 /** Invoice numbers reset on 1 January in Asia/Kolkata, not UTC. */
 export function billingYearIst(now: Date = new Date()): number {
   return todayIst(now).getUTCFullYear();
 }
 
-/** The instant a date-only value begins in Asia/Kolkata (used to compare against timestamps). */
-export function istStartOfDay(dateOnly: Date): Date {
-  return new Date(dateOnly.getTime() - IST_OFFSET_MS);
-}
-
-/** Default due date: the 5th of the billing month. */
+/** Default (provisional) due date: the 5th of the billing month. */
 export function defaultDueDate(periodStart: Date): Date {
   return new Date(Date.UTC(periodStart.getUTCFullYear(), periodStart.getUTCMonth(), 5));
+}
+
+/**
+ * Due date of an invoice that is being issued: the later of the 5th of its billing month and the
+ * Asia/Kolkata calendar date of issue, so an invoice is never born overdue.
+ */
+export function dueDateAtIssue(periodStart: Date, issuedAt: Date): Date {
+  const fifth = defaultDueDate(periodStart);
+  const issueDate = istDateOf(issuedAt);
+  return issueDate.getTime() > fifth.getTime() ? issueDate : fifth;
+}
+
+/** The [from, to) instants of a billing month, bounded at Asia/Kolkata midnights. */
+export function monthRangeIst(period: BillingPeriod): { from: Date; to: Date } {
+  return { from: istStartOfDay(period.periodStart), to: istStartOfDay(period.nextPeriodStart) };
+}
+
+/**
+ * Whether a booking covers any part of a billing month. The booking period is [startDate, endDate):
+ * the end date is the first day the bed is no longer booked, so a booking ending on the 1st of a
+ * month does not bill that month. Both bounds are compared as Asia/Kolkata calendar dates.
+ */
+export function bookingCoversMonth(
+  booking: { startDate: Date; endDate: Date },
+  period: BillingPeriod,
+): boolean {
+  const start = istDateOf(booking.startDate).getTime();
+  const end = istDateOf(booking.endDate).getTime();
+  return start < period.nextPeriodStart.getTime() && end > period.periodStart.getTime();
+}
+
+export interface StayFacts {
+  checkInAt: Date;
+  status: string;
+  /** Recorded check-out instant, when a CheckOut row exists. */
+  checkOutAt?: Date | null;
+  /** Used only when a stay is CHECKED_OUT without a CheckOut row (status change time). */
+  updatedAt: Date;
+}
+
+/**
+ * Whether the actual stay overlaps a billing month. A stay starts at check-in and ends at
+ * check-out; it is still open while the check-in is ACTIVE. Month bounds are Asia/Kolkata
+ * midnights. A resident who checks out during the month (or the day it starts) is still billed the
+ * full month; only a check-out completed before the period began excludes the month.
+ */
+export function stayOverlapsMonth(stay: StayFacts, period: BillingPeriod): boolean {
+  const { from, to } = monthRangeIst(period);
+  if (stay.checkInAt.getTime() >= to.getTime()) return false;
+  if (stay.status === 'ACTIVE') return true;
+  const endedAt = stay.checkOutAt ?? stay.updatedAt;
+  return endedAt.getTime() >= from.getTime();
+}
+
+/**
+ * A month is billable for a stay when the stay overlaps it and the booking covers it. Booking and
+ * admission status are deliberately not inputs: a later cancellation never erases occupied months,
+ * and a stay can never be billed outside the approved booking period.
+ */
+export function isMonthBillable(
+  stay: StayFacts,
+  booking: { startDate: Date; endDate: Date },
+  period: BillingPeriod,
+): boolean {
+  return stayOverlapsMonth(stay, period) && bookingCoversMonth(booking, period);
 }
 
 export function formatInvoiceNumber(year: number, sequence: number): string {

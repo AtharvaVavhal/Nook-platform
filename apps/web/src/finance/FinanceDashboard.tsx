@@ -1,9 +1,19 @@
 import { financeApi } from './financeApi';
+import { OverstayBanner } from './OverstayBanner';
 import { currentMonth, formatMoney, monthLabel } from './financeFormat';
 import { financeLinks } from './financeRoute';
 import { ErrorState, LoadingState, Stat, useAsync } from './shared';
 
 export function FinanceDashboard() {
+  return (
+    <>
+      <OverstayBanner />
+      <FinanceOverview />
+    </>
+  );
+}
+
+function FinanceOverview() {
   const month = currentMonth();
   const { data, loading, error, reload } = useAsync(
     () => financeApi.report({ month, months: 6 }),

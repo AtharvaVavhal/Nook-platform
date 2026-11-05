@@ -1239,6 +1239,11 @@ export type $BedPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
     archivedAt: Date | null
     createdAt: Date
     updatedAt: Date
+    /**
+     * Price field currently UNUSED for billing.
+     * Rent is determined by Booking.monthlyPrice (snapshot at booking creation).
+     * This field may be used in future for reference/list pricing only.
+     */
     price: runtime.Decimal
   }, ExtArgs["result"]["bed"]>
   composites: {}

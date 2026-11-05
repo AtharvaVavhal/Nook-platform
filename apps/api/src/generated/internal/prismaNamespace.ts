@@ -417,6 +417,7 @@ export const ModelName = {
   Payment: 'Payment',
   PaymentReversal: 'PaymentReversal',
   InvoiceAdjustment: 'InvoiceAdjustment',
+  InvoiceVoid: 'InvoiceVoid',
   PaymentIdempotencyKey: 'PaymentIdempotencyKey',
   LoginThrottle: 'LoginThrottle'
 } as const
@@ -434,7 +435,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "organization" | "user" | "membership" | "session" | "auditEvent" | "property" | "floor" | "room" | "bed" | "resident" | "booking" | "admission" | "enquiry" | "enquiryFollowUp" | "checkIn" | "checkOut" | "invoice" | "payment" | "paymentReversal" | "invoiceAdjustment" | "paymentIdempotencyKey" | "loginThrottle"
+    modelProps: "organization" | "user" | "membership" | "session" | "auditEvent" | "property" | "floor" | "room" | "bed" | "resident" | "booking" | "admission" | "enquiry" | "enquiryFollowUp" | "checkIn" | "checkOut" | "invoice" | "payment" | "paymentReversal" | "invoiceAdjustment" | "invoiceVoid" | "paymentIdempotencyKey" | "loginThrottle"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1918,6 +1919,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    InvoiceVoid: {
+      payload: Prisma.$InvoiceVoidPayload<ExtArgs>
+      fields: Prisma.InvoiceVoidFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.InvoiceVoidFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InvoiceVoidPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.InvoiceVoidFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InvoiceVoidPayload>
+        }
+        findFirst: {
+          args: Prisma.InvoiceVoidFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InvoiceVoidPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.InvoiceVoidFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InvoiceVoidPayload>
+        }
+        findMany: {
+          args: Prisma.InvoiceVoidFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InvoiceVoidPayload>[]
+        }
+        create: {
+          args: Prisma.InvoiceVoidCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InvoiceVoidPayload>
+        }
+        createMany: {
+          args: Prisma.InvoiceVoidCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.InvoiceVoidCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InvoiceVoidPayload>[]
+        }
+        delete: {
+          args: Prisma.InvoiceVoidDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InvoiceVoidPayload>
+        }
+        update: {
+          args: Prisma.InvoiceVoidUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InvoiceVoidPayload>
+        }
+        deleteMany: {
+          args: Prisma.InvoiceVoidDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.InvoiceVoidUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.InvoiceVoidUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InvoiceVoidPayload>[]
+        }
+        upsert: {
+          args: Prisma.InvoiceVoidUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InvoiceVoidPayload>
+        }
+        aggregate: {
+          args: Prisma.InvoiceVoidAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateInvoiceVoid>
+        }
+        groupBy: {
+          args: Prisma.InvoiceVoidGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InvoiceVoidGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.InvoiceVoidCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InvoiceVoidCountAggregateOutputType> | number
+        }
+      }
+    }
     PaymentIdempotencyKey: {
       payload: Prisma.$PaymentIdempotencyKeyPayload<ExtArgs>
       fields: Prisma.PaymentIdempotencyKeyFieldRefs
@@ -2398,6 +2473,8 @@ export const PaymentScalarFieldEnum = {
   receivedAt: 'receivedAt',
   notes: 'notes',
   correctsPaymentId: 'correctsPaymentId',
+  creditTotalAtPayment: 'creditTotalAtPayment',
+  balanceAfterPayment: 'balanceAfterPayment',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -2430,6 +2507,21 @@ export const InvoiceAdjustmentScalarFieldEnum = {
 } as const
 
 export type InvoiceAdjustmentScalarFieldEnum = (typeof InvoiceAdjustmentScalarFieldEnum)[keyof typeof InvoiceAdjustmentScalarFieldEnum]
+
+
+export const InvoiceVoidScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  invoiceId: 'invoiceId',
+  residentId: 'residentId',
+  previousStatus: 'previousStatus',
+  amountAtVoid: 'amountAtVoid',
+  reason: 'reason',
+  voidedBy: 'voidedBy',
+  createdAt: 'createdAt'
+} as const
+
+export type InvoiceVoidScalarFieldEnum = (typeof InvoiceVoidScalarFieldEnum)[keyof typeof InvoiceVoidScalarFieldEnum]
 
 
 export const PaymentIdempotencyKeyScalarFieldEnum = {
@@ -2982,6 +3074,7 @@ export type GlobalOmitConfig = {
   payment?: Prisma.PaymentOmit
   paymentReversal?: Prisma.PaymentReversalOmit
   invoiceAdjustment?: Prisma.InvoiceAdjustmentOmit
+  invoiceVoid?: Prisma.InvoiceVoidOmit
   paymentIdempotencyKey?: Prisma.PaymentIdempotencyKeyOmit
   loginThrottle?: Prisma.LoginThrottleOmit
 }

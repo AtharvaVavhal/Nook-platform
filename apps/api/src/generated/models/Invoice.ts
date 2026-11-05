@@ -317,6 +317,7 @@ export type InvoiceWhereInput = {
   booking?: Prisma.XOR<Prisma.BookingNullableScalarRelationFilter, Prisma.BookingWhereInput> | null
   payments?: Prisma.PaymentListRelationFilter
   adjustments?: Prisma.InvoiceAdjustmentListRelationFilter
+  voids?: Prisma.InvoiceVoidListRelationFilter
 }
 
 export type InvoiceOrderByWithRelationInput = {
@@ -341,12 +342,12 @@ export type InvoiceOrderByWithRelationInput = {
   booking?: Prisma.BookingOrderByWithRelationInput
   payments?: Prisma.PaymentOrderByRelationAggregateInput
   adjustments?: Prisma.InvoiceAdjustmentOrderByRelationAggregateInput
+  voids?: Prisma.InvoiceVoidOrderByRelationAggregateInput
 }
 
 export type InvoiceWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   organizationId_number?: Prisma.InvoiceOrganizationIdNumberCompoundUniqueInput
-  organizationId_residentId_periodStart?: Prisma.InvoiceOrganizationIdResidentIdPeriodStartCompoundUniqueInput
   id_organizationId_residentId?: Prisma.InvoiceIdOrganizationIdResidentIdCompoundUniqueInput
   AND?: Prisma.InvoiceWhereInput | Prisma.InvoiceWhereInput[]
   OR?: Prisma.InvoiceWhereInput[]
@@ -371,7 +372,8 @@ export type InvoiceWhereUniqueInput = Prisma.AtLeast<{
   booking?: Prisma.XOR<Prisma.BookingNullableScalarRelationFilter, Prisma.BookingWhereInput> | null
   payments?: Prisma.PaymentListRelationFilter
   adjustments?: Prisma.InvoiceAdjustmentListRelationFilter
-}, "id" | "organizationId_number" | "organizationId_residentId_periodStart" | "id_organizationId_residentId">
+  voids?: Prisma.InvoiceVoidListRelationFilter
+}, "id" | "organizationId_number" | "id_organizationId_residentId">
 
 export type InvoiceOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -438,6 +440,7 @@ export type InvoiceCreateInput = {
   booking?: Prisma.BookingCreateNestedOneWithoutInvoicesInput
   payments?: Prisma.PaymentCreateNestedManyWithoutInvoiceInput
   adjustments?: Prisma.InvoiceAdjustmentCreateNestedManyWithoutInvoiceInput
+  voids?: Prisma.InvoiceVoidCreateNestedManyWithoutInvoiceInput
 }
 
 export type InvoiceUncheckedCreateInput = {
@@ -459,6 +462,7 @@ export type InvoiceUncheckedCreateInput = {
   updatedAt?: Date | string
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutInvoiceInput
   adjustments?: Prisma.InvoiceAdjustmentUncheckedCreateNestedManyWithoutInvoiceInput
+  voids?: Prisma.InvoiceVoidUncheckedCreateNestedManyWithoutInvoiceInput
 }
 
 export type InvoiceUpdateInput = {
@@ -480,6 +484,7 @@ export type InvoiceUpdateInput = {
   booking?: Prisma.BookingUpdateOneWithoutInvoicesNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutInvoiceNestedInput
   adjustments?: Prisma.InvoiceAdjustmentUpdateManyWithoutInvoiceNestedInput
+  voids?: Prisma.InvoiceVoidUpdateManyWithoutInvoiceNestedInput
 }
 
 export type InvoiceUncheckedUpdateInput = {
@@ -501,6 +506,7 @@ export type InvoiceUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutInvoiceNestedInput
   adjustments?: Prisma.InvoiceAdjustmentUncheckedUpdateManyWithoutInvoiceNestedInput
+  voids?: Prisma.InvoiceVoidUncheckedUpdateManyWithoutInvoiceNestedInput
 }
 
 export type InvoiceCreateManyInput = {
@@ -570,12 +576,6 @@ export type InvoiceOrderByRelationAggregateInput = {
 export type InvoiceOrganizationIdNumberCompoundUniqueInput = {
   organizationId: string
   number: string
-}
-
-export type InvoiceOrganizationIdResidentIdPeriodStartCompoundUniqueInput = {
-  organizationId: string
-  residentId: string
-  periodStart: Date | string
 }
 
 export type InvoiceIdOrganizationIdResidentIdCompoundUniqueInput = {
@@ -816,6 +816,20 @@ export type InvoiceUpdateOneRequiredWithoutAdjustmentsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.InvoiceUpdateToOneWithWhereWithoutAdjustmentsInput, Prisma.InvoiceUpdateWithoutAdjustmentsInput>, Prisma.InvoiceUncheckedUpdateWithoutAdjustmentsInput>
 }
 
+export type InvoiceCreateNestedOneWithoutVoidsInput = {
+  create?: Prisma.XOR<Prisma.InvoiceCreateWithoutVoidsInput, Prisma.InvoiceUncheckedCreateWithoutVoidsInput>
+  connectOrCreate?: Prisma.InvoiceCreateOrConnectWithoutVoidsInput
+  connect?: Prisma.InvoiceWhereUniqueInput
+}
+
+export type InvoiceUpdateOneRequiredWithoutVoidsNestedInput = {
+  create?: Prisma.XOR<Prisma.InvoiceCreateWithoutVoidsInput, Prisma.InvoiceUncheckedCreateWithoutVoidsInput>
+  connectOrCreate?: Prisma.InvoiceCreateOrConnectWithoutVoidsInput
+  upsert?: Prisma.InvoiceUpsertWithoutVoidsInput
+  connect?: Prisma.InvoiceWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.InvoiceUpdateToOneWithWhereWithoutVoidsInput, Prisma.InvoiceUpdateWithoutVoidsInput>, Prisma.InvoiceUncheckedUpdateWithoutVoidsInput>
+}
+
 export type InvoiceCreateWithoutOrganizationInput = {
   id?: string
   number: string
@@ -834,6 +848,7 @@ export type InvoiceCreateWithoutOrganizationInput = {
   booking?: Prisma.BookingCreateNestedOneWithoutInvoicesInput
   payments?: Prisma.PaymentCreateNestedManyWithoutInvoiceInput
   adjustments?: Prisma.InvoiceAdjustmentCreateNestedManyWithoutInvoiceInput
+  voids?: Prisma.InvoiceVoidCreateNestedManyWithoutInvoiceInput
 }
 
 export type InvoiceUncheckedCreateWithoutOrganizationInput = {
@@ -854,6 +869,7 @@ export type InvoiceUncheckedCreateWithoutOrganizationInput = {
   updatedAt?: Date | string
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutInvoiceInput
   adjustments?: Prisma.InvoiceAdjustmentUncheckedCreateNestedManyWithoutInvoiceInput
+  voids?: Prisma.InvoiceVoidUncheckedCreateNestedManyWithoutInvoiceInput
 }
 
 export type InvoiceCreateOrConnectWithoutOrganizationInput = {
@@ -922,6 +938,7 @@ export type InvoiceCreateWithoutResidentInput = {
   booking?: Prisma.BookingCreateNestedOneWithoutInvoicesInput
   payments?: Prisma.PaymentCreateNestedManyWithoutInvoiceInput
   adjustments?: Prisma.InvoiceAdjustmentCreateNestedManyWithoutInvoiceInput
+  voids?: Prisma.InvoiceVoidCreateNestedManyWithoutInvoiceInput
 }
 
 export type InvoiceUncheckedCreateWithoutResidentInput = {
@@ -941,6 +958,7 @@ export type InvoiceUncheckedCreateWithoutResidentInput = {
   updatedAt?: Date | string
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutInvoiceInput
   adjustments?: Prisma.InvoiceAdjustmentUncheckedCreateNestedManyWithoutInvoiceInput
+  voids?: Prisma.InvoiceVoidUncheckedCreateNestedManyWithoutInvoiceInput
 }
 
 export type InvoiceCreateOrConnectWithoutResidentInput = {
@@ -987,6 +1005,7 @@ export type InvoiceCreateWithoutBookingInput = {
   resident: Prisma.ResidentCreateNestedOneWithoutInvoicesInput
   payments?: Prisma.PaymentCreateNestedManyWithoutInvoiceInput
   adjustments?: Prisma.InvoiceAdjustmentCreateNestedManyWithoutInvoiceInput
+  voids?: Prisma.InvoiceVoidCreateNestedManyWithoutInvoiceInput
 }
 
 export type InvoiceUncheckedCreateWithoutBookingInput = {
@@ -1006,6 +1025,7 @@ export type InvoiceUncheckedCreateWithoutBookingInput = {
   updatedAt?: Date | string
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutInvoiceInput
   adjustments?: Prisma.InvoiceAdjustmentUncheckedCreateNestedManyWithoutInvoiceInput
+  voids?: Prisma.InvoiceVoidUncheckedCreateNestedManyWithoutInvoiceInput
 }
 
 export type InvoiceCreateOrConnectWithoutBookingInput = {
@@ -1052,6 +1072,7 @@ export type InvoiceCreateWithoutPaymentsInput = {
   resident: Prisma.ResidentCreateNestedOneWithoutInvoicesInput
   booking?: Prisma.BookingCreateNestedOneWithoutInvoicesInput
   adjustments?: Prisma.InvoiceAdjustmentCreateNestedManyWithoutInvoiceInput
+  voids?: Prisma.InvoiceVoidCreateNestedManyWithoutInvoiceInput
 }
 
 export type InvoiceUncheckedCreateWithoutPaymentsInput = {
@@ -1072,6 +1093,7 @@ export type InvoiceUncheckedCreateWithoutPaymentsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   adjustments?: Prisma.InvoiceAdjustmentUncheckedCreateNestedManyWithoutInvoiceInput
+  voids?: Prisma.InvoiceVoidUncheckedCreateNestedManyWithoutInvoiceInput
 }
 
 export type InvoiceCreateOrConnectWithoutPaymentsInput = {
@@ -1108,6 +1130,7 @@ export type InvoiceUpdateWithoutPaymentsInput = {
   resident?: Prisma.ResidentUpdateOneRequiredWithoutInvoicesNestedInput
   booking?: Prisma.BookingUpdateOneWithoutInvoicesNestedInput
   adjustments?: Prisma.InvoiceAdjustmentUpdateManyWithoutInvoiceNestedInput
+  voids?: Prisma.InvoiceVoidUpdateManyWithoutInvoiceNestedInput
 }
 
 export type InvoiceUncheckedUpdateWithoutPaymentsInput = {
@@ -1128,6 +1151,7 @@ export type InvoiceUncheckedUpdateWithoutPaymentsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   adjustments?: Prisma.InvoiceAdjustmentUncheckedUpdateManyWithoutInvoiceNestedInput
+  voids?: Prisma.InvoiceVoidUncheckedUpdateManyWithoutInvoiceNestedInput
 }
 
 export type InvoiceCreateWithoutAdjustmentsInput = {
@@ -1148,6 +1172,7 @@ export type InvoiceCreateWithoutAdjustmentsInput = {
   resident: Prisma.ResidentCreateNestedOneWithoutInvoicesInput
   booking?: Prisma.BookingCreateNestedOneWithoutInvoicesInput
   payments?: Prisma.PaymentCreateNestedManyWithoutInvoiceInput
+  voids?: Prisma.InvoiceVoidCreateNestedManyWithoutInvoiceInput
 }
 
 export type InvoiceUncheckedCreateWithoutAdjustmentsInput = {
@@ -1168,6 +1193,7 @@ export type InvoiceUncheckedCreateWithoutAdjustmentsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutInvoiceInput
+  voids?: Prisma.InvoiceVoidUncheckedCreateNestedManyWithoutInvoiceInput
 }
 
 export type InvoiceCreateOrConnectWithoutAdjustmentsInput = {
@@ -1204,6 +1230,7 @@ export type InvoiceUpdateWithoutAdjustmentsInput = {
   resident?: Prisma.ResidentUpdateOneRequiredWithoutInvoicesNestedInput
   booking?: Prisma.BookingUpdateOneWithoutInvoicesNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutInvoiceNestedInput
+  voids?: Prisma.InvoiceVoidUpdateManyWithoutInvoiceNestedInput
 }
 
 export type InvoiceUncheckedUpdateWithoutAdjustmentsInput = {
@@ -1224,6 +1251,107 @@ export type InvoiceUncheckedUpdateWithoutAdjustmentsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutInvoiceNestedInput
+  voids?: Prisma.InvoiceVoidUncheckedUpdateManyWithoutInvoiceNestedInput
+}
+
+export type InvoiceCreateWithoutVoidsInput = {
+  id?: string
+  number: string
+  periodStart: Date | string
+  periodEnd: Date | string
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paidAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  adjustmentTotal?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: $Enums.InvoiceStatus
+  dueDate: Date | string
+  issuedAt?: Date | string | null
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  organization: Prisma.OrganizationCreateNestedOneWithoutInvoicesInput
+  resident: Prisma.ResidentCreateNestedOneWithoutInvoicesInput
+  booking?: Prisma.BookingCreateNestedOneWithoutInvoicesInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutInvoiceInput
+  adjustments?: Prisma.InvoiceAdjustmentCreateNestedManyWithoutInvoiceInput
+}
+
+export type InvoiceUncheckedCreateWithoutVoidsInput = {
+  id?: string
+  organizationId: string
+  residentId: string
+  bookingId?: string | null
+  number: string
+  periodStart: Date | string
+  periodEnd: Date | string
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paidAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  adjustmentTotal?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: $Enums.InvoiceStatus
+  dueDate: Date | string
+  issuedAt?: Date | string | null
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutInvoiceInput
+  adjustments?: Prisma.InvoiceAdjustmentUncheckedCreateNestedManyWithoutInvoiceInput
+}
+
+export type InvoiceCreateOrConnectWithoutVoidsInput = {
+  where: Prisma.InvoiceWhereUniqueInput
+  create: Prisma.XOR<Prisma.InvoiceCreateWithoutVoidsInput, Prisma.InvoiceUncheckedCreateWithoutVoidsInput>
+}
+
+export type InvoiceUpsertWithoutVoidsInput = {
+  update: Prisma.XOR<Prisma.InvoiceUpdateWithoutVoidsInput, Prisma.InvoiceUncheckedUpdateWithoutVoidsInput>
+  create: Prisma.XOR<Prisma.InvoiceCreateWithoutVoidsInput, Prisma.InvoiceUncheckedCreateWithoutVoidsInput>
+  where?: Prisma.InvoiceWhereInput
+}
+
+export type InvoiceUpdateToOneWithWhereWithoutVoidsInput = {
+  where?: Prisma.InvoiceWhereInput
+  data: Prisma.XOR<Prisma.InvoiceUpdateWithoutVoidsInput, Prisma.InvoiceUncheckedUpdateWithoutVoidsInput>
+}
+
+export type InvoiceUpdateWithoutVoidsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  number?: Prisma.StringFieldUpdateOperationsInput | string
+  periodStart?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  periodEnd?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paidAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  adjustmentTotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
+  dueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  issuedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutInvoicesNestedInput
+  resident?: Prisma.ResidentUpdateOneRequiredWithoutInvoicesNestedInput
+  booking?: Prisma.BookingUpdateOneWithoutInvoicesNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutInvoiceNestedInput
+  adjustments?: Prisma.InvoiceAdjustmentUpdateManyWithoutInvoiceNestedInput
+}
+
+export type InvoiceUncheckedUpdateWithoutVoidsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  residentId?: Prisma.StringFieldUpdateOperationsInput | string
+  bookingId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  number?: Prisma.StringFieldUpdateOperationsInput | string
+  periodStart?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  periodEnd?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paidAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  adjustmentTotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
+  dueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  issuedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutInvoiceNestedInput
+  adjustments?: Prisma.InvoiceAdjustmentUncheckedUpdateManyWithoutInvoiceNestedInput
 }
 
 export type InvoiceCreateManyOrganizationInput = {
@@ -1262,6 +1390,7 @@ export type InvoiceUpdateWithoutOrganizationInput = {
   booking?: Prisma.BookingUpdateOneWithoutInvoicesNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutInvoiceNestedInput
   adjustments?: Prisma.InvoiceAdjustmentUpdateManyWithoutInvoiceNestedInput
+  voids?: Prisma.InvoiceVoidUpdateManyWithoutInvoiceNestedInput
 }
 
 export type InvoiceUncheckedUpdateWithoutOrganizationInput = {
@@ -1282,6 +1411,7 @@ export type InvoiceUncheckedUpdateWithoutOrganizationInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutInvoiceNestedInput
   adjustments?: Prisma.InvoiceAdjustmentUncheckedUpdateManyWithoutInvoiceNestedInput
+  voids?: Prisma.InvoiceVoidUncheckedUpdateManyWithoutInvoiceNestedInput
 }
 
 export type InvoiceUncheckedUpdateManyWithoutOrganizationInput = {
@@ -1337,6 +1467,7 @@ export type InvoiceUpdateWithoutResidentInput = {
   booking?: Prisma.BookingUpdateOneWithoutInvoicesNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutInvoiceNestedInput
   adjustments?: Prisma.InvoiceAdjustmentUpdateManyWithoutInvoiceNestedInput
+  voids?: Prisma.InvoiceVoidUpdateManyWithoutInvoiceNestedInput
 }
 
 export type InvoiceUncheckedUpdateWithoutResidentInput = {
@@ -1356,6 +1487,7 @@ export type InvoiceUncheckedUpdateWithoutResidentInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutInvoiceNestedInput
   adjustments?: Prisma.InvoiceAdjustmentUncheckedUpdateManyWithoutInvoiceNestedInput
+  voids?: Prisma.InvoiceVoidUncheckedUpdateManyWithoutInvoiceNestedInput
 }
 
 export type InvoiceUncheckedUpdateManyWithoutResidentInput = {
@@ -1410,6 +1542,7 @@ export type InvoiceUpdateWithoutBookingInput = {
   resident?: Prisma.ResidentUpdateOneRequiredWithoutInvoicesNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutInvoiceNestedInput
   adjustments?: Prisma.InvoiceAdjustmentUpdateManyWithoutInvoiceNestedInput
+  voids?: Prisma.InvoiceVoidUpdateManyWithoutInvoiceNestedInput
 }
 
 export type InvoiceUncheckedUpdateWithoutBookingInput = {
@@ -1429,6 +1562,7 @@ export type InvoiceUncheckedUpdateWithoutBookingInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutInvoiceNestedInput
   adjustments?: Prisma.InvoiceAdjustmentUncheckedUpdateManyWithoutInvoiceNestedInput
+  voids?: Prisma.InvoiceVoidUncheckedUpdateManyWithoutInvoiceNestedInput
 }
 
 export type InvoiceUncheckedUpdateManyWithoutBookingInput = {
@@ -1456,11 +1590,13 @@ export type InvoiceUncheckedUpdateManyWithoutBookingInput = {
 export type InvoiceCountOutputType = {
   payments: number
   adjustments: number
+  voids: number
 }
 
 export type InvoiceCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   payments?: boolean | InvoiceCountOutputTypeCountPaymentsArgs
   adjustments?: boolean | InvoiceCountOutputTypeCountAdjustmentsArgs
+  voids?: boolean | InvoiceCountOutputTypeCountVoidsArgs
 }
 
 /**
@@ -1487,6 +1623,13 @@ export type InvoiceCountOutputTypeCountAdjustmentsArgs<ExtArgs extends runtime.T
   where?: Prisma.InvoiceAdjustmentWhereInput
 }
 
+/**
+ * InvoiceCountOutputType without action
+ */
+export type InvoiceCountOutputTypeCountVoidsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.InvoiceVoidWhereInput
+}
+
 
 export type InvoiceSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1510,6 +1653,7 @@ export type InvoiceSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   booking?: boolean | Prisma.Invoice$bookingArgs<ExtArgs>
   payments?: boolean | Prisma.Invoice$paymentsArgs<ExtArgs>
   adjustments?: boolean | Prisma.Invoice$adjustmentsArgs<ExtArgs>
+  voids?: boolean | Prisma.Invoice$voidsArgs<ExtArgs>
   _count?: boolean | Prisma.InvoiceCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["invoice"]>
 
@@ -1583,6 +1727,7 @@ export type InvoiceInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs
   booking?: boolean | Prisma.Invoice$bookingArgs<ExtArgs>
   payments?: boolean | Prisma.Invoice$paymentsArgs<ExtArgs>
   adjustments?: boolean | Prisma.Invoice$adjustmentsArgs<ExtArgs>
+  voids?: boolean | Prisma.Invoice$voidsArgs<ExtArgs>
   _count?: boolean | Prisma.InvoiceCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type InvoiceIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1604,6 +1749,10 @@ export type $InvoicePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     booking: Prisma.$BookingPayload<ExtArgs> | null
     payments: Prisma.$PaymentPayload<ExtArgs>[]
     adjustments: Prisma.$InvoiceAdjustmentPayload<ExtArgs>[]
+    /**
+     * At most one (unique invoice_id); a list only because the unique key is narrower than the composite relation.
+     */
+    voids: Prisma.$InvoiceVoidPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2027,6 +2176,7 @@ export interface Prisma__InvoiceClient<T, Null = never, ExtArgs extends runtime.
   booking<T extends Prisma.Invoice$bookingArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Invoice$bookingArgs<ExtArgs>>): Prisma.Prisma__BookingClient<runtime.Types.Result.GetResult<Prisma.$BookingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   payments<T extends Prisma.Invoice$paymentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Invoice$paymentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   adjustments<T extends Prisma.Invoice$adjustmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Invoice$adjustmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvoiceAdjustmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  voids<T extends Prisma.Invoice$voidsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Invoice$voidsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvoiceVoidPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2537,6 +2687,30 @@ export type Invoice$adjustmentsArgs<ExtArgs extends runtime.Types.Extensions.Int
   take?: number
   skip?: number
   distinct?: Prisma.InvoiceAdjustmentScalarFieldEnum | Prisma.InvoiceAdjustmentScalarFieldEnum[]
+}
+
+/**
+ * Invoice.voids
+ */
+export type Invoice$voidsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the InvoiceVoid
+   */
+  select?: Prisma.InvoiceVoidSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the InvoiceVoid
+   */
+  omit?: Prisma.InvoiceVoidOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InvoiceVoidInclude<ExtArgs> | null
+  where?: Prisma.InvoiceVoidWhereInput
+  orderBy?: Prisma.InvoiceVoidOrderByWithRelationInput | Prisma.InvoiceVoidOrderByWithRelationInput[]
+  cursor?: Prisma.InvoiceVoidWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.InvoiceVoidScalarFieldEnum | Prisma.InvoiceVoidScalarFieldEnum[]
 }
 
 /**

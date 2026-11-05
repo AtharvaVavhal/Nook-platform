@@ -71,6 +71,7 @@ export const ModelName = {
   Payment: 'Payment',
   PaymentReversal: 'PaymentReversal',
   InvoiceAdjustment: 'InvoiceAdjustment',
+  InvoiceVoid: 'InvoiceVoid',
   PaymentIdempotencyKey: 'PaymentIdempotencyKey',
   LoginThrottle: 'LoginThrottle'
 } as const
@@ -384,6 +385,8 @@ export const PaymentScalarFieldEnum = {
   receivedAt: 'receivedAt',
   notes: 'notes',
   correctsPaymentId: 'correctsPaymentId',
+  creditTotalAtPayment: 'creditTotalAtPayment',
+  balanceAfterPayment: 'balanceAfterPayment',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -416,6 +419,21 @@ export const InvoiceAdjustmentScalarFieldEnum = {
 } as const
 
 export type InvoiceAdjustmentScalarFieldEnum = (typeof InvoiceAdjustmentScalarFieldEnum)[keyof typeof InvoiceAdjustmentScalarFieldEnum]
+
+
+export const InvoiceVoidScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  invoiceId: 'invoiceId',
+  residentId: 'residentId',
+  previousStatus: 'previousStatus',
+  amountAtVoid: 'amountAtVoid',
+  reason: 'reason',
+  voidedBy: 'voidedBy',
+  createdAt: 'createdAt'
+} as const
+
+export type InvoiceVoidScalarFieldEnum = (typeof InvoiceVoidScalarFieldEnum)[keyof typeof InvoiceVoidScalarFieldEnum]
 
 
 export const PaymentIdempotencyKeyScalarFieldEnum = {

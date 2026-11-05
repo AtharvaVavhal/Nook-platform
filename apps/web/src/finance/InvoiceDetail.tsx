@@ -1,7 +1,15 @@
 import { useState } from 'react';
 import { financeApi, type Payment } from './financeApi';
-import { CreditInvoiceModal, ReversePaymentModal } from './CorrectionModals';
-import { formatDate, formatDateTime, formatMoney, methodLabels, monthLabel } from './financeFormat';
+import { CreditInvoiceModal, ReversePaymentModal, VoidInvoiceModal } from './CorrectionModals';
+import {
+  canVoidInvoice,
+  formatDate,
+  formatDateTime,
+  formatMoney,
+  methodLabels,
+  monthLabel,
+  voidBlockedReason,
+} from './financeFormat';
 import { financeLinks } from './financeRoute';
 import { RecordPaymentModal } from './RecordPaymentModal';
 import { EmptyState, ErrorState, LoadingState, Stat, StatusBadge, useAsync } from './shared';
@@ -12,6 +20,7 @@ export function InvoiceDetail({ id }: { id: string }) {
   const [replacing, setReplacing] = useState<Payment | null>(null);
   const [reversing, setReversing] = useState<Payment | null>(null);
   const [crediting, setCrediting] = useState(false);
+  const [voiding, setVoiding] = useState(false);
   const [issuing, setIssuing] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
@@ -68,6 +77,11 @@ export function InvoiceDetail({ id }: { id: string }) {
               Record payment
             </button>
           ) : null}
+          {canVoidInvoice(data) ? (
+            <button type="button" className="outline-button" onClick={() => setVoiding(true)}>
+              Void invoice
+            </button>
+          ) : null}
           {data.payments.length > 0 ? (
             <a className="outline-button" href={financeLinks.receipt(data.id)}>
               Receipts
@@ -82,6 +96,22 @@ export function InvoiceDetail({ id }: { id: string }) {
         </p>
       ) : null}
       {actionError ? <ErrorState message={actionError} /> : null}
+      {data.void ? (
+        <p className="fin-warning" role="status">
+          <strong>Voided</strong> on {formatDateTime(data.void.voidedAt)} by{' '}
+          {data.void.voidedBy ?? 'a user'}: {data.void.reason}. It was{' '}
+          {data.void.previousStatus.toLowerCase().replace('_', ' ')} for{' '}
+          {formatMoney(data.void.amountAtVoid)}. It stays here for the record and cannot be paid or
+          changed.
+        </p>
+      ) : null}
+      {data.legacyCancelled ? (
+        <p className="fin-warning" role="status">
+          This invoice was cancelled before void records existed, so no reason or user was recorded
+          for it. It is kept as it was.
+        </p>
+      ) : null}
+      {voidBlockedReason(data) ? <p className="fin-note">{voidBlockedReason(data)}</p> : null}
 
       <div className="fin-stats">
         <Stat label="Invoice amount" value={formatMoney(data.amount)} />
@@ -251,6 +281,17 @@ export function InvoiceDetail({ id }: { id: string }) {
           onClose={() => setReversing(null)}
           onDone={(message) => {
             setReversing(null);
+            setNotice(message);
+            reload();
+          }}
+        />
+      ) : null}
+      {voiding ? (
+        <VoidInvoiceModal
+          invoice={data}
+          onClose={() => setVoiding(false)}
+          onDone={(message) => {
+            setVoiding(false);
             setNotice(message);
             reload();
           }}

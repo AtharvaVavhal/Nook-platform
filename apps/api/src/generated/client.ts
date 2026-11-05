@@ -142,6 +142,12 @@ export type PaymentReversal = Prisma.PaymentReversalModel
  */
 export type InvoiceAdjustment = Prisma.InvoiceAdjustmentModel
 /**
+ * Model InvoiceVoid
+ * Append-only record that an invoice was voided. The invoice then sits in CANCELLED for good; payments, reversals
+ * and credits are never touched. Legacy CANCELLED invoices have no row here and none is invented for them.
+ */
+export type InvoiceVoid = Prisma.InvoiceVoidModel
+/**
  * Model PaymentIdempotencyKey
  * Append-only record of a client-supplied Idempotency-Key and the payment it produced.
  */

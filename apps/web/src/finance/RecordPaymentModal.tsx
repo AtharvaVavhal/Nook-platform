@@ -1,6 +1,13 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { financeApi, type Invoice, type Payment, type PaymentMethod } from './financeApi';
-import { formatMoney, isValidAmountInput, methodLabels, toMinorUnits } from './financeFormat';
+import {
+  formatMoney,
+  isValidAmountInput,
+  istDate,
+  methodLabels,
+  receivedAtFor,
+  toMinorUnits,
+} from './financeFormat';
 
 interface Props {
   invoice: Invoice;
@@ -10,10 +17,8 @@ interface Props {
   onRecorded: (payment: Payment) => void;
 }
 
-const todayInput = () => {
-  const d = new Date();
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-};
+// The received date is a calendar date in India, whatever the browser's own time zone is.
+const todayInput = () => istDate();
 
 export function RecordPaymentModal({ invoice, corrects, onClose, onRecorded }: Props) {
   const [amount, setAmount] = useState('');
@@ -62,10 +67,7 @@ export function RecordPaymentModal({ invoice, corrects, onClose, onRecorded }: P
         attempt.current = {
           fingerprint,
           key: crypto.randomUUID(),
-          receivedAt:
-            receivedDate === todayInput()
-              ? new Date().toISOString()
-              : new Date(`${receivedDate}T12:00:00`).toISOString(),
+          receivedAt: receivedAtFor(receivedDate),
         };
       }
       const { key, receivedAt } = attempt.current;

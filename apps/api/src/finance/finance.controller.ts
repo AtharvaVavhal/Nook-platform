@@ -107,6 +107,20 @@ export class FinanceController {
     return this.finance.adjustInvoice(req.auth!.organizationId, req.auth!.userId, id, body);
   }
 
+  @Post('invoices/:id/void')
+  @UseGuards(OriginGuard, CsrfGuard)
+  @ApiOperation({
+    summary:
+      'Void an invoice (terminal; reason required; refused while payments are unreversed or credits applied)',
+  })
+  voidInvoice(
+    @Req() req: AuthenticatedRequest,
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() body: unknown,
+  ) {
+    return this.finance.voidInvoice(req.auth!.organizationId, req.auth!.userId, id, body);
+  }
+
   @Get('corrections')
   @ApiOperation({ summary: 'Correction history: payment reversals and invoice credits' })
   corrections(@Req() req: AuthenticatedRequest, @Query() query: Record<string, unknown>) {

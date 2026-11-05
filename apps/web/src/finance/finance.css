@@ -515,3 +515,20 @@
   color: #b3261e;
   font-weight: 700;
 }
+
+/* Notice banner: overstays on the check-ins screen, void records on the invoice page. */
+.fin-warning {
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: var(--color-danger-tint);
+  color: var(--color-danger-text);
+  font-size: 13px;
+  margin: 0 0 14px;
+}
+.fin-warning ul {
+  margin: 6px 0 0;
+  padding-left: 18px;
+}
+.fin-warning p {
+  margin: 6px 0 0;
+}

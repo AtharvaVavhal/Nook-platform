@@ -1,6 +1,6 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { financeApi, type Invoice } from './financeApi';
-import { currentMonth, formatMoney, isValidAmountInput, monthLabel } from './financeFormat';
+import { currentMonth, formatMoney, monthLabel } from './financeFormat';
 import { financeLinks } from './financeRoute';
 import { ErrorState } from './shared';
 
@@ -85,8 +85,10 @@ function GenerateMonthly() {
           {result.created > 0
             ? `Created ${result.created} invoice${result.created === 1 ? '' : 's'} for ${monthLabel(result.month)}.`
             : `No new invoices for ${monthLabel(result.month)}.`}{' '}
-          {result.skippedExisting > 0 ? `${result.skippedExisting} already existed. ` : ''}
-          {result.eligibleResidents === 0 ? 'No eligible residents were found.' : ''}
+          {result.skippedExisting > 0
+            ? `${result.skippedExisting} booking${result.skippedExisting === 1 ? ' already has' : 's already have'} an invoice for this month. `
+            : ''}
+          {result.eligibleBookings === 0 ? 'No eligible bookings were found.' : ''}
           {result.skippedZeroPrice > 0
             ? `${result.skippedZeroPrice} skipped (booking price is zero).`
             : ''}{' '}
@@ -107,7 +109,6 @@ function SingleInvoice() {
   const [bookings, setBookings] = useState<BookingOption[]>([]);
   const [bookingId, setBookingId] = useState('');
   const [month, setMonth] = useState(currentMonth());
-  const [amount, setAmount] = useState('');
   const [dueDate, setDueDate] = useState('');
   const [notes, setNotes] = useState('');
   const [busy, setBusy] = useState(false);
@@ -139,18 +140,14 @@ function SingleInvoice() {
     e.preventDefault();
     setError(null);
     if (!resident) return setError('Choose a resident.');
-    if (amount && !isValidAmountInput(amount))
-      return setError('Amount must be greater than zero with at most 2 decimals.');
-    if (!amount && !bookingId)
-      return setError('Choose a booking to use its monthly price, or enter an amount.');
+    if (!bookingId) return setError('Choose the booking whose monthly price is invoiced.');
     setBusy(true);
     try {
       setCreated(
         await financeApi.createDraft({
           residentId: resident.id,
           month,
-          ...(bookingId ? { bookingId } : {}),
-          ...(amount ? { amount: amount.trim() } : {}),
+          bookingId,
           ...(dueDate ? { dueDate } : {}),
           ...(notes.trim() ? { notes: notes.trim() } : {}),
         }),
@@ -198,7 +195,6 @@ function SingleInvoice() {
             className="outline-button"
             onClick={() => {
               setCreated(null);
-              setAmount('');
               setNotes('');
             }}
           >
@@ -256,10 +252,10 @@ function SingleInvoice() {
       ) : null}
       {resident ? (
         <label className="fin-field">
-          <span>Booking (uses its monthly price)</span>
-          <select value={bookingId} onChange={(e) => setBookingId(e.target.value)}>
+          <span>Booking (its monthly price is the invoice amount)</span>
+          <select value={bookingId} onChange={(e) => setBookingId(e.target.value)} required>
             <option value="">
-              {bookings.length ? 'No booking — enter an amount' : 'No confirmed bookings found'}
+              {bookings.length ? 'Choose a booking' : 'No confirmed bookings found'}
             </option>
             {bookings.map((b) => (
               <option key={b.id} value={b.id}>
@@ -278,17 +274,13 @@ function SingleInvoice() {
           required
         />
       </label>
+      <p className="fin-lede">
+        The amount is the booking&rsquo;s monthly price and the month must fall inside the booking
+        and a recorded stay. To change what was billed after issuing, record a credit on the
+        invoice.
+      </p>
       <label className="fin-field">
-        <span>Amount override (₹, optional with a booking)</span>
-        <input
-          inputMode="decimal"
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
-          placeholder="Booking price is used if blank"
-        />
-      </label>
-      <label className="fin-field">
-        <span>Due date (optional)</span>
+        <span>Due date (optional; otherwise the later of the 5th and the issue date)</span>
         <input type="date" value={dueDate} onChange={(e) => setDueDate(e.target.value)} />
       </label>
       <label className="fin-field">

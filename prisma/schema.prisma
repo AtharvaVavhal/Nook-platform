@@ -121,6 +121,7 @@ model Organization {
   paymentIdempotencyKeys PaymentIdempotencyKey[]
   paymentReversals       PaymentReversal[]
   invoiceAdjustments     InvoiceAdjustment[]
+  invoiceVoids           InvoiceVoid[]
 
   @@map("organizations")
 }
@@ -142,6 +143,7 @@ model User {
   enquiryFollowUps       EnquiryFollowUp[]
   paymentReversals       PaymentReversal[]
   invoiceAdjustments     InvoiceAdjustment[]
+  invoiceVoids           InvoiceVoid[]
 
   @@map("users")
 }
@@ -485,9 +487,13 @@ model Invoice {
   booking      Booking?            @relation(fields: [bookingId, organizationId], references: [id, organizationId], onDelete: Restrict, onUpdate: Restrict)
   payments     Payment[]
   adjustments  InvoiceAdjustment[]
+  /// At most one (unique invoice_id); a list only because the unique key is narrower than the composite relation.
+  voids        InvoiceVoid[]
 
   @@unique([organizationId, number])
-  @@unique([organizationId, residentId, periodStart])
+  /// Partial unique indexes over non-CANCELLED invoices (one active invoice per booking per month, and per resident for
+  /// legacy invoices with no booking) exist only in SQL: migration 20261103130000_invoice_active_uniqueness.
+  @@index([organizationId, residentId, periodStart])
   @@unique([id, organizationId, residentId])
   @@index([organizationId, status, dueDate])
   @@index([organizationId, periodStart])
@@ -507,6 +513,10 @@ model Payment {
   notes             String?
   /// Set on a replacement payment: the (already reversed) payment it corrects.
   correctsPaymentId String?       @map("corrects_payment_id") @db.Uuid
+  /// Receipt snapshot, written by a database trigger under the invoice lock and never updated. NULL on payments
+  /// recorded before the snapshot existed; they are shown as "derived", never back-filled.
+  creditTotalAtPayment Decimal?   @map("credit_total_at_payment") @db.Decimal(12, 2)
+  balanceAfterPayment  Decimal?   @map("balance_after_payment") @db.Decimal(12, 2)
   createdAt         DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt         DateTime      @updatedAt @map("updated_at") @db.Timestamptz(6)
 
@@ -565,6 +575,29 @@ model InvoiceAdjustment {
   @@index([invoiceId])
   @@index([organizationId, createdAt])
   @@map("invoice_adjustments")
+}
+
+/// Append-only record that an invoice was voided. The invoice then sits in CANCELLED for good; payments, reversals
+/// and credits are never touched. Legacy CANCELLED invoices have no row here and none is invented for them.
+model InvoiceVoid {
+  id             String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  organizationId String        @map("organization_id") @db.Uuid
+  invoiceId      String        @map("invoice_id") @db.Uuid
+  residentId     String        @map("resident_id") @db.Uuid
+  /// Filled in by the database from the locked invoice; any value the caller sends is overwritten.
+  previousStatus InvoiceStatus @map("previous_status")
+  amountAtVoid   Decimal       @map("amount_at_void") @db.Decimal(12, 2)
+  reason         String
+  voidedBy       String        @map("voided_by") @db.Uuid
+  createdAt      DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  invoice      Invoice      @relation(fields: [invoiceId, organizationId, residentId], references: [id, organizationId, residentId], onDelete: Restrict, onUpdate: Restrict)
+  actor        User         @relation(fields: [voidedBy], references: [id], onDelete: Restrict, onUpdate: Restrict)
+
+  @@unique([invoiceId])
+  @@index([organizationId, createdAt])
+  @@map("invoice_voids")
 }
 
 /// Append-only record of a client-supplied Idempotency-Key and the payment it produced.

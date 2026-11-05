@@ -200,6 +200,7 @@
         "GET /api/v1/bookings/:id",
         "GET /api/v1/bookings/beds/available",
         "POST /api/v1/bookings",
+        "POST /api/v1/bookings/:id/extend",
         "PUT /api/v1/bookings/:id"
       ],
       "allowsVocabulary": [
@@ -325,6 +326,45 @@
       "allowsTypes": [
         "Decimal"
       ]
+    },
+    "3.7": {
+      "status": "approved",
+      "approver": "AtharvaVavhal",
+      "date": "2026-11-02",
+      "ref": "docs/nook-phase-3/PHASE_3_SCOPE_REGISTER.md#slice-37-finance-ledger-integrity",
+      "description": "Payment receipt snapshots, the append-only invoice void record, and issued-invoice trigger hardening (Task 4F.2). Approved in session on 2026-11-02 from the 4F.2 migration design.",
+      "models": [
+        "InvoiceVoid"
+      ],
+      "enums": [],
+      "tables": [
+        "invoice_voids"
+      ],
+      "functions": [
+        "finance_snapshot_payment",
+        "finance_check_void"
+      ],
+      "extensions": [],
+      "routes": [
+        "POST /api/v1/finance/invoices/:id/void"
+      ],
+      "allowsVocabulary": [
+        "balance"
+      ]
+    },
+    "3.8": {
+      "status": "approved",
+      "approver": "AtharvaVavhal",
+      "date": "2026-11-03",
+      "ref": "docs/nook-phase-3/PHASE_3_SCOPE_REGISTER.md#slice-38-invoice-uniqueness",
+      "description": "One active invoice per booking per billing month; a voided invoice frees its slot (void and reissue). Index change only: no new table, model, function or route. Approved in session on 2026-11-03 from TASK_4F_INVOICE_UNIQUENESS_MODEL.md.",
+      "models": [],
+      "enums": [],
+      "tables": [],
+      "functions": [],
+      "extensions": [],
+      "routes": [],
+      "allowsVocabulary": []
     }
   },
   "baselineRoutes": [
@@ -410,6 +450,12 @@
       "name": "node-pty",
       "version": "1.1.0",
       "ref": "docs/nook-phase-3/PHASE_3_SCOPE_REGISTER.md#dependency-additions-since-phase-2"
+    },
+    {
+      "file": "apps/api/package.json",
+      "name": "@sentry/node",
+      "version": "10.76.2",
+      "ref": "docs/nook-phase-3/PHASE_3_SCOPE_REGISTER.md#dependency-additions-since-phase-2"
     }
   ],
   "forbiddenWords": [
@@ -474,6 +520,11 @@
     "20261101170000_add_financial_corrections": "3.6",
     "20261101190000_tenant_composite_keys_phase_3_3_to_3_5": "3.6",
     "20261101210000_admission_and_lifecycle_integrity": "3.6",
-    "20261102100000_account_security": "3.6"
+    "20261102100000_account_security": "3.6",
+    "20261103090000_payment_receipt_snapshot": "3.7",
+    "20261103100000_invoice_void_record": "3.7",
+    "20261103110000_invoice_guard_hardening": "3.7",
+    "20261103120000_invoice_status_consistency": "3.7",
+    "20261103130000_invoice_active_uniqueness": "3.8"
   }
 }

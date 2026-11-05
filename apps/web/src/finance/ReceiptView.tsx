@@ -84,9 +84,25 @@ export function ReceiptView({
               <dt>Invoice total</dt>
               <dd>{formatMoney(data.invoice.amount)}</dd>
             </div>
+            {receipt.creditTotalAtPayment !== null ? (
+              <div>
+                <dt>Credits applied at the time</dt>
+                <dd>{formatMoney(receipt.creditTotalAtPayment.replace('-', ''))}</dd>
+              </div>
+            ) : null}
             <div>
               <dt>Balance after this payment</dt>
-              <dd>{formatMoney(receipt.balanceAfterPayment)}</dd>
+              <dd>
+                {formatMoney(receipt.balanceAfterPayment)}
+                {receipt.balanceSource === 'derived' ? (
+                  <span
+                    className="fin-tag"
+                    title="Recorded before receipts stored their own figures, so this is recalculated from today's invoice and may differ from what was shown at the time."
+                  >
+                    Derived
+                  </span>
+                ) : null}
+              </dd>
             </div>
           </dl>
           {receipt.notes ? <p className="fin-note">Note: {receipt.notes}</p> : null}

@@ -69,6 +69,30 @@ throttling keyed by hashes), the `users.password_change_required` flag, the auth
 change-own-password endpoint, and the operator scripts under `scripts/ops/` (provision, reset, revoke). See
 `PILOT_ACCOUNT_REQUIREMENTS.md`.
 
+## Slice 3.7 Finance ledger integrity
+
+Task 4F.2, approved in session on 2026-11-02 from `TASK_4F2_MIGRATION_DESIGN.md`. All changes are additive; none is applied
+outside the isolated scratch database without a separate approval.
+
+- Receipt snapshots: nullable `payments.credit_total_at_payment` and `payments.balance_after_payment`, written by the trigger function
+  `finance_snapshot_payment` under the invoice row lock; client values are overwritten and existing payments keep NULL ("derived").
+  The column name `balance_after_payment` is why this slice allows the vocabulary word `balance`.
+- Invoice voiding: model `InvoiceVoid` (table `invoice_voids`, append-only, one per invoice, organization-scoped composite keys) and
+  route `POST /api/v1/finance/invoices/:id/void`. The existing `CANCELLED` status is reused. Voiding is terminal, needs a reason, is refused
+  while payments are unreversed or credits are applied, and never alters payments. A draft may be voided. Function `finance_check_void`.
+- Trigger hardening: `finance_guard_invoice` is replaced (body only; no object is dropped) to enforce the permitted status transitions,
+  freeze `due_date`, `issued_at`, `notes` and `created_at` after issue, and allow `CANCELLED` only through a void record. The database also
+  refuses payments against DRAFT or CANCELLED invoices.
+- The 12 legacy `CANCELLED` invoices in test data have no void record and none is invented; they stay `CANCELLED` and become read-only.
+
+## Slice 3.8 Invoice uniqueness
+
+Approved in session on 2026-11-03 from `TASK_4F_INVOICE_UNIQUENESS_MODEL.md` (owner decisions: void and reissue; one invoice per
+**booking** per billing month, separate bookings billed independently, extensions stay on their booking, no automatic merging).
+Index change only: the resident-level unique index on `invoices` is replaced by partial unique indexes over non-`CANCELLED`
+invoices (per booking, and per resident for legacy invoices with no booking). No new table, model, function or route. Applied only
+to the isolated scratch database `nook_layer1_clean`; applying it anywhere else needs a separate approval.
+
 ## Dependency additions since Phase 2
 
 All are exact-pinned and used by committed code. Recorded for owner confirmation.
@@ -77,6 +101,12 @@ All are exact-pinned and used by committed code. Recorded for owner confirmation
 - `supertest` and `@types/supertest` in `apps/api`: HTTP integration tests.
 - `node-pty` (root, dev only): chosen in the Phase 2 credential-rotation plan to read a password without placing it
   in process arguments. It is not imported by application code.
+- `@sentry/node` 10.76.2 in `apps/api`, approved by the owner on 2026-11-03 (P0 #4, error monitoring), with these
+  conditions: API only (no web SDK); active only when `SENTRY_DSN` is set; no default integrations, no request data,
+  cookies, headers, bodies or breadcrumbs; `sendDefaultPii: false`; tracing off; only unexpected 5xx errors, rebuilt with
+  scrubbed messages and stack frames; user id and organisation id only. Installed with `--ignore-scripts`; 19 packages
+  added (OpenTelemetry and Sentry internals); `npm audit` reports 0 vulnerabilities. The version is the newest v10
+  release that was more than two weeks old when chosen. Details: `docs/ops/OBSERVABILITY.md`.
 
 ## Raw SQL
 

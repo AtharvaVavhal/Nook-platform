@@ -1,7 +1,8 @@
 // Finance API client. The organization is never sent from the browser: the server derives it
 // from the session. Money values are decimal strings and are only ever formatted here, never
 // added or compared as JavaScript numbers.
-import { API_BASE, csrfToken, notifyUnauthorized } from '../apiConfig';
+import { API_BASE, csrf, notifyUnauthorized } from '../apiConfig';
+import { serverFailureMessage } from '../errorReference';
 
 export type InvoiceStatus =
   | 'DRAFT'
@@ -46,6 +47,9 @@ export interface Payment {
   receivedAt: string;
   notes: string | null;
   correctsPaymentId?: string | null;
+  /** Recorded by the database when the payment was made; null on payments that pre-date the snapshot. */
+  creditTotalAtPayment?: string | null;
+  balanceAfterPayment?: string | null;
   reversed?: boolean;
   reversal?: { id: string; reason: string; reversedAt: string; reversedBy: string | null } | null;
 }
@@ -71,9 +75,22 @@ export interface CorrectionItem {
   createdAt: string;
 }
 
+export interface VoidRecord {
+  id: string;
+  reason: string;
+  voidedAt: string;
+  voidedBy: string | null;
+  previousStatus: InvoiceStatus;
+  amountAtVoid: string;
+}
+
 export interface InvoiceDetailData extends Invoice {
   payments: Payment[];
   adjustments: Adjustment[];
+  /** Present once the invoice has been voided through a void record. */
+  void: VoidRecord | null;
+  /** Cancelled before void records existed: kept as it was, with no reason or actor on record. */
+  legacyCancelled: boolean;
 }
 
 export interface Paged<T> {
@@ -125,6 +142,10 @@ export interface ReceiptData {
     receivedAt: string;
     notes: string | null;
     balanceAfterPayment: string;
+    /** Credits applied when the payment was made; null when the receipt is derived. */
+    creditTotalAtPayment: string | null;
+    /** `recorded` figures were stored when the payment was made; `derived` ones are recomputed (older payments). */
+    balanceSource: 'recorded' | 'derived';
     reversed: boolean;
     reversedAt: string | null;
   }>;
@@ -145,12 +166,10 @@ async function request<T>(
   body?: unknown,
   extraHeaders: Record<string, string> = {},
 ): Promise<T> {
-  const response = await fetch(`${API_BASE}${path}`, {
+  const response = await csrf.request(`${API_BASE}${path}`, {
     method,
-    credentials: 'include',
     headers: {
       ...(body !== undefined ? { 'Content-Type': 'application/json' } : {}),
-      ...(method === 'POST' ? { 'x-csrf-token': csrfToken() } : {}),
       ...extraHeaders,
     },
     ...(body !== undefined ? { body: JSON.stringify(body) } : {}),
@@ -164,7 +183,8 @@ async function request<T>(
         ? 'Please sign in to view finance records.'
         : response.status === 403
           ? 'This request was refused for security reasons. Refresh the page and try again.'
-          : message || `Request failed (${response.status})`,
+          : (serverFailureMessage(response.status, response.headers.get('x-request-id')) ??
+            (message || `Request failed (${response.status})`)),
       response.status,
     );
   }
@@ -188,6 +208,10 @@ export const financeApi = {
     search?: string;
     month?: string;
   }) => request<Paged<Invoice>>('GET', `/finance/invoices${qs(params)}`),
+  voidInvoice: (invoiceId: string, reason: string) =>
+    request<{ invoice: Invoice; void: VoidRecord }>('POST', `/finance/invoices/${invoiceId}/void`, {
+      reason,
+    }),
   reversePayment: (paymentId: string, reason: string) =>
     request<{ payment: Payment; invoice: Invoice }>(
       'POST',
@@ -205,9 +229,9 @@ export const financeApi = {
   getInvoice: (id: string) => request<InvoiceDetailData>('GET', `/finance/invoices/${id}`),
   createDraft: (body: {
     residentId: string;
-    bookingId?: string;
+    /** Required: the invoice amount always comes from the booking's monthly price. */
+    bookingId: string;
     month: string;
-    amount?: string;
     dueDate?: string;
     notes?: string;
   }) => request<Invoice>('POST', '/finance/invoices', body),
@@ -218,6 +242,8 @@ export const financeApi = {
       created: number;
       skippedExisting: number;
       skippedZeroPrice: number;
+      /** Bookings with a billable stay in the month: one invoice each (a bed transfer is two bookings). */
+      eligibleBookings: number;
       eligibleResidents: number;
       invoices: Invoice[];
     }>('POST', '/finance/invoices/generate-monthly', body),

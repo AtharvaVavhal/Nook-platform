@@ -1,4 +1,4 @@
-import { createHash, randomUUID } from 'node:crypto';
+import { createHash } from 'node:crypto';
 import {
   BadRequestException,
   ConflictException,
@@ -7,12 +7,17 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from '../database/prisma.service.js';
+import { resolveInstant } from '../common/time.js';
 import { Prisma } from '../generated/client.js';
 import {
   Decimal,
   PAYMENT_METHODS,
   daysOverdue,
+  bookingCoversMonth,
   defaultDueDate,
+  dueDateAtIssue,
+  isMonthBillable,
+  monthRangeIst,
   effectiveStatus,
   formatInvoiceNumber,
   formatMoney,
@@ -29,10 +34,10 @@ import {
   statusAfterPayment,
   todayIst,
   billingYearIst,
-  istStartOfDay,
   toDecimal,
   type PaymentMethodName,
 } from './finance.util.js';
+import { auditRequestId } from '../observability/request-context.js';
 
 const OPEN_STATUSES = ['ISSUED', 'PARTIALLY_PAID', 'OVERDUE'] as const;
 const BILLABLE_STATUSES = ['ISSUED', 'PARTIALLY_PAID', 'OVERDUE', 'PAID'] as const;
@@ -185,6 +190,15 @@ export class FinanceService {
       receivedAt: payment.receivedAt.toISOString(),
       notes: payment.notes,
       correctsPaymentId: payment.correctsPaymentId,
+      // Recorded by the database when the payment was made; null on payments that pre-date the snapshot.
+      creditTotalAtPayment:
+        payment.creditTotalAtPayment === null || payment.creditTotalAtPayment === undefined
+          ? null
+          : formatMoney(payment.creditTotalAtPayment),
+      balanceAfterPayment:
+        payment.balanceAfterPayment === null || payment.balanceAfterPayment === undefined
+          ? null
+          : formatMoney(payment.balanceAfterPayment),
       reversed: Boolean(reversal),
       reversal: reversal
         ? {
@@ -212,7 +226,7 @@ export class FinanceService {
   private async audit(
     tx: Tx,
     organizationId: string,
-    actorUserId: string,
+    actorUserId: string | null,
     action: string,
     targetType: string,
     targetId: string,
@@ -225,7 +239,7 @@ export class FinanceService {
         action,
         targetType,
         targetId,
-        requestId: randomUUID(),
+        requestId: auditRequestId(),
         metadata,
       },
     });
@@ -239,8 +253,9 @@ export class FinanceService {
     }
   }
 
-  private resolveDueDate(raw: unknown, periodStart: Date): Date {
-    if (raw === undefined || raw === null || raw === '') return defaultDueDate(periodStart);
+  /** An explicitly requested due date, or null when the rule (later of the 5th and issue date) applies. */
+  private explicitDueDate(raw: unknown, periodStart: Date): Date | null {
+    if (raw === undefined || raw === null || raw === '') return null;
     const dueDate = parseDateOnly(raw, 'dueDate');
     if (dueDate.getTime() < periodStart.getTime()) {
       throw new BadRequestException('dueDate cannot be before the billing period start');
@@ -248,18 +263,96 @@ export class FinanceService {
     return dueDate;
   }
 
+  /**
+   * The due date an invoice carries once issued: the later of the 5th of its billing month and the
+   * issue date (Asia/Kolkata). An explicitly requested later date is kept, so an explicit date can
+   * postpone but never leave an invoice overdue at birth.
+   */
+  private issuedDueDate(periodStart: Date, issuedAt: Date, requested: Date | null): Date {
+    const rule = dueDateAtIssue(periodStart, issuedAt);
+    return requested && requested.getTime() > rule.getTime() ? requested : rule;
+  }
+
+  /**
+   * Stays that make a resident billable for a month. Eligibility comes from the actual stay (the
+   * check-in and check-out records) and the booking period [startDate, endDate) in Asia/Kolkata
+   * dates, where the end date already includes any approved extension. Booking, admission and
+   * resident status are not consulted: cancelling a booking or marking a resident INACTIVE or
+   * ARCHIVED later must not erase months that were really occupied, and a booking cancelled before
+   * any check-in has no stay. Existing invoices are skipped by the caller.
+   * Newest stay first.
+   */
+  private async billableStays(
+    db: Pick<Tx, 'checkIn'>,
+    organizationId: string,
+    period: ReturnType<typeof parseBillingMonth>,
+    extra: Prisma.CheckInWhereInput = {},
+  ) {
+    const { from, to } = monthRangeIst(period);
+    const day = 86_400_000;
+    const rows = await db.checkIn.findMany({
+      where: {
+        organizationId,
+        ...extra,
+        checkInAt: { lt: to },
+        OR: [
+          { status: 'ACTIVE' },
+          { checkOut: { is: { checkOutAt: { gte: from } } } },
+          // CHECKED_OUT without a CheckOut row: the status change time is the only record.
+          { status: 'CHECKED_OUT', checkOut: { is: null }, updatedAt: { gte: from } },
+        ],
+        // Coarse database pre-filter (one day of slack); the exact test is bookingCoversMonth below.
+        booking: {
+          is: {
+            startDate: { lt: new Date(period.nextPeriodStart.getTime() + day) },
+            endDate: { gt: new Date(period.periodStart.getTime() - day) },
+          },
+        },
+      },
+      orderBy: [{ checkInAt: 'desc' }, { id: 'asc' }],
+      select: {
+        id: true,
+        residentId: true,
+        status: true,
+        checkInAt: true,
+        updatedAt: true,
+        checkOut: { select: { checkOutAt: true } },
+        booking: { select: { id: true, monthlyPrice: true, startDate: true, endDate: true } },
+      },
+    });
+    return rows.filter((row) =>
+      isMonthBillable(
+        {
+          checkInAt: row.checkInAt,
+          status: row.status,
+          checkOutAt: row.checkOut?.checkOutAt ?? null,
+          updatedAt: row.updatedAt,
+        },
+        row.booking,
+        period,
+      ),
+    );
+  }
+
   // --------------------------------------------------------------- invoices
 
   async createDraft(organizationId: string, actorUserId: string, body: unknown) {
     const input = asObject(body);
+    if (input.amount !== undefined) {
+      throw new BadRequestException(
+        'amount cannot be set: the invoice amount comes from the booking monthly price. ' +
+          'Use a credit adjustment to correct an issued invoice.',
+      );
+    }
     const residentId = requireUuid(input.residentId, 'residentId');
-    const bookingId =
-      input.bookingId === undefined || input.bookingId === null
-        ? null
-        : requireUuid(input.bookingId, 'bookingId');
+    if (input.bookingId === undefined || input.bookingId === null) {
+      throw new BadRequestException('bookingId is required: the amount comes from the booking');
+    }
+    const bookingId = requireUuid(input.bookingId, 'bookingId');
     const period = parseBillingMonth(input.month);
     this.assertBillableMonth(period.periodStart);
-    const dueDate = this.resolveDueDate(input.dueDate, period.periodStart);
+    const dueDate =
+      this.explicitDueDate(input.dueDate, period.periodStart) ?? defaultDueDate(period.periodStart);
     const notes = optionalText(input.notes, 'notes', 1000);
 
     const resident = await this.prisma.db.resident.findFirst({
@@ -268,32 +361,51 @@ export class FinanceService {
     });
     if (!resident) throw new NotFoundException('Resident not found');
 
-    let amount: Decimal | null = null;
-    if (bookingId) {
-      const booking = await this.prisma.db.booking.findFirst({
-        where: { id: bookingId, organizationId, residentId },
-        select: { monthlyPrice: true, status: true },
-      });
-      if (!booking) throw new NotFoundException('Booking not found for this resident');
-      if (booking.status !== 'CONFIRMED') {
-        throw new BadRequestException('Cannot invoice a cancelled booking');
-      }
-      // Price snapshot: the booking's monthly price, charged in full (no proration).
-      amount = booking.monthlyPrice;
-    }
-    if (input.amount !== undefined && input.amount !== null) {
-      amount = parseMoney(input.amount, 'amount');
-    }
-    if (!amount || !amount.gt(0)) {
+    const booking = await this.prisma.db.booking.findFirst({
+      where: { id: bookingId, organizationId, residentId },
+      select: { monthlyPrice: true, startDate: true, endDate: true },
+    });
+    if (!booking) throw new NotFoundException('Booking not found for this resident');
+    if (!bookingCoversMonth(booking, period)) {
       throw new BadRequestException(
-        'amount is required (or supply a booking with a positive monthly price)',
+        'The booking does not cover this billing month (the booking end date is exclusive); ' +
+          'an approved extension is required to bill beyond it',
       );
     }
-    const invoiceAmount = amount;
+    const stays = await this.billableStays(this.prisma.db, organizationId, period, {
+      bookingId,
+      residentId,
+    });
+    if (stays.length === 0) {
+      throw new BadRequestException(
+        'There is no recorded stay for this booking in this billing month',
+      );
+    }
+    // Price snapshot: the booking's monthly price, charged in full (no proration).
+    const invoiceAmount = booking.monthlyPrice;
+    if (!invoiceAmount.gt(0)) {
+      throw new BadRequestException('The booking has no positive monthly price to invoice');
+    }
 
     try {
       return await this.prisma.db.$transaction(async (tx) => {
         await this.lockNumbering(tx, organizationId);
+        // A legacy invoice (no booking) already bills this resident for the month: do not bill it a second time.
+        const legacy = await tx.invoice.findFirst({
+          where: {
+            organizationId,
+            residentId,
+            periodStart: period.periodStart,
+            bookingId: null,
+            status: { not: 'CANCELLED' },
+          },
+          select: { id: true },
+        });
+        if (legacy) {
+          throw new ConflictException(
+            'An active invoice without a booking already exists for this resident and billing period',
+          );
+        }
         const year = billingYearIst();
         const sequence = (await this.lastSequence(tx, organizationId, year)) + 1;
         const invoice = await tx.invoice.create({
@@ -327,8 +439,9 @@ export class FinanceService {
       }, TX_OPTIONS);
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
+        // One ACTIVE invoice per booking per billing month. A voided invoice does not count: it can be replaced.
         throw new ConflictException(
-          'An invoice already exists for this resident and billing period',
+          'An active invoice already exists for this booking and billing period',
         );
       }
       throw error;
@@ -343,9 +456,21 @@ export class FinanceService {
           `Only DRAFT invoices can be issued (current status: ${locked.status})`,
         );
       }
+      const draft = await tx.invoice.findFirstOrThrow({
+        where: { id: invoiceId, organizationId },
+        select: { periodStart: true, dueDate: true },
+      });
+      // The due date is fixed here, at issue: later of the 5th and the issue date. A draft that
+      // carries an explicit later date keeps it.
+      const issuedAt = new Date();
+      const requested =
+        draft.dueDate.getTime() === defaultDueDate(draft.periodStart).getTime()
+          ? null
+          : draft.dueDate;
+      const dueDate = this.issuedDueDate(draft.periodStart, issuedAt, requested);
       const invoice = await tx.invoice.update({
         where: { id: invoiceId },
-        data: { status: 'ISSUED', issuedAt: new Date() },
+        data: { status: 'ISSUED', issuedAt, dueDate },
         include: { resident: { select: { id: true, firstName: true, lastName: true } } },
       });
       await this.audit(
@@ -357,6 +482,7 @@ export class FinanceService {
         invoiceId,
         {
           number: invoice.number,
+          dueDate: isoDate(dueDate),
         },
       );
       return this.serializeInvoice(invoice, todayIst());
@@ -366,13 +492,88 @@ export class FinanceService {
   /**
    * Idempotent and concurrency-safe: numbering is serialised per organization, existing
    * (resident, period) invoices are skipped, and the unique index is the final backstop.
-   * Rent is always the booking's full monthlyPrice — never prorated for partial months.
+   * Rent is always the booking's full monthlyPrice, never prorated for partial months.
+   * Eligibility is stay-based (see billableStays). Each invoice issued here writes its own
+   * `finance.invoice.issued` audit event in the same transaction, plus one batch event.
    */
-  async generateMonthly(organizationId: string, actorUserId: string, body: unknown) {
+  /**
+   * What monthly generation would do for one organization and month: the billable bookings, which of them still need an
+   * invoice, and how many are skipped. Reads only. One invoice per BOOKING per period: a booking has at most one admission and
+   * one check-in, so each billable stay is exactly one booking, and separate bookings of one resident (a bed transfer, say) are
+   * billed independently. Only ACTIVE invoices occupy a slot: a voided one has been replaced or is waiting to be, and a legacy
+   * invoice with no booking already bills its resident for the month.
+   */
+  private async planMonthly(
+    db: Pick<Tx, 'checkIn' | 'invoice'>,
+    organizationId: string,
+    period: ReturnType<typeof parseBillingMonth>,
+  ) {
+    const stays = await this.billableStays(db, organizationId, period);
+    const byBooking = new Map<string, { residentId: string; amount: Decimal }>();
+    for (const row of stays) {
+      if (!byBooking.has(row.booking.id)) {
+        byBooking.set(row.booking.id, {
+          residentId: row.residentId,
+          amount: row.booking.monthlyPrice,
+        });
+      }
+    }
+    const existing = await db.invoice.findMany({
+      where: { organizationId, periodStart: period.periodStart, status: { not: 'CANCELLED' } },
+      select: { bookingId: true, residentId: true },
+    });
+    const billedBookings = new Set(
+      existing.flatMap((row) => (row.bookingId ? [row.bookingId] : [])),
+    );
+    const legacyResidents = new Set(
+      existing.filter((row) => !row.bookingId).map((row) => row.residentId),
+    );
+    const toCreate: Array<{ residentId: string; bookingId: string; amount: Decimal }> = [];
+    let skippedZeroPrice = 0;
+    for (const [bookingId, candidate] of byBooking) {
+      if (billedBookings.has(bookingId) || legacyResidents.has(candidate.residentId)) continue;
+      if (!candidate.amount.gt(0)) {
+        skippedZeroPrice += 1;
+        continue;
+      }
+      toCreate.push({ bookingId, ...candidate });
+    }
+    return { byBooking, toCreate, skippedZeroPrice };
+  }
+
+  /** The same plan as generateMonthly, without writing anything (used by the scheduler's dry run). */
+  async previewMonthly(organizationId: string, month: unknown) {
+    const period = parseBillingMonth(month);
+    this.assertBillableMonth(period.periodStart);
+    const { byBooking, toCreate, skippedZeroPrice } = await this.planMonthly(
+      this.prisma.db,
+      organizationId,
+      period,
+    );
+    return {
+      month: period.month,
+      eligibleBookings: byBooking.size,
+      wouldCreate: toCreate.length,
+      skippedExisting: byBooking.size - toCreate.length - skippedZeroPrice,
+      skippedZeroPrice,
+    };
+  }
+
+  /**
+   * `actorUserId` is null for the scheduler (the system actor); `options.source` names who triggered the run in the audit
+   * metadata ('generate-monthly' for the API, 'scheduler' for the job).
+   */
+  async generateMonthly(
+    organizationId: string,
+    actorUserId: string | null,
+    body: unknown,
+    options: { source?: string } = {},
+  ) {
+    const source = options.source ?? 'generate-monthly';
     const input = asObject(body);
     const period = parseBillingMonth(input.month);
     this.assertBillableMonth(period.periodStart);
-    const dueDate = this.resolveDueDate(input.dueDate, period.periodStart);
+    const requestedDue = this.explicitDueDate(input.dueDate, period.periodStart);
     if (input.issue !== undefined && typeof input.issue !== 'boolean') {
       throw new BadRequestException('issue must be a boolean');
     }
@@ -381,74 +582,18 @@ export class FinanceService {
     return this.prisma.db.$transaction(async (tx) => {
       await this.lockNumbering(tx, organizationId);
 
-      const checkIns = await tx.checkIn.findMany({
-        where: {
-          organizationId,
-          // Month boundaries are Asia/Kolkata midnights. A resident who checks out during the month
-          // (or the day it starts) is still billed the full month; only a checkout completed before
-          // the period began excludes them.
-          checkInAt: { lt: istStartOfDay(period.nextPeriodStart) },
-          OR: [
-            { status: 'ACTIVE' },
-            {
-              checkOut: { is: { checkOutAt: { gte: istStartOfDay(period.periodStart) } } },
-            },
-            // CHECKED_OUT through update/cancel leaves no CheckOut row; the status change time
-            // is then the only checkout moment on record.
-            {
-              status: 'CHECKED_OUT',
-              checkOut: { is: null },
-              updatedAt: { gte: istStartOfDay(period.periodStart) },
-            },
-          ],
-          admission: { is: { status: 'ADMITTED' } },
-          resident: { is: { status: 'ACTIVE' } },
-          booking: {
-            is: {
-              status: 'CONFIRMED',
-              startDate: { lt: period.nextPeriodStart },
-              endDate: { gte: period.periodStart },
-            },
-          },
-        },
-        orderBy: { checkInAt: 'desc' },
-        select: {
-          residentId: true,
-          booking: { select: { id: true, monthlyPrice: true } },
-        },
-      });
-
-      // One invoice per resident per period: the most recent eligible check-in wins.
-      const byResident = new Map<string, { bookingId: string; amount: Decimal }>();
-      for (const row of checkIns) {
-        if (!byResident.has(row.residentId)) {
-          byResident.set(row.residentId, {
-            bookingId: row.booking.id,
-            amount: row.booking.monthlyPrice,
-          });
-        }
-      }
-
-      const existing = await tx.invoice.findMany({
-        where: { organizationId, periodStart: period.periodStart },
-        select: { residentId: true },
-      });
-      const existingResidents = new Set(existing.map((row) => row.residentId));
-
-      const toCreate: Array<{ residentId: string; bookingId: string; amount: Decimal }> = [];
-      let skippedZeroPrice = 0;
-      for (const [residentId, candidate] of byResident) {
-        if (existingResidents.has(residentId)) continue;
-        if (!candidate.amount.gt(0)) {
-          skippedZeroPrice += 1;
-          continue;
-        }
-        toCreate.push({ residentId, ...candidate });
-      }
+      const { byBooking, toCreate, skippedZeroPrice } = await this.planMonthly(
+        tx,
+        organizationId,
+        period,
+      );
 
       const year = billingYearIst();
       let sequence = await this.lastSequence(tx, organizationId, year);
       const issuedAt = issueNow ? new Date() : null;
+      const dueDate = issuedAt
+        ? this.issuedDueDate(period.periodStart, issuedAt, requestedDue)
+        : (requestedDue ?? defaultDueDate(period.periodStart));
       const numbers: string[] = [];
       const rows = toCreate.map((item) => {
         sequence += 1;
@@ -492,16 +637,41 @@ export class FinanceService {
             month: period.month,
             created: created.count,
             issued: issueNow,
+            source,
           },
         );
+        if (issueNow) {
+          // Exactly one issued event per invoice this run actually created. A retry finds the
+          // invoices already present, creates none, and therefore writes no further events.
+          for (const invoice of invoices) {
+            await this.audit(
+              tx,
+              organizationId,
+              actorUserId,
+              'finance.invoice.issued',
+              'invoice',
+              invoice.id,
+              {
+                number: invoice.number,
+                automatic: true,
+                source,
+                month: period.month,
+                dueDate: isoDate(invoice.dueDate),
+              },
+            );
+          }
+        }
       }
 
       const today = todayIst();
       return {
         month: period.month,
-        eligibleResidents: byResident.size,
+        eligibleBookings: byBooking.size,
+        // kept for existing clients: the distinct residents behind the eligible bookings
+        eligibleResidents: new Set([...byBooking.values()].map((candidate) => candidate.residentId))
+          .size,
         created: created.count,
-        skippedExisting: byResident.size - toCreate.length - skippedZeroPrice,
+        skippedExisting: byBooking.size - toCreate.length - skippedZeroPrice,
         skippedZeroPrice,
         invoices: invoices.map((invoice) => this.serializeInvoice(invoice, today)),
       };
@@ -579,13 +749,27 @@ export class FinanceService {
           orderBy: { createdAt: 'asc' },
           include: { actor: { select: { displayName: true } } },
         },
+        voids: { include: { actor: { select: { displayName: true } } } },
       },
     });
     if (!invoice) throw new NotFoundException('Invoice not found');
+    const voidRecord = invoice.voids[0];
     return {
       ...this.serializeInvoice(invoice, todayIst()),
       payments: invoice.payments.map((payment) => this.serializePayment(payment)),
       adjustments: invoice.adjustments.map((adjustment) => this.serializeAdjustment(adjustment)),
+      void: voidRecord
+        ? {
+            id: voidRecord.id,
+            reason: voidRecord.reason,
+            voidedAt: voidRecord.createdAt.toISOString(),
+            voidedBy: voidRecord.actor.displayName,
+            previousStatus: voidRecord.previousStatus,
+            amountAtVoid: formatMoney(voidRecord.amountAtVoid),
+          }
+        : null,
+      // Cancelled before void records existed: kept as it was, with no void record invented for it.
+      legacyCancelled: invoice.status === 'CANCELLED' && !voidRecord,
     };
   }
 
@@ -614,15 +798,10 @@ export class FinanceService {
       input.correctsPaymentId === undefined || input.correctsPaymentId === null
         ? null
         : requireUuid(input.correctsPaymentId, 'correctsPaymentId');
-    let receivedAt = new Date();
-    if (input.receivedAt !== undefined && input.receivedAt !== null && input.receivedAt !== '') {
-      if (typeof input.receivedAt !== 'string' || Number.isNaN(Date.parse(input.receivedAt))) {
-        throw new BadRequestException('receivedAt must be a valid ISO date');
-      }
-      receivedAt = new Date(input.receivedAt);
-      if (receivedAt.getTime() > Date.now() + 5 * 60_000) {
-        throw new BadRequestException('receivedAt cannot be in the future');
-      }
+    // A zone-less receivedAt (or a bare date) is Asia/Kolkata wall-clock time, never the host's.
+    const receivedAt = resolveInstant(input.receivedAt, 'receivedAt');
+    if (receivedAt.getTime() > Date.now() + 5 * 60_000) {
+      throw new BadRequestException('receivedAt cannot be in the future');
     }
 
     const fingerprint: unknown[] = [
@@ -701,6 +880,24 @@ export class FinanceService {
         data: { paidAmount: newPaid, status: statusAfterPayment(locked.amount, newPaid) },
         include: { resident: { select: { id: true, firstName: true, lastName: true } } },
       });
+      // DEFENSIVE: Verify the paid_amount update persisted before emitting the audit event.
+      // If the update was lost (e.g., due to a transaction boundary issue), throw to roll back
+      // the entire transaction rather than creating an audit event for a payment the invoice
+      // does not reflect.
+      const verify = await tx.invoice.findUnique({
+        where: { id: invoiceId },
+        select: { paidAmount: true },
+      });
+      if (!verify) {
+        throw new Error(
+          `Invoice ${invoiceId} not found after payment; payment row exists but invoice update vanished.`,
+        );
+      }
+      if (!verify.paidAmount.equals(newPaid)) {
+        throw new Error(
+          `Invoice ${invoiceId} paid_amount not persisted: expected ${formatMoney(newPaid)}, found ${formatMoney(verify.paidAmount)}.`,
+        );
+      }
       await this.audit(
         tx,
         organizationId,
@@ -893,6 +1090,84 @@ export class FinanceService {
     }, TX_OPTIONS);
   }
 
+  /**
+   * Voids an invoice: an append-only record plus a move to CANCELLED, in one transaction. Voiding is
+   * terminal. It is refused while payments are unreversed or credits are applied (credits are append-only
+   * and cannot be reversed), and it never touches payments, reversals or credits. A draft may be voided
+   * too. The database re-checks every rule, so a race cannot slip a void past a payment.
+   */
+  async voidInvoice(organizationId: string, actorUserId: string, invoiceId: string, body: unknown) {
+    const reason = parseReason(asObject(body).reason);
+    try {
+      return await this.prisma.db.$transaction(async (tx) => {
+        const locked = await this.lockInvoice(tx, organizationId, invoiceId);
+        if (locked.status === 'CANCELLED') {
+          throw new ConflictException('This invoice is already voided');
+        }
+        const problems: string[] = [];
+        if (locked.adjustmentTotal.lt(0)) {
+          problems.push(
+            'it has credits applied, which cannot be reversed (correct it with a further credit instead)',
+          );
+        }
+        if (locked.paidAmount.plus(locked.adjustmentTotal).gt(0)) {
+          problems.push('it has unreversed payments (reverse each payment, with a reason, first)');
+        }
+        if (problems.length > 0) {
+          throw new ConflictException(`This invoice cannot be voided: ${problems.join('; and ')}`);
+        }
+        const record = await tx.invoiceVoid.create({
+          data: {
+            organizationId,
+            invoiceId,
+            residentId: locked.residentId,
+            // Overwritten by the database from the locked invoice; sent only to satisfy the client types.
+            previousStatus: locked.status as Prisma.InvoiceVoidCreateInput['previousStatus'],
+            amountAtVoid: locked.amount,
+            reason,
+            voidedBy: actorUserId,
+          },
+          include: { actor: { select: { displayName: true } } },
+        });
+        const invoice = await tx.invoice.update({
+          where: { id: invoiceId },
+          data: { status: 'CANCELLED' },
+          include: { resident: { select: { id: true, firstName: true, lastName: true } } },
+        });
+        await this.audit(
+          tx,
+          organizationId,
+          actorUserId,
+          'finance.invoice.voided',
+          'invoice',
+          invoiceId,
+          {
+            number: invoice.number,
+            reason,
+            previousStatus: record.previousStatus,
+            amount: formatMoney(record.amountAtVoid),
+          },
+        );
+        return {
+          invoice: this.serializeInvoice(invoice, todayIst()),
+          void: {
+            id: record.id,
+            reason: record.reason,
+            voidedAt: record.createdAt.toISOString(),
+            voidedBy: record.actor.displayName,
+            previousStatus: record.previousStatus,
+            amountAtVoid: formatMoney(record.amountAtVoid),
+          },
+        };
+      }, TX_OPTIONS);
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
+        throw new ConflictException('This invoice is already voided');
+      }
+      throw error;
+    }
+  }
+
   /** Newest-first history of reversals and credits across the organization. */
   async corrections(organizationId: string, query: Record<string, unknown>) {
     const limit = parsePage(query.limit, 50, 200, 'limit');
@@ -1022,6 +1297,7 @@ export class FinanceService {
     const months = await Promise.all(
       Array.from({ length: count }, (_, index) => shiftMonth(end, index - (count - 1))).map(
         async (period) => {
+          const range = monthRangeIst(period);
           const billed: Prisma.InvoiceWhereInput = {
             organizationId,
             periodStart: period.periodStart,
@@ -1036,7 +1312,7 @@ export class FinanceService {
             this.prisma.db.payment.aggregate({
               where: {
                 organizationId,
-                receivedAt: { gte: period.periodStart, lt: period.nextPeriodStart },
+                receivedAt: { gte: range.from, lt: range.to },
                 reversals: { none: {} },
               },
               _sum: { amount: true },
@@ -1086,6 +1362,10 @@ export class FinanceService {
     const receipts = invoice.payments.map((payment) => {
       const reversed = payment.reversals.length > 0;
       if (!reversed) cumulative = cumulative.plus(payment.amount);
+      // A recorded snapshot is the figure the receipt showed when it was issued and is never recomputed.
+      // Payments that pre-date the snapshot keep the old derived figure, labelled as derived.
+      const recorded =
+        payment.balanceAfterPayment !== null && payment.creditTotalAtPayment !== null;
       return {
         reversed,
         reversedAt: payment.reversals[0]?.createdAt.toISOString() ?? null,
@@ -1096,7 +1376,13 @@ export class FinanceService {
         reference: payment.reference,
         receivedAt: payment.receivedAt.toISOString(),
         notes: payment.notes,
-        balanceAfterPayment: formatMoney(netDue.minus(cumulative)),
+        balanceAfterPayment: recorded
+          ? formatMoney(payment.balanceAfterPayment as Decimal)
+          : formatMoney(netDue.minus(cumulative)),
+        creditTotalAtPayment: recorded
+          ? formatMoney(payment.creditTotalAtPayment as Decimal)
+          : null,
+        balanceSource: recorded ? ('recorded' as const) : ('derived' as const),
       };
     });
     const selected = wantedPayment
