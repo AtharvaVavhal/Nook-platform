@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any -- supertest response bodies and pg rows are untyped */
+import './helpers/preflight.js';
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { execFile } from 'node:child_process';
@@ -150,6 +151,8 @@ test('R1: the lock expires, and a successful sign-in resets the failure counter'
   const a = await newAccount();
   for (let i = 0; i < 5; i += 1) await login(a, 'nope-nope-nope').expect(401);
   await login(a).expect(429);
+  // Database-wide by design (the throttle key is a hash): safe only because the suite runs serially, under the
+  // suite lock, on a disposable database that no other run or application shares.
   await withMigratorClient((c) =>
     c.query(
       `UPDATE login_throttles SET locked_until = now() - interval '1 minute', window_started_at = now() - interval '20 minutes' WHERE scope = 'IDENTIFIER'`,

@@ -1,19 +1,27 @@
+import { connectionStringOf, validateEnvironment, type IntegrationConfig } from './guard.js';
+
 /**
- * Runtime-role connection string for integration tests. It must come from the environment so
- * no credential is committed. Refuses the host PostgreSQL port 5432 and the development database.
+ * Environment access for the integration suite. Every accessor re-validates the whole environment with
+ * the strict guard (see guard.ts), so none of them can hand out a URL that has not passed it. Failures
+ * throw an IntegrationGuardError that names the rule and the variable, never the value. The configuration
+ * object carries sanitized metadata only; the password-bearing strings are reachable solely through the two
+ * functions below, for the database driver.
  */
+export function integrationConfig(env: NodeJS.ProcessEnv = process.env): IntegrationConfig {
+  return validateEnvironment(env);
+}
+
+/** The runtime-role connection string, validated. For the database driver only; never log it. */
 export function requireTestDatabaseUrl(): string {
-  const raw = process.env.DATABASE_URL;
-  if (!raw) throw new Error('DATABASE_URL environment variable is required');
-  let url: URL;
-  try {
-    url = new URL(raw);
-  } catch {
-    throw new Error('DATABASE_URL is not a valid connection string');
-  }
-  const database = url.pathname.replace(/^\//, '');
-  if (url.port === '5432' || url.port === '' || database === 'nook_dev') {
-    throw new Error('Integration tests refuse port 5432 and the nook_dev database');
-  }
-  return raw;
+  return connectionStringOf(integrationConfig().runtime);
+}
+
+/** The migrator-role connection string, validated against the runtime URL. Never log it. */
+export function requireMigratorDatabaseUrl(): string {
+  return connectionStringOf(integrationConfig().migrator);
+}
+
+/** The migrator role's user name as the URL names it (not a secret). */
+export function migratorRoleName(): string {
+  return integrationConfig().migrator.username;
 }

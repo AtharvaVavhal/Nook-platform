@@ -1,3 +1,4 @@
+import './helpers/preflight.js';
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { NestFactory } from '@nestjs/core';
