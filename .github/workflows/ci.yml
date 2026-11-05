@@ -8,16 +8,15 @@ on:
 permissions:
   contents: read
 
-# Password of the throwaway PostgreSQL service container that exists only inside the CI runner.
-env:
-  CI_DB_PASSWORD: ci-throwaway-database
-
 jobs:
   quality:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
@@ -29,46 +28,65 @@ jobs:
         env:
           PYTHONDONTWRITEBYTECODE: '1'
         run: python3 -m unittest scripts/test_phase_scope.py scripts/test_db_guard.py
-      - name: Verify Phase 2 scope
+      - name: Verify phase scope
         run: npm run verify:scope
-      - name: Formatting
-        run: npm run format:check
-      - name: Lint
-        run: npm run lint
-      - name: Type-check
-        run: npm run typecheck
-      - name: Unit tests
-        run: npm test
+      - name: Backend TypeScript
+        run: npm run typecheck --workspace @nook/api
+      - name: Backend ESLint
+        run: npx --no-install eslint apps/api
+      - name: Backend Prettier
+        run: npx --no-install prettier --check apps/api '!apps/api/src/generated/**'
+      - name: Backend database-free unit tests
+        run: node scripts/ci/run-unit.js
+      - name: Frontend TypeScript
+        run: npm run typecheck --workspace @nook/web
+      - name: Frontend ESLint
+        run: npx --no-install eslint apps/web
+      - name: Frontend Prettier
+        run: npx --no-install prettier --check apps/web
+      - name: Frontend unit tests
+        run: npm run test --workspace @nook/web
+      - name: Static CI contract
+        run: node scripts/ci/check.js
+      - name: Offline G6A migration-path tests
+        run: node --import tsx --test scripts/ci/g6a-migration.test.js
+      - name: CI script lint and formatting
+        run: |
+          npx --no-install eslint scripts/ci
+          npx --no-install prettier --check .github/workflows/ci.yml .github/workflows/g6a.yml scripts/ci
       - name: Build
         run: npm run build
-      - name: Prisma schema validation
-        env:
-          DATABASE_URL: postgresql://nook:<password>@localhost:5432/nook_dev?schema=public
-        run: npm run prisma:validate
+      - name: Prisma schema validation (no database configuration)
+        run: npx --no-install prisma validate --config scripts/ci/prisma.config.ts
       - name: Baseline secret scan
         run: npm run verify:secrets
       - name: Dependency audit
         run: npm audit --audit-level=high
 
-  database:
+  full-integration:
+    needs: quality
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     services:
       postgres:
         image: postgres:17
         env:
-          POSTGRES_USER: nook_ci
-          POSTGRES_PASSWORD: ${{ env.CI_DB_PASSWORD }}
-          POSTGRES_DB: nook_ci
+          POSTGRES_USER: postgres
+          POSTGRES_DB: postgres
+          # Masked, job-scoped read-only token; bootstrap only, never a test credential.
+          POSTGRES_PASSWORD: ${{ github.token }}
         ports:
-          - 5432:5432
+          - '127.0.0.1:5545:5432'
         options: >-
-          --health-cmd "pg_isready -U nook_ci -d nook_ci"
+          --health-cmd "pg_isready -U postgres -d postgres"
           --health-interval 5s
           --health-timeout 5s
           --health-retries 20
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
@@ -76,16 +94,9 @@ jobs:
           cache: npm
       - name: Install locked dependencies
         run: npm ci
-      - name: Verify Phase 2 scope
-        run: npm run verify:scope
       - name: Verify migration contents
         run: npm run verify:migration
-      - name: Apply migrations to empty PostgreSQL
+      - name: Provision and test full profile
         env:
-          DATABASE_URL: postgresql://nook_ci:${{ env.CI_DB_PASSWORD }}@localhost:5432/nook_ci?schema=public
-        run: npx prisma migrate deploy
-      - name: Run mandatory database integration tests
-        env:
-          DATABASE_URL: postgresql://nook_ci:${{ env.CI_DB_PASSWORD }}@localhost:5432/nook_ci?schema=public
-          NOOK_DATABASE_TESTS_REQUIRED: '1'
-        run: npm run test:database --workspace @nook/api
+          CI_BOOTSTRAP_PASSWORD: ${{ github.token }}
+        run: node --import tsx scripts/ci/integration.js full
