@@ -4,16 +4,18 @@ import {
   NotFoundException,
   ForbiddenException,
   BadRequestException,
+  ConflictException,
 } from '@nestjs/common';
 import { PrismaService } from '../database/prisma.service.js';
-import { optionalUuid, parsePagination, requireUuid } from '../common/ids.js';
+import { parsePagination, requireUuid } from '../common/ids.js';
 import { pickResidentFields } from '../resident/resident.fields.js';
 import {
-  CreateEnquiryDto,
-  UpdateEnquiryDto,
-  EnquiryQueryDto,
-  CreateFollowUpDto,
-} from './enquiry.dto.js';
+  parseConvertBody,
+  parseCreateEnquiry,
+  parseEnquiryQuery,
+  parseFollowUp,
+  parseUpdateEnquiry,
+} from './enquiry.input.js';
 import { Prisma } from '../generated/client.js';
 
 @Injectable()
@@ -45,21 +47,22 @@ export class EnquiryService {
     return userId;
   }
 
-  async create(organizationId: string, dto: CreateEnquiryDto) {
+  async create(organizationId: string, body: unknown) {
+    const dto = parseCreateEnquiry(body);
     const assignedUserId = await this.resolveAssignee(organizationId, dto.assignedUserId);
-    const preferredPropertyId = optionalUuid(dto.preferredPropertyId, 'preferredPropertyId');
+    const preferredPropertyId = dto.preferredPropertyId;
     await this.assertOwnProperty(organizationId, preferredPropertyId);
     const data: Prisma.EnquiryCreateInput = {
       firstName: dto.firstName,
       lastName: dto.lastName,
       phone: dto.phone,
-      email: dto.email ?? null,
-      preferredRoomType: dto.preferredRoomType ?? null,
-      expectedMoveInDate: dto.expectedMoveInDate ? new Date(dto.expectedMoveInDate) : null,
-      expectedDurationOfStay: dto.expectedDurationOfStay ?? null,
-      numberOfOccupants: dto.numberOfOccupants ?? null,
-      source: dto.source ?? 'OTHER',
-      notes: dto.notes ?? null,
+      email: dto.email,
+      preferredRoomType: dto.preferredRoomType,
+      expectedMoveInDate: dto.expectedMoveInDate,
+      expectedDurationOfStay: dto.expectedDurationOfStay,
+      numberOfOccupants: dto.numberOfOccupants,
+      source: dto.source,
+      notes: dto.notes,
       status: 'NEW',
       organization: { connect: { id: organizationId } },
       assignedUserId,
@@ -70,7 +73,7 @@ export class EnquiryService {
     return this.prisma.db.enquiry.create({ data });
   }
 
-  async findAll(organizationId: string, query: EnquiryQueryDto) {
+  async findAll(organizationId: string, rawQuery: unknown) {
     const {
       search,
       status,
@@ -80,7 +83,7 @@ export class EnquiryService {
       toDate,
       page: rawPage,
       limit: rawLimit,
-    } = query;
+    } = parseEnquiryQuery(rawQuery);
     const { page, limit } = parsePagination(rawPage, rawLimit);
     const where: Prisma.EnquiryWhereInput = { organizationId };
 
@@ -97,8 +100,8 @@ export class EnquiryService {
     if (propertyId) where.propertyId = propertyId;
     if (fromDate || toDate) {
       where.createdAt = {};
-      if (fromDate) where.createdAt.gte = new Date(fromDate);
-      if (toDate) where.createdAt.lte = new Date(toDate);
+      if (fromDate) where.createdAt.gte = fromDate;
+      if (toDate) where.createdAt.lte = toDate;
     }
 
     const [items, total] = await Promise.all([
@@ -124,27 +127,28 @@ export class EnquiryService {
     return enquiry;
   }
 
-  async update(organizationId: string, id: string, dto: UpdateEnquiryDto) {
-    await this.findOne(organizationId, id);
-    const preferredPropertyId =
-      dto.preferredPropertyId === undefined
-        ? undefined
-        : optionalUuid(dto.preferredPropertyId, 'preferredPropertyId');
+  async update(organizationId: string, id: string, body: unknown) {
+    const dto = parseUpdateEnquiry(body);
+    const existing = await this.findOne(organizationId, id);
+    // A converted enquiry is tied to its resident; moving it back to an open status would contradict that link.
+    if (dto.status !== undefined && existing.status === 'CONVERTED') {
+      throw new ConflictException('A converted enquiry cannot change status');
+    }
+    const preferredPropertyId = dto.preferredPropertyId;
     if (preferredPropertyId) await this.assertOwnProperty(organizationId, preferredPropertyId);
     const data: Prisma.EnquiryUpdateInput = {};
     if (dto.firstName !== undefined) data.firstName = dto.firstName;
     if (dto.lastName !== undefined) data.lastName = dto.lastName;
     if (dto.phone !== undefined) data.phone = dto.phone;
-    if (dto.email !== undefined) data.email = dto.email ?? null;
-    if (dto.preferredRoomType !== undefined) data.preferredRoomType = dto.preferredRoomType ?? null;
-    if (dto.expectedMoveInDate !== undefined)
-      data.expectedMoveInDate = dto.expectedMoveInDate ? new Date(dto.expectedMoveInDate) : null;
+    if (dto.email !== undefined) data.email = dto.email;
+    if (dto.preferredRoomType !== undefined) data.preferredRoomType = dto.preferredRoomType;
+    if (dto.expectedMoveInDate !== undefined) data.expectedMoveInDate = dto.expectedMoveInDate;
     if (dto.expectedDurationOfStay !== undefined)
-      data.expectedDurationOfStay = dto.expectedDurationOfStay ?? null;
-    if (dto.numberOfOccupants !== undefined) data.numberOfOccupants = dto.numberOfOccupants ?? null;
-    if (dto.source !== undefined) data.source = dto.source as any;
-    if (dto.notes !== undefined) data.notes = dto.notes ?? null;
-    if (dto.status !== undefined) data.status = dto.status as any;
+      data.expectedDurationOfStay = dto.expectedDurationOfStay;
+    if (dto.numberOfOccupants !== undefined) data.numberOfOccupants = dto.numberOfOccupants;
+    if (dto.source !== undefined) data.source = dto.source;
+    if (dto.notes !== undefined) data.notes = dto.notes;
+    if (dto.status !== undefined) data.status = dto.status;
     if (preferredPropertyId !== undefined) {
       if (preferredPropertyId) data.property = { connect: { id: preferredPropertyId } };
       else data.property = { disconnect: true };
@@ -163,18 +167,14 @@ export class EnquiryService {
     });
   }
 
-  async addFollowUp(
-    organizationId: string,
-    enquiryId: string,
-    userId: string,
-    dto: CreateFollowUpDto,
-  ) {
+  async addFollowUp(organizationId: string, enquiryId: string, userId: string, body: unknown) {
+    const dto = parseFollowUp(body);
     await this.findOne(organizationId, enquiryId);
     return this.prisma.db.enquiryFollowUp.create({
       data: {
         notes: dto.notes,
-        followUpAt: new Date(dto.followUpAt),
-        outcome: dto.outcome ?? null,
+        followUpAt: dto.followUpAt,
+        outcome: dto.outcome,
         enquiry: { connect: { id: enquiryId } },
         user: { connect: { id: userId } },
       },
@@ -193,10 +193,8 @@ export class EnquiryService {
   async convert(organizationId: string, enquiryId: string, residentData: any) {
     requireUuid(enquiryId, 'enquiryId');
     // Optional overrides for the new resident: allow-listed fields only (no organizationId, no id).
-    const overrides =
-      residentData && Object.keys(residentData).length > 0
-        ? pickResidentFieldsLoose(residentData)
-        : {};
+    const body = parseConvertBody(residentData);
+    const overrides = Object.keys(body).length > 0 ? pickResidentFieldsLoose(body) : {};
     return this.prisma.db.$transaction(async (tx) => {
       // Serialize concurrent conversions of the same enquiry: the second waits here, then sees it converted.
       await tx.$queryRaw`SELECT id FROM enquiries WHERE id = ${enquiryId}::uuid AND organization_id = ${organizationId}::uuid FOR UPDATE`;

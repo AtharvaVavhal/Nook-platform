@@ -5,6 +5,7 @@ import {
   assertCanCheckIn,
   assertCanCheckOut,
   optionalText,
+  isOverstay,
   resolveInstant,
   type CheckInFacts,
 } from '../src/checkin/checkin.rules.js';
@@ -99,4 +100,15 @@ test('optional text is trimmed, empty becomes null, and over-long input is a 400
   assert.equal(optionalText('  moved out ', 'reason', 20), 'moved out');
   assert.throws(() => optionalText('x'.repeat(11), 'reason', 10), BadRequestException);
   assert.throws(() => optionalText(5, 'reason', 10), BadRequestException);
+});
+
+test('overstay: a checked-in resident is past the booking from the exclusive end date (Asia/Kolkata)', () => {
+  const end = new Date('2026-11-01T00:00:00Z');
+  assert.equal(isOverstay(end, new Date('2026-10-31T18:29:00Z')), false); // 31 Oct in India
+  assert.equal(isOverstay(end, new Date('2026-10-31T18:30:00Z')), true); // 1 Nov in India
+  assert.equal(isOverstay(end, new Date('2026-11-15T05:00:00Z')), true);
+  assert.equal(
+    isOverstay(new Date('2027-01-01T00:00:00Z'), new Date('2026-12-31T05:00:00Z')),
+    false,
+  );
 });

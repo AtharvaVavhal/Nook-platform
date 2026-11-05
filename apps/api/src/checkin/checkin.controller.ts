@@ -1,4 +1,15 @@
-import { Body, Controller, Get, Param, Post, Put, Query, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Post,
+  Put,
+  Query,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { Inject } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { CsrfGuard, OriginGuard, SessionGuard } from '../auth/auth.guards.js';
@@ -35,7 +46,7 @@ export class CheckInController {
 
   @Get(':id')
   @ApiOperation({ summary: 'Get a check-in by id' })
-  async findOne(@Req() req: AuthenticatedRequest, @Param('id') id: string) {
+  async findOne(@Req() req: AuthenticatedRequest, @Param('id', ParseUUIDPipe) id: string) {
     const organizationId = req.auth!.organizationId;
     return this.checkInService.findOne(organizationId, id);
   }
@@ -47,7 +58,7 @@ export class CheckInController {
   })
   async update(
     @Req() req: AuthenticatedRequest,
-    @Param('id') id: string,
+    @Param('id', ParseUUIDPipe) id: string,
     @Body() dto: Record<string, unknown>,
   ) {
     const organizationId = req.auth!.organizationId;
@@ -59,7 +70,7 @@ export class CheckInController {
   @ApiOperation({ summary: 'Check out a resident' })
   async checkOut(
     @Req() req: AuthenticatedRequest,
-    @Param('id') id: string,
+    @Param('id', ParseUUIDPipe) id: string,
     @Body() dto: Record<string, unknown>,
   ) {
     const organizationId = req.auth!.organizationId;

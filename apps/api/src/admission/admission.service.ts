@@ -10,6 +10,12 @@ import { PrismaService } from '../database/prisma.service.js';
 import { AdmissionStatus } from '../generated/enums.js';
 import { assertMatchesParent, optionalUuid, requireUuid, parsePagination } from '../common/ids.js';
 import { Prisma } from '../generated/client.js';
+import { periodContains } from '../booking/booking.input.js';
+import {
+  parseAdmissionQuery,
+  parseCreateAdmission,
+  parseUpdateAdmission,
+} from './admission.input.js';
 
 @Injectable()
 export class AdmissionService {
@@ -47,10 +53,11 @@ export class AdmissionService {
     return { propertyId, roomId: requestedRoom };
   }
 
-  async create(organizationId: string, dto: any) {
-    const bookingId = requireUuid(dto.bookingId, 'bookingId');
-    const requestedProperty = optionalUuid(dto.propertyId, 'propertyId');
-    const requestedRoom = optionalUuid(dto.roomId, 'roomId');
+  async create(organizationId: string, body: unknown) {
+    const dto = parseCreateAdmission(body);
+    const bookingId = dto.bookingId;
+    const requestedProperty = dto.propertyId;
+    const requestedRoom = dto.roomId;
     // Verify booking exists, is CONFIRMED, belongs to org, and has no admission yet
     const booking = await this.prisma.db.booking.findFirst({
       where: { id: bookingId, organizationId, status: 'CONFIRMED' },
@@ -63,6 +70,10 @@ export class AdmissionService {
     if (existingAdmission) throw new ConflictException('Booking already has an admission');
     if (booking.status !== 'CONFIRMED')
       throw new BadRequestException('Only confirmed bookings can be admitted');
+
+    // The admission date must fall inside the booked period (the end is exclusive): an admission outside it would
+    // either precede the reservation or start a stay the booking does not cover.
+    assertWithinBooking(dto.admissionDate, booking);
 
     // The booking is authoritative for who and which bed; the request may only repeat it.
     assertMatchesParent(dto.residentId, booking.residentId, 'residentId', 'booking');
@@ -77,8 +88,8 @@ export class AdmissionService {
     );
 
     const data: any = {
-      admissionDate: new Date(dto.admissionDate),
-      notes: dto.notes ?? null,
+      admissionDate: dto.admissionDate,
+      notes: dto.notes,
       status: 'PENDING',
       organization: { connect: { id: organizationId } },
       booking: { connect: { id: bookingId } },
@@ -98,7 +109,7 @@ export class AdmissionService {
     });
   }
 
-  async findAll(organizationId: string, query: any) {
+  async findAll(organizationId: string, rawQuery: unknown) {
     const {
       search,
       status,
@@ -108,7 +119,7 @@ export class AdmissionService {
       toDate,
       page: rawPage,
       limit: rawLimit,
-    } = query;
+    } = parseAdmissionQuery(rawQuery);
     const { page, limit } = parsePagination(rawPage, rawLimit);
     const where: any = { organizationId };
     if (status) where.status = status;
@@ -116,8 +127,8 @@ export class AdmissionService {
     if (bookingId) where.bookingId = bookingId;
     if (fromDate || toDate) {
       where.admissionDate = {};
-      if (fromDate) where.admissionDate.gte = new Date(fromDate);
-      if (toDate) where.admissionDate.lte = new Date(toDate);
+      if (fromDate) where.admissionDate.gte = fromDate;
+      if (toDate) where.admissionDate.lte = toDate;
     }
 
     const [items, total] = await Promise.all([
@@ -155,7 +166,8 @@ export class AdmissionService {
     return admission;
   }
 
-  async update(organizationId: string, id: string, dto: any) {
+  async update(organizationId: string, id: string, body: unknown) {
+    const dto = parseUpdateAdmission(body);
     const existing = await this.findOne(organizationId, id);
     // Who and which bed are fixed by the booking: an update may repeat them but never change them.
     assertMatchesParent(dto.residentId, existing.residentId, 'residentId', 'admission');
@@ -164,28 +176,19 @@ export class AdmissionService {
 
     const data: any = {};
     if (dto.admissionDate !== undefined) {
-      const date = new Date(dto.admissionDate);
-      if (Number.isNaN(date.getTime()))
-        throw new BadRequestException('admissionDate must be a valid date');
-      data.admissionDate = date;
+      assertWithinBooking(dto.admissionDate, existing.booking);
+      data.admissionDate = dto.admissionDate;
     }
-    if (dto.notes !== undefined) data.notes = dto.notes ?? null;
-    if (dto.status !== undefined) {
-      if (!Object.values(AdmissionStatus).includes(dto.status)) {
-        throw new BadRequestException(
-          `status must be one of ${Object.values(AdmissionStatus).join(', ')}`,
-        );
-      }
-      data.status = dto.status;
-    }
+    if (dto.notes !== undefined) data.notes = dto.notes;
+    if (dto.status !== undefined) data.status = dto.status;
 
     // Location changes get exactly the validation create gets: same organization, room within property.
     if (dto.propertyId !== undefined || dto.roomId !== undefined) {
       const roomTouched = dto.roomId !== undefined;
-      const requestedRoom = roomTouched ? optionalUuid(dto.roomId, 'roomId') : existing.roomId;
+      const requestedRoom = roomTouched ? (dto.roomId ?? null) : existing.roomId;
       const requestedProperty =
         dto.propertyId !== undefined
-          ? optionalUuid(dto.propertyId, 'propertyId')
+          ? (dto.propertyId ?? null)
           : roomTouched
             ? null // a new room decides its own property
             : existing.propertyId;
@@ -204,13 +207,21 @@ export class AdmissionService {
     // refused, or this lands first and the check-in is refused.
     return this.prisma.db.$transaction(async (tx) => {
       await tx.$queryRaw`SELECT id FROM admissions WHERE id = ${id}::uuid AND organization_id = ${organizationId}::uuid FOR UPDATE`;
-      const active = await tx.checkIn.findFirst({
-        where: { admissionId: id, organizationId, status: 'ACTIVE' },
-        select: { id: true },
+      const stay = await tx.checkIn.findFirst({
+        where: {
+          admissionId: id,
+          organizationId,
+          // Cancelling is refused once any check-in is on record (even after check-out) so occupied
+          // periods stay in billing history; other status moves only matter while a stay is open.
+          ...(data.status === 'CANCELLED' ? {} : { status: 'ACTIVE' as const }),
+        },
+        select: { id: true, status: true },
       });
-      if (active) {
+      if (stay) {
         throw new ConflictException(
-          'This admission has an active check-in. Check the resident out before changing its status.',
+          stay.status === 'ACTIVE'
+            ? 'This admission has an active check-in. Check the resident out before changing its status.'
+            : 'This admission has check-in history and can no longer be cancelled.',
         );
       }
       return tx.admission.update({ where: { id }, data });
@@ -219,5 +230,17 @@ export class AdmissionService {
 
   async cancel(organizationId: string, id: string) {
     return this.update(organizationId, id, { status: 'CANCELLED' });
+  }
+}
+
+/** An admission date must lie inside its booking's period, compared as Asia/Kolkata calendar days. */
+function assertWithinBooking(
+  admissionDate: Date,
+  booking: { startDate: Date; endDate: Date },
+): void {
+  if (!periodContains(booking.startDate, booking.endDate, admissionDate)) {
+    throw new BadRequestException(
+      'admissionDate must fall within the booking period (from the start date up to, not including, the end date)',
+    );
   }
 }

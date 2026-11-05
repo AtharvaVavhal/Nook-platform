@@ -1,4 +1,3 @@
-import { randomUUID } from 'node:crypto';
 import { Inject, Injectable } from '@nestjs/common';
 import { PrismaService } from '../database/prisma.service.js';
 import type {
@@ -7,6 +6,7 @@ import type {
   AuthUserRecord,
   SessionRecord,
 } from './auth.types.js';
+import { auditRequestId } from '../observability/request-context.js';
 
 export const AUTH_REPOSITORY = Symbol('AUTH_REPOSITORY');
 
@@ -100,7 +100,7 @@ export class PrismaAuthRepository implements AuthRepository {
           action: 'auth.password.changed',
           targetType: 'user',
           targetId: input.userId,
-          requestId: randomUUID(),
+          requestId: auditRequestId(),
           metadata: { revokedOtherSessions: revoked.count },
         },
       });

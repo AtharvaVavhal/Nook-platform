@@ -5,30 +5,17 @@ import { BadRequestException, ConflictException } from '@nestjs/common';
  * service) and either return or throw, so they can be unit-tested without a database.
  */
 
-/** Asia/Kolkata is a fixed UTC+05:30 offset (India has no daylight saving time). */
-const IST_OFFSET = '+05:30';
-const HAS_ZONE = /(Z|[+-]\d{2}:?\d{2})$/i;
-const DATE_ONLY = /^\d{4}-\d{2}-\d{2}$/;
-const LOCAL_DATE_TIME = /^\d{4}-\d{2}-\d{2}[T ]\d{2}:\d{2}(:\d{2}(\.\d{1,3})?)?$/;
+import { istDateOf } from '../common/time.js';
+
+export { resolveInstant } from '../common/time.js';
 
 /**
- * Parses a client timestamp into an instant. A value with an explicit zone (`Z`, `+05:30`) is taken
- * as given. A zone-less value (what a `datetime-local` input produces) or a bare date is read as
- * Asia/Kolkata wall-clock time, never as the server's own time zone. With no value the default is "now".
+ * Whether a resident who is still checked in is past the approved booking period. The booking end is
+ * exclusive, so on the end date itself (Asia/Kolkata) the stay is already beyond what was booked.
+ * Overstay days are never billed unless an extension is approved.
  */
-export function resolveInstant(raw: unknown, field: string, now: Date = new Date()): Date {
-  if (raw === undefined || raw === null || raw === '') return now;
-  if (typeof raw !== 'string') throw new BadRequestException(`${field} must be a date-time string`);
-  const text = raw.trim();
-  let iso: string;
-  if (HAS_ZONE.test(text) && /^\d{4}-\d{2}-\d{2}[T ]\d{2}:\d{2}/.test(text)) iso = text;
-  else if (LOCAL_DATE_TIME.test(text)) iso = `${text.replace(' ', 'T')}${IST_OFFSET}`;
-  else if (DATE_ONLY.test(text)) iso = `${text}T00:00:00${IST_OFFSET}`;
-  else throw new BadRequestException(`${field} must be a valid date-time`);
-  const date = new Date(iso);
-  if (Number.isNaN(date.getTime()))
-    throw new BadRequestException(`${field} must be a valid date-time`);
-  return date;
+export function isOverstay(bookingEndDate: Date, now: Date = new Date()): boolean {
+  return istDateOf(bookingEndDate).getTime() <= istDateOf(now).getTime();
 }
 
 export const MAX_REASON_LENGTH = 500;

@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseUUIDPipe,
   Post,
   Put,
   Query,
@@ -15,7 +16,7 @@ import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { CsrfGuard, OriginGuard, SessionGuard } from '../auth/auth.guards.js';
 import type { AuthenticatedRequest } from '../auth/auth.types.js';
 import { ResidentService } from './resident.service.js';
-import { CreateResidentDto, UpdateResidentDto, ResidentQueryDto } from './resident.dto.js';
+import { CreateResidentDto, UpdateResidentDto } from './resident.dto.js';
 
 @ApiTags('Residents')
 @ApiBearerAuth()
@@ -34,14 +35,14 @@ export class ResidentController {
 
   @Get()
   @ApiOperation({ summary: 'List residents with pagination and filters' })
-  async findAll(@Req() req: AuthenticatedRequest, @Query() query: ResidentQueryDto) {
+  async findAll(@Req() req: AuthenticatedRequest, @Query() query: unknown) {
     const organizationId = req.auth!.organizationId;
     return this.residentService.findAll(organizationId, query);
   }
 
   @Get(':id')
   @ApiOperation({ summary: 'Get a resident by id' })
-  async findOne(@Req() req: AuthenticatedRequest, @Param('id') id: string) {
+  async findOne(@Req() req: AuthenticatedRequest, @Param('id', ParseUUIDPipe) id: string) {
     const organizationId = req.auth!.organizationId;
     return this.residentService.findOne(organizationId, id);
   }
@@ -51,7 +52,7 @@ export class ResidentController {
   @ApiOperation({ summary: 'Update a resident' })
   async update(
     @Req() req: AuthenticatedRequest,
-    @Param('id') id: string,
+    @Param('id', ParseUUIDPipe) id: string,
     @Body() dto: UpdateResidentDto,
   ) {
     const organizationId = req.auth!.organizationId;
@@ -61,8 +62,8 @@ export class ResidentController {
   @Delete(':id')
   @UseGuards(OriginGuard, CsrfGuard)
   @ApiOperation({ summary: 'Archive a resident' })
-  async delete(@Req() req: AuthenticatedRequest, @Param('id') id: string) {
+  async delete(@Req() req: AuthenticatedRequest, @Param('id', ParseUUIDPipe) id: string) {
     const organizationId = req.auth!.organizationId;
-    return this.residentService.delete(organizationId, id);
+    return this.residentService.archive(organizationId, id);
   }
 }

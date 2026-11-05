@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any -- supertest response bodies and pg rows are untyped */
+import './helpers/preflight.js';
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { randomUUID } from 'node:crypto';
@@ -126,7 +127,8 @@ async function stay(
   }).expect(201);
   const admission = await send('post', org, '/admissions', {
     bookingId: booking.body.id,
-    admissionDate: '2026-12-01',
+    // an admission date must lie inside the booked period: use the first booked day
+    admissionDate: who.start ?? '2026-12-01',
   }).expect(201);
   if (who.admit !== false) {
     await send('put', org, `/admissions/${admission.body.id}`, { status: 'ADMITTED' }).expect(200);
@@ -370,8 +372,22 @@ test('an admission or booking with an active check-in cannot be cancelled', asyn
   await send('put', org, `/admissions/${s.admissionId}`, { status: 'PENDING' }).expect(409);
   await send('put', org, `/bookings/${s.bookingId}`, { status: 'CANCELLED' }).expect(409);
   await send('post', org, `/check-ins/${ci.body.id}/check-out`, {}).expect(201);
-  // after check-out they may be cancelled again, but nothing did it automatically
-  await send('put', org, `/bookings/${s.bookingId}`, { status: 'CANCELLED' }).expect(200);
+  // once any check-in is on record (even after check-out) they can no longer be cancelled, so the
+  // occupied period stays in billing history
+  const refusedBooking = await send('put', org, `/bookings/${s.bookingId}`, {
+    status: 'CANCELLED',
+  }).expect(409);
+  assert.match(refusedBooking.body.message, /check-in history/i);
+  const refusedAdmission = await send('put', org, `/admissions/${s.admissionId}`, {
+    status: 'CANCELLED',
+  }).expect(409);
+  assert.match(refusedAdmission.body.message, /check-in history/i);
+  const [row] = await sql(
+    `SELECT a.status AS admission, b.status AS booking FROM admissions a JOIN bookings b ON b.id=a.booking_id WHERE a.id=$1`,
+    [s.admissionId],
+  );
+  assert.equal(row.booking, 'CONFIRMED');
+  assert.equal(row.admission, 'ADMITTED');
 });
 
 // ─────────────────────────── concurrency ───────────────────────────
@@ -497,4 +513,156 @@ test('concurrency: check-out racing a check-in of the next admission for the sam
   assert.ok(
     (await n(`SELECT count(*) n FROM check_ins WHERE bed_id=$1 AND status='ACTIVE'`, [bedId])) <= 1,
   );
+});
+
+test('occupancy: a resident still checked in past the booking end date is listed as an overstay until the booking is extended', async () => {
+  const org = await newOrg();
+  const over = await stay(org, { start: '2026-09-01', end: '2026-10-20' }); // ended in the past
+  const fine = await stay(org);
+  await checkIn(org, over).expect(201);
+  await checkIn(org, fine).expect(201);
+  const before = (await send('get', org, '/check-ins/occupancy').expect(200)).body;
+  assert.equal(before.activeCheckIns, 2);
+  assert.equal(before.overstayCount, 1);
+  assert.equal(before.overstays[0].bookingId, over.bookingId);
+  assert.equal(before.overstays[0].bedId, over.bedId);
+
+  await send('post', org, `/bookings/${over.bookingId}/extend`, {
+    newEndDate: '2099-01-01',
+    reason: 'Resident stayed on',
+  }).expect(201);
+  const after = (await send('get', org, '/check-ins/occupancy').expect(200)).body;
+  assert.equal(after.overstayCount, 0);
+});
+
+// ------------------------------------------------ resident archival vs active check-in (4F follow-up)
+
+const residentStatus = async (residentId: string) =>
+  (await sql(`SELECT status FROM residents WHERE id = $1`, [residentId]))[0].status as string;
+
+test('resident archival: DELETE and PUT are refused with 409 while the resident is checked in', async () => {
+  const org = await newOrg();
+  const s = await stay(org);
+  const ci = await checkIn(org, s).expect(201);
+
+  const del = await send('delete', org, `/residents/${s.residentId}`).expect(409);
+  assert.match(del.body.message, /currently checked in/i);
+  const put = await send('put', org, `/residents/${s.residentId}`, { status: 'ARCHIVED' }).expect(
+    409,
+  );
+  assert.match(put.body.message, /currently checked in/i);
+  // a PUT that archives AND edits is refused as a whole: nothing is applied
+  await send('put', org, `/residents/${s.residentId}`, {
+    status: 'ARCHIVED',
+    firstName: 'ShouldNotApply',
+  }).expect(409);
+  const unchanged = await send('get', org, `/residents/${s.residentId}`).expect(200);
+  assert.equal(unchanged.body.status, 'ACTIVE');
+  assert.notEqual(unchanged.body.firstName, 'ShouldNotApply');
+
+  // everything else about the resident is still editable while checked in
+  await send('put', org, `/residents/${s.residentId}`, { firstName: 'Renamed' }).expect(200);
+  await send('put', org, `/residents/${s.residentId}`, { status: 'INACTIVE' }).expect(200);
+  await send('put', org, `/residents/${s.residentId}`, { status: 'ACTIVE' }).expect(200);
+
+  // after check-out the resident can be archived through either route
+  await send('post', org, `/check-ins/${ci.body.id}/check-out`, {}).expect(201);
+  const archived = await send('delete', org, `/residents/${s.residentId}`).expect(200);
+  assert.equal(archived.body.status, 'ARCHIVED');
+  assert.equal(await residentStatus(s.residentId), 'ARCHIVED');
+});
+
+test('resident archival: PUT archives a resident who is not checked in, and archiving is idempotent', async () => {
+  const org = await newOrg();
+  const s = await stay(org);
+  const res = await send('put', org, `/residents/${s.residentId}`, {
+    status: 'ARCHIVED',
+    lastName: 'Edited',
+  }).expect(200);
+  assert.equal(res.body.status, 'ARCHIVED');
+  assert.equal(res.body.lastName, 'Edited', 'other fields in the same request are applied');
+  await send('delete', org, `/residents/${s.residentId}`).expect(200);
+  await send('put', org, `/residents/${s.residentId}`, { status: 'ARCHIVED' }).expect(200);
+  // unknown resident and another organization's resident stay 404
+  const other = await newOrg();
+  await send('delete', other, `/residents/${s.residentId}`).expect(404);
+  await send('put', other, `/residents/${s.residentId}`, { status: 'ARCHIVED' }).expect(404);
+});
+
+test('resident archival: an archived resident cannot be checked in', async () => {
+  const org = await newOrg();
+  const s = await stay(org);
+  await send('delete', org, `/residents/${s.residentId}`).expect(200);
+  const res = await checkIn(org, s).expect(409);
+  assert.match(res.body.message, /archived/i);
+  assert.equal(
+    await n(`SELECT count(*) n FROM check_ins WHERE organization_id = $1`, [org.orgId]),
+    0,
+  );
+});
+
+test('resident archival: history survives archiving, and a restored resident can be checked in again', async () => {
+  const org = await newOrg();
+  const s = await stay(org);
+  const ci = await checkIn(org, s).expect(201);
+  await send('post', org, `/check-ins/${ci.body.id}/check-out`, {}).expect(201);
+  await send('delete', org, `/residents/${s.residentId}`).expect(200);
+  // the stay is still there, checked out, and the booking and admission are untouched
+  const [row] = await sql(
+    `SELECT c.status AS ci, (SELECT status FROM bookings WHERE id = $2) AS booking,
+            (SELECT count(*)::int FROM check_ins WHERE resident_id = $1) AS stays
+       FROM check_ins c WHERE c.id = $3`,
+    [s.residentId, s.bookingId, ci.body.id],
+  );
+  assert.equal(row.ci, 'CHECKED_OUT');
+  assert.equal(row.stays, 1);
+  // restoring a resident lifts the check-in refusal (the rule follows the resident's status)
+  const fresh = await stay(org);
+  await send('delete', org, `/residents/${fresh.residentId}`).expect(200);
+  await checkIn(org, fresh).expect(409);
+  await send('put', org, `/residents/${fresh.residentId}`, { status: 'ACTIVE' }).expect(200);
+  await checkIn(org, fresh).expect(201);
+});
+
+async function raceArchival(via: 'delete' | 'put', rounds: number) {
+  const outcomes = new Set<string>();
+  for (let i = 0; i < rounds; i += 1) {
+    const org = await newOrg();
+    const s = await stay(org);
+    const archive = () =>
+      via === 'delete'
+        ? send('delete', org, `/residents/${s.residentId}`)
+        : send('put', org, `/residents/${s.residentId}`, { status: 'ARCHIVED' });
+    const pair = i % 2 === 0 ? [checkIn(org, s), archive()] : [archive(), checkIn(org, s)];
+    const results = await Promise.all(pair);
+    const ci = results.find((r) => r.req.path.includes('check-ins'))!;
+    const ar = results.find((r) => r.req.path.includes('residents'))!;
+    assert.ok([201, 409].includes(ci.status), `check-in answered ${ci.status}`);
+    assert.ok([200, 409].includes(ar.status), `archive answered ${ar.status}`);
+    // exactly one of them wins
+    assert.equal(
+      (ci.status === 201 ? 1 : 0) + (ar.status === 200 ? 1 : 0),
+      1,
+      JSON.stringify([ci.status, ar.status]),
+    );
+    // the invariant, read from the database: an ARCHIVED resident never has an ACTIVE check-in
+    const [row] = await sql(
+      `SELECT r.status AS resident, (SELECT count(*)::int FROM check_ins c WHERE c.resident_id = r.id AND c.status = 'ACTIVE') AS active
+         FROM residents r WHERE r.id = $1`,
+      [s.residentId],
+    );
+    assert.ok(!(row.resident === 'ARCHIVED' && row.active > 0), JSON.stringify(row));
+    outcomes.add(ci.status === 201 ? 'check-in won' : 'archive won');
+  }
+  return outcomes;
+}
+
+test('concurrency: DELETE racing a check-in never leaves an active stay on an archived resident', async () => {
+  const outcomes = await raceArchival('delete', 12);
+  assert.ok(outcomes.size >= 1);
+});
+
+test('concurrency: PUT status ARCHIVED racing a check-in never leaves an active stay on an archived resident', async () => {
+  const outcomes = await raceArchival('put', 12);
+  assert.ok(outcomes.size >= 1);
 });

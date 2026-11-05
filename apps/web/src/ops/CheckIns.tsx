@@ -3,7 +3,15 @@ import { EmptyState, ErrorState, LoadingState, Pager, useAsync } from '../financ
 import { Field, FormError, PageHead, Tag, useGuardedAction } from './ui';
 import { opsApi, type CheckIn } from './opsApi';
 import { opsLinks } from './opsRoute';
-import { bedLabel, dateOnly, dateTimeIst, label, nowIst, personName } from './opsFormat';
+import {
+  bedLabel,
+  dateOnly,
+  dateTimeIst,
+  isPastBookingEnd,
+  label,
+  nowIst,
+  personName,
+} from './opsFormat';
 
 // Check-in / check-out screens. All times are shown in Asia/Kolkata. A time typed into a form is sent
 // without a zone and the server reads it as Asia/Kolkata, so the browser's own time zone never matters.
@@ -41,6 +49,23 @@ export function CheckInList() {
           {occupancy.data.occupiedBeds} of {occupancy.data.totalBeds} beds occupied. Occupancy is
           counted from active check-ins.
         </p>
+      ) : null}
+      {occupancy.data && occupancy.data.overstayCount > 0 ? (
+        <div className="fin-warning" role="alert">
+          <strong>
+            {occupancy.data.overstayCount} resident{occupancy.data.overstayCount === 1 ? '' : 's'}{' '}
+            checked in past the booking end date.
+          </strong>{' '}
+          These days are not billed unless the booking is extended with a reason.
+          <ul>
+            {occupancy.data.overstays.map((o) => (
+              <li key={o.checkInId}>
+                <a href={opsLinks.checkIn(o.checkInId)}>{o.residentName}</a> · booking ended{' '}
+                {dateOnly(o.bookingEndDate)}
+              </li>
+            ))}
+          </ul>
+        </div>
       ) : null}
       <form
         className="fin-toolbar"
@@ -113,6 +138,9 @@ export function CheckInList() {
                   <td>{c.checkOut ? dateTimeIst(c.checkOut.checkOutAt) : '—'}</td>
                   <td>
                     <Tag>{c.status === 'ACTIVE' ? 'Checked in' : 'Checked out'}</Tag>
+                    {c.status === 'ACTIVE' && c.booking && isPastBookingEnd(c.booking.endDate) ? (
+                      <Tag>Past booking end</Tag>
+                    ) : null}
                   </td>
                 </tr>
               ))}
@@ -300,6 +328,17 @@ export function CheckInDetail({ id }: { id: string }) {
         <dd>{c.notes ?? '—'}</dd>
       </dl>
 
+      {c.status === 'ACTIVE' && c.booking && isPastBookingEnd(c.booking.endDate) ? (
+        <ExtendBookingForm
+          bookingId={c.booking.id}
+          currentEnd={c.booking.endDate}
+          onDone={() => {
+            setNotice('Booking extended. The extension is recorded with your name and the reason.');
+            reload();
+          }}
+        />
+      ) : null}
+
       {c.status === 'ACTIVE' ? (
         <form className="ops-form ops-section" onSubmit={(e) => void submitCheckOut(e)} noValidate>
           <h3>Check out</h3>
@@ -341,5 +380,70 @@ export function CheckInDetail({ id }: { id: string }) {
         </form>
       ) : null}
     </section>
+  );
+}
+
+/** Approves an extension of the booking behind an overstay. Without it, days past the end are not billed. */
+function ExtendBookingForm({
+  bookingId,
+  currentEnd,
+  onDone,
+}: {
+  bookingId: string;
+  currentEnd: string;
+  onDone: () => void;
+}) {
+  const [newEndDate, setNewEndDate] = useState('');
+  const [reason, setReason] = useState('');
+  const [errors, setErrors] = useState<{ newEndDate?: string; reason?: string }>({});
+  const action = useGuardedAction();
+
+  async function submit(e: FormEvent) {
+    e.preventDefault();
+    const next: { newEndDate?: string; reason?: string } = {};
+    if (!newEndDate) next.newEndDate = 'Choose the new end date.';
+    else if (newEndDate <= currentEnd.slice(0, 10)) {
+      next.newEndDate = 'The new end date must be later than the current end date.';
+    }
+    if (reason.trim().length < 3) next.reason = 'Enter a reason (at least 3 characters).';
+    setErrors(next);
+    if (next.newEndDate || next.reason) return;
+    await action.run(async () => {
+      await opsApi.bookings.extend(bookingId, { newEndDate, reason: reason.trim() });
+      onDone();
+    });
+  }
+
+  return (
+    <form className="ops-form ops-section" onSubmit={(e) => void submit(e)} noValidate>
+      <h3>Past the booking end date</h3>
+      <p className="fin-lede" role="status">
+        This booking ended on {dateOnly(currentEnd)}. The resident is still checked in, but days
+        after the booking end are not billed unless you extend the booking. An extension needs a
+        reason and is recorded with your name.
+      </p>
+      <div className="ops-grid">
+        <Field label="New end date (the first day not booked)" error={errors.newEndDate}>
+          <input
+            type="date"
+            value={newEndDate}
+            min={currentEnd.slice(0, 10)}
+            onChange={(e) => setNewEndDate(e.target.value)}
+          />
+        </Field>
+        <Field label="Reason" error={errors.reason}>
+          <input
+            value={reason}
+            maxLength={500}
+            onChange={(e) => setReason(e.target.value)}
+            placeholder="For example: stayed on for exams"
+          />
+        </Field>
+      </div>
+      <FormError message={action.error} />
+      <button type="submit" className="primary-button" disabled={action.busy}>
+        {action.busy ? 'Extending…' : 'Extend booking'}
+      </button>
+    </form>
   );
 }

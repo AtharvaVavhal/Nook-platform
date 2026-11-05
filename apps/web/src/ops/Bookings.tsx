@@ -3,7 +3,15 @@ import { EmptyState, ErrorState, LoadingState, Pager, useAsync } from '../financ
 import { Field, FormError, PageHead, Tag, useGuardedAction } from './ui';
 import { opsApi, type Bed, type Resident } from './opsApi';
 import { opsLinks } from './opsRoute';
-import { bedLabel, dateOnly, isMoney, label, personName, todayDate } from './opsFormat';
+import {
+  MAX_MONTHLY_PRICE_LABEL,
+  bedLabel,
+  dateOnly,
+  isMonthlyPrice,
+  label,
+  personName,
+  todayDate,
+} from './opsFormat';
 
 export function BookingList() {
   const [status, setStatus] = useState('');
@@ -153,8 +161,8 @@ export function BookingNew() {
     if (!resident) found.resident = 'Choose the resident.';
     if (!beds) found.beds = 'Find the available beds for these dates first.';
     else if (!bedId) found.beds = 'Choose a bed.';
-    if (!isMoney(price) || Number(price) <= 0)
-      found.price = 'Enter the monthly rent, for example 7500 or 7500.50.';
+    if (!isMonthlyPrice(price))
+      found.price = `Enter the monthly rent, for example 7500 or 7500.50 (up to ${MAX_MONTHLY_PRICE_LABEL}).`;
     setErrors((cur) => ({ ...cur, ...found, start: cur.start ?? '', end: cur.end ?? '' }));
     if (Object.keys(found).length) return;
     await save.run(async () => {

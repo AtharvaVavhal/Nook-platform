@@ -12,6 +12,7 @@ export interface HttpRequest {
 export interface HttpResponse {
   cookie(name: string, value: string, options: Record<string, unknown>): void;
   clearCookie(name: string, options: Record<string, unknown>): void;
+  setHeader(name: string, value: string): void;
 }
 
 export interface AuthenticatedContext {

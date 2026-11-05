@@ -13,6 +13,7 @@ import {
   MAX_REASON_LENGTH,
   assertCanCheckIn,
   assertCanCheckOut,
+  isOverstay,
   optionalText,
   resolveInstant,
 } from './checkin.rules.js';
@@ -117,6 +118,15 @@ export class CheckInService {
           }),
         ]);
 
+        // Read under the resident lock, so it cannot race the guarded archive in ResidentService.
+        const resident = await tx.resident.findFirstOrThrow({
+          where: { id: admission.residentId, organizationId },
+          select: { status: true },
+        });
+        if (resident.status === 'ARCHIVED') {
+          throw new ConflictException('This resident is archived and cannot be checked in');
+        }
+
         assertCanCheckIn({
           admission,
           booking,
@@ -193,9 +203,26 @@ export class CheckInService {
   async occupancy(organizationId: string) {
     const active = await this.prisma.db.checkIn.findMany({
       where: { organizationId, status: 'ACTIVE' },
-      select: { bedId: true },
+      select: {
+        id: true,
+        bedId: true,
+        booking: { select: { id: true, endDate: true } },
+        resident: { select: { firstName: true, lastName: true } },
+      },
     });
     const occupiedBedIds = [...new Set(active.map((row) => row.bedId))];
+    // Residents still checked in past their booking's end date: not billed without an approved extension.
+    const now = new Date();
+    const overstays = active
+      .filter((row) => isOverstay(row.booking.endDate, now))
+      .map((row) => ({
+        checkInId: row.id,
+        bookingId: row.booking.id,
+        bedId: row.bedId,
+        residentName: `${row.resident.firstName} ${row.resident.lastName}`.trim(),
+        bookingEndDate: row.booking.endDate.toISOString(),
+      }))
+      .sort((a, b) => a.bookingEndDate.localeCompare(b.bookingEndDate));
     const totalBeds = await this.prisma.db.bed.count({
       where: { organizationId, archivedAt: null, room: { archivedAt: null } },
     });
@@ -204,6 +231,8 @@ export class CheckInService {
       occupiedBeds: occupiedBedIds.length,
       totalBeds,
       occupiedBedIds,
+      overstayCount: overstays.length,
+      overstays: overstays.slice(0, 50),
     };
   }
 

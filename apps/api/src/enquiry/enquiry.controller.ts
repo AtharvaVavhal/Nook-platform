@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseUUIDPipe,
   Post,
   Put,
   Query,
@@ -15,7 +16,7 @@ import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { CsrfGuard, OriginGuard, SessionGuard } from '../auth/auth.guards.js';
 import type { AuthenticatedRequest } from '../auth/auth.types.js';
 import { EnquiryService } from './enquiry.service.js';
-import { CreateEnquiryDto, UpdateEnquiryDto, EnquiryQueryDto, CreateFollowUpDto } from './enquiry.dto.js';
+import { parseUpcomingDays } from './enquiry.input.js';
 
 @ApiTags('Enquiries')
 @ApiBearerAuth()
@@ -27,21 +28,21 @@ export class EnquiryController {
   @Post()
   @UseGuards(OriginGuard, CsrfGuard)
   @ApiOperation({ summary: 'Create a new enquiry' })
-  async create(@Req() req: AuthenticatedRequest, @Body() dto: any) {
+  async create(@Req() req: AuthenticatedRequest, @Body() dto: unknown) {
     const organizationId = req.auth!.organizationId;
     return this.enquiryService.create(organizationId, dto);
   }
 
   @Get()
   @ApiOperation({ summary: 'List enquiries with pagination and filters' })
-  async findAll(@Req() req: AuthenticatedRequest, @Query() query: any) {
+  async findAll(@Req() req: AuthenticatedRequest, @Query() query: unknown) {
     const organizationId = req.auth!.organizationId;
     return this.enquiryService.findAll(organizationId, query);
   }
 
   @Get(':id')
   @ApiOperation({ summary: 'Get an enquiry by id' })
-  async findOne(@Req() req: AuthenticatedRequest, @Param('id') id: string) {
+  async findOne(@Req() req: AuthenticatedRequest, @Param('id', ParseUUIDPipe) id: string) {
     const organizationId = req.auth!.organizationId;
     return this.enquiryService.findOne(organizationId, id);
   }
@@ -49,7 +50,11 @@ export class EnquiryController {
   @Put(':id')
   @UseGuards(OriginGuard, CsrfGuard)
   @ApiOperation({ summary: 'Update an enquiry' })
-  async update(@Req() req: AuthenticatedRequest, @Param('id') id: string, @Body() dto: any) {
+  async update(
+    @Req() req: AuthenticatedRequest,
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() dto: unknown,
+  ) {
     const organizationId = req.auth!.organizationId;
     return this.enquiryService.update(organizationId, id, dto);
   }
@@ -57,7 +62,7 @@ export class EnquiryController {
   @Delete(':id')
   @UseGuards(OriginGuard, CsrfGuard)
   @ApiOperation({ summary: 'Archive an enquiry' })
-  async archive(@Req() req: AuthenticatedRequest, @Param('id') id: string) {
+  async archive(@Req() req: AuthenticatedRequest, @Param('id', ParseUUIDPipe) id: string) {
     const organizationId = req.auth!.organizationId;
     return this.enquiryService.archive(organizationId, id);
   }
@@ -66,7 +71,11 @@ export class EnquiryController {
   @Post(':id/follow-ups')
   @UseGuards(OriginGuard, CsrfGuard)
   @ApiOperation({ summary: 'Add a follow-up to an enquiry' })
-  async addFollowUp(@Req() req: AuthenticatedRequest, @Param('id') id: string, @Body() dto: any) {
+  async addFollowUp(
+    @Req() req: AuthenticatedRequest,
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() dto: unknown,
+  ) {
     const organizationId = req.auth!.organizationId;
     const userId = req.auth!.userId;
     return this.enquiryService.addFollowUp(organizationId, id, userId, dto);
@@ -74,7 +83,7 @@ export class EnquiryController {
 
   @Get(':id/follow-ups')
   @ApiOperation({ summary: 'Get follow-ups for an enquiry' })
-  async getFollowUps(@Req() req: AuthenticatedRequest, @Param('id') id: string) {
+  async getFollowUps(@Req() req: AuthenticatedRequest, @Param('id', ParseUUIDPipe) id: string) {
     const organizationId = req.auth!.organizationId;
     return this.enquiryService.getFollowUps(organizationId, id);
   }
@@ -83,7 +92,11 @@ export class EnquiryController {
   @Post(':id/convert')
   @UseGuards(OriginGuard, CsrfGuard)
   @ApiOperation({ summary: 'Convert enquiry to resident' })
-  async convert(@Req() req: AuthenticatedRequest, @Param('id') id: string, @Body() residentData: any) {
+  async convert(
+    @Req() req: AuthenticatedRequest,
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() residentData: unknown,
+  ) {
     const organizationId = req.auth!.organizationId;
     return this.enquiryService.convert(organizationId, id, residentData);
   }
@@ -98,8 +111,8 @@ export class EnquiryController {
 
   @Get('follow-ups/upcoming')
   @ApiOperation({ summary: 'Get upcoming follow-ups' })
-  async getUpcomingFollowUps(@Req() req: AuthenticatedRequest, @Query('days') days?: number) {
+  async getUpcomingFollowUps(@Req() req: AuthenticatedRequest, @Query('days') days?: unknown) {
     const organizationId = req.auth!.organizationId;
-    return this.enquiryService.getUpcomingFollowUps(organizationId, days ? parseInt(days as any, 10) : 7);
+    return this.enquiryService.getUpcomingFollowUps(organizationId, parseUpcomingDays(days));
   }
 }

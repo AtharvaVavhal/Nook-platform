@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any -- supertest response bodies and pg rows are untyped */
+import './helpers/preflight.js';
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { randomUUID } from 'node:crypto';
@@ -869,4 +870,136 @@ test('admission update: resident, bed and booking cannot be changed', async () =
     bookingId: one.bookingId,
     notes: 'repeating is fine',
   }).expect(200);
+});
+
+// ------------------------------------------------------------------ input validation (P0 #1)
+
+test('admission: invalid input is a 400 with the field named, and nothing is stored', async () => {
+  const org = await newOrg();
+  const { bedId, residentId } = await seedBedAndResident(org);
+  const booking = await send('post', org, '/bookings', {
+    residentId,
+    bedId,
+    startDate: '2026-12-01',
+    endDate: '2027-06-01',
+    monthlyPrice: 4200,
+  }).expect(201);
+  const good = { bookingId: booking.body.id, admissionDate: '2026-12-01' };
+  const cases: [string, Record<string, unknown>, RegExp][] = [
+    ['no booking', { admissionDate: '2026-12-01' }, /bookingId/],
+    ['bad booking id', { ...good, bookingId: 'x' }, /bookingId/],
+    ['no date', { bookingId: good.bookingId }, /admissionDate/],
+    ['garbage date', { ...good, admissionDate: 'tomorrow' }, /admissionDate/],
+    ['impossible date', { ...good, admissionDate: '2026-02-30' }, /admissionDate/],
+    ['notes not text', { ...good, notes: 5 }, /notes/],
+    ['notes too long', { ...good, notes: 'x'.repeat(2001) }, /notes/],
+    ['bad room id', { ...good, roomId: 'room' }, /roomId/],
+    ['bad property id', { ...good, propertyId: 'p' }, /propertyId/],
+  ];
+  for (const [label, body, field] of cases) {
+    const res = await send('post', org, '/admissions', body);
+    assert.equal(res.status, 400, `${label} answered ${res.status}`);
+    assert.match(String(res.body.message), field, label);
+  }
+  for (const raw of [null, [], '"x"']) {
+    const res = await (server as any)
+      .post('/api/v1/admissions')
+      .set(org.headers)
+      .set('Content-Type', 'application/json')
+      .send(raw === null ? 'null' : raw === '"x"' ? raw : '[]');
+    assert.equal(res.status, 400);
+  }
+  assert.equal(
+    await count(`SELECT count(*) n FROM admissions WHERE organization_id = $1`, [org.orgId]),
+    0,
+  );
+  const created = await send('post', org, '/admissions', { ...good, notes: ' ok ' }).expect(201);
+  assert.equal(created.body.notes, 'ok');
+
+  // update
+  const id = created.body.id as string;
+  for (const body of [
+    { status: 'DONE' },
+    { status: 3 },
+    { admissionDate: 'x' },
+    { admissionDate: null },
+    { notes: [] },
+    { bedId: 'x' },
+    { roomId: 'x' },
+  ]) {
+    const res = await send('put', org, `/admissions/${id}`, body);
+    assert.equal(res.status, 400, `${JSON.stringify(body)} answered ${res.status}`);
+  }
+  await send('put', org, `/admissions/${id}`, { notes: null, admissionDate: '2026-12-05' }).expect(
+    200,
+  );
+});
+
+test('admission queries: bad filters and ids are 400, not 500', async () => {
+  const org = await newOrg();
+  const get = (path: string) => (server as any).get(`/api/v1${path}`).set(org.headers);
+  for (const path of [
+    '/admissions?status=NOPE',
+    '/admissions?residentId=abc',
+    '/admissions?bookingId=abc',
+    '/admissions?fromDate=abc',
+    '/admissions?fromDate=2026-02-01&toDate=2026-01-01',
+    '/admissions?status=PENDING&status=ADMITTED',
+    '/admissions/not-a-uuid',
+  ]) {
+    const res = await get(path);
+    assert.equal(res.status, 400, `${path} answered ${res.status}`);
+  }
+  await send('put', org, '/admissions/not-a-uuid', {}).expect(400);
+  await send('delete', org, '/admissions/not-a-uuid').expect(400);
+  await get('/admissions?status=PENDING&fromDate=2026-01-01').expect(200);
+});
+
+test('admission date: must fall inside the booked period, on create, on update, and when the booking changes', async () => {
+  const org = await newOrg();
+  const { bedId, residentId } = await seedBedAndResident(org);
+  const booking = await send('post', org, '/bookings', {
+    residentId,
+    bedId,
+    startDate: '2026-12-01',
+    endDate: '2027-03-01', // exclusive: the last booked day is 28 Feb
+    monthlyPrice: 4200,
+  }).expect(201);
+  const bookingId = booking.body.id as string;
+  const admit = (admissionDate: string) =>
+    send('post', org, '/admissions', { bookingId, admissionDate });
+
+  // outside the period: before the start, on the (exclusive) end date, after it
+  for (const date of ['2026-11-30', '2027-03-01', '2027-03-02', '2026-01-01']) {
+    const res = await admit(date);
+    assert.equal(res.status, 400, `${date} answered ${res.status}`);
+    assert.match(String(res.body.message), /within the booking period/i);
+  }
+  assert.equal(
+    await count(`SELECT count(*) n FROM admissions WHERE organization_id = $1`, [org.orgId]),
+    0,
+  );
+  // a time on the day is judged by its Asia/Kolkata calendar day
+  await admit('2026-11-30T17:00:00Z').expect(400); // 30 Nov 22:30 in India
+  const last = await admit('2027-02-28').expect(201); // the last booked day
+  const id = last.body.id as string;
+
+  // update: the same rule
+  await send('put', org, `/admissions/${id}`, { admissionDate: '2027-03-01' }).expect(400);
+  await send('put', org, `/admissions/${id}`, { admissionDate: '2026-11-30' }).expect(400);
+  await send('put', org, `/admissions/${id}`, { admissionDate: '2026-12-01' }).expect(200);
+  await send('put', org, `/admissions/${id}`, { notes: 'unrelated edit' }).expect(200);
+
+  // the booking cannot be changed so that its live admission falls outside it
+  const putBooking = (body: object) => send('put', org, `/bookings/${bookingId}`, body);
+  const moved = await putBooking({ startDate: '2026-12-05' });
+  assert.equal(moved.status, 409);
+  assert.match(String(moved.body.message), /admission date outside/i);
+  await putBooking({ endDate: '2026-12-01' }).expect(400); // not even a valid period
+  await putBooking({ startDate: '2026-11-20' }).expect(200); // earlier start still covers it
+  await putBooking({ endDate: '2027-01-15', notes: 'shorter' }).expect(200);
+
+  // a cancelled admission no longer constrains the booking
+  await send('put', org, `/admissions/${id}`, { status: 'CANCELLED' }).expect(200);
+  await putBooking({ startDate: '2027-01-01' }).expect(200);
 });

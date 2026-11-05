@@ -2,7 +2,14 @@ import { useState } from 'react';
 import { EmptyState, ErrorState, LoadingState, Pager, useAsync } from '../finance/shared';
 import { Field, FormError, PageHead, Tag, useGuardedAction } from './ui';
 import { opsApi } from './opsApi';
-import { bedLabel, dateOnly, label, personName, todayDate } from './opsFormat';
+import {
+  bedLabel,
+  dateOnly,
+  label,
+  personName,
+  suggestedAdmissionDate,
+  todayDate,
+} from './opsFormat';
 
 export function AdmissionPanel() {
   const [status, setStatus] = useState('');
@@ -36,7 +43,15 @@ export function AdmissionPanel() {
       ) : null}
       <div className="ops-inline-form">
         <Field label="Confirmed booking">
-          <select value={bookingId} onChange={(e) => setBookingId(e.target.value)}>
+          <select
+            value={bookingId}
+            onChange={(e) => {
+              setBookingId(e.target.value);
+              const chosen = candidates.data?.find((b) => b.id === e.target.value);
+              // the API only accepts a date inside the booked period, so offer one that is
+              if (chosen) setDate(suggestedAdmissionDate(chosen, todayDate()));
+            }}
+          >
             <option value="">
               {candidates.data && candidates.data.length === 0
                 ? 'No booking is waiting for admission'

@@ -1,6 +1,6 @@
 // Sign-in client for the existing session API. The session lives in an HttpOnly cookie set by the
 // server, so nothing about the session is ever stored by the browser application itself.
-import { API_BASE, csrfToken, notifyUnauthorized } from '../apiConfig';
+import { API_BASE, csrf, notifyUnauthorized } from '../apiConfig';
 import type { AuthErrorCode } from './authHelpers';
 
 export interface AuthUser {
@@ -24,6 +24,15 @@ export class AuthError extends Error {
 
 async function send(path: string, init: RequestInit): Promise<Response> {
   try {
+    return await csrf.request(`${API_BASE}${path}`, init);
+  } catch {
+    throw new AuthError('NETWORK', 'network');
+  }
+}
+
+/** Sign-in itself needs no CSRF token (there is no session to forge yet); it is protected by the Origin check. */
+async function sendUnauthenticated(path: string, init: RequestInit): Promise<Response> {
+  try {
     return await fetch(`${API_BASE}${path}`, { credentials: 'include', ...init });
   } catch {
     throw new AuthError('NETWORK', 'network');
@@ -41,7 +50,7 @@ export const authApi = {
   },
 
   async login(email: string, password: string): Promise<AuthUser> {
-    const response = await send('/auth/login', {
+    const response = await sendUnauthenticated('/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email: email.trim(), password }),
@@ -49,16 +58,16 @@ export const authApi = {
     if (response.status === 401) throw new AuthError('INVALID_CREDENTIALS', 'invalid');
     if (response.status === 429) throw new AuthError('RATE_LIMITED', 'rate limited');
     if (!response.ok) throw new AuthError('UNKNOWN', `status ${response.status}`);
+    // A new session comes with a new CSRF token: forget the old one so the next write fetches it.
+    csrf.clear();
     const body = (await response.json()) as { data: { user: AuthUser } };
     return body.data.user;
   },
 
   /** Ends the session on the server. An already-expired session counts as signed out. */
   async logout(): Promise<void> {
-    const response = await send('/auth/logout', {
-      method: 'POST',
-      headers: { 'x-csrf-token': csrfToken() },
-    });
+    const response = await send('/auth/logout', { method: 'POST' });
+    csrf.clear();
     if (response.ok || response.status === 401) return;
     throw new AuthError('UNKNOWN', `status ${response.status}`);
   },
@@ -67,7 +76,7 @@ export const authApi = {
   async changePassword(currentPassword: string, newPassword: string): Promise<void> {
     const response = await send('/auth/password', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-csrf-token': csrfToken() },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ currentPassword, newPassword }),
     });
     if (response.ok) return;

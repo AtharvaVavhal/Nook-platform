@@ -1,6 +1,7 @@
 // Client for the operational APIs (residents, enquiries, bookings, admissions, check-ins).
 // The organization is never sent from the browser: the server derives it from the session.
-import { API_BASE, csrfToken, notifyUnauthorized } from '../apiConfig';
+import { API_BASE, csrf, notifyUnauthorized } from '../apiConfig';
+import { serverFailureMessage } from '../errorReference';
 
 export class OpsApiError extends Error {
   constructor(
@@ -18,12 +19,10 @@ async function request<T>(
 ): Promise<T> {
   let response: Response;
   try {
-    response = await fetch(`${API_BASE}${path}`, {
+    response = await csrf.request(`${API_BASE}${path}`, {
       method,
-      credentials: 'include',
       headers: {
         ...(body !== undefined ? { 'Content-Type': 'application/json' } : {}),
-        ...(method !== 'GET' ? { 'x-csrf-token': csrfToken() } : {}),
       },
       ...(body !== undefined ? { body: JSON.stringify(body) } : {}),
     });
@@ -42,7 +41,8 @@ async function request<T>(
         ? 'Your session has ended. Please sign in again.'
         : response.status === 403
           ? 'This request was refused for security reasons. Refresh the page and try again.'
-          : message || `Request failed (${response.status})`,
+          : (serverFailureMessage(response.status, response.headers.get('x-request-id')) ??
+            (message || `Request failed (${response.status})`)),
       response.status,
     );
   }
@@ -336,11 +336,26 @@ export interface CheckOutInput {
   reason?: string | null;
   notes?: string | null;
 }
+export interface Overstay {
+  checkInId: string;
+  bookingId: string;
+  bedId: string;
+  residentName: string;
+  bookingEndDate: string;
+}
 export interface Occupancy {
   activeCheckIns: number;
   occupiedBeds: number;
   totalBeds: number;
   occupiedBedIds: string[];
+  /** Residents still checked in on or after their booking end date (not billed without an extension). */
+  overstayCount: number;
+  overstays: Overstay[];
+}
+export interface ExtendBookingInput {
+  /** New exclusive end date, YYYY-MM-DD. */
+  newEndDate: string;
+  reason: string;
 }
 
 export const opsApi = {
@@ -444,6 +459,9 @@ export const opsApi = {
     update: (id: string, body: BookingUpdateInput) =>
       request<Booking>('PUT', `/bookings/${id}`, body),
     cancel: (id: string) => request<Booking>('PUT', `/bookings/${id}`, { status: 'CANCELLED' }),
+    /** Approved extension: needs a reason and is recorded with the approving user. */
+    extend: (id: string, body: ExtendBookingInput) =>
+      request<Booking>('POST', `/bookings/${id}/extend`, body),
   },
   admissions: {
     list: (p: {
@@ -463,7 +481,7 @@ export const opsApi = {
     setStatus: (id: string, status: 'PENDING' | 'ADMITTED' | 'CANCELLED') =>
       request<Admission>('PUT', `/admissions/${id}`, { status }),
   },
-checkIns: {
+  checkIns: {
     list: (p: {
       search?: string;
       status?: string;

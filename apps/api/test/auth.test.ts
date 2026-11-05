@@ -242,10 +242,15 @@ test('CSRF guard rejects missing, malformed, duplicate, and mismatched tokens', 
   );
 });
 
-test('production login cookies are secure, strict, and non-readable only for sessions', async () => {
-  const saved = { APP_ENV: process.env.APP_ENV, WEB_ORIGIN: process.env.WEB_ORIGIN };
+test('production login cookies are host-only, HttpOnly, secure and strict (session and CSRF alike)', async () => {
+  const saved = {
+    APP_ENV: process.env.APP_ENV,
+    WEB_ORIGIN: process.env.WEB_ORIGIN,
+    TRUST_PROXY_HOPS: process.env.TRUST_PROXY_HOPS,
+  };
   process.env.APP_ENV = 'production';
   process.env.WEB_ORIGIN = 'https://app.example.com';
+  process.env.TRUST_PROXY_HOPS = '1';
   const cookies: Array<{ name: string; value: string; options: Record<string, unknown> }> = [];
   const controller = new AuthController(
     {
@@ -270,6 +275,7 @@ test('production login cookies are secure, strict, and non-readable only for ses
       {
         cookie: (name, value, options) => cookies.push({ name, value, options }),
         clearCookie: () => {},
+        setHeader: () => {},
       },
     );
     assert.equal(cookies[0]?.name, SESSION_COOKIE);
@@ -277,9 +283,16 @@ test('production login cookies are secure, strict, and non-readable only for ses
     assert.equal(cookies[0]?.options.secure, true);
     assert.equal(cookies[0]?.options.sameSite, 'strict');
     assert.equal(cookies[1]?.name, CSRF_COOKIE);
-    assert.equal(cookies[1]?.options.httpOnly, false);
+    // The browser app never reads the CSRF cookie (it gets the token from GET /auth/csrf), so it is HttpOnly too.
+    assert.equal(cookies[1]?.options.httpOnly, true);
     assert.equal(cookies[1]?.options.secure, true);
+    assert.equal(cookies[1]?.options.sameSite, 'strict');
+    for (const cookie of cookies) {
+      assert.equal('domain' in cookie.options, false, `${cookie.name} must be host-only`);
+    }
   } finally {
+    if (saved.TRUST_PROXY_HOPS === undefined) delete process.env.TRUST_PROXY_HOPS;
+    else process.env.TRUST_PROXY_HOPS = saved.TRUST_PROXY_HOPS;
     if (saved.APP_ENV === undefined) delete process.env.APP_ENV;
     else process.env.APP_ENV = saved.APP_ENV;
     if (saved.WEB_ORIGIN === undefined) delete process.env.WEB_ORIGIN;

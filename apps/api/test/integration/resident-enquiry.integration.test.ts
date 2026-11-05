@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any -- supertest response bodies and pg rows are untyped */
+import './helpers/preflight.js';
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { randomUUID } from 'node:crypto';
 import { NestFactory } from '@nestjs/core';
 import request from 'supertest';
 import { AppModule } from '../../src/app.module.js';
-import { withMigratorClient } from './helpers/db.js';
+import { withMigratorClient, withRuntimeClient } from './helpers/db.js';
 import { requireTestDatabaseUrl } from './helpers/env.js';
 import { TEST_PASSWORD, hashTestPassword } from './helpers/fixtures.js';
 
@@ -581,4 +582,196 @@ test("enquiry assignee: the database refuses a user who is not a member of the e
     c.query(`UPDATE memberships SET status = 'REVOKED' WHERE user_id = $1`, [member]),
   );
   await call('put', orgB, `/enquiries/${e.body.id}`, { notes: 'still editable' }).expect(200);
+});
+
+// ------------------------------------------------ deleting a resident archives it (4F.1 follow-up)
+
+test('resident: DELETE archives the resident; the row is kept and still readable', async () => {
+  const org = await newOrg();
+  const created = await call('post', org, '/residents', {
+    firstName: 'Asha',
+    lastName: 'Rao',
+  }).expect(201);
+  assert.equal(created.body.status, 'ACTIVE');
+  const archived = await call('delete', org, `/residents/${created.body.id}`).expect(200);
+  assert.equal(archived.body.id, created.body.id);
+  assert.equal(archived.body.status, 'ARCHIVED');
+  assert.equal(await count(`SELECT count(*) n FROM residents WHERE id = $1`, [created.body.id]), 1);
+  const reread = await call('get', org, `/residents/${created.body.id}`).expect(200);
+  assert.equal(reread.body.status, 'ARCHIVED');
+  assert.equal(reread.body.firstName, 'Asha');
+  // repeating it is harmless
+  await call('delete', org, `/residents/${created.body.id}`).expect(200);
+  assert.equal(await count(`SELECT count(*) n FROM residents WHERE id = $1`, [created.body.id]), 1);
+  // unknown and malformed ids are still 404 / 400-class, never a database error
+  const missing = await call('delete', org, `/residents/${randomUUID()}`);
+  assert.equal(missing.status, 404);
+});
+
+test('resident: archiving through DELETE leaves the converted enquiry linked to it', async () => {
+  const org = await newOrg();
+  const enquiry = await call('post', org, '/enquiries', enquiryBody()).expect(201);
+  const converted = await call('post', org, `/enquiries/${enquiry.body.id}/convert`, {}).expect(
+    201,
+  );
+  const residentId = converted.body.resident?.id ?? converted.body.residentId;
+  assert.ok(residentId, 'conversion returned the resident');
+  await call('delete', org, `/residents/${residentId}`).expect(200);
+  const link = await withMigratorClient((c) =>
+    c.query(`SELECT resident_id FROM enquiries WHERE id = $1`, [enquiry.body.id]),
+  );
+  assert.equal(
+    link.rows[0].resident_id,
+    residentId,
+    'the enquiry keeps its link (no ON DELETE SET NULL)',
+  );
+});
+
+test('resident: the runtime database role cannot hard-delete a resident at all', async () => {
+  const org = await newOrg();
+  const created = await call('post', org, '/residents', {
+    firstName: 'Dev',
+    lastName: 'Patel',
+  }).expect(201);
+  await withRuntimeClient(async (c) => {
+    await assert.rejects(
+      c.query(`DELETE FROM residents WHERE id = $1`, [created.body.id]),
+      (e: any) => e.code === '42501',
+    );
+  });
+  assert.equal(await count(`SELECT count(*) n FROM residents WHERE id = $1`, [created.body.id]), 1);
+});
+
+// ------------------------------------------------------------------ input validation (P0 #1)
+
+test('enquiry create: invalid input is a 400 with the field named, and nothing is stored', async () => {
+  const org = await newOrg();
+  const cases: [string, Record<string, unknown>, RegExp][] = [
+    ['no first name', { firstName: undefined }, /firstName/],
+    ['first name not text', { firstName: 42 }, /firstName/],
+    ['blank last name', { lastName: '   ' }, /lastName/],
+    ['name too long', { lastName: 'x'.repeat(101) }, /lastName/],
+    ['no phone', { phone: undefined }, /phone/],
+    ['phone too short', { phone: '12' }, /phone/],
+    ['phone with letters', { phone: 'call me' }, /phone/],
+    ['phone markup', { phone: '<script>1' }, /phone/],
+    ['phone number type', { phone: 9000000002 }, /phone/],
+    ['bad e-mail', { email: 'nope' }, /email/],
+    ['unknown source', { source: 'FLYER' }, /source/],
+    ['zero stay', { expectedDurationOfStay: 0 }, /expectedDurationOfStay/],
+    ['fractional stay', { expectedDurationOfStay: 1.5 }, /expectedDurationOfStay/],
+    ['too many occupants', { numberOfOccupants: 21 }, /numberOfOccupants/],
+    ['garbage move-in date', { expectedMoveInDate: 'soon' }, /expectedMoveInDate/],
+    ['notes too long', { notes: 'x'.repeat(2001) }, /notes/],
+  ];
+  for (const [label, over, field] of cases) {
+    const res = await call('post', org, '/enquiries', enquiryBody(over));
+    assert.equal(res.status, 400, `${label} answered ${res.status}`);
+    assert.match(String(res.body.message), field, label);
+  }
+  for (const raw of ['null', '[]', '"x"', '5']) {
+    const res = await (server as any)
+      .post('/api/v1/enquiries')
+      .set(org.headers)
+      .set('Content-Type', 'application/json')
+      .send(raw);
+    assert.equal(res.status, 400, `body ${raw} answered ${res.status}`);
+  }
+  assert.equal(
+    await count(`SELECT count(*) n FROM enquiries WHERE organization_id = $1`, [org.orgId]),
+    0,
+  );
+  const ok = await call(
+    'post',
+    org,
+    '/enquiries',
+    enquiryBody({
+      phone: '+91 98765 43210',
+      email: 'kavya@example.in',
+      expectedMoveInDate: '2027-01-15',
+    }),
+  ).expect(201);
+  assert.equal(ok.body.status, 'NEW');
+  assert.equal(ok.body.source, 'OTHER');
+});
+
+test('enquiry update: CONVERTED and ARCHIVED cannot be forced, a converted enquiry keeps its status', async () => {
+  const org = await newOrg();
+  const e = await call('post', org, '/enquiries', enquiryBody()).expect(201);
+  const id = e.body.id as string;
+  for (const body of [
+    { status: 'CONVERTED' },
+    { status: 'ARCHIVED' },
+    { status: 'MAYBE' },
+    { firstName: '' },
+    { phone: 'x' },
+    { email: 'nope' },
+    { numberOfOccupants: 0 },
+    { expectedMoveInDate: 'x' },
+  ]) {
+    const res = await call('put', org, `/enquiries/${id}`, body);
+    assert.equal(res.status, 400, `${JSON.stringify(body)} answered ${res.status}`);
+  }
+  assert.equal((await call('get', org, `/enquiries/${id}`).expect(200)).body.status, 'NEW');
+  await call('put', org, `/enquiries/${id}`, { status: 'LOST', email: null }).expect(200);
+
+  const converted = await call('post', org, '/enquiries', enquiryBody()).expect(201);
+  await call('post', org, `/enquiries/${converted.body.id}/convert`, {}).expect(201);
+  const res = await call('put', org, `/enquiries/${converted.body.id}`, { status: 'NEW' });
+  assert.equal(res.status, 409);
+  await call('put', org, `/enquiries/${converted.body.id}`, { notes: 'still editable' }).expect(
+    200,
+  );
+});
+
+test('enquiry follow-ups, convert body and queries: bad input is 400, not 500', async () => {
+  const org = await newOrg();
+  const e = await call('post', org, '/enquiries', enquiryBody()).expect(201);
+  const id = e.body.id as string;
+  for (const body of [
+    {},
+    { notes: 'x' },
+    { followUpAt: '2026-12-10T10:00:00Z' },
+    { notes: 'x', followUpAt: 'later' },
+    { notes: 5, followUpAt: '2026-12-10T10:00:00Z' },
+    { notes: 'x', followUpAt: '2026-12-10T10:00:00Z', outcome: 'y'.repeat(501) },
+  ]) {
+    const res = await call('post', org, `/enquiries/${id}/follow-ups`, body);
+    assert.equal(res.status, 400, `${JSON.stringify(body)} answered ${res.status}`);
+  }
+  assert.equal(
+    await count(`SELECT count(*) n FROM enquiry_follow_ups WHERE enquiry_id = $1`, [id]),
+    0,
+  );
+  for (const raw of ['[]', '"x"', '5']) {
+    const res = await (server as any)
+      .post(`/api/v1/enquiries/${id}/convert`)
+      .set(org.headers)
+      .set('Content-Type', 'application/json')
+      .send(raw);
+    assert.equal(res.status, 400, `convert body ${raw} answered ${res.status}`);
+  }
+  assert.equal((await call('get', org, `/enquiries/${id}`).expect(200)).body.status, 'NEW');
+
+  for (const path of [
+    '/enquiries?status=NOPE',
+    '/enquiries?source=NOPE',
+    '/enquiries?propertyId=abc',
+    '/enquiries?fromDate=abc',
+    '/enquiries?fromDate=2026-02-01&toDate=2026-01-01',
+    '/enquiries?status=NEW&status=LOST',
+    '/enquiries/not-a-uuid',
+    `/enquiries/${id}/follow-ups?x=1`.replace(`/${id}`, '/not-a-uuid'),
+    '/enquiries/follow-ups/upcoming?days=0',
+    '/enquiries/follow-ups/upcoming?days=abc',
+    '/enquiries/follow-ups/upcoming?days=366',
+  ]) {
+    const res = await call('get', org, path);
+    assert.equal(res.status, 400, `${path} answered ${res.status}`);
+  }
+  await call('put', org, '/enquiries/not-a-uuid', {}).expect(400);
+  await call('delete', org, '/enquiries/not-a-uuid').expect(400);
+  await call('post', org, '/enquiries/not-a-uuid/convert', {}).expect(400);
+  await call('get', org, '/enquiries/follow-ups/upcoming?days=30').expect(200);
+  await call('get', org, '/enquiries/follow-ups/overdue').expect(200);
 });

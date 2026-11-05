@@ -10,13 +10,12 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { BadRequestException, Inject } from '@nestjs/common';
-import { optionalUuid } from '../common/ids.js';
+import { Inject, ParseUUIDPipe } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { CsrfGuard, OriginGuard, SessionGuard } from '../auth/auth.guards.js';
 import type { AuthenticatedRequest } from '../auth/auth.types.js';
 import { BookingService } from './booking.service.js';
-import { CreateBookingDto, UpdateBookingDto, BookingQueryDto } from './booking.dto.js';
+import { parseAvailabilityQuery } from './booking.input.js';
 
 @ApiTags('Bookings')
 @ApiBearerAuth()
@@ -28,7 +27,7 @@ export class BookingController {
   @Post()
   @UseGuards(OriginGuard, CsrfGuard)
   @ApiOperation({ summary: 'Create a new booking' })
-  async create(@Req() req: any, @Body() dto: any) {
+  async create(@Req() req: any, @Body() dto: unknown) {
     const organizationId = req.auth!.organizationId;
     return this.bookingService.create(organizationId, dto);
   }
@@ -42,7 +41,7 @@ export class BookingController {
 
   @Get(':id')
   @ApiOperation({ summary: 'Get a booking by id' })
-  async findOne(@Req() req: any, @Param('id') id: string) {
+  async findOne(@Req() req: any, @Param('id', ParseUUIDPipe) id: string) {
     const organizationId = req.auth!.organizationId;
     return this.bookingService.findOne(organizationId, id);
   }
@@ -50,15 +49,23 @@ export class BookingController {
   @Put(':id')
   @UseGuards(OriginGuard, CsrfGuard)
   @ApiOperation({ summary: 'Update a booking' })
-  async update(@Req() req: any, @Param('id') id: string, @Body() dto: any) {
+  async update(@Req() req: any, @Param('id', ParseUUIDPipe) id: string, @Body() dto: unknown) {
     const organizationId = req.auth!.organizationId;
-    return this.bookingService.update(organizationId, id, dto);
+    return this.bookingService.update(organizationId, id, dto, req.auth!.userId);
+  }
+
+  @Post(':id/extend')
+  @UseGuards(OriginGuard, CsrfGuard)
+  @ApiOperation({ summary: 'Extend a booking end date (reason required, audited)' })
+  async extend(@Req() req: AuthenticatedRequest, @Param('id') id: string, @Body() body: unknown) {
+    const { organizationId, userId, role } = req.auth!;
+    return this.bookingService.extend({ organizationId, userId, role }, id, body);
   }
 
   @Delete(':id')
   @UseGuards(OriginGuard, CsrfGuard)
   @ApiOperation({ summary: 'Cancel a booking' })
-  async cancel(@Req() req: any, @Param('id') id: string) {
+  async cancel(@Req() req: any, @Param('id', ParseUUIDPipe) id: string) {
     const organizationId = req.auth!.organizationId;
     return this.bookingService.cancel(organizationId, id);
   }
@@ -67,18 +74,7 @@ export class BookingController {
   @ApiOperation({ summary: 'Get available beds for a date range' })
   async getAvailableBeds(@Req() req: any, @Query() query: any) {
     const organizationId = req.auth!.organizationId;
-    const { startDate, endDate, propertyId } = query;
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-    if (!startDate || !endDate || Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) {
-      throw new BadRequestException('startDate and endDate are required valid dates');
-    }
-    if (end <= start) throw new BadRequestException('endDate must be after startDate');
-    return this.bookingService.getAvailableBeds(
-      organizationId,
-      start,
-      end,
-      optionalUuid(propertyId, 'propertyId') ?? undefined,
-    );
+    const { startDate, endDate, propertyId } = parseAvailabilityQuery(query);
+    return this.bookingService.getAvailableBeds(organizationId, startDate, endDate, propertyId);
   }
 }

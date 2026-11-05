@@ -1,7 +1,8 @@
-import { randomUUID } from 'node:crypto';
 import { Inject, Injectable } from '@nestjs/common';
 import { PrismaService } from '../database/prisma.service.js';
 import type { Prisma } from '../generated/client.js';
+import { log } from '../observability/json-logger.js';
+import { auditRequestId } from '../observability/request-context.js';
 
 export type AuthAuditAction =
   | 'auth.login.succeeded'
@@ -37,16 +38,17 @@ export class AuthAuditService {
           action,
           targetType: 'user',
           targetId: entry.targetId ?? entry.actorUserId ?? null,
-          requestId: randomUUID(),
+          requestId: auditRequestId(),
           metadata: entry.metadata ?? {},
         },
       });
     } catch (error) {
-      console.error(
-        'auth audit write failed',
+      // The failure is visible (and alertable) in the log without blocking the sign-in outcome.
+      log.error('auth audit write failed', {
+        context: 'auth-audit',
         action,
-        (error as { code?: string }).code ?? 'unknown',
-      );
+        errorCode: (error as { code?: string }).code ?? 'unknown',
+      });
     }
   }
 }

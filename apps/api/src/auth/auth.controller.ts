@@ -64,13 +64,13 @@ export class AuthController {
       ...cookieOptions(this.secureCookies()),
       maxAge: 8 * 60 * 60 * 1000,
     });
+    // A fresh CSRF token with every sign-in. The cookie is HttpOnly: the web app never reads it, it gets the same
+    // value from GET /auth/csrf and sends it back in a header (double submit).
     response.cookie(CSRF_COOKIE, this.csrf.createToken(), {
-      httpOnly: false,
-      secure: this.secureCookies(),
-      sameSite: 'strict',
-      path: '/',
+      ...cookieOptions(this.secureCookies()),
       maxAge: 8 * 60 * 60 * 1000,
     });
+    response.setHeader('Cache-Control', 'no-store');
     return { data: { user: publicContext(result.context) } };
   }
 
@@ -83,10 +83,7 @@ export class AuthController {
   ) {
     await this.auth.logout(request.auth!);
     response.clearCookie(SESSION_COOKIE, cookieOptions(this.secureCookies()));
-    response.clearCookie(CSRF_COOKIE, {
-      ...cookieOptions(this.secureCookies()),
-      httpOnly: false,
-    });
+    response.clearCookie(CSRF_COOKIE, cookieOptions(this.secureCookies()));
     return { data: { loggedOut: true } };
   }
 
@@ -114,12 +111,11 @@ export class AuthController {
     const cookies = parseCookies(request.headers.cookie);
     const token = cookies.get(CSRF_COOKIE) ?? this.csrf.createToken();
     response.cookie(CSRF_COOKIE, token, {
-      httpOnly: false,
-      secure: this.secureCookies(),
-      sameSite: 'strict',
-      path: '/',
+      ...cookieOptions(this.secureCookies()),
       maxAge: 8 * 60 * 60 * 1000,
     });
+    // A token must never be cached by the browser or an intermediary.
+    response.setHeader('Cache-Control', 'no-store');
     return { data: { csrfToken: token } };
   }
 }
