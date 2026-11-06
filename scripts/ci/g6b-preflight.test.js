@@ -1,3 +1,5 @@
+// Exercise the locked PostgreSQL driver boundary in the existing G6B test selection.
+import './catalog-arrays.test.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';

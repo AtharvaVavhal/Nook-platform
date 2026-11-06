@@ -52,10 +52,10 @@ export async function readIdentity(db) {
     ARRAY(SELECT x FROM unnest(ARRAY[CASE WHEN r.rolsuper THEN 'superuser' END, CASE WHEN r.rolcreatedb THEN 'createdb' END,
       CASE WHEN r.rolcreaterole THEN 'createrole' END, CASE WHEN r.rolreplication THEN 'replication' END,
       CASE WHEN r.rolbypassrls THEN 'bypassrls' END]) x WHERE x IS NOT NULL) AS dangerous,
-    ARRAY(SELECT rolname FROM pg_roles WHERE rolname <> current_user AND pg_has_role(current_user,oid,'MEMBER') ORDER BY rolname) AS memberships,
-    ARRAY(SELECT datname FROM pg_database ORDER BY datname) AS databases,
+    ARRAY(SELECT rolname FROM pg_roles WHERE rolname <> current_user AND pg_has_role(current_user,oid,'MEMBER') ORDER BY rolname)::text[] AS memberships,
+    ARRAY(SELECT datname FROM pg_database ORDER BY datname)::text[] AS databases,
     ARRAY(SELECT datname FROM pg_database WHERE datallowconn AND NOT datistemplate AND datname <> current_database()
-      AND has_database_privilege(current_user,oid,'CONNECT') ORDER BY datname) AS "otherConnections"
+      AND has_database_privilege(current_user,oid,'CONNECT') ORDER BY datname)::text[] AS "otherConnections"
     FROM pg_database d CROSS JOIN pg_roles r WHERE d.datname=current_database() AND r.rolname=current_user`);
   assert.equal(rows.length, 1);
   return rows[0];
@@ -64,7 +64,7 @@ export async function readIdentity(db) {
 export async function readFreshFacts(db) {
   const identity = await readIdentity(db);
   const { rows } = await db.query(`SELECT
-    ARRAY(SELECT nspname FROM pg_namespace WHERE nspname !~ '^pg_' AND nspname <> 'information_schema' ORDER BY nspname) AS "userSchemas",
+    ARRAY(SELECT nspname FROM pg_namespace WHERE nspname !~ '^pg_' AND nspname <> 'information_schema' ORDER BY nspname)::text[] AS "userSchemas",
     (SELECT pg_get_userbyid(nspowner) FROM pg_namespace WHERE nspname='public') AS "schemaOwner",
     ARRAY(SELECT 'relation:'||c.relname FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname !~ '^pg_' AND n.nspname <> 'information_schema'
       UNION ALL SELECT 'function:'||p.proname FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace WHERE n.nspname !~ '^pg_' AND n.nspname <> 'information_schema'
@@ -430,14 +430,14 @@ export async function readSchema(db) {
       FROM pg_attribute a WHERE a.attrelid=c.oid AND a.attnum>0 AND NOT a.attisdropped),'{}'::jsonb) AS columns
     FROM pg_class c WHERE c.relnamespace='public'::regnamespace AND c.relkind IN ('r','p')`);
   const enums = await db.query(
-    `SELECT t.typname AS name,array_agg(e.enumlabel ORDER BY e.enumsortorder) AS labels FROM pg_type t JOIN pg_enum e ON e.enumtypid=t.oid WHERE t.typnamespace='public'::regnamespace GROUP BY t.typname`,
+    `SELECT t.typname AS name,array_agg(e.enumlabel ORDER BY e.enumsortorder)::text[] AS labels FROM pg_type t JOIN pg_enum e ON e.enumtypid=t.oid WHERE t.typnamespace='public'::regnamespace GROUP BY t.typname`,
   );
   const constraints =
     await db.query(`SELECT conname AS name,cl.relname AS "table",contype AS type,convalidated AS validated,condeferrable AS deferrable,condeferred AS deferred,pg_get_constraintdef(c.oid) AS definition
     FROM pg_constraint c JOIN pg_class cl ON cl.oid=c.conrelid WHERE c.connamespace='public'::regnamespace AND cl.relname<>'_prisma_migrations' AND contype IN ('p','f','c')`);
   const indexes =
     await db.query(`SELECT ic.relname AS name,t.relname AS "table",i.indisunique AS "unique",i.indisvalid AS valid,i.indisready AS ready,
-    ARRAY(SELECT a.attname FROM unnest(i.indkey) WITH ORDINALITY k(num,ord) JOIN pg_attribute a ON a.attrelid=t.oid AND a.attnum=k.num ORDER BY ord) AS columns,
+    ARRAY(SELECT a.attname FROM unnest(i.indkey) WITH ORDINALITY k(num,ord) JOIN pg_attribute a ON a.attrelid=t.oid AND a.attnum=k.num ORDER BY ord)::text[] AS columns,
     pg_get_expr(i.indpred,i.indrelid) AS predicate FROM pg_index i JOIN pg_class ic ON ic.oid=i.indexrelid JOIN pg_class t ON t.oid=i.indrelid
     WHERE t.relnamespace='public'::regnamespace AND i.indpred IS NOT NULL`);
   const functions =
@@ -445,10 +445,10 @@ export async function readSchema(db) {
     pg_get_function_result(p.oid) AS result,p.pronargs AS arguments,p.prosecdef AS "securityDefiner",p.proconfig AS config,p.provolatile AS volatility,p.proparallel AS parallel,p.proleakproof AS leakproof,p.proisstrict AS strict FROM pg_proc p JOIN pg_language l ON l.oid=p.prolang WHERE p.pronamespace='public'::regnamespace`);
   const triggers =
     await db.query(`SELECT t.tgname AS name,c.relname AS "table",p.proname AS function,t.tgtype::int AS type,t.tgenabled AS enabled,t.tgnargs::int AS arguments,pg_get_expr(t.tgqual,t.tgrelid) AS "when",
-    ARRAY(SELECT a.attname FROM unnest(t.tgattr) WITH ORDINALITY k(num,ord) JOIN pg_attribute a ON a.attrelid=c.oid AND a.attnum=k.num ORDER BY ord) AS columns
+    ARRAY(SELECT a.attname FROM unnest(t.tgattr) WITH ORDINALITY k(num,ord) JOIN pg_attribute a ON a.attrelid=c.oid AND a.attnum=k.num ORDER BY ord)::text[] AS columns
     FROM pg_trigger t JOIN pg_class c ON c.oid=t.tgrelid JOIN pg_proc p ON p.oid=t.tgfoid WHERE c.relnamespace='public'::regnamespace AND NOT t.tgisinternal`);
   const other = await db.query(
-    `SELECT (SELECT pg_get_userbyid(nspowner) FROM pg_namespace WHERE nspname='public') AS "schemaOwner", ARRAY(SELECT nspname FROM pg_namespace WHERE nspname !~ '^pg_' AND nspname<>'information_schema' ORDER BY nspname) AS "userSchemas",
+    `SELECT (SELECT pg_get_userbyid(nspowner) FROM pg_namespace WHERE nspname='public') AS "schemaOwner", ARRAY(SELECT nspname FROM pg_namespace WHERE nspname !~ '^pg_' AND nspname<>'information_schema' ORDER BY nspname)::text[] AS "userSchemas",
     ((SELECT count(*) FROM pg_type WHERE typnamespace='public'::regnamespace AND typowner<>(SELECT oid FROM pg_roles WHERE rolname=$1))
     +(SELECT count(*) FROM pg_proc WHERE pronamespace='public'::regnamespace AND proowner<>(SELECT oid FROM pg_roles WHERE rolname=$1)))::int AS "foreignOwnedObjects",
     ((SELECT count(*) FROM pg_class WHERE relnamespace='public'::regnamespace AND relkind NOT IN ('r','i'))
