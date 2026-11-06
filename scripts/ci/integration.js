@@ -1,3 +1,4 @@
+import { createDiagnostics } from './diagnostics.js';
 import { randomBytes } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
@@ -21,6 +22,7 @@ let terminationUncertain = false;
 const quoteIdentifier = (value) => '"' + value.replaceAll('"', '""') + '"';
 const quoteLiteral = (value) => "'" + value.replaceAll("'", "''") + "'";
 const clients = [];
+const diagnostics = createDiagnostics();
 
 async function connect(options) {
   const client = new Client({
@@ -76,25 +78,28 @@ async function grantRuntime(owner, runtime) {
 async function main() {
   const profile = process.argv[2];
   const target = profiles[profile];
-  if (
-    !target ||
-    process.argv.length !== 3 ||
-    process.env.GITHUB_ACTIONS !== 'true' ||
-    process.env.RUNNER_ENVIRONMENT !== 'github-hosted' ||
-    process.env.GITHUB_JOB !== (profile === 'full' ? 'full-integration' : 'initial-integration') ||
-    !process.env.CI_BOOTSTRAP_PASSWORD
-  ) {
-    throw new Error('Hosted CI profile required');
-  }
-  if (profile === 'initial-migration') assertG6AAuthorization(process.env);
-  // Do not let pg fall back to ambient connection/TLS options, even during provisioning.
-  if (
-    Object.keys(process.env).some(
-      (key) => /^PG[A-Z0-9_]*$/.test(key) || key === 'NODE_TLS_REJECT_UNAUTHORIZED',
-    )
-  ) {
-    throw new Error('Ambient driver configuration forbidden');
-  }
+  diagnostics.runSync('hosted_environment_validation', () => {
+    if (
+      !target ||
+      process.argv.length !== 3 ||
+      process.env.GITHUB_ACTIONS !== 'true' ||
+      process.env.RUNNER_ENVIRONMENT !== 'github-hosted' ||
+      process.env.GITHUB_JOB !==
+        (profile === 'full' ? 'full-integration' : 'initial-integration') ||
+      !process.env.CI_BOOTSTRAP_PASSWORD
+    ) {
+      throw new Error('Hosted CI profile required');
+    }
+    if (profile === 'initial-migration') assertG6AAuthorization(process.env);
+    // Do not let pg fall back to ambient connection/TLS options, even during provisioning.
+    if (
+      Object.keys(process.env).some(
+        (key) => /^PG[A-Z0-9_]*$/.test(key) || key === 'NODE_TLS_REJECT_UNAUTHORIZED',
+      )
+    ) {
+      throw new Error('Ambient driver configuration forbidden');
+    }
+  });
   const runtime = `nook_ci_${target.suffix}_runtime`;
   const migrator = `nook_ci_${target.suffix}_migrator`;
   const runtimePassword = secret();
@@ -114,67 +119,82 @@ async function main() {
     MIGRATOR_DATABASE_URL: url(migrator, migratorPassword),
     TEST_OWNER_PASSWORD: ownerPassword,
   };
-  validateEnvironment(env); // Pure guard validation before the first connection.
-  if (profile === 'full') assertG6BEnvironment(process.env, env);
-  const admin = await connect({
-    ...endpoint,
-    database: 'postgres',
-    user: 'postgres',
-    password: process.env.CI_BOOTSTRAP_PASSWORD,
+  diagnostics.runSync('hosted_environment_validation', () => {
+    validateEnvironment(env); // Pure guard validation before the first connection.
+    if (profile === 'full') assertG6BEnvironment(process.env, env);
   });
-  // Refuse any reused cluster before making changes, including all protected/scratch databases.
-  const databases = (
-    await admin.query('SELECT datname FROM pg_database ORDER BY datname')
-  ).rows.map((row) => row.datname);
-  if (JSON.stringify(databases) !== JSON.stringify(['postgres', 'template0', 'template1'])) {
-    throw new Error('Fresh service cluster required');
-  }
-  const bootstrap = {
-    databases,
-    ...(
+  const admin = await diagnostics.run('postgres_service_readiness', () =>
+    connect({
+      ...endpoint,
+      database: 'postgres',
+      user: 'postgres',
+      password: process.env.CI_BOOTSTRAP_PASSWORD,
+    }),
+  );
+  const bootstrap = await diagnostics.run('bootstrap_validation', async () => {
+    // Refuse any reused cluster before making changes, including all protected/scratch databases.
+    const databases = (
+      await admin.query('SELECT datname FROM pg_database ORDER BY datname')
+    ).rows.map((row) => row.datname);
+    if (JSON.stringify(databases) !== JSON.stringify(['postgres', 'template0', 'template1'])) {
+      throw new Error('Fresh service cluster required');
+    }
+    const bootstrap = {
+      databases,
+      ...(
+        await admin.query(
+          'SELECT inet_server_addr()::text AS server, inet_server_port() AS "serverPort", pg_postmaster_start_time()::text AS postmaster',
+        )
+      ).rows[0],
+    };
+    return bootstrap;
+  });
+  const databases = bootstrap.databases;
+  await diagnostics.run('role_provisioning', async () => {
+    for (const [role, password] of [
+      [runtime, runtimePassword],
+      [migrator, migratorPassword],
+      ...(profile === 'full' ? [[TARGET.verifier, verifierPassword]] : []),
+    ]) {
       await admin.query(
-        'SELECT inet_server_addr()::text AS server, inet_server_port() AS "serverPort", pg_postmaster_start_time()::text AS postmaster',
-      )
-    ).rows[0],
-  };
-  for (const [role, password] of [
-    [runtime, runtimePassword],
-    [migrator, migratorPassword],
-    ...(profile === 'full' ? [[TARGET.verifier, verifierPassword]] : []),
-  ]) {
-    await admin.query(
-      `CREATE ROLE ${quoteIdentifier(role)} LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION NOBYPASSRLS PASSWORD ${quoteLiteral(password)}`,
-    );
-  }
-  for (const database of databases) {
-    await admin.query(`REVOKE ALL ON DATABASE ${quoteIdentifier(database)} FROM PUBLIC`);
-  }
-  await admin.query(
-    `CREATE DATABASE ${quoteIdentifier(target.database)} OWNER ${quoteIdentifier(migrator)}`,
-  );
-  await admin.query(`REVOKE ALL ON DATABASE ${quoteIdentifier(target.database)} FROM PUBLIC`);
-  await admin.query(
-    `GRANT CONNECT ON DATABASE ${quoteIdentifier(target.database)} TO ${quoteIdentifier(runtime)}`,
-  );
-  await admin.query(
-    `COMMENT ON DATABASE ${quoteIdentifier(target.database)} IS ${quoteLiteral(DATABASE_MARKER)}`,
-  );
-  if (profile !== 'full') {
-    await admin.end();
-    clients.splice(clients.indexOf(admin), 1);
-  } else
-    await admin.query(
-      `GRANT CONNECT ON DATABASE ${quoteIdentifier(target.database)} TO ${quoteIdentifier(TARGET.verifier)}`,
-    );
-
-  const owner = await connect({
-    ...endpoint,
-    database: target.database,
-    user: migrator,
-    password: migratorPassword,
+        `CREATE ROLE ${quoteIdentifier(role)} LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION NOBYPASSRLS PASSWORD ${quoteLiteral(password)}`,
+      );
+    }
   });
-  await owner.query('REVOKE ALL ON SCHEMA public FROM PUBLIC');
-  await owner.query(`GRANT USAGE ON SCHEMA public TO ${quoteIdentifier(runtime)}`);
+  await diagnostics.run('database_provisioning', async () => {
+    for (const database of databases) {
+      await admin.query(`REVOKE ALL ON DATABASE ${quoteIdentifier(database)} FROM PUBLIC`);
+    }
+    await admin.query(
+      `CREATE DATABASE ${quoteIdentifier(target.database)} OWNER ${quoteIdentifier(migrator)}`,
+    );
+    await admin.query(`REVOKE ALL ON DATABASE ${quoteIdentifier(target.database)} FROM PUBLIC`);
+    await admin.query(
+      `GRANT CONNECT ON DATABASE ${quoteIdentifier(target.database)} TO ${quoteIdentifier(runtime)}`,
+    );
+    await admin.query(
+      `COMMENT ON DATABASE ${quoteIdentifier(target.database)} IS ${quoteLiteral(DATABASE_MARKER)}`,
+    );
+    if (profile !== 'full') {
+      await admin.end();
+      clients.splice(clients.indexOf(admin), 1);
+    } else
+      await admin.query(
+        `GRANT CONNECT ON DATABASE ${quoteIdentifier(target.database)} TO ${quoteIdentifier(TARGET.verifier)}`,
+      );
+  });
+
+  const owner = await diagnostics.run('database_identity_preflight', async () => {
+    const owner = await connect({
+      ...endpoint,
+      database: target.database,
+      user: migrator,
+      password: migratorPassword,
+    });
+    await owner.query('REVOKE ALL ON SCHEMA public FROM PUBLIC');
+    await owner.query(`GRANT USAGE ON SCHEMA public TO ${quoteIdentifier(runtime)}`);
+    return owner;
+  });
   if (profile === 'initial-migration') {
     await deployFoundation(owner, env.MIGRATOR_DATABASE_URL);
   } else {
@@ -189,9 +209,15 @@ async function main() {
         process.execPath,
         ['--import', 'tsx', ...args],
         { env, cwd: process.cwd() },
-        { signal: abort.signal, timeout: 20 * 60 * 1000 },
+        {
+          signal: abort.signal,
+          timeout: 20 * 60 * 1000,
+          diagnostics,
+          identity: args[0] === 'scripts/ci/seed-fixtures.js' ? 'fixtures' : 'integration_tests',
+        },
       );
     await deployFull({
+      diagnostics,
       hosted: process.env,
       env,
       bootstrap,
@@ -251,18 +277,27 @@ async function main() {
   const tests = files['initial-migration'].map((name) => `apps/api/test/${name}.test.ts`);
   child(['--test', '--test-concurrency=1', ...tests], env);
 }
+let primaryError;
 try {
   await main();
 } catch (error) {
+  primaryError = error;
   // Never emit SQL text, connection strings, driver messages, or child environment values.
-  console.error(`CI integration setup/test failed (${sanitizeDriverError(error)}).`);
+  diagnostics.report(error);
   process.exitCode = 1;
 } finally {
   if (!terminationUncertain) {
-    const results = await Promise.allSettled(clients.map((client) => client.end()));
-    if (results.some((result) => result.status === 'rejected')) {
-      console.error('CI connection cleanup uncertain.');
+    try {
+      await diagnostics.run('cleanup', async () => {
+        const results = await Promise.allSettled(clients.map((client) => client.end()));
+        if (results.some((result) => result.status === 'rejected')) {
+          throw new Error('CI connection cleanup uncertain.');
+        }
+      });
+    } catch (error) {
+      diagnostics.report(error);
       process.exitCode = 1;
     }
   }
+  if (primaryError) diagnostics.report(primaryError);
 }

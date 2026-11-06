@@ -1,3 +1,4 @@
+import { attachChildFailure } from './diagnostics.js';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import {
@@ -207,9 +208,20 @@ export async function supervise(
     maxBytes = 4 * 1024 * 1024,
     signal,
     closeTimeout = 5000,
+    diagnostics,
+    identity = 'unknown',
   } = {},
 ) {
   assert.ok(!signal?.aborted, 'G6B aborted before child launch');
+  diagnostics?.child('START', identity);
+  const info = {
+    exitCode: null,
+    signal: null,
+    timeout: false,
+    heartbeatLost: false,
+    outputOverflow: false,
+    terminationConfirmed: false,
+  };
   let child;
   try {
     child = launch(executable, args, {
@@ -217,8 +229,10 @@ export async function supervise(
       detached: true,
       stdio: ['ignore', 'pipe', 'pipe'],
     });
-  } catch {
-    throw fail();
+  } catch (error) {
+    info.errorCode = error?.code;
+    diagnostics?.child('FAILED', identity, { ...info, terminationConfirmed: true });
+    throw attachChildFailure(fail(), identity, { ...info, terminationConfirmed: true });
   }
   let bytes = 0;
   let bad = false;
@@ -229,6 +243,8 @@ export async function supervise(
   const closedPromise = new Promise((r) =>
     child.once('close', (code, signal) => {
       closed = true;
+      info.exitCode = code;
+      info.signal = signal;
       if (code !== 0 || signal) bad = true;
       r();
       void finish();
@@ -256,11 +272,16 @@ export async function supervise(
             clearTimeout(timer);
           }
         }
+        info.terminationConfirmed = true;
         if (bad) throw fail();
+        diagnostics?.child('COMPLETE', identity, info);
         resolveDone();
       } catch (error) {
         const safe = fail();
         safe.terminationUncertain = Boolean(error.terminationUncertain || !terminated || !closed);
+        info.terminationConfirmed = !safe.terminationUncertain;
+        attachChildFailure(safe, identity, info);
+        diagnostics?.child('FAILED', identity, info);
         rejectDone(safe);
       }
     };
@@ -268,28 +289,49 @@ export async function supervise(
       bad = true;
       void finish();
     };
-    child.once('error', completion);
+    const childError = (error) => {
+      info.errorCode = error?.code;
+      completion();
+    };
+    child.once('error', childError);
     for (const stream of [child.stdout, child.stderr]) {
-      stream?.on('error', completion);
+      stream?.on('error', childError);
       stream?.on('data', (data) => {
         bytes += Buffer.byteLength(data);
-        if (bytes > maxBytes) completion();
+        if (bytes > maxBytes) {
+          info.outputOverflow = true;
+          completion();
+        }
       });
     }
   });
-  const timer = setTimeout(completion, timeout);
-  const interrupt = () => completion();
-  signal?.addEventListener('abort', interrupt, { once: true });
-  process.once('SIGINT', interrupt);
-  process.once('SIGTERM', interrupt);
-  if (signal?.aborted) completion();
+  const timer = setTimeout(() => {
+    info.timeout = true;
+    completion();
+  }, timeout);
+  const sigint = () => {
+    info.requestedSignal = 'SIGINT';
+    completion();
+  };
+  const sigterm = () => {
+    info.requestedSignal = 'SIGTERM';
+    completion();
+  };
+  const heartbeatLost = () => {
+    info.heartbeatLost = signal?.reason === 'heartbeat_loss';
+    completion();
+  };
+  signal?.addEventListener('abort', heartbeatLost, { once: true });
+  process.once('SIGINT', sigint);
+  process.once('SIGTERM', sigterm);
+  if (signal?.aborted) heartbeatLost();
   try {
     await done;
   } finally {
     clearTimeout(timer);
-    signal?.removeEventListener('abort', interrupt);
-    process.removeListener('SIGINT', interrupt);
-    process.removeListener('SIGTERM', interrupt);
+    signal?.removeEventListener('abort', heartbeatLost);
+    process.removeListener('SIGINT', sigint);
+    process.removeListener('SIGTERM', sigterm);
   }
 }
 
@@ -324,7 +366,7 @@ export function migrationLock(db, abort) {
         return { stop: () => clearInterval(t) };
       },
     },
-    () => abort.abort(),
+    () => abort.abort('heartbeat_loss'),
   );
 }
 
@@ -332,36 +374,53 @@ export function migrationLock(db, abort) {
 export async function runG6BStages(s) {
   let error;
   let released = false;
+  const stage = (name, operation) =>
+    s.diagnostics ? s.diagnostics.run(name, operation) : operation();
   const check = () => {
     s.lock.assertHeld();
     s.check?.();
   };
   try {
-    await s.preflight();
-    await s.lock.acquire();
-    check();
-    await s.deploy();
-    check();
-    await s.ledger();
-    check();
-    await s.schema();
-    check();
-    await s.grants();
-    await s.privileges();
-    check();
-    await s.lock.release();
+    await stage('empty_schema_preflight', () => s.preflight());
+    await stage('migration_lock_acquisition', async () => {
+      await s.lock.acquire();
+      check();
+    });
+    await stage('prisma_deployment', async () => {
+      await s.deploy();
+      check();
+    });
+    await stage('ledger_verification', async () => {
+      await s.ledger();
+      check();
+    });
+    await stage('schema_verification', async () => {
+      await s.schema();
+      check();
+    });
+    await stage('runtime_grants', () => s.grants());
+    await stage('runtime_privilege_verification', async () => {
+      await s.privileges();
+      check();
+    });
+    await stage('migration_lock_release', () => s.lock.release());
     released = true;
-    await s.fixtures();
-    await s.tests();
+    await stage('fixture_execution', () => s.fixtures());
+    await stage('integration_test_execution', () => s.tests());
   } catch (e) {
     error = e;
     throw e;
   } finally {
     // Never intentionally release a lock while descendants may still be executing SQL.
     try {
-      if (!released && !error?.terminationUncertain) await s.lock.release();
+      if (!released && !error?.terminationUncertain)
+        await stage('migration_lock_release', () => s.lock.release());
     } finally {
-      await s.cleanup({ terminationUncertain: Boolean(error?.terminationUncertain) });
+      await stage('postrun_verification', async () => {
+        await s.cleanup({ terminationUncertain: Boolean(error?.terminationUncertain) });
+        // A callback returning while hosted teardown is still required is not verification success.
+        if (error?.terminationUncertain) throw error;
+      });
     }
   }
 }
@@ -381,20 +440,26 @@ export async function deployFull(
     tests,
     cleanup,
     abort,
+    diagnostics,
   },
   { run = supervise, root = ROOT } = {},
 ) {
-  assertG6BEnvironment(hosted, env);
+  const diagnosticStage = (name, operation) =>
+    diagnostics ? diagnostics.run(name, operation) : operation();
+  await diagnosticStage('hosted_environment_validation', () => assertG6BEnvironment(hosted, env));
   assert.deepEqual([...bootstrap.databases].sort(), ['postgres', 'template0', 'template1']);
   const manifest = JSON.parse(
     readFileSync(resolve(root, 'scripts/ci/g6b-migrations.json'), 'utf8'),
   );
   const source = resolve(root, 'prisma/migrations');
-  const binary = lockedCLI(root);
-  const platform = createRequire(resolve(root, 'node_modules/@prisma/engines/package.json'))(
-    '@prisma/get-platform',
-  );
-  const engine = lockedEngine(root, await platform.getBinaryTargetForCurrentPlatform());
+  const { binary, engine } = await diagnosticStage('toolchain_resolution', async () => {
+    const binary = lockedCLI(root);
+    const platform = createRequire(resolve(root, 'node_modules/@prisma/engines/package.json'))(
+      '@prisma/get-platform',
+    );
+    const engine = lockedEngine(root, await platform.getBinaryTargetForCurrentPlatform());
+    return { binary, engine };
+  });
   let staging;
   const lock = migrationLock(lockClient, abort);
   let identity;
@@ -404,6 +469,7 @@ export async function deployFull(
     assert.equal(other.postmaster, identity.postmaster);
   };
   await runG6BStages({
+    diagnostics,
     lock,
     check: () => assert.ok(!abort.signal.aborted),
     preflight: async () => {
@@ -440,7 +506,7 @@ export async function deployFull(
             NOOK_CI_G6B_MIGRATIONS_DIR: staging.directory,
           },
         },
-        { signal: abort.signal },
+        { signal: abort.signal, diagnostics, identity: 'prisma' },
       );
       verifyMigrationFiles(staging.directory, manifest);
     },

@@ -1,3 +1,5 @@
+// Keep database-free diagnostic regression coverage in the existing hosted G6B test selection.
+import './diagnostics.test.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { EventEmitter } from 'node:events';
