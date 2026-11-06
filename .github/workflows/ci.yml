@@ -50,6 +50,8 @@ jobs:
         run: node scripts/ci/check.js
       - name: Offline G6A migration-path tests
         run: node --import tsx --test scripts/ci/g6a-migration.test.js
+      - name: Offline G6B deployment and ledger tests
+        run: node --import tsx --test scripts/ci/g6b-migration.test.js scripts/ci/migration-ledger.test.js scripts/ci/g6b-preflight.test.js
       - name: CI script lint and formatting
         run: |
           npx --no-install eslint scripts/ci
@@ -69,7 +71,7 @@ jobs:
     timeout-minutes: 30
     services:
       postgres:
-        image: postgres:17
+        image: postgres:17.10-bookworm@sha256:9b18b78397054fce88a9552e9d5a3ad5bb7fd258c5b3cc1c5028e46373d6ea8f
         env:
           POSTGRES_USER: postgres
           POSTGRES_DB: postgres

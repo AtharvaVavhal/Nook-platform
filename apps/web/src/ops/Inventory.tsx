@@ -1,5 +1,5 @@
 import { useState, type FormEvent, type ChangeEvent } from 'react';
-import { EmptyState, ErrorState, LoadingState, Pager, useAsync } from '../finance/shared';
+import { EmptyState, ErrorState, LoadingState, useAsync } from '../finance/shared';
 import { Field, FormError, PageHead, Tag, useGuardedAction } from './ui';
 import {
   opsApi,
@@ -366,7 +366,7 @@ export function FloorNew({ propertyId }: { propertyId: string }) {
       <PageHead title="Add floor" />
       <FloorForm
         propertyId={propertyId}
-        onSaved={(f) => {
+        onSaved={() => {
           window.location.hash = opsLinks.rooms(propertyId);
         }}
         onCancel={() => {
@@ -902,7 +902,7 @@ export function BedNew({ roomId }: { roomId: string }) {
       <PageHead title="Add bed" />
       <BedForm
         roomId={roomId}
-        onSaved={(b) => {
+        onSaved={() => {
           window.location.hash = opsLinks.beds(roomId);
         }}
         onCancel={() => {

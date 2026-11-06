@@ -1,0 +1,78 @@
+{
+  "version": 1,
+  "provider": "postgresql",
+  "migrations": [
+    {
+      "name": "20261031154500_slice_2_2_foundation",
+      "checksum": "b7f83263a0bbe212148640a337cef02cc87fee68a73eb55da4ebcd639ae26b78"
+    },
+    {
+      "name": "20261101093228_add_resident_model",
+      "checksum": "6ca8032d014afb54495d9f65906af87d7943ab4607f85ae360feb18ee66f7c49"
+    },
+    {
+      "name": "20261101101417_add_enquiry_lead_management",
+      "checksum": "30ec8911eb755493ed03a87ddd47bd5517c13d31f5354f0fc32b5d0ab844bdd6"
+    },
+    {
+      "name": "20261101101956_add_archived_enquiry_status",
+      "checksum": "b0983694d944527a0caec4712306c2d028e8ed5276799b0d8b1da6804e121bae"
+    },
+    {
+      "name": "20261101104957_add_booking_reservation",
+      "checksum": "f1d239d69d2550e1a2d95e981f2e9a90aef73bb8b0c03d699c2fc64b48318e56"
+    },
+    {
+      "name": "20261101110350_add_admission_model",
+      "checksum": "4719d3d2226121288aa55689f22db574c325c04594511768f2daab55ba923075"
+    },
+    {
+      "name": "20261101113306_add_checkin_checkout",
+      "checksum": "e86d6219840a5c69072962ca40a230d55b1316283ca740b7afc61b94ebc79c8b"
+    },
+    {
+      "name": "20261101130000_add_finance_billing",
+      "checksum": "0eab8226890957ef6186aaa74149dea60433b5f9632fed5e50d56f11a8c4423a"
+    },
+    {
+      "name": "20261101150000_add_payment_idempotency",
+      "checksum": "af4b3fc25da0e2d08c182ebaaf80c46d6c7d755b7506c1570f7caf16771cbf01"
+    },
+    {
+      "name": "20261101170000_add_financial_corrections",
+      "checksum": "32aafd3ec28eeb97c17ed9ae1b48ddfe82bc80d5e4fd6177ca853704d63997c9"
+    },
+    {
+      "name": "20261101190000_tenant_composite_keys_phase_3_3_to_3_5",
+      "checksum": "6926135a839c888456564af6af8f69b91713de6d11c18a83c3aa4d10fe204f7a"
+    },
+    {
+      "name": "20261101210000_admission_and_lifecycle_integrity",
+      "checksum": "cfbeee4146df18a3bf8f2bb4646d98742ed86d4f6a01238f4194b3eccd1c03cf"
+    },
+    {
+      "name": "20261102100000_account_security",
+      "checksum": "efcd898006bcf43bc827b532ec05c58b4806834f389be7207d7bfd3c4848fb58"
+    },
+    {
+      "name": "20261103090000_payment_receipt_snapshot",
+      "checksum": "09e38f4af45c2d6580981f14f99a6f10779d79f5b45840903354b2566e537a3d"
+    },
+    {
+      "name": "20261103100000_invoice_void_record",
+      "checksum": "6e04541e0f06d1462590672fc9b6789100b20a5993ea59ef0aa8bd3339987d3a"
+    },
+    {
+      "name": "20261103110000_invoice_guard_hardening",
+      "checksum": "fcc7c4a607a7f49aad5a916836eb4dc24925ce9046aa3fc7b95ce509cce3c797"
+    },
+    {
+      "name": "20261103120000_invoice_status_consistency",
+      "checksum": "c66d1a696e20c3b74b0b9bdff41aa31a9876a482c351d487aaddbc4223e625e7"
+    },
+    {
+      "name": "20261103130000_invoice_active_uniqueness",
+      "checksum": "a657461c3ba28a1bcf4cfb8ee762f1e57cc930deceb43d1232fba55f694c1d99"
+    }
+  ]
+}

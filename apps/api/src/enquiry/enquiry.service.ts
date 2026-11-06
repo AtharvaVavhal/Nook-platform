@@ -2,7 +2,6 @@ import {
   Inject,
   Injectable,
   NotFoundException,
-  ForbiddenException,
   BadRequestException,
   ConflictException,
 } from '@nestjs/common';
@@ -95,8 +94,8 @@ export class EnquiryService {
         { email: { contains: search, mode: 'insensitive' } },
       ];
     }
-    if (status) where.status = status as any;
-    if (source) where.source = source as any;
+    if (status) where.status = status;
+    if (source) where.source = source;
     if (propertyId) where.propertyId = propertyId;
     if (fromDate || toDate) {
       where.createdAt = {};
@@ -190,7 +189,7 @@ export class EnquiryService {
     });
   }
 
-  async convert(organizationId: string, enquiryId: string, residentData: any) {
+  async convert(organizationId: string, enquiryId: string, residentData: unknown) {
     requireUuid(enquiryId, 'enquiryId');
     // Optional overrides for the new resident: allow-listed fields only (no organizationId, no id).
     const body = parseConvertBody(residentData);
@@ -230,7 +229,6 @@ export class EnquiryService {
   }
 
   async getOverdueFollowUps(organizationId: string) {
-    const now = new Date();
     return this.prisma.db.enquiryFollowUp.findMany({
       where: {
         enquiry: { organizationId, status: { not: 'CONVERTED' } },

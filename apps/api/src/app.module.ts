@@ -11,7 +11,16 @@ import { CheckInModule } from './checkin/checkin.module.js';
 import { FinanceModule } from './finance/finance.module.js';
 
 @Module({
-  imports: [AuthModule, InventoryModule, ResidentModule, EnquiryModule, BookingModule, AdmissionModule, CheckInModule, FinanceModule],
+  imports: [
+    AuthModule,
+    InventoryModule,
+    ResidentModule,
+    EnquiryModule,
+    BookingModule,
+    AdmissionModule,
+    CheckInModule,
+    FinanceModule,
+  ],
   controllers: [HealthController],
   providers: [DatabaseService],
 })

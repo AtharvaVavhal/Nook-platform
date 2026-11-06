@@ -185,7 +185,7 @@ export class InventoryService {
     };
   }
 
-async archiveBed(context: AuthenticatedContext, bedId: string) {
+  async archiveBed(context: AuthenticatedContext, bedId: string) {
     this.assertRole(context);
     try {
       return {

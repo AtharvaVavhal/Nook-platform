@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { randomUUID } from 'node:crypto';
 import { NestFactory } from '@nestjs/core';
+import type { INestApplication } from '@nestjs/common';
 import { AppModule } from '../../src/app.module.js';
 import request from 'supertest';
 import { requireTestDatabaseUrl } from './helpers/env.js';
@@ -19,10 +20,9 @@ if (!fixturePassword) {
 
 const FIXTURE_EMAIL = 'm3c-owner@nook.test.invalid';
 const FIXTURE_PASSWORD = fixturePassword;
-const FIXTURE_ORG_ID = '00000000-0000-4000-8000-000000000101';
 
-let app: any;
-let server: any;
+let app: INestApplication;
+let server: ReturnType<typeof request>;
 let authCookies: { sessionCookie: string; csrfCookie: string; csrfToken: string };
 let orgACookies: { sessionCookie: string; csrfCookie: string; csrfToken: string };
 let orgBCookies: { sessionCookie: string; csrfCookie: string; csrfToken: string };
@@ -33,7 +33,7 @@ async function loginFixture() {
     .set('Origin', 'http://localhost:5173')
     .send({ email: FIXTURE_EMAIL, password: FIXTURE_PASSWORD })
     .expect(200);
-  const cookies = res.headers['set-cookie'];
+  const cookies = res.headers['set-cookie'] as unknown as string[];
   const sessionCookie = cookies.find((c: string) => c.startsWith('nook_session='));
   const csrfCookie = cookies.find((c: string) => c.startsWith('nook_csrf='));
   const csrfToken = cookies
@@ -49,7 +49,7 @@ async function loginUser(email: string, password: string) {
     .set('Origin', 'http://localhost:5173')
     .send({ email, password })
     .expect(200);
-  const cookies = res.headers['set-cookie'];
+  const cookies = res.headers['set-cookie'] as unknown as string[];
   const sessionCookie = cookies.find((c: string) => c.startsWith('nook_session='));
   const csrfCookie = cookies.find((c: string) => c.startsWith('nook_csrf='));
   const csrfToken = cookies
@@ -107,7 +107,7 @@ test('Property CRUD lifecycle', async () => {
     .set('Cookie', `${sessionCookie}; ${csrfCookie}`)
     .expect(200);
   assert.ok(Array.isArray(listRes.body.data));
-  assert.ok(listRes.body.data.some((p: any) => p.id === propertyId));
+  assert.ok(listRes.body.data.some((p: { id: string }) => p.id === propertyId));
 
   // Get property
   const getRes = await server
@@ -140,7 +140,7 @@ test('Property CRUD lifecycle', async () => {
     .get('/api/v1/properties')
     .set('Cookie', `${sessionCookie}; ${csrfCookie}`)
     .expect(200);
-  assert.ok(!listAfterArchive.body.data.some((p: any) => p.id === propertyId));
+  assert.ok(!listAfterArchive.body.data.some((p: { id: string }) => p.id === propertyId));
 });
 
 test('Floor CRUD under property', async () => {
@@ -174,7 +174,7 @@ test('Floor CRUD under property', async () => {
     .set('Cookie', `${sessionCookie}; ${csrfCookie}`)
     .expect(200);
   assert.ok(Array.isArray(listRes.body.data));
-  assert.ok(listRes.body.data.some((f: any) => f.id === floorId));
+  assert.ok(listRes.body.data.some((f: { id: string }) => f.id === floorId));
 
   // update floor
   const updRes = await server
@@ -223,7 +223,7 @@ test('Room CRUD with floor filter and q prefix', async () => {
     .set('x-csrf-token', csrfToken!)
     .send({ floorId, label: 'Alpha Room' })
     .expect(201);
-  const room2 = await server
+  await server
     .post(`/api/v1/properties/${propertyId}/rooms`)
     .set('Origin', 'http://localhost:5173')
     .set('Cookie', `${sessionCookie}; ${csrfCookie}`)
@@ -315,7 +315,11 @@ test('Bed CRUD with status and reason validation', async () => {
     .set('Origin', 'http://localhost:5173')
     .set('Cookie', `${sessionCookie}; ${csrfCookie}`)
     .set('x-csrf-token', csrfToken!)
-    .send({ label: 'Bed 2', operationalStatus: 'OUT_OF_SERVICE', outOfServiceReason: 'Maintenance' })
+    .send({
+      label: 'Bed 2',
+      operationalStatus: 'OUT_OF_SERVICE',
+      outOfServiceReason: 'Maintenance',
+    })
     .expect(201);
   assert.equal(bedOut.body.data.operationalStatus, 'OUT_OF_SERVICE');
   assert.equal(bedOut.body.data.outOfServiceReason, 'Maintenance');
@@ -356,14 +360,13 @@ test('Bed CRUD with status and reason validation', async () => {
 
 test('Authentication guards protect mutations', async () => {
   const { sessionCookie, csrfCookie, csrfToken } = authCookies;
-  const propRes = await server
+  await server
     .post('/api/v1/properties')
     .set('Origin', 'http://localhost:5173')
     .set('Cookie', `${sessionCookie}; ${csrfCookie}`)
     .set('x-csrf-token', csrfToken!)
     .send({ code: `AUTHPROP-${randomUUID()}`, name: 'Auth Test' })
     .expect(201);
-  const propertyId = propRes.body.data.id;
 
   // missing session -> 401
   await server
@@ -390,7 +393,7 @@ test('Authentication guards protect mutations', async () => {
 });
 
 test('Cross-org access denied – using non‑existent org id returns 404', async () => {
-  const { sessionCookie, csrfCookie, csrfToken } = authCookies;
+  const { sessionCookie, csrfCookie } = authCookies;
   const fakeOrgId = '00000000-0000-4000-8000-000000000999';
   // try to list floors for unknown property (belongs to other org)
   await server
@@ -430,14 +433,14 @@ test('Organisation A can create property and Organisation B cannot access it', a
     .get('/api/v1/properties')
     .set('Cookie', `${orgACookies.sessionCookie}; ${orgACookies.csrfCookie}`)
     .expect(200);
-  assert.ok(listA.body.data.some((p: any) => p.id === propertyId));
+  assert.ok(listA.body.data.some((p: { id: string }) => p.id === propertyId));
 
   // Org B cannot list Org A's property
   const listB = await server
     .get('/api/v1/properties')
     .set('Cookie', `${orgBCookies.sessionCookie}; ${orgBCookies.csrfCookie}`)
     .expect(200);
-  assert.ok(!listB.body.data.some((p: any) => p.id === propertyId));
+  assert.ok(!listB.body.data.some((p: { id: string }) => p.id === propertyId));
 
   // Org B cannot retrieve Org A's property by ID
   await server

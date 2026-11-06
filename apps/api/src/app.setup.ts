@@ -9,7 +9,7 @@ import { REQUEST_ID_HEADER, requestIdMiddleware } from './observability/request-
 export const API_PREFIX = 'api/v1';
 
 /** Request headers the browser client may send cross-origin. Everything else is refused at the preflight. */
-export const CORS_ALLOWED_HEADERS = ['Content-Type', 'X-CSRF-Token'];
+export const CORS_ALLOWED_HEADERS = ['Content-Type', 'X-CSRF-Token', 'Idempotency-Key'];
 export const CORS_METHODS = ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE'];
 
 /**

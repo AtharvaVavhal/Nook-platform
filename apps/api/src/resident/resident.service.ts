@@ -4,7 +4,7 @@ import { pickResidentFields } from './resident.fields.js';
 import { parsePagination } from '../common/ids.js';
 import { asQuery, queryEnum, queryText } from '../common/input.js';
 import { CreateResidentDto, UpdateResidentDto } from './resident.dto.js';
-import type { Resident } from '../generated/client.js';
+import type { Prisma } from '../generated/client.js';
 
 const RESIDENT_STATUSES = ['ACTIVE', 'INACTIVE', 'ARCHIVED'] as const;
 const DOCUMENT_STATUSES = ['PENDING', 'VERIFIED', 'REJECTED'] as const;
@@ -32,7 +32,7 @@ export class ResidentService {
     );
     const { page: rawPage, limit: rawLimit } = query;
     const { page, limit } = parsePagination(rawPage, rawLimit);
-    const where: Record<string, any> = { organizationId };
+    const where: Prisma.ResidentWhereInput = { organizationId };
 
     if (search) {
       where.OR = [

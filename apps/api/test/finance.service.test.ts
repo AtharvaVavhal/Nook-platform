@@ -19,6 +19,8 @@ import {
  * PostgreSQL behaviour such as locking, triggers or unique indexes.
  */
 
+type RecordPaymentResult = Awaited<ReturnType<FinanceService['recordPayment']>>;
+
 const ORG = randomUUID();
 const ACTOR = randomUUID();
 const DAY = 86_400_000;
@@ -657,28 +659,36 @@ function makePaymentFake(invoiceOverrides: Record<string, unknown> = {}) {
       findUnique: async ({ where }: any) => payments.find((p) => p.id === where.id) ?? null,
     },
     invoice: {
-      findFirst: async ({ where }: any) =>
-        invoices.find((i) => i.id === where.id) ?? null,
+      findFirst: async ({ where }: any) => invoices.find((i) => i.id === where.id) ?? null,
       findFirstOrThrow: async ({ where }: any) => {
         const found = invoices.find((i) => i.id === where.id);
         if (!found) throw new Error('not found');
         return found;
       },
-      findUnique: async ({ where }: any) =>
-        invoices.find((i) => i.id === where.id) ?? null,
+      findUnique: async ({ where }: any) => invoices.find((i) => i.id === where.id) ?? null,
       update: async ({ where, data }: any) => {
         const found = invoices.find((i) => i.id === where.id);
         if (!found) throw new Error('invoice not found');
         // Always convert decimal fields to Decimal objects
         for (const [key, value] of Object.entries(data)) {
-          const isDecimalField = key === 'paidAmount' || key === 'amount' || key === 'adjustmentTotal';
+          const isDecimalField =
+            key === 'paidAmount' || key === 'amount' || key === 'adjustmentTotal';
           if (isDecimalField) {
-            if (value && typeof value === 'object' && typeof value.toFixed === 'function') {
+            if (
+              value &&
+              typeof value === 'object' &&
+              'toFixed' in value &&
+              typeof value.toFixed === 'function'
+            ) {
               // Decimal-like object (has toFixed method)
               (found as any)[key] = value;
             } else if (typeof value === 'string' || typeof value === 'number') {
               (found as any)[key] = new Decimal(String(value));
-            } else if (value && typeof value === 'object' && value.constructor?.name === 'Decimal') {
+            } else if (
+              value &&
+              typeof value === 'object' &&
+              value.constructor?.name === 'Decimal'
+            ) {
               (found as any)[key] = value;
             } else {
               (found as any)[key] = new Decimal(String(value));
@@ -713,13 +723,18 @@ function makePaymentFake(invoiceOverrides: Record<string, unknown> = {}) {
     },
   };
   // Snapshot state for potential rollback
-  let snapshot: { invoices: any[]; payments: any[]; audits: any[]; idempotencyKeys: any[] } | null = null;
+  let snapshot: { invoices: any[]; payments: any[]; audits: any[]; idempotencyKeys: any[] } | null =
+    null;
   const db: any = {
     ...tx,
     $transaction: async (fn: (t: any) => unknown) => {
       // Take snapshot before transaction
       snapshot = {
-        invoices: JSON.parse(JSON.stringify(invoices, (_, v) => typeof v === 'object' && v !== null && 'toFixed' in v ? v.toString() : v)),
+        invoices: JSON.parse(
+          JSON.stringify(invoices, (_, v) =>
+            typeof v === 'object' && v !== null && 'toFixed' in v ? v.toString() : v,
+          ),
+        ),
         payments: JSON.parse(JSON.stringify(payments)),
         audits: JSON.parse(JSON.stringify(audits)),
         idempotencyKeys: JSON.parse(JSON.stringify(idempotencyKeys)),
@@ -743,28 +758,73 @@ function makePaymentFake(invoiceOverrides: Record<string, unknown> = {}) {
     resident: { findFirst: async () => ({ id: 'resident-1' }) },
     booking: { findFirst: async () => null },
   };
-  return { service: new FinanceService({ db } as any), invoices, payments, audits, idempotencyKeys, tx, db };
+  return {
+    service: new FinanceService({ db } as any),
+    invoices,
+    payments,
+    audits,
+    idempotencyKeys,
+    tx,
+    db,
+  };
 }
 
 // FIN-REC-001: Sequential payments sum correctly
 test('FIN-REC-001: sequential payments of 100.00, 200.00, 700.00 sum to 1000.00 with three audit events', async () => {
-  const { service, invoices, payments, audits } = makePaymentFake({ id: 'ffffffff-ffff-ffff-ffff-ffffffffffff' });
-  await service.recordPayment(ORG, ACTOR, { invoiceId: 'ffffffff-ffff-ffff-ffff-ffffffffffff', amount: '100.00', method: 'CASH' }, 'rec001-key-0001');
-  await service.recordPayment(ORG, ACTOR, { invoiceId: 'ffffffff-ffff-ffff-ffff-ffffffffffff', amount: '200.00', method: 'CASH' }, 'rec001-key-0002');
-  await service.recordPayment(ORG, ACTOR, { invoiceId: 'ffffffff-ffff-ffff-ffff-ffffffffffff', amount: '700.00', method: 'CASH' }, 'rec001-key-0003');
+  const { service, invoices, payments, audits } = makePaymentFake({
+    id: 'ffffffff-ffff-ffff-ffff-ffffffffffff',
+  });
+  await service.recordPayment(
+    ORG,
+    ACTOR,
+    { invoiceId: 'ffffffff-ffff-ffff-ffff-ffffffffffff', amount: '100.00', method: 'CASH' },
+    'rec001-key-0001',
+  );
+  await service.recordPayment(
+    ORG,
+    ACTOR,
+    { invoiceId: 'ffffffff-ffff-ffff-ffff-ffffffffffff', amount: '200.00', method: 'CASH' },
+    'rec001-key-0002',
+  );
+  await service.recordPayment(
+    ORG,
+    ACTOR,
+    { invoiceId: 'ffffffff-ffff-ffff-ffff-ffffffffffff', amount: '700.00', method: 'CASH' },
+    'rec001-key-0003',
+  );
   assert.equal(fmt(invoices[0].paidAmount), '1000.00');
   assert.equal(payments.length, 3);
   const recorded = eventsOf(audits, 'finance.payment.recorded');
   assert.equal(recorded.length, 3);
-  assert.deepEqual(recorded.map((r) => r.metadata.amount), ['100.00', '200.00', '700.00']);
+  assert.deepEqual(
+    recorded.map((r) => r.metadata.amount),
+    ['100.00', '200.00', '700.00'],
+  );
 });
 
 // FIN-REC-002: Rapid sequential payments
 test('FIN-REC-002: rapid sequential payments are each recorded with an audit event', async () => {
-  const { service, invoices, payments, audits } = makePaymentFake({ id: 'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee' });
-  await service.recordPayment(ORG, ACTOR, { invoiceId: 'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee', amount: '100.00', method: 'CASH' }, 'rec002-key-0001');
-  await service.recordPayment(ORG, ACTOR, { invoiceId: 'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee', amount: '200.00', method: 'CASH' }, 'rec002-key-0002');
-  await service.recordPayment(ORG, ACTOR, { invoiceId: 'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee', amount: '50.00', method: 'CASH' }, 'rec002-key-0003');
+  const { service, invoices, payments, audits } = makePaymentFake({
+    id: 'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee',
+  });
+  await service.recordPayment(
+    ORG,
+    ACTOR,
+    { invoiceId: 'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee', amount: '100.00', method: 'CASH' },
+    'rec002-key-0001',
+  );
+  await service.recordPayment(
+    ORG,
+    ACTOR,
+    { invoiceId: 'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee', amount: '200.00', method: 'CASH' },
+    'rec002-key-0002',
+  );
+  await service.recordPayment(
+    ORG,
+    ACTOR,
+    { invoiceId: 'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee', amount: '50.00', method: 'CASH' },
+    'rec002-key-0003',
+  );
   assert.equal(fmt(invoices[0].paidAmount), '350.00');
   assert.equal(payments.length, 3);
   const recorded = eventsOf(audits, 'finance.payment.recorded');
@@ -773,14 +833,37 @@ test('FIN-REC-002: rapid sequential payments are each recorded with an audit eve
 
 // FIN-REC-003: Sequential payments within balance limits
 test('FIN-REC-003: sequential payments within balance are all accepted; overpayment is rejected', async () => {
-  const { service, invoices } = makePaymentFake({ id: '11111111-2222-3333-4444-555555555555', amount: new Decimal('100.00') });
-  await service.recordPayment(ORG, ACTOR, { invoiceId: '11111111-2222-3333-4444-555555555555', amount: '30.00', method: 'CASH' }, 'rec003-key-001');
-  await service.recordPayment(ORG, ACTOR, { invoiceId: '11111111-2222-3333-4444-555555555555', amount: '30.00', method: 'CASH' }, 'rec003-key-002');
-  await service.recordPayment(ORG, ACTOR, { invoiceId: '11111111-2222-3333-4444-555555555555', amount: '30.00', method: 'CASH' }, 'rec003-key-003');
+  const { service, invoices } = makePaymentFake({
+    id: '11111111-2222-3333-4444-555555555555',
+    amount: new Decimal('100.00'),
+  });
+  await service.recordPayment(
+    ORG,
+    ACTOR,
+    { invoiceId: '11111111-2222-3333-4444-555555555555', amount: '30.00', method: 'CASH' },
+    'rec003-key-001',
+  );
+  await service.recordPayment(
+    ORG,
+    ACTOR,
+    { invoiceId: '11111111-2222-3333-4444-555555555555', amount: '30.00', method: 'CASH' },
+    'rec003-key-002',
+  );
+  await service.recordPayment(
+    ORG,
+    ACTOR,
+    { invoiceId: '11111111-2222-3333-4444-555555555555', amount: '30.00', method: 'CASH' },
+    'rec003-key-003',
+  );
   assert.equal(fmt(invoices[0].paidAmount), '90.00');
   // Fourth payment would exceed balance - should be rejected
   await assert.rejects(
-    service.recordPayment(ORG, ACTOR, { invoiceId: '11111111-2222-3333-4444-555555555555', amount: '30.00', method: 'CASH' }, 'rec003-key-004'),
+    service.recordPayment(
+      ORG,
+      ACTOR,
+      { invoiceId: '11111111-2222-3333-4444-555555555555', amount: '30.00', method: 'CASH' },
+      'rec003-key-004',
+    ),
     (e: Error) => e instanceof Error && e.message.includes('remaining balance'),
   );
   assert.equal(fmt(invoices[0].paidAmount), '90.00');
@@ -789,24 +872,48 @@ test('FIN-REC-003: sequential payments within balance are all accepted; overpaym
 // FIN-REC-004: Payment reversal logic
 test('FIN-REC-004: payment reversal and replacement correctly update paid_amount logic', async () => {
   const { service, invoices } = makePaymentFake({ id: '22222222-3333-4444-5555-666666666666' });
-  await service.recordPayment(ORG, ACTOR, { invoiceId: '22222222-3333-4444-5555-666666666666', amount: '100.00', method: 'CASH' }, 'rec004-key-0001');
+  await service.recordPayment(
+    ORG,
+    ACTOR,
+    { invoiceId: '22222222-3333-4444-5555-666666666666', amount: '100.00', method: 'CASH' },
+    'rec004-key-0001',
+  );
   assert.equal(fmt(invoices[0].paidAmount), '100.00');
 
   // Verify statusAfterCorrection logic for reversal
   const { statusAfterCorrection } = await import('../src/finance/finance.util.js');
-  const statusAfterReversal = statusAfterCorrection(new Decimal('100.00'), new Decimal('0.00'), new Decimal('0.00'));
+  const statusAfterReversal = statusAfterCorrection(
+    new Decimal('100.00'),
+    new Decimal('0.00'),
+    new Decimal('0.00'),
+  );
   assert.equal(statusAfterReversal, 'ISSUED');
 });
 
 // FIN-REC-005: Idempotent replay
 test('FIN-REC-005: idempotent replay with same key returns cached result without duplicate payment', async () => {
-  const { service, payments, audits, idempotencyKeys } = makePaymentFake({ id: '33333333-4444-5555-6666-777777777777' });
-  const first = await service.recordPayment(ORG, ACTOR, { invoiceId: '33333333-4444-5555-6666-777777777777', amount: '100.00', method: 'CASH' }, 'rec005-idem-key-001');
+  const { service, payments, audits, idempotencyKeys } = makePaymentFake({
+    id: '33333333-4444-5555-6666-777777777777',
+  });
+  const first: RecordPaymentResult = await service.recordPayment(
+    ORG,
+    ACTOR,
+    { invoiceId: '33333333-4444-5555-6666-777777777777', amount: '100.00', method: 'CASH' },
+    'rec005-idem-key-001',
+  );
   assert.equal(first.idempotentReplay, false);
   assert.equal(payments.length, 1);
 
-  const second = await service.recordPayment(ORG, ACTOR, { invoiceId: '33333333-4444-5555-6666-777777777777', amount: '100.00', method: 'CASH' }, 'rec005-idem-key-001');
+  const second: RecordPaymentResult = await service.recordPayment(
+    ORG,
+    ACTOR,
+    { invoiceId: '33333333-4444-5555-6666-777777777777', amount: '100.00', method: 'CASH' },
+    'rec005-idem-key-001',
+  );
   assert.equal(second.idempotentReplay, true);
+  // The replay branch comes from stored JSON, so the boolean alone cannot narrow the result.
+  assert.ok('payment' in first && 'invoice' in first);
+  assert.ok('payment' in second && 'invoice' in second);
   assert.equal(second.payment.id, first.payment.id);
   assert.deepEqual(second.invoice, first.invoice);
   assert.equal(payments.length, 1, 'replay must not create duplicate payment');
@@ -841,7 +948,7 @@ test('FIN-REC-006: verification failure rolls back the entire transaction', asyn
   const idempotencyKeys: any[] = [];
   let updateCalled = false;
 
-const tx: any = {
+  const tx: any = {
     $executeRaw: async () => 0,
     $queryRaw: async (strings: TemplateStringsArray) => {
       // _values is intentionally unused - the query doesn't need parameters
@@ -899,7 +1006,7 @@ const tx: any = {
         return data;
       },
     },
-paymentIdempotencyKey: {
+    paymentIdempotencyKey: {
       findUnique: async () => null,
       create: async ({ data }: any) => {
         idempotencyKeys.push(data);
@@ -936,8 +1043,14 @@ paymentIdempotencyKey: {
 
   // This should throw because the verification will fail
   await assert.rejects(
-    service.recordPayment(ORG, ACTOR, { invoiceId: VERIFY_FAIL_INV, amount: '100.00', method: 'CASH' }, 'verify-fail-key-0001'),
-    (e: Error) => e.message.includes('paid_amount not persisted') && e.message.includes(VERIFY_FAIL_INV),
+    service.recordPayment(
+      ORG,
+      ACTOR,
+      { invoiceId: VERIFY_FAIL_INV, amount: '100.00', method: 'CASH' },
+      'verify-fail-key-0001',
+    ),
+    (e: Error) =>
+      e.message.includes('paid_amount not persisted') && e.message.includes(VERIFY_FAIL_INV),
   );
 
   // Verify full rollback: no payment, no audit, no idempotency key
@@ -949,10 +1062,27 @@ paymentIdempotencyKey: {
 
 // FIN-REC-007: paid_amount_drift invariant
 test('FIN-REC-007: paid_amount_drift invariant is zero after test payments', async () => {
-  const { service, invoices, payments } = makePaymentFake({ id: 'eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee' });
-await service.recordPayment(ORG, ACTOR, { invoiceId: 'eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee', amount: '100.00', method: 'CASH' }, 'drift-key-0001');
-  await service.recordPayment(ORG, ACTOR, { invoiceId: 'eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee', amount: '200.00', method: 'CASH' }, 'drift-key-0002');
-  await service.recordPayment(ORG, ACTOR, { invoiceId: 'eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee', amount: '50.00', method: 'CASH' }, 'drift-key-0003');
+  const { service, invoices, payments } = makePaymentFake({
+    id: 'eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee',
+  });
+  await service.recordPayment(
+    ORG,
+    ACTOR,
+    { invoiceId: 'eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee', amount: '100.00', method: 'CASH' },
+    'drift-key-0001',
+  );
+  await service.recordPayment(
+    ORG,
+    ACTOR,
+    { invoiceId: 'eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee', amount: '200.00', method: 'CASH' },
+    'drift-key-0002',
+  );
+  await service.recordPayment(
+    ORG,
+    ACTOR,
+    { invoiceId: 'eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee', amount: '50.00', method: 'CASH' },
+    'drift-key-0003',
+  );
 
   // Simulate the paid_amount_drift invariant check
   for (const inv of invoices) {
@@ -960,6 +1090,10 @@ await service.recordPayment(ORG, ACTOR, { invoiceId: 'eeeeeeee-eeee-eeee-eeee-ee
       .filter((p) => p.invoiceId === inv.id)
       .reduce((sum, p) => sum.plus(p.amount), new Decimal('0'));
     const expectedPaid = liveCash.minus(inv.adjustmentTotal);
-    assert.equal(fmt(inv.paidAmount), fmt(expectedPaid), `drift check failed for invoice ${inv.id}`);
+    assert.equal(
+      fmt(inv.paidAmount),
+      fmt(expectedPaid),
+      `drift check failed for invoice ${inv.id}`,
+    );
   }
 });

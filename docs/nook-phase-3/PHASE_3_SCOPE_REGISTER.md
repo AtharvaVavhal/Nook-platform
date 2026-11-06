@@ -110,11 +110,17 @@ All are exact-pinned and used by committed code. Recorded for owner confirmation
 
 ## Raw SQL
 
-Raw SQL (`$queryRaw`, `$executeRaw`) is approved in seven files, each for a reason Prisma cannot express:
+Raw SQL (`$queryRaw`, `$executeRaw`) is approved in eight files, each for a reason Prisma cannot express:
 `auth/auth.repository.ts` (session handling), `booking/booking.service.ts` and `enquiry/enquiry.service.ts`
 (`SELECT ... FOR UPDATE` row locks), `finance/finance.service.ts` (advisory locks, row locks, invoice numbering), `auth/throttle.service.ts` (one atomic upsert per failed sign-in), and, approved 2026-11-02 (Task 4E),
 `admission/admission.service.ts` and `checkin/checkin.service.ts` (`SELECT ... FOR UPDATE` row locks so check-in, check-out and
 cancellation serialize; see `TASK_4E_CHECKIN_CHECKOUT.md`).
+
+The explicitly approved S9 exception for `apps/api/src/booking/booking.rules.ts` covers its existing
+parameterized, read-only booking-overlap query for timezone-normalized, tenant-scoped bed/date overlap
+validation. It compares half-open booking periods as Asia/Kolkata calendar dates, filters by organization
+and bed, excludes cancelled bookings, and optionally excludes the booking being changed. This approval
+does not change application behavior or establish that the SQL has passed database-backed integration tests.
 
 ## Guard maintenance, 2026-11-02
 

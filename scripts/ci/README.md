@@ -12,10 +12,14 @@ checks. Static Prisma schema validation uses a CI-only config with no datasource
 `test-files.json` is the reviewed backend routing manifest; new tests need explicit classification.
 Frontend uses its existing workspace test command (`src/*.test.ts`).
 
-Both `initial-integration` and `full-integration` depend on `quality`. They run independently on
-separate GitHub-hosted runners with separate PostgreSQL 17 services, no shared storage or database
-artifacts, and 30-minute job timeouts. Host bindings are loopback-only. GitHub owns service cleanup.
-No self-hosted runner, existing database, arbitrary URL, or operator-specified endpoint is accepted.
+`full-integration` (G6B) in `.github/workflows/ci.yml` depends on `quality` and runs only after it
+succeeds. `initial-integration` (G6A) is the sole job in `.github/workflows/g6a.yml`, triggered by
+`workflow_dispatch` with `AUTHORIZE_G6A`; it has no `needs` dependency on `quality` or G6B. G6A runs
+the static CI contract, offline migration-path tests and migration-content checks before its
+provisioning step, but does not run the complete quality job. The two integration jobs use separate
+GitHub-hosted runners and PostgreSQL 17 services, no shared storage or database artifacts, and
+30-minute job timeouts. Host bindings are loopback-only. GitHub owns service cleanup. No self-hosted
+runner, existing database, arbitrary URL, or operator-specified endpoint is accepted.
 
 | Group                                     | Job                 | Database                                                         | Schema               |
 | ----------------------------------------- | ------------------- | ---------------------------------------------------------------- | -------------------- |
@@ -80,8 +84,8 @@ forwarded to children. No dotenv loader or Prisma config is imported.
 ## Schema separation and fixtures
 
 The initial profile deploys only `20261031154500_slice_2_2_foundation` and runs only
-`database-migration.test.ts`. Full applies every checked-in migration directory in sorted order
-via direct SQL, one transaction per file. Failed migration setup prevents all test execution.
+`database-migration.test.ts`. Full deploys the 18 checksum-pinned migration files with the locked Prisma CLI. Independent ledger,
+schema and privilege verification must succeed before fixtures or tests. There is no direct-SQL fallback.
 
 The initial profile uses `prisma migrate deploy` through `deployFoundation()` in
 `scripts/ci/g6a-migration.js`. The locked CLI binary is resolved from
@@ -158,3 +162,76 @@ and offline unit tests cannot establish those database-backed results.
 
 G6A preparation is complete. G6A execution has not been authorized and no database has been
 provisioned or connected to by any task in this working tree.
+
+## G6B-2: full-profile Prisma deployment (database-free implementation gate)
+
+This implementation has not established PostgreSQL runtime behavior. G6B-3 requires separate explicit
+approval before provisioning, migrations, fixtures or integration execution. Publishing a PR or main
+push can make the existing full-integration job eligible after quality; implementation approval does
+not authorize triggering it. G6A remains its own manually authorized, foundation-only workflow.
+
+`g6b-migrations.json` is the reviewed immutable 18-name, raw-byte SHA-256 manifest. Files, directory
+ordering, symlinks and PostgreSQL provider are checked before staging and after deployment. Any future
+history addition/change needs a separately reviewed manifest update; checksums are never regenerated
+at runtime. Staging copies exact SQL bytes, including transaction boundaries, without rewriting SQL.
+
+`g6b-prisma.config.ts` reads only `MIGRATOR_DATABASE_URL` and the private staged migration directory.
+It never imports dotenv or the root config and never reads the runtime URL. The wrapper resolves
+Prisma 7.10.1 from the locked local package, invokes its executable using the current Node, and has no
+npx/download fallback. Only PATH, the two dedicated variables and a validated local schema-engine binary path reach the migration child.
+The engine path is resolved under this installation using the locked platform helper; missing, linked,
+non-executable or version-mismatched engines fail before spawning. A controlled PRISMA_SCHEMA_ENGINE_BINARY
+value prevents automatic engine downloading. Ambient Prisma overrides are still rejected.
+
+The full hosted-job contract requires the fixed loopback endpoint and fresh service cluster. A new
+CI-only empty-schema preflight validates identities, marker, server fingerprint, PostgreSQL 17,
+privileges, ownership and absence of user objects. It does not relax the existing post-migration
+integration guard, which cannot accept an empty schema. The cluster identity is compared with the
+bootstrap session and both runtime and migrator sessions. A second empty-schema check after acquiring
+the migration lock prevents a schema change between preflight and deployment.
+
+The existing SuiteLock state machine and advisory key are used on a dedicated migration connection.
+Heartbeat/retry behavior and no-reconnect semantics are preserved. Asynchronous child supervision
+keeps heartbeat timers responsive. The detached process group contains the CLI and inherited engine
+children. Timeout, signal, spawn failure, output overflow or heartbeat loss stops the group with a
+bounded TERM/KILL sequence and verifies disappearance before intentional lock release. Engine output
+is counted with a fixed byte ceiling and never relayed. If group termination cannot be established,
+no later work runs and no intentional lock release occurs: the process keeps its lock connection
+pending the hosted job timeout and disposable-service teardown. This deliberately fails acceptance.
+
+The verifier is a separately generated, masked, temporary service role. It has CONNECT only to the
+disposable database, public-schema USAGE and ledger SELECT only. It owns no objects and has no role
+memberships, DDL or mutation privileges. Runtime receives no ledger privilege. Ledger reads use a
+bounded READ ONLY transaction with a ROLLBACK on both success and failure.
+
+The adapter verifies all eight ledger columns, types, lengths, nullability, defaults, primary key and
+owner. The pure verifier groups by migration name, preserves rolled-back attempts and their logs,
+rejects unresolved/conflicting states, duplicate IDs/successes, missing/extra names and wrong successful
+checksums, and compares epoch-microsecond timestamp strings without JS Date rounding. Return order is
+irrelevant; equal consecutive migration boundaries are permitted. Fresh G6B accepts exactly one
+successful non-rolled-back record per expected name with empty/null logs and positive supporting step
+metadata. Step count is not SQL-statement count or the primary completeness proof. Legitimate recovery
+history can be classified but is rejected by the fresh-run acceptance policy. No migrate resolve,
+automatic repair or rollback is implemented.
+
+The independent structural contract in `g6b-preflight.js` covers exactly 23 application tables plus
+ledger, all reviewed columns/enums, primary and tenant foreign keys, financial CHECK definitions,
+partial-index keys/predicates, function bodies/ownership/security settings and enabled trigger wiring.
+Expression parsing preserves Boolean grouping while accepting PostgreSQL deparser casts, ANY arrays
+and BETWEEN expansion. Unsupported catalog representations fail closed; PostgreSQL acceptance remains
+a G6B-3 requirement. This is targeted catalog verification, not a claim of universal drift detection.
+
+Schema acceptance and absence of runtime migration privileges precede application grants. Exact
+runtime privileges are checked after grants and before lock release, fixtures or tests. Audit remains
+SELECT/INSERT only; other application tables keep SELECT/INSERT/UPDATE and no destructive/DDL rights.
+Fixture and test processes acquire the same suite lock themselves, so the migration lock is released
+before they start. Full tests remain serial and retain their preflight imports and manifest routing.
+
+On every normal/error exit, managed connections close and bounded postrun catalog checks require zero
+target sessions and advisory locks. Remaining database/role/container resources are removed by the
+existing GitHub service lifecycle, never by a developer-database utility. Cleanup uncertainty fails the
+job. Failure recovery is a new disposable service/database, not continued execution on partial state.
+
+Offline tests: `node --import tsx --test scripts/ci/g6b-migration.test.js scripts/ci/migration-ledger.test.js scripts/ci/g6b-preflight.test.js`.
+All process/database boundaries in those tests are injected; no PostgreSQL connection or migration is
+executed. G6B-4 acceptance still requires review of separately authorized G6B-3 execution evidence.

@@ -99,7 +99,7 @@ export class BookingService {
       limit: rawLimit,
     } = parseBookingQuery(rawQuery);
     const { page, limit } = parsePagination(rawPage, rawLimit);
-    const where: any = { organizationId };
+    const where: Prisma.BookingWhereInput = { organizationId };
     if (search) {
       where.OR = [
         { resident: { firstName: { contains: search, mode: 'insensitive' } } },
@@ -387,7 +387,7 @@ export class BookingService {
     endDate: Date,
     propertyId?: string,
   ) {
-    const whereBed: any = {
+    const whereBed: Prisma.BedWhereInput = {
       organizationId,
       operationalStatus: 'IN_SERVICE',
       archivedAt: null,

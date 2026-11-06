@@ -27,21 +27,21 @@ export class AdmissionController {
   @Post()
   @UseGuards(OriginGuard, CsrfGuard)
   @ApiOperation({ summary: 'Create a new admission from a confirmed booking' })
-  async create(@Req() req: any, @Body() dto: unknown) {
+  async create(@Req() req: AuthenticatedRequest, @Body() dto: unknown) {
     const organizationId = req.auth!.organizationId;
     return this.admissionService.create(organizationId, dto);
   }
 
   @Get()
   @ApiOperation({ summary: 'List admissions with pagination and filters' })
-  async findAll(@Req() req: any, @Query() query: any) {
+  async findAll(@Req() req: AuthenticatedRequest, @Query() query: unknown) {
     const organizationId = req.auth!.organizationId;
     return this.admissionService.findAll(organizationId, query);
   }
 
   @Get(':id')
   @ApiOperation({ summary: 'Get an admission by id' })
-  async findOne(@Req() req: any, @Param('id', ParseUUIDPipe) id: string) {
+  async findOne(@Req() req: AuthenticatedRequest, @Param('id', ParseUUIDPipe) id: string) {
     const organizationId = req.auth!.organizationId;
     return this.admissionService.findOne(organizationId, id);
   }
@@ -49,7 +49,11 @@ export class AdmissionController {
   @Put(':id')
   @UseGuards(OriginGuard, CsrfGuard)
   @ApiOperation({ summary: 'Update an admission' })
-  async update(@Req() req: any, @Param('id', ParseUUIDPipe) id: string, @Body() dto: unknown) {
+  async update(
+    @Req() req: AuthenticatedRequest,
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() dto: unknown,
+  ) {
     const organizationId = req.auth!.organizationId;
     return this.admissionService.update(organizationId, id, dto);
   }
@@ -57,7 +61,7 @@ export class AdmissionController {
   @Delete(':id')
   @UseGuards(OriginGuard, CsrfGuard)
   @ApiOperation({ summary: 'Cancel an admission' })
-  async cancel(@Req() req: any, @Param('id', ParseUUIDPipe) id: string) {
+  async cancel(@Req() req: AuthenticatedRequest, @Param('id', ParseUUIDPipe) id: string) {
     const organizationId = req.auth!.organizationId;
     return this.admissionService.cancel(organizationId, id);
   }

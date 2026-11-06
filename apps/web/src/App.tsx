@@ -9,10 +9,13 @@ import { isFinanceHash } from './finance/financeRoute';
 import { isOpsHash, parseOpsRoute, opsLinks } from './ops/opsRoute';
 import { ResidentList, ResidentNew, ResidentDetail } from './ops/Residents';
 import {
-  PropertyList, PropertyNew, PropertyDetail,
-  FloorList, FloorNew, FloorDetail,
-  RoomList, RoomNew, RoomDetail,
-  BedList, BedNew, BedDetail,
+  PropertyList,
+  PropertyDetail,
+  FloorList,
+  FloorDetail,
+  RoomList,
+  RoomDetail,
+  BedList,
 } from './ops/Inventory';
 import { EnquiryList, EnquiryNew, EnquiryDetail } from './ops/Enquiries';
 import { BookingList, BookingNew } from './ops/Bookings';
@@ -83,64 +86,64 @@ export function App() {
             <small>{roleLabel}</small>
           </div>
         </div>
-<div
-            className={`workspace-navigation ${navigationOpen ? 'is-open' : ''}`}
-            id="workspace-navigation"
-          >
-            <p className="sidebar-label">YOUR WORKSPACE</p>
-            <nav aria-label="Primary navigation" onClick={() => setNavigationOpen(false)}>
-              <a className="nav-item" href="#overview">
-                <Icon name="building" />
-                Property overview
-              </a>
-              <a className="nav-item" href="#floor-plan">
-                <Icon name="layers" />
-                Interactive floor plan
-              </a>
-              <a className="nav-item" href="#inventory">
-                <Icon name="grid" />
-                Inventory overview
-              </a>
-              <a className="nav-item" href={opsLinks.admissions}>
-                <Icon name="layers" />
-                Admissions
-              </a>
-              <a className="nav-item" href={opsLinks.properties}>
-                <Icon name="grid" />
-                Properties
-              </a>
-              <a className="nav-item" href={opsLinks.residents}>
-                <Icon name="layers" />
-                Residents
-              </a>
-              <a className="nav-item" href={opsLinks.enquiries}>
-                <Icon name="layers" />
-                Enquiries
-              </a>
-              <a className="nav-item" href={opsLinks.bookings}>
-                <Icon name="layers" />
-                Bookings
-              </a>
-              <a className="nav-item" href={opsLinks.checkIns}>
-                <Icon name="layers" />
-                Check-ins
-              </a>
-              <a className="nav-item" href="#finance" aria-current={financeView ? 'page' : undefined}>
-                <Icon name="layers" />
-                Finance
-              </a>
-            </nav>
-            <div className="planned-modules">
-              <p className="sidebar-label">ON THE HORIZON</p>
-              <ul>
-                {['Booking', 'Operations'].map((module) => (
-                  <li key={module}>
-                    <span>{module}</span>
-                    <small>Planned</small>
-                  </li>
-                ))}
-              </ul>
-            </div>
+        <div
+          className={`workspace-navigation ${navigationOpen ? 'is-open' : ''}`}
+          id="workspace-navigation"
+        >
+          <p className="sidebar-label">YOUR WORKSPACE</p>
+          <nav aria-label="Primary navigation" onClick={() => setNavigationOpen(false)}>
+            <a className="nav-item" href="#overview">
+              <Icon name="building" />
+              Property overview
+            </a>
+            <a className="nav-item" href="#floor-plan">
+              <Icon name="layers" />
+              Interactive floor plan
+            </a>
+            <a className="nav-item" href="#inventory">
+              <Icon name="grid" />
+              Inventory overview
+            </a>
+            <a className="nav-item" href={opsLinks.admissions}>
+              <Icon name="layers" />
+              Admissions
+            </a>
+            <a className="nav-item" href={opsLinks.properties}>
+              <Icon name="grid" />
+              Properties
+            </a>
+            <a className="nav-item" href={opsLinks.residents}>
+              <Icon name="layers" />
+              Residents
+            </a>
+            <a className="nav-item" href={opsLinks.enquiries}>
+              <Icon name="layers" />
+              Enquiries
+            </a>
+            <a className="nav-item" href={opsLinks.bookings}>
+              <Icon name="layers" />
+              Bookings
+            </a>
+            <a className="nav-item" href={opsLinks.checkIns}>
+              <Icon name="layers" />
+              Check-ins
+            </a>
+            <a className="nav-item" href="#finance" aria-current={financeView ? 'page' : undefined}>
+              <Icon name="layers" />
+              Finance
+            </a>
+          </nav>
+          <div className="planned-modules">
+            <p className="sidebar-label">ON THE HORIZON</p>
+            <ul>
+              {['Booking', 'Operations'].map((module) => (
+                <li key={module}>
+                  <span>{module}</span>
+                  <small>Planned</small>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
         <div className="sidebar-note">
           <span className="sidebar-note-icon">

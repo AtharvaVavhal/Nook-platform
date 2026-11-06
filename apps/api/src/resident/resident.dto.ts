@@ -42,7 +42,7 @@ export class CreateResidentDto {
   emergencyContactRelation?: string;
 
   @IsOptional()
-  documentMetadata?: Record<string, any>;
+  documentMetadata?: Record<string, unknown>;
 
   @IsOptional()
   @IsString()
@@ -99,7 +99,7 @@ export class UpdateResidentDto {
   emergencyContactRelation?: string;
 
   @IsOptional()
-  documentMetadata?: Record<string, any>;
+  documentMetadata?: Record<string, unknown>;
 
   @IsOptional()
   @IsString()

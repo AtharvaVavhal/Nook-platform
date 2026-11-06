@@ -27,21 +27,21 @@ export class BookingController {
   @Post()
   @UseGuards(OriginGuard, CsrfGuard)
   @ApiOperation({ summary: 'Create a new booking' })
-  async create(@Req() req: any, @Body() dto: unknown) {
+  async create(@Req() req: AuthenticatedRequest, @Body() dto: unknown) {
     const organizationId = req.auth!.organizationId;
     return this.bookingService.create(organizationId, dto);
   }
 
   @Get()
   @ApiOperation({ summary: 'List bookings with pagination and filters' })
-  async findAll(@Req() req: any, @Query() query: any) {
+  async findAll(@Req() req: AuthenticatedRequest, @Query() query: unknown) {
     const organizationId = req.auth!.organizationId;
     return this.bookingService.findAll(organizationId, query);
   }
 
   @Get(':id')
   @ApiOperation({ summary: 'Get a booking by id' })
-  async findOne(@Req() req: any, @Param('id', ParseUUIDPipe) id: string) {
+  async findOne(@Req() req: AuthenticatedRequest, @Param('id', ParseUUIDPipe) id: string) {
     const organizationId = req.auth!.organizationId;
     return this.bookingService.findOne(organizationId, id);
   }
@@ -49,7 +49,11 @@ export class BookingController {
   @Put(':id')
   @UseGuards(OriginGuard, CsrfGuard)
   @ApiOperation({ summary: 'Update a booking' })
-  async update(@Req() req: any, @Param('id', ParseUUIDPipe) id: string, @Body() dto: unknown) {
+  async update(
+    @Req() req: AuthenticatedRequest,
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() dto: unknown,
+  ) {
     const organizationId = req.auth!.organizationId;
     return this.bookingService.update(organizationId, id, dto, req.auth!.userId);
   }
@@ -65,14 +69,14 @@ export class BookingController {
   @Delete(':id')
   @UseGuards(OriginGuard, CsrfGuard)
   @ApiOperation({ summary: 'Cancel a booking' })
-  async cancel(@Req() req: any, @Param('id', ParseUUIDPipe) id: string) {
+  async cancel(@Req() req: AuthenticatedRequest, @Param('id', ParseUUIDPipe) id: string) {
     const organizationId = req.auth!.organizationId;
     return this.bookingService.cancel(organizationId, id);
   }
 
   @Get('beds/available')
   @ApiOperation({ summary: 'Get available beds for a date range' })
-  async getAvailableBeds(@Req() req: any, @Query() query: any) {
+  async getAvailableBeds(@Req() req: AuthenticatedRequest, @Query() query: unknown) {
     const organizationId = req.auth!.organizationId;
     const { startDate, endDate, propertyId } = parseAvailabilityQuery(query);
     return this.bookingService.getAvailableBeds(organizationId, startDate, endDate, propertyId);

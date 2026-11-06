@@ -2,14 +2,12 @@ import {
   Inject,
   Injectable,
   NotFoundException,
-  ForbiddenException,
   BadRequestException,
   ConflictException,
 } from '@nestjs/common';
 import { PrismaService } from '../database/prisma.service.js';
-import { AdmissionStatus } from '../generated/enums.js';
-import { assertMatchesParent, optionalUuid, requireUuid, parsePagination } from '../common/ids.js';
-import { Prisma } from '../generated/client.js';
+import { assertMatchesParent, parsePagination } from '../common/ids.js';
+import type { Prisma } from '../generated/client.js';
 import { periodContains } from '../booking/booking.input.js';
 import {
   parseAdmissionQuery,
@@ -87,7 +85,7 @@ export class AdmissionService {
       requestedRoom,
     );
 
-    const data: any = {
+    const data: Prisma.AdmissionCreateInput = {
       admissionDate: dto.admissionDate,
       notes: dto.notes,
       status: 'PENDING',
@@ -111,7 +109,6 @@ export class AdmissionService {
 
   async findAll(organizationId: string, rawQuery: unknown) {
     const {
-      search,
       status,
       residentId,
       bookingId,
@@ -121,7 +118,7 @@ export class AdmissionService {
       limit: rawLimit,
     } = parseAdmissionQuery(rawQuery);
     const { page, limit } = parsePagination(rawPage, rawLimit);
-    const where: any = { organizationId };
+    const where: Prisma.AdmissionWhereInput = { organizationId };
     if (status) where.status = status;
     if (residentId) where.residentId = residentId;
     if (bookingId) where.bookingId = bookingId;
@@ -174,7 +171,7 @@ export class AdmissionService {
     assertMatchesParent(dto.bedId, existing.bedId, 'bedId', 'admission');
     assertMatchesParent(dto.bookingId, existing.bookingId, 'bookingId', 'admission');
 
-    const data: any = {};
+    const data: Prisma.AdmissionUpdateInput = {};
     if (dto.admissionDate !== undefined) {
       assertWithinBooking(dto.admissionDate, existing.booking);
       data.admissionDate = dto.admissionDate;

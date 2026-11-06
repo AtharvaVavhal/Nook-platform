@@ -2,6 +2,7 @@ import './helpers/preflight.js';
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { NestFactory } from '@nestjs/core';
+import type { INestApplication } from '@nestjs/common';
 import { AppModule } from '../../src/app.module.js';
 import request from 'supertest';
 import { requireTestDatabaseUrl } from './helpers/env.js';
@@ -16,9 +17,8 @@ if (!fixturePassword) {
   throw new Error('TEST_OWNER_PASSWORD environment variable is required');
 }
 
-let app: any;
-let server: any;
-let httpServer: any;
+let app: INestApplication;
+let server: ReturnType<typeof request>;
 
 const VALID_EMAIL = 'm3c-owner@nook.test.invalid';
 const VALID_PASSWORD = fixturePassword;
@@ -49,7 +49,9 @@ test('POST /api/v1/auth/login - valid credentials', async () => {
     .expect(200);
   assert.ok(res.body.data.user);
   assert.equal(res.body.data.user.id, '00000000-0000-4000-8000-000000000102');
-  const cookies = res.headers['set-cookie'];
+  const cookies: unknown = res.headers['set-cookie'];
+  assert.ok(Array.isArray(cookies));
+  assert.ok(cookies.every((cookie: unknown) => typeof cookie === 'string'));
   const sessionCookie = cookies.find((c: string) => c.startsWith('nook_session='));
   const csrfCookie = cookies.find((c: string) => c.startsWith('nook_csrf='));
   assert.ok(sessionCookie);
@@ -80,7 +82,9 @@ test('GET /api/v1/auth/csrf returns token and sets cookie', async () => {
     .set('Origin', 'http://localhost:5173')
     .expect(200);
   assert.ok(res.body.data.csrfToken);
-  const cookies = res.headers['set-cookie'];
+  const cookies: unknown = res.headers['set-cookie'];
+  assert.ok(Array.isArray(cookies));
+  assert.ok(cookies.every((cookie: unknown) => typeof cookie === 'string'));
   const csrfCookie = cookies.find((c: string) => c.startsWith('nook_csrf='));
   assert.ok(csrfCookie);
 });
@@ -92,7 +96,9 @@ test('GET /api/v1/auth/me - authenticated', async () => {
     .set('Origin', 'http://localhost:5173')
     .send({ email: VALID_EMAIL, password: VALID_PASSWORD })
     .expect(200);
-  const cookieHeader = loginRes.headers['set-cookie'];
+  const cookieHeader: unknown = loginRes.headers['set-cookie'];
+  assert.ok(Array.isArray(cookieHeader));
+  assert.ok(cookieHeader.every((cookie: unknown) => typeof cookie === 'string'));
   const sessionCookie = cookieHeader.find((c: string) => c.startsWith('nook_session='));
   const csrfCookie = cookieHeader.find((c: string) => c.startsWith('nook_csrf='));
 
@@ -105,10 +111,7 @@ test('GET /api/v1/auth/me - authenticated', async () => {
 });
 
 test('GET /api/v1/auth/me - missing session returns 401', async () => {
-  await server
-    .get('/api/v1/auth/me')
-    .set('Origin', 'http://localhost:5173')
-    .expect(401);
+  await server.get('/api/v1/auth/me').set('Origin', 'http://localhost:5173').expect(401);
 });
 
 test('POST /api/v1/auth/logout - revokes session', async () => {
@@ -118,7 +121,9 @@ test('POST /api/v1/auth/logout - revokes session', async () => {
     .set('Origin', 'http://localhost:5173')
     .send({ email: VALID_EMAIL, password: VALID_PASSWORD })
     .expect(200);
-  const cookieHeader = loginRes.headers['set-cookie'];
+  const cookieHeader: unknown = loginRes.headers['set-cookie'];
+  assert.ok(Array.isArray(cookieHeader));
+  assert.ok(cookieHeader.every((cookie: unknown) => typeof cookie === 'string'));
   const sessionCookie = cookieHeader.find((c: string) => c.startsWith('nook_session='));
   const csrfCookie = cookieHeader.find((c: string) => c.startsWith('nook_csrf='));
   const csrfToken = cookieHeader
@@ -147,7 +152,9 @@ test('CSRF guard rejects missing token', async () => {
     .set('Origin', 'http://localhost:5173')
     .send({ email: VALID_EMAIL, password: VALID_PASSWORD })
     .expect(200);
-  const cookieHeader = loginRes.headers['set-cookie'];
+  const cookieHeader: unknown = loginRes.headers['set-cookie'];
+  assert.ok(Array.isArray(cookieHeader));
+  assert.ok(cookieHeader.every((cookie: unknown) => typeof cookie === 'string'));
   const sessionCookie = cookieHeader.find((c: string) => c.startsWith('nook_session='));
   const csrfCookie = cookieHeader.find((c: string) => c.startsWith('nook_csrf='));
 

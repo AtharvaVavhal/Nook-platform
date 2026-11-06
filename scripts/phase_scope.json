@@ -502,6 +502,7 @@
   "rawSqlAllowedFiles": [
     "apps/api/src/auth/auth.repository.ts",
     "apps/api/src/booking/booking.service.ts",
+    "apps/api/src/booking/booking.rules.ts",
     "apps/api/src/enquiry/enquiry.service.ts",
     "apps/api/src/finance/finance.service.ts",
     "apps/api/src/auth/throttle.service.ts",

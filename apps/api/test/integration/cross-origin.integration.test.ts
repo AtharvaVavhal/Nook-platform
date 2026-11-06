@@ -184,7 +184,7 @@ test('cors: the preflight allows every write method and the CSRF header, nothing
       .options('/api/v1/enquiries/x')
       .set('Origin', WEB_ORIGIN)
       .set('Access-Control-Request-Method', method)
-      .set('Access-Control-Request-Headers', 'content-type,x-csrf-token');
+      .set('Access-Control-Request-Headers', 'content-type,x-csrf-token,idempotency-key');
     assert.equal(pre.status, 204, `${method} preflight answered ${pre.status}`);
     assert.equal(pre.headers['access-control-allow-origin'], WEB_ORIGIN);
     assert.equal(pre.headers['access-control-allow-credentials'], 'true');
@@ -192,6 +192,7 @@ test('cors: the preflight allows every write method and the CSRF header, nothing
     assert.ok(methods.includes(method), `${method} missing from ${methods}`);
     const headers = String(pre.headers['access-control-allow-headers']).toLowerCase();
     assert.ok(headers.includes('x-csrf-token') && headers.includes('content-type'), headers);
+    assert.ok(headers.includes('idempotency-key'), headers);
     assert.ok(Number(pre.headers['access-control-max-age']) > 0);
   }
   const odd = await server

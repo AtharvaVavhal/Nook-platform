@@ -2,6 +2,7 @@
 import yaml from 'js-yaml'; // Supplied by the locked ESLint dependency tree.
 import fs from 'node:fs';
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 
 const read = (path) => fs.readFileSync(path, 'utf8');
 const workflow = yaml.load(read('.github/workflows/ci.yml'));
@@ -21,6 +22,11 @@ assert.equal(
 assert.deepEqual(Object.keys(workflow.jobs), ['quality', 'full-integration']);
 assert.equal(workflow.permissions.contents, 'read');
 assert.equal(workflow.jobs.quality.services, undefined);
+assert.equal(
+  workflow.jobs['full-integration'].services.postgres.image,
+  'postgres:17.10-bookworm@sha256:9b18b78397054fce88a9552e9d5a3ad5bb7fd258c5b3cc1c5028e46373d6ea8f',
+  'G6B requires the reviewed immutable PostgreSQL 17 image',
+);
 assert.equal(
   workflow.jobs.quality.steps.find((step) => step.name === 'Backend Prettier').run,
   "npx --no-install prettier --check apps/api '!apps/api/src/generated/**'",
@@ -108,8 +114,85 @@ assert.ok(
       /integration.js|test:database|test:integration|restore-drill/.test(step.run ?? ''),
   ),
 );
+// G6B checks remain static: never import the deployment modules or a PostgreSQL driver.
+for (const file of [
+  'g6b-migration.js',
+  'g6b-prisma.config.ts',
+  'g6b-migrations.json',
+  'migration-ledger.js',
+  'g6b-preflight.js',
+  'g6b-migration.test.js',
+  'migration-ledger.test.js',
+  'g6b-preflight.test.js',
+]) {
+  assert.ok(fs.existsSync(`scripts/ci/${file}`), file);
+}
+const history = JSON.parse(read('scripts/ci/g6b-migrations.json'));
+assert.equal(history.version, 1);
+assert.equal(history.provider, 'postgresql');
+assert.equal(history.migrations.length, 18);
+const migrationNames = history.migrations.map((m) => m.name);
+assert.equal(new Set(migrationNames).size, 18);
+assert.deepEqual(migrationNames, [...migrationNames].sort());
+assert.deepEqual(
+  fs.readdirSync('prisma/migrations').sort(),
+  [...migrationNames, 'migration_lock.toml'].sort(),
+);
+assert.equal(
+  read('prisma/migrations/migration_lock.toml')
+    .replace(/#[^\n]*/g, '')
+    .trim(),
+  'provider = "postgresql"',
+);
+for (const m of history.migrations) {
+  assert.match(m.name, /^\d{14}_[a-z0-9_]+$/);
+  assert.match(m.checksum, /^[0-9a-f]{64}$/);
+  const path = `prisma/migrations/${m.name}/migration.sql`;
+  assert.ok(!fs.lstatSync(`prisma/migrations/${m.name}`).isSymbolicLink());
+  assert.ok(fs.lstatSync(path).isFile() && !fs.lstatSync(path).isSymbolicLink());
+  assert.equal(createHash('sha256').update(fs.readFileSync(path)).digest('hex'), m.checksum);
+}
+assert.ok(runner.includes('await deployFull('));
+assert.ok(
+  !runner.includes('readdirSync') &&
+    !runner.includes("owner.query('BEGIN')") &&
+    !runner.includes('migration.sql'),
+);
+const fullRunner = read('scripts/ci/g6b-migration.js');
+assert.ok(!fullRunner.includes('spawnSync'));
+assert.ok(read('scripts/ci/g6b-preflight.js').includes('verifyFreshLedger(ledger.rows, expected)'));
+assert.ok(fullRunner.includes('PRISMA_SCHEMA_ENGINE_BINARY: engine'));
+const stages = fullRunner.slice(
+  fullRunner.indexOf('export async function runG6BStages'),
+  fullRunner.indexOf('export async function deployFull'),
+);
+let stagePosition = -1;
+for (const call of [
+  's.preflight()',
+  's.lock.acquire()',
+  's.deploy()',
+  's.ledger()',
+  's.schema()',
+  's.grants()',
+  's.privileges()',
+  's.lock.release()',
+  's.fixtures()',
+  's.tests()',
+]) {
+  const next = stages.indexOf(call);
+  assert.ok(next > stagePosition, call);
+  stagePosition = next;
+}
+const fullConfig = read('scripts/ci/g6b-prisma.config.ts');
+assert.ok(fullConfig.includes("env('MIGRATOR_DATABASE_URL')"));
+assert.ok(fullConfig.includes("env('NOOK_CI_G6B_MIGRATIONS_DIR')"));
+assert.ok(!fullConfig.includes("env('DATABASE_URL')") && !fullConfig.includes("import 'dotenv"));
+assert.equal(
+  workflow.jobs.quality.steps.find((s) => s.name === 'Offline G6B deployment and ledger tests').run,
+  'node --import tsx --test scripts/ci/g6b-migration.test.js scripts/ci/migration-ledger.test.js scripts/ci/g6b-preflight.test.js',
+);
 console.log(
-  'PASS: YAML, job graph, loopback ports, all backend test routing, preflight imports, guard variables, migration/script references and concurrency.',
+  'PASS: YAML, job graph, routing, guards, G6A separation, G6B manifest hashes and acceptance ordering.',
 );
 console.log(
   `Routing: ${manifest.quality.length} backend unit, 1 initial, ${manifest.full.length} full, 1 manual; ${testNames('apps/web/src').length} frontend unit files.`,

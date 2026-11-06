@@ -1,15 +1,11 @@
-import { useState, type FormEvent } from 'react';
-import { EmptyState, ErrorState, LoadingState, useAsync } from '../finance/shared';
+import { ErrorState, LoadingState, useAsync } from '../finance/shared';
 import { PageHead } from '../ops/ui';
-import { opsApi, type InventorySummary } from '../ops/opsApi';
+import { opsApi } from '../ops/opsApi';
 import { opsLinks } from '../ops/opsRoute';
 import { Icon } from './BrandIllustration';
 
 export function InventoryOverview() {
-  const { data, loading, error, reload } = useAsync(
-    () => opsApi.inventory.summary(),
-    [],
-  );
+  const { data, loading, error, reload } = useAsync(() => opsApi.inventory.summary(), []);
   return (
     <section id="inventory" className="inventory-section" aria-labelledby="inventory-heading">
       <PageHead
@@ -30,9 +26,7 @@ export function InventoryOverview() {
           tabIndex={0}
         >
           <table className="inventory-table">
-            <caption className="sr-only">
-              Inventory summary by organization.
-            </caption>
+            <caption className="sr-only">Inventory summary by organization.</caption>
             <thead>
               <tr>
                 <th scope="col">Metric</th>
@@ -76,11 +70,13 @@ export function InventoryOverview() {
               </tr>
             </tbody>
           </table>
-          <p className="fin-form-error" style={{ marginTop: 12, fontSize: 11, color: 'var(--color-text-secondary)' }}>
+          <p
+            className="fin-form-error"
+            style={{ marginTop: 12, fontSize: 11, color: 'var(--color-text-secondary)' }}
+          >
             <Icon name="search" size={12} />
-            "In service" = operational status (not booked/occupied).
-            "Out of service" = held for maintenance.
-            Occupancy is determined by active bookings and check-ins.
+            "In service" = operational status (not booked/occupied). "Out of service" = held for
+            maintenance. Occupancy is determined by active bookings and check-ins.
           </p>
         </div>
       ) : null}
