@@ -3,8 +3,9 @@ import { createDiagnostics } from './diagnostics.js';
 import { randomBytes } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
+import { resolve } from 'node:path';
 import { Client } from 'pg';
-import { deployFull, assertG6BEnvironment, supervise } from './g6b-migration.js';
+import { deployFull, assertG6BEnvironment, supervise, ROOT } from './g6b-migration.js';
 import { TARGET } from './g6b-preflight.js';
 import { assertG6AAuthorization, deployFoundation } from './g6a-migration.js';
 import {
@@ -210,7 +211,13 @@ async function main() {
         supervise(
           process.execPath,
           ['--import', 'tsx', ...args],
-          { env, cwd: process.cwd() },
+          {
+            env:
+              args[0] === '--test'
+                ? { ...env, TSX_TSCONFIG_PATH: resolve(ROOT, 'apps/api/tsconfig.json') }
+                : env,
+            cwd: process.cwd(),
+          },
           {
             signal: abort.signal,
             timeout: 20 * 60 * 1000,

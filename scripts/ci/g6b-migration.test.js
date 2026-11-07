@@ -680,3 +680,75 @@ for (const mode of ['valid', 'version', 'symlink', 'not-executable'])
     if (mode === 'valid') assert.equal(lockedEngine(root, 'synthetic'), binary);
     else assert.throws(() => lockedEngine(root, 'synthetic'));
   });
+
+test('integration test child selects API tsconfig for real TSX decorator transformation', async () => {
+  const ts = (await import('typescript')).default;
+  const { runInNewContext } = await import('node:vm');
+  const { spawnSync } = await import('node:child_process');
+  const { pathToFileURL } = await import('node:url');
+  const source = ts.createSourceFile(
+    'integration.js',
+    readFileSync(new URL('./integration.js', import.meta.url), 'utf8'),
+    ts.ScriptTarget.Latest,
+    true,
+    ts.ScriptKind.JS,
+  );
+  const spawns = [];
+  const visit = (node) => {
+    if (ts.isCallExpression(node) && node.expression.getText(source) === 'supervise')
+      spawns.push(node);
+    ts.forEachChild(node, visit);
+  };
+  visit(source);
+  assert.equal(spawns.length, 1);
+  const options = spawns[0].arguments[2];
+  assert.ok(ts.isObjectLiteralExpression(options));
+  const envProperty = options.properties.find((p) => p.name?.getText(source) === 'env');
+  const cwdProperty = options.properties.find((p) => p.name?.getText(source) === 'cwd');
+  assert.equal(cwdProperty.initializer.getText(source), 'process.cwd()');
+  // Evaluate only the production spawn's pure environment expression. Importing
+  // integration.js itself would run database bootstrap and is forbidden here.
+  const envExpression =
+    envProperty.initializer?.getText(source) ?? envProperty.name.getText(source);
+  const base = { PATH: process.env.PATH, APP_ENV: 'test' };
+  const childEnvironment = (args) =>
+    runInNewContext(`(${envExpression})`, { args, env: base, ROOT, resolve });
+  assert.equal(childEnvironment(['scripts/ci/seed-fixtures.js']), base);
+  const child = childEnvironment(['--test']);
+  const config = resolve(ROOT, 'apps/api/tsconfig.json');
+  assert.ok(existsSync(config));
+  const target = pathToFileURL(resolve(ROOT, 'apps/api/src/auth/auth.controller.ts')).href;
+  const probe = `import {registerHooks} from 'node:module';
+    const target=${JSON.stringify(target)};
+    registerHooks({resolve(s,c,next){
+      if(s===target||s.startsWith('node:'))return next(s,c);
+      throw new Error('NOOK_DIAGNOSTIC_DEPENDENCY_BOUNDARY');
+    }});
+    let kind='unexpected';
+    try{await import(target);}catch(e){
+      if(e.name==='TransformError'&&String(e.message).includes('Parameter decorators only work when experimental decorators are enabled'))kind='decorator_failure';
+      else if(e.message==='NOOK_DIAGNOSTIC_DEPENDENCY_BOUNDARY')kind='dependency_boundary';
+    }
+    console.log(JSON.stringify({kind,configMatches:process.env.TSX_TSCONFIG_PATH===${JSON.stringify(config)}}));`;
+  const transform = (env) => {
+    const result = spawnSync(
+      process.execPath,
+      ['--import', 'tsx', '--input-type=module', '-e', probe],
+      {
+        cwd: ROOT,
+        env: { ...env, TSX_DISABLE_CACHE: '1' },
+        encoding: 'utf8',
+        timeout: 10000,
+      },
+    );
+    assert.equal(result.error, undefined);
+    assert.equal(result.status, 0);
+    assert.equal(result.stderr, '');
+    return JSON.parse(result.stdout);
+  };
+  assert.deepEqual(transform(base), { kind: 'decorator_failure', configMatches: false });
+  assert.equal(child.TSX_TSCONFIG_PATH, config);
+  assert.equal(Object.hasOwn(base, 'TSX_TSCONFIG_PATH'), false);
+  assert.equal(Object.hasOwn(child, 'NODE_OPTIONS'), false);
+  assert.deepEqual(transform(child), { kind: 'dependency_boundary', configMatches: true });
+});
