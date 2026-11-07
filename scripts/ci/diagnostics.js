@@ -2,7 +2,7 @@ import { realpathSync, statSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { resolve, relative } from 'node:path';
 
-const ROOT = fileURLToPath(new URL('../../', import.meta.url));
+const ROOT = realpathSync(fileURLToPath(new URL('../../', import.meta.url)));
 const FILES = new Set([
   'scripts/ci/integration.js',
   'scripts/ci/g6b-migration.js',
@@ -55,8 +55,36 @@ const CODES = new Set([
   'ENOTFOUND',
 ]);
 
+// Only known source files, never URL/query/traversal inputs or secret-file paths.
+export function safeSourceLocation(value, line, column) {
+  const unknown = { source: 'unknown', line: null, column: null };
+  if (
+    typeof value !== 'string' ||
+    value.length > 4096 ||
+    /[\\?#%@\r\n]/.test(value) ||
+    value.includes('://') ||
+    value.split('/').some((part) => part === '..' || part === '.')
+  )
+    return unknown;
+  if (!Number.isSafeInteger(line) || !Number.isSafeInteger(column) || line <= 0 || column <= 0)
+    return unknown;
+  const path = resolve(ROOT, value);
+  const rel = relative(ROOT, path);
+  if (
+    !FILES.has(rel) &&
+    !/^apps\/api\/(?:test\/integration|src)\/[a-zA-Z0-9_./-]+\.tsx?$/.test(rel)
+  )
+    return unknown;
+  try {
+    if (realpathSync(path) !== path || !statSync(path).isFile()) return unknown;
+    return { source: rel, line, column };
+  } catch {
+    return unknown;
+  }
+}
+
 // No message, actual, expected, raw stack, SQL or process argument is ever serialized.
-export function safeError(error) {
+export function safeError(error, { allowFileURL = true } = {}) {
   const name = [
     'AssertionError',
     'IntegrationGuardError',
@@ -76,29 +104,34 @@ export function safeError(error) {
   if (typeof error?.stack === 'string') {
     // Skip the first line, which contains the raw message. Accept only actual stack-frame syntax.
     for (const frame of error.stack.split('\n').slice(1)) {
-      const match = /^\s+at (?:[^()\r\n]+ \()?((?:file:\/\/)?\/[^()\r\n]+):(\d+):(\d+)\)?$/.exec(
-        frame,
-      );
+      const match = /^\s+at (?:[^()\r\n]+ \()?([^()\r\n]+):(\d+):(\d+)\)?$/.exec(frame);
       if (!match) continue;
-      try {
-        const path = match[1].startsWith('file://') ? fileURLToPath(match[1]) : match[1];
-        const rel = relative(ROOT, path);
-        if (
-          !FILES.has(rel) ||
-          realpathSync(path) !== resolve(ROOT, rel) ||
-          !statSync(path).isFile()
-        )
+      let framePath = match[1];
+      // Normalize only local native stack-frame URLs. Protocol source fields
+      // still pass directly through safeSourceLocation and never accept URLs.
+      if (allowFileURL && framePath.startsWith('file://')) {
+        try {
+          // Reject traversal before URL parsing can normalize it away.
+          if (
+            !framePath.startsWith('file:///') ||
+            /[%\\?#@]/.test(framePath) ||
+            framePath
+              .slice(7)
+              .split('/')
+              .some((part) => part === '.' || part === '..')
+          )
+            continue;
+          const url = new URL(framePath);
+          if (url.host || url.username || url.password || url.search || url.hash) continue;
+          framePath = fileURLToPath(url);
+        } catch {
           continue;
-        const row = Number(match[2]);
-        const col = Number(match[3]);
-        if (!Number.isSafeInteger(row) || !Number.isSafeInteger(col) || row <= 0 || col <= 0)
-          continue;
-        source = rel;
-        line = row;
-        column = col;
+        }
+      }
+      const location = safeSourceLocation(framePath, Number(match[2]), Number(match[3]));
+      if (location.source !== 'unknown') {
+        ({ source, line, column } = location);
         break;
-      } catch {
-        /* An unverifiable frame is never printed. */
       }
     }
   }

@@ -1,3 +1,5 @@
+// Reporter tests are selected through this import; do not also select their entry file.
+import './integration-test-reporter.test.js';
 // Keep database-free diagnostic regression coverage in the existing hosted G6B test selection.
 import './diagnostics.test.js';
 import test from 'node:test';

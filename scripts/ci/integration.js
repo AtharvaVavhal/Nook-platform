@@ -1,3 +1,4 @@
+import { withTestProtocol } from './integration-test-reporter.js';
 import { createDiagnostics } from './diagnostics.js';
 import { randomBytes } from 'node:crypto';
 import { readFileSync } from 'node:fs';
@@ -204,18 +205,24 @@ async function main() {
     const runtimeClient = await make(runtime, runtimePassword);
     const verifier = await make(TARGET.verifier, verifierPassword);
     const files = JSON.parse(readFileSync(new URL('./test-files.json', import.meta.url), 'utf8'));
-    const run = (args) =>
-      supervise(
-        process.execPath,
-        ['--import', 'tsx', ...args],
-        { env, cwd: process.cwd() },
-        {
-          signal: abort.signal,
-          timeout: 20 * 60 * 1000,
-          diagnostics,
-          identity: args[0] === 'scripts/ci/seed-fixtures.js' ? 'fixtures' : 'integration_tests',
-        },
-      );
+    const run = (args) => {
+      const execute = (onOutput) =>
+        supervise(
+          process.execPath,
+          ['--import', 'tsx', ...args],
+          { env, cwd: process.cwd() },
+          {
+            signal: abort.signal,
+            timeout: 20 * 60 * 1000,
+            diagnostics,
+            identity: args[0] === 'scripts/ci/seed-fixtures.js' ? 'fixtures' : 'integration_tests',
+            onOutput,
+          },
+        );
+      return args[0] === '--test'
+        ? withTestProtocol(execute, (line) => console.log(line))
+        : execute();
+    };
     await deployFull({
       diagnostics,
       hosted: process.env,
@@ -238,6 +245,7 @@ async function main() {
         run([
           '--test',
           '--test-concurrency=1',
+          '--test-reporter=./scripts/ci/integration-test-reporter.js',
           ...files.full.map((name) => `apps/api/test/integration/${name}.integration.test.ts`),
         ]),
       cleanup: async (state) => {

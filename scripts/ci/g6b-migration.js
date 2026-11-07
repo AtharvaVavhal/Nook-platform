@@ -210,6 +210,7 @@ export async function supervise(
     closeTimeout = 5000,
     diagnostics,
     identity = 'unknown',
+    onOutput,
   } = {},
 ) {
   assert.ok(!signal?.aborted, 'G6B aborted before child launch');
@@ -301,6 +302,14 @@ export async function supervise(
         if (bytes > maxBytes) {
           info.outputOverflow = true;
           completion();
+          return;
+        }
+        if (!bad && stream === child.stdout && onOutput) {
+          try {
+            onOutput(data);
+          } catch {
+            completion();
+          }
         }
       });
     }
