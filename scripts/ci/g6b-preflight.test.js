@@ -309,7 +309,7 @@ for (const [name, mutate] of [
     mutate(f);
     assert.throws(() => verifyPrivileges(f, f.role, 'before'));
   });
-test('runtime gets exactly application CRUD subset and audit append-only', () => {
+function runtimePrivileges() {
   const f = privileges(TARGET.runtime);
   f.tablePrivileges = Object.fromEntries(
     Object.keys(SCHEMA.tables).map((t) => [
@@ -317,10 +317,29 @@ test('runtime gets exactly application CRUD subset and audit append-only', () =>
       t === 'audit_events' ? ['INSERT', 'SELECT'] : ['INSERT', 'SELECT', 'UPDATE'],
     ]),
   );
+  f.tablePrivileges.invoice_voids = ['INSERT', 'SELECT'];
+  return f;
+}
+test('runtime gets exactly application CRUD subset and append-only audit and void history', () => {
+  const f = runtimePrivileges();
   verifyPrivileges(f, TARGET.runtime);
   f.tablePrivileges.audit_events.push('UPDATE');
   assert.throws(() => verifyPrivileges(f, TARGET.runtime));
 });
+for (const privilege of ['UPDATE', 'DELETE'])
+  test(`runtime invoice_voids rejects ${privilege}`, () => {
+    const f = runtimePrivileges();
+    f.tablePrivileges.invoice_voids.push(privilege);
+    assert.throws(() => verifyPrivileges(f, TARGET.runtime));
+  });
+for (const privilege of ['SELECT', 'INSERT'])
+  test(`runtime invoice_voids requires ${privilege}`, () => {
+    const f = runtimePrivileges();
+    f.tablePrivileges.invoice_voids = f.tablePrivileges.invoice_voids.filter(
+      (p) => p !== privilege,
+    );
+    assert.throws(() => verifyPrivileges(f, TARGET.runtime));
+  });
 function ledgerAdapter({ missing = false, fail = false, badSchema = false, mutate = false } = {}) {
   const calls = [];
   return {

@@ -349,6 +349,8 @@ export function verifyPrivileges(f, role, phase = 'after') {
               t === 'audit_events' ? ['INSERT', 'SELECT'] : ['INSERT', 'SELECT', 'UPDATE'],
             ]),
           );
+  // Void history is insert-only for runtime, independently of the generic table policy.
+  if (role !== TARGET.verifier && phase !== 'before') expected.invoice_voids = ['INSERT', 'SELECT'];
   assert.deepEqual(f.tablePrivileges, expected);
 }
 

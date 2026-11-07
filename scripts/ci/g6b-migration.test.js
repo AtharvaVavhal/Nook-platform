@@ -475,7 +475,9 @@ test('deployment wrapper stages exact history, isolates CLI environment and gate
               ? Object.keys(SCHEMA.tables).map((name) => ({
                   name,
                   privileges:
-                    name === 'audit_events' ? ['INSERT', 'SELECT'] : ['INSERT', 'SELECT', 'UPDATE'],
+                    name === 'audit_events' || name === 'invoice_voids'
+                      ? ['INSERT', 'SELECT']
+                      : ['INSERT', 'SELECT', 'UPDATE'],
                 }))
               : [],
       };
@@ -751,4 +753,60 @@ test('integration test child selects API tsconfig for real TSX decorator transfo
   assert.equal(Object.hasOwn(base, 'TSX_TSCONFIG_PATH'), false);
   assert.equal(Object.hasOwn(child, 'NODE_OPTIONS'), false);
   assert.deepEqual(transform(child), { kind: 'dependency_boundary', configMatches: true });
+});
+
+test('runtime grants keep invoice_voids append-only and preserve every other table grant', async () => {
+  const ts = (await import('typescript')).default;
+  const { runInNewContext } = await import('node:vm');
+  const { FULL_APPLICATION_TABLES } = await import(
+    '../../apps/api/test/integration/helpers/guard.ts'
+  );
+  const source = ts.createSourceFile(
+    'integration.js',
+    readFileSync(new URL('./integration.js', import.meta.url), 'utf8'),
+    ts.ScriptTarget.Latest,
+    true,
+    ts.ScriptKind.JS,
+  );
+  const grant = source.statements.find(
+    (node) => ts.isFunctionDeclaration(node) && node.name?.text === 'grantRuntime',
+  );
+  assert.ok(grant);
+  // Run the actual provisioning function with an injected query adapter, never
+  // the integration entry point (which would bootstrap a database).
+  const provision = runInNewContext(`(${grant.getText(source)})`, {
+    quoteIdentifier: (value) => `"${value}"`,
+  });
+  const queries = [];
+  await provision(
+    {
+      query: async (sql) => {
+        queries.push(sql);
+        return { rows: FULL_APPLICATION_TABLES.map((tablename) => ({ tablename })) };
+      },
+    },
+    'synthetic_runtime',
+  );
+  assert.match(queries[0], /tablename <> '_prisma_migrations'/);
+  const tableGrants = queries.slice(1, -1);
+  assert.equal(tableGrants.length, 23);
+  assert.ok(
+    tableGrants.includes(
+      'GRANT SELECT, INSERT ON TABLE public."invoice_voids" TO "synthetic_runtime"',
+    ),
+  );
+  for (const table of FULL_APPLICATION_TABLES) {
+    const privileges =
+      table === 'invoice_voids' || table === 'audit_events'
+        ? 'SELECT, INSERT'
+        : 'SELECT, INSERT, UPDATE';
+    assert.ok(
+      tableGrants.includes(`GRANT ${privileges} ON TABLE public."${table}" TO "synthetic_runtime"`),
+    );
+  }
+  assert.equal(
+    queries.at(-1),
+    'GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO "synthetic_runtime"',
+  );
+  assert.ok(tableGrants.every((sql) => !sql.includes('DELETE')));
 });

@@ -67,7 +67,9 @@ async function grantRuntime(owner, runtime) {
     )
   ).rows;
   for (const { tablename } of tables) {
-    const privileges = tablename === 'audit_events' ? 'SELECT, INSERT' : 'SELECT, INSERT, UPDATE';
+    const privileges = ['audit_events', 'invoice_voids'].includes(tablename)
+      ? 'SELECT, INSERT'
+      : 'SELECT, INSERT, UPDATE';
     await owner.query(
       `GRANT ${privileges} ON TABLE public.${quoteIdentifier(tablename)} TO ${quoteIdentifier(runtime)}`,
     );
