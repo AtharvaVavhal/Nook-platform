@@ -1,3 +1,4 @@
+import { DemoBadge } from './DemoBadge';
 import type { CSSProperties, Dispatch } from 'react';
 import {
   bedStatuses,
@@ -195,7 +196,9 @@ export function FloorPlan({
       <div className="section-heading">
         <div>
           <p className="eyebrow violet">EXPLORE YOUR SPACE</p>
-          <h2 id="floors-heading">A floor-by-floor perspective</h2>
+          <h2 id="floors-heading">
+            A floor-by-floor perspective <DemoBadge />
+          </h2>
           <p>Select a room or bed. See the details, keep the context.</p>
         </div>
         <span className="subtle-label">INTERACTIVE 2D PLAN</span>

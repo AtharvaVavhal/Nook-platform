@@ -45,7 +45,7 @@ for label, phrase in [
     check(f"M0 guardrail documented: {label}", phrase in guardrail_text)
 
 example = (ROOT / ".env.example").read_text()
-check("Environment example uses local placeholder database credentials", "nook_local_only" in example and "localhost" in example)
+check("Environment example uses local placeholder database credentials", "<password>" in example and "localhost" in example)
 check("No real .env file is present", not (ROOT / ".env").exists())
 package = (ROOT / "package.json").read_text()
 check("No obsolete verify:docs command points to a missing file", "docs/verify_reconciliation.py" not in package)

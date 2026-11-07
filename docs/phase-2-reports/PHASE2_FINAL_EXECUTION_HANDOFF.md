@@ -7,7 +7,7 @@
 | TypeScript `typecheck` | **PASS** – both `@nook/api` and `@nook/web` compile without errors. |
 | Unit tests (auth, config, inventory) – no DB | **PASS** – 18/18 tests green (the DB‑migration test is excluded). |
 | Keychain helper availability | **PASS** – both entries exist: <br>`./scripts/keychain_helper check nook_m3c_migrator nook_phase3c_migrator` → exit 0 <br>`./scripts/keychain_helper check nook_m3c_fixture_owner m3c-owner@nook.test.invalid` → exit 0 |
-| Integration‑test configuration inspection | **PASS** – integration tests explicitly set `DATABASE_URL` to `postgresql://nook_phase3c_runtime:…@127.0.0.1:5433/nook_test`; they never target `nook_dev` or port 5432. |
+| Integration‑test configuration inspection | **PASS** – integration tests explicitly set `DATABASE_URL` to `postgresql://nook_phase3c_runtime:<password>@127.0.0.1:5433/nook_test`; they never target `nook_dev` or port 5432. |
 | Static scope verification (`verify:scope`) | **MIXED** – core schema checks pass; pre‑existing deviations (missing real `.env`, extra routes, raw SQL in `auth.repository.ts`, extra deps) remain but are unrelated to credential work. |
 
 ---

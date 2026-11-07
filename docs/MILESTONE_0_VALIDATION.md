@@ -43,7 +43,7 @@ The following commands were executed independently from the repository root with
 | `npm run build`                                                                                | 0         | API and frontend production builds pass                      |
 | `npm run lint`                                                                                 | 0         | Pass                                                         |
 | `npm run format:check`                                                                         | 0         | Pass                                                         |
-| `DATABASE_URL='postgresql://nook:nook_local_only@127.0.0.1:5432/nook' npm run prisma:validate` | 0         | Empty schema validates; no database connection required      |
+| `DATABASE_URL='postgresql://nook:<password>@127.0.0.1:5432/nook' npm run prisma:validate` | 0         | Empty schema validates; no database connection required      |
 | `npm run verify:secrets`                                                                       | 0         | Baseline scanner passes; not a comprehensive security review |
 | `npm run verify:m0-scope`                                                                      | 0         | 22/22 checks pass; no `.env`                                 |
 | `npm audit`                                                                                    | 1         | Audit endpoint unavailable; security blocker remains         |

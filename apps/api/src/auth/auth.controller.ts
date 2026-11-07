@@ -59,18 +59,18 @@ export class AuthController {
     } catch {
       throw new UnauthorizedException({ code: 'INVALID_CREDENTIALS' });
     }
-    const result = await this.auth.login(input.email, input.password);
+    const result = await this.auth.login(input.email, input.password, request.ip ?? 'unknown');
     response.cookie(SESSION_COOKIE, result.secret, {
       ...cookieOptions(this.secureCookies()),
       maxAge: 8 * 60 * 60 * 1000,
     });
+    // A fresh CSRF token with every sign-in. The cookie is HttpOnly: the web app never reads it, it gets the same
+    // value from GET /auth/csrf and sends it back in a header (double submit).
     response.cookie(CSRF_COOKIE, this.csrf.createToken(), {
-      httpOnly: false,
-      secure: this.secureCookies(),
-      sameSite: 'strict',
-      path: '/',
+      ...cookieOptions(this.secureCookies()),
       maxAge: 8 * 60 * 60 * 1000,
     });
+    response.setHeader('Cache-Control', 'no-store');
     return { data: { user: publicContext(result.context) } };
   }
 
@@ -81,13 +81,23 @@ export class AuthController {
     @Req() request: AuthenticatedRequest,
     @Res({ passthrough: true }) response: HttpResponse,
   ) {
-    await this.sessions.revoke(request.auth!.sessionId);
+    await this.auth.logout(request.auth!);
     response.clearCookie(SESSION_COOKIE, cookieOptions(this.secureCookies()));
-    response.clearCookie(CSRF_COOKIE, {
-      ...cookieOptions(this.secureCookies()),
-      httpOnly: false,
-    });
+    response.clearCookie(CSRF_COOKIE, cookieOptions(this.secureCookies()));
     return { data: { loggedOut: true } };
+  }
+
+  @Post('password')
+  @UseGuards(OriginGuard, SessionGuard, CsrfGuard)
+  @HttpCode(HttpStatus.OK)
+  async changePassword(@Req() request: AuthenticatedRequest) {
+    const body = (request.body ?? {}) as Record<string, unknown>;
+    const result = await this.auth.changePassword(
+      request.auth!,
+      body.currentPassword,
+      body.newPassword,
+    );
+    return { data: { changed: true, otherSessionsRevoked: result.revokedSessions } };
   }
 
   @Get('me')
@@ -101,12 +111,11 @@ export class AuthController {
     const cookies = parseCookies(request.headers.cookie);
     const token = cookies.get(CSRF_COOKIE) ?? this.csrf.createToken();
     response.cookie(CSRF_COOKIE, token, {
-      httpOnly: false,
-      secure: this.secureCookies(),
-      sameSite: 'strict',
-      path: '/',
+      ...cookieOptions(this.secureCookies()),
       maxAge: 8 * 60 * 60 * 1000,
     });
+    // A token must never be cached by the browser or an intermediary.
+    response.setHeader('Cache-Control', 'no-store');
     return { data: { csrfToken: token } };
   }
 }
@@ -120,5 +129,6 @@ function publicContext(context: AuthenticatedContext) {
       name: context.organizationName,
     },
     role: context.role,
+    passwordChangeRequired: context.passwordChangeRequired,
   };
 }

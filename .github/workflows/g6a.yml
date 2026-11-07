@@ -1,0 +1,61 @@
+name: G6A Initial Migration Verification
+
+on:
+  workflow_dispatch:
+    inputs:
+      authorization:
+        description: 'Type AUTHORIZE_G6A to provision a disposable PostgreSQL service and deploy the foundation migration'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nook-g6a-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  initial-integration:
+    if: github.event_name == 'workflow_dispatch' && inputs.authorization == 'AUTHORIZE_G6A'
+    environment: g6a-disposable
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_DB: postgres
+          # Masked, job-scoped read-only token; bootstrap only, never a test credential.
+          POSTGRES_PASSWORD: ${{ github.token }}
+        ports:
+          - '127.0.0.1:5544:5432'
+        options: >-
+          --health-cmd "pg_isready -U postgres -d postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24.22.1
+          cache: npm
+      - name: Install locked dependencies
+        run: npm ci
+      - name: Static CI contract
+        run: node scripts/ci/check.js
+      - name: Offline G6A migration-path tests
+        run: node --import tsx --test scripts/ci/g6a-migration.test.js
+      - name: Verify migration contents
+        run: npm run verify:migration
+      - name: Provision and test initial-migration profile
+        env:
+          NOOK_CI_G6A_AUTHORIZATION: ${{ inputs.authorization }}
+          CI_BOOTSTRAP_PASSWORD: ${{ github.token }}
+        run: node --import tsx scripts/ci/integration.js initial-migration

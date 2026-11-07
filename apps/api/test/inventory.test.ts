@@ -98,6 +98,18 @@ class FakeInventoryRepository implements InventoryRepository {
     this.scope(organizationId);
     return this.bedExists ? { id: 'bed-1' } : null;
   }
+  async getInventorySummary(organizationId: string) {
+    this.scope(organizationId);
+    return {
+      properties: 0,
+      floors: 0,
+      rooms: 0,
+      beds: 0,
+      bedsInService: 0,
+      bedsOutOfService: 0,
+      bedsArchived: 0,
+    };
+  }
 }
 
 const context = (role: 'OWNER' | 'PROPERTY_MANAGER' = 'OWNER'): AuthenticatedContext => ({
@@ -107,6 +119,7 @@ const context = (role: 'OWNER' | 'PROPERTY_MANAGER' = 'OWNER'): AuthenticatedCon
   organizationName: 'A',
   displayName: 'Owner',
   role,
+  passwordChangeRequired: false,
 });
 
 test('inventory repository operations use only the authenticated organization context', async () => {

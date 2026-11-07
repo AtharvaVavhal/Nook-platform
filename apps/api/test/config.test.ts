@@ -1,6 +1,11 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { loadRuntimeConfig, parseDatabaseUrl, parsePort } from '../src/config.js';
+import {
+  loadRuntimeConfig,
+  parseDatabaseUrl,
+  parsePort,
+  parseTrustProxyHops,
+} from '../src/config.js';
 
 test('parsePort uses the documented local default', () => {
   assert.equal(parsePort(undefined), 3000);
@@ -43,7 +48,36 @@ test('production runtime configuration requires an HTTPS application origin', ()
     loadRuntimeConfig({
       APP_ENV: 'production',
       WEB_ORIGIN: 'https://app.example.com',
+      TRUST_PROXY_HOPS: '1',
     }).secureCookies,
     true,
+  );
+});
+
+test('TRUST_PROXY_HOPS: optional outside production, mandatory and bounded in production', () => {
+  assert.equal(parseTrustProxyHops(undefined, 'development'), 0);
+  assert.equal(parseTrustProxyHops('', 'test'), 0);
+  assert.equal(parseTrustProxyHops('1', 'production'), 1);
+  assert.equal(parseTrustProxyHops('0', 'production'), 0, 'an explicit 0 is a deliberate answer');
+  assert.throws(() => parseTrustProxyHops(undefined, 'production'), /TRUST_PROXY_HOPS must be set/);
+  assert.throws(() => parseTrustProxyHops('', 'production'), /must be set/);
+  for (const bad of ['-1', '1.5', 'one', '6', '99', '1e1']) {
+    assert.throws(
+      () => parseTrustProxyHops(bad, 'development'),
+      /whole number between 0 and 5/,
+      bad,
+    );
+  }
+  assert.throws(
+    () => loadRuntimeConfig({ APP_ENV: 'production', WEB_ORIGIN: 'https://app.example.com' }),
+    /TRUST_PROXY_HOPS must be set/,
+  );
+  assert.equal(
+    loadRuntimeConfig({
+      APP_ENV: 'test',
+      WEB_ORIGIN: 'http://localhost:5173',
+      TRUST_PROXY_HOPS: '2',
+    }).trustProxyHops,
+    2,
   );
 });

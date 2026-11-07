@@ -25,6 +25,7 @@ FILES = [
     "apps/api/src/app.module.ts", "apps/api/src/database/database.service.ts",
     "apps/web/src/main.tsx", "apps/web/src/tokens.css", "prisma/schema.prisma",
     "docs/MILESTONE_0_SCOPE.md", "docs/nook-phase-2/PHASE_2_DECISION_LOG.md",
+    "docs/nook-phase-3/PHASE_3_SCOPE_REGISTER.md",
     "scripts/secret_scan.py", "scripts/verify_m0_scope.py", "scripts/verify_phase_scope.py",
     "scripts/phase_scope.json", "scripts/test_phase_scope.py", "scripts/db_guard.py",
     "package.json", "apps/api/package.json", "apps/web/package.json",
@@ -85,6 +86,11 @@ class ScopeGuardTests(unittest.TestCase):
 
     def test_real_repository_passes(self):
         bad = [r for r in guard.run_checks(REAL) if not r.ok]
+        # A developer's git-ignored local .env is normal. A clean checkout (CI) has none, and
+        # test_S1_env_file_present proves the rule, so only that one environment-dependent check is skipped.
+        ignored = subprocess.run(["git", "-C", str(REAL), "check-ignore", "-q", ".env"]).returncode == 0
+        if ignored:
+            bad = [r for r in bad if r.name != "no real .env file"]
         self.assertEqual(bad, [], bad)
 
     # S1 retained Milestone 0 checks
@@ -128,6 +134,21 @@ class ScopeGuardTests(unittest.TestCase):
             '-- phase-scope: slice-2.2\nALTER TABLE "rooms" ADD CONSTRAINT c FOREIGN KEY (a) REFERENCES "widgets"(id);\n',
         )
         self.assertOnly("S3")
+
+    def test_S3_manifest_mapping_replaces_the_first_line_tag(self):
+        self.migration("20261101999999_mapped", 'CREATE INDEX "x" ON "residents"("id");\n')
+        self.assertOnly("S3")  # unmapped and untagged
+        self.manifest(lambda d: d.setdefault("migrationSlices", {}).update({"20261101999999_mapped": "3.1"}))
+        self.assertEqual(self.failed(), [])
+
+    def test_S3_mapping_to_an_unapproved_slice_fails(self):
+        self.migration("20261101999999_mapped", 'CREATE INDEX "x" ON "residents"("id");\n')
+        self.manifest(lambda d: d.setdefault("migrationSlices", {}).update({"20261101999999_mapped": "9.9"}))
+        self.assertOnly("S3")
+
+    def test_S1_env_example_must_carry_the_placeholder_not_a_password(self):
+        self.write(".env.example", "DATABASE_URL=postgresql://nook:realpassword@localhost:5433/nook_dev\n")
+        self.assertOnly("S1")
 
     # S4 destructive SQL
     def test_S4_drop_table(self):
@@ -173,12 +194,27 @@ class ScopeGuardTests(unittest.TestCase):
 
     # S6 forbidden vocabulary
     def test_S6_forbidden_file_name(self):
-        self.write("apps/api/src/resident.controller.ts", "export class X {}\n")
+        self.write("apps/api/src/refund.controller.ts", "export class X {}\n")
         self.assertOnly("S6")
 
     def test_S6_forbidden_schema_identifier(self):
-        self.write("prisma/schema.prisma", "\nmodel Organization {\n  id String @id\n  paymentStatus String\n}\n", "a")
+        self.write("prisma/schema.prisma", "\nmodel Organization {\n  id String @id\n  refundStatus String\n}\n", "a")
         self.assertOnly("S6")
+
+    def test_S6_words_beyond_the_approved_slices_stay_forbidden(self):
+        # ledger, settlement, kyc, aadhaar, otp, sms and whatsapp are not declared by any slice
+        for word in ("ledger", "settlement", "kyc", "aadhaar", "otp", "sms", "whatsapp"):
+            with self.subTest(word=word):
+                self.write("apps/api/src/" + word + ".util.ts", "export const a = 1;\n")
+                self.assertOnly("S6")
+                (self.root / "apps/api/src" / (word + ".util.ts")).unlink()
+
+    def test_S6_approved_vocabulary_is_allowed_only_through_a_slice(self):
+        def drop(d):
+            for sl in d["slices"].values():
+                sl.pop("allowsVocabulary", None)
+        self.manifest(drop)
+        self.assertIn("S6", self.failed())
 
     def test_S6_whole_word_matching_has_no_false_positive(self):
         self.write("apps/api/src/threshold.util.ts", "export const a = 1;\n")
@@ -186,12 +222,19 @@ class ScopeGuardTests(unittest.TestCase):
 
     # S7 money types
     def test_S7_decimal_and_float(self):
-        for typ in ("Decimal", "Float"):
+        # Float and Money are never approved
+        for typ in ("Float", "Money"):
             with self.subTest(typ=typ):
-                self.write("prisma/schema.prisma", f"\nmodel Organization {{\n  id String @id\n  size {typ}\n}}\n", "w")
                 shutil.copy(REAL / "prisma/schema.prisma", self.root / "prisma/schema.prisma")
                 self.write("prisma/schema.prisma", f"\nmodel Organization {{\n  id String @id\n  size {typ}\n}}\n", "a")
                 self.assertIn("S7", self.failed())
+
+    def test_S7_decimal_requires_an_approved_slice(self):
+        def drop(d):
+            for sl in d["slices"].values():
+                sl.pop("allowsTypes", None)
+        self.manifest(drop)
+        self.assertOnly("S7")
 
     # S8 route allow-list
     def test_S8_unlisted_route(self):

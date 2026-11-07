@@ -1,5 +1,7 @@
 export interface HttpRequest {
   readonly body?: unknown;
+  readonly ip?: string;
+  readonly originalUrl?: string;
   readonly headers: {
     readonly cookie?: string;
     readonly origin?: string;
@@ -10,6 +12,7 @@ export interface HttpRequest {
 export interface HttpResponse {
   cookie(name: string, value: string, options: Record<string, unknown>): void;
   clearCookie(name: string, options: Record<string, unknown>): void;
+  setHeader(name: string, value: string): void;
 }
 
 export interface AuthenticatedContext {
@@ -19,6 +22,7 @@ export interface AuthenticatedContext {
   readonly organizationName: string;
   readonly displayName: string;
   readonly role: 'OWNER' | 'PROPERTY_MANAGER';
+  readonly passwordChangeRequired: boolean;
 }
 
 export type AuthenticatedRequest = HttpRequest & {
@@ -31,6 +35,7 @@ export interface AuthUserRecord {
   readonly passwordHash: string;
   readonly displayName: string;
   readonly status: 'ACTIVE' | 'DISABLED';
+  readonly passwordChangeRequired: boolean;
 }
 
 export interface AuthMembershipRecord {
@@ -80,4 +85,12 @@ export interface AuthRepository {
   >;
   touchSession(sessionId: string, lastSeenAt: Date, idleExpiresAt: Date): Promise<void>;
   revokeSession(sessionId: string, reason: string): Promise<void>;
+  findUserById(userId: string): Promise<AuthUserRecord | null>;
+  /** Sets the new hash, clears the must-change flag and revokes every other session, atomically. */
+  changePassword(input: {
+    userId: string;
+    organizationId: string;
+    passwordHash: string;
+    keepSessionId: string;
+  }): Promise<{ revokedSessions: number }>;
 }

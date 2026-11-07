@@ -1,0 +1,38 @@
+{
+  "quality": [
+    "auth",
+    "booking.extension",
+    "booking.rules",
+    "checkin.rules",
+    "config",
+    "cors",
+    "di",
+    "finance.rules",
+    "finance.service",
+    "finance.util",
+    "input",
+    "integration-connection-paths",
+    "integration-guard",
+    "inventory",
+    "invoice-scheduler",
+    "observability",
+    "sentry-reporter",
+    "suite-lock"
+  ],
+  "initial-migration": ["database-migration"],
+  "full": [
+    "account-security",
+    "auth",
+    "booking",
+    "checkin",
+    "cross-origin",
+    "finance",
+    "inventory",
+    "invoice-scheduler",
+    "lifecycle",
+    "observability",
+    "resident-enquiry",
+    "uuid-params"
+  ],
+  "manual": ["restore-drill"]
+}

@@ -86,3 +86,74 @@ export type Room = Prisma.RoomModel
  * 
  */
 export type Bed = Prisma.BedModel
+/**
+ * Model Resident
+ * 
+ */
+export type Resident = Prisma.ResidentModel
+/**
+ * Model Booking
+ * 
+ */
+export type Booking = Prisma.BookingModel
+/**
+ * Model Admission
+ * 
+ */
+export type Admission = Prisma.AdmissionModel
+/**
+ * Model Enquiry
+ * 
+ */
+export type Enquiry = Prisma.EnquiryModel
+/**
+ * Model EnquiryFollowUp
+ * 
+ */
+export type EnquiryFollowUp = Prisma.EnquiryFollowUpModel
+/**
+ * Model CheckIn
+ * 
+ */
+export type CheckIn = Prisma.CheckInModel
+/**
+ * Model CheckOut
+ * 
+ */
+export type CheckOut = Prisma.CheckOutModel
+/**
+ * Model Invoice
+ * 
+ */
+export type Invoice = Prisma.InvoiceModel
+/**
+ * Model Payment
+ * 
+ */
+export type Payment = Prisma.PaymentModel
+/**
+ * Model PaymentReversal
+ * Append-only: a payment is never edited; reversing it records one row here.
+ */
+export type PaymentReversal = Prisma.PaymentReversalModel
+/**
+ * Model InvoiceAdjustment
+ * Append-only credit against an issued invoice. Credits are stored as negative amounts.
+ */
+export type InvoiceAdjustment = Prisma.InvoiceAdjustmentModel
+/**
+ * Model InvoiceVoid
+ * Append-only record that an invoice was voided. The invoice then sits in CANCELLED for good; payments, reversals
+ * and credits are never touched. Legacy CANCELLED invoices have no row here and none is invented for them.
+ */
+export type InvoiceVoid = Prisma.InvoiceVoidModel
+/**
+ * Model PaymentIdempotencyKey
+ * Append-only record of a client-supplied Idempotency-Key and the payment it produced.
+ */
+export type PaymentIdempotencyKey = Prisma.PaymentIdempotencyKeyModel
+/**
+ * Model LoginThrottle
+ * Persistent sign-in throttling. Keys are SHA-256 hashes, so no e-mail address or IP address is stored.
+ */
+export type LoginThrottle = Prisma.LoginThrottleModel

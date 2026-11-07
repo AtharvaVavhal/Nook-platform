@@ -232,7 +232,41 @@ export class PrismaInventoryRepository implements InventoryRepository {
     );
   }
 
-  archiveBed(organizationId: string, bedId: string) {
+  async archiveBed(organizationId: string, bedId: string) {
+    const now = new Date();
+
+    const activeBooking = await this.prisma.db.booking.findFirst({
+      where: {
+        bedId,
+        organizationId,
+        status: 'CONFIRMED',
+        endDate: { gte: now },
+      },
+      select: { id: true },
+    });
+
+    const activeAdmission = await this.prisma.db.admission.findFirst({
+      where: {
+        bedId,
+        organizationId,
+        status: { in: ['PENDING', 'ADMITTED'] },
+      },
+      select: { id: true },
+    });
+
+    const activeCheckIn = await this.prisma.db.checkIn.findFirst({
+      where: {
+        bedId,
+        organizationId,
+        status: 'ACTIVE',
+      },
+      select: { id: true },
+    });
+
+    if (activeBooking || activeAdmission || activeCheckIn) {
+      throw new Error('BED_OCCUPIED');
+    }
+
     return this.updateScoped(
       () =>
         this.prisma.db.bed.updateMany({
@@ -270,5 +304,23 @@ export class PrismaInventoryRepository implements InventoryRepository {
   ): Promise<T | null> {
     const result = await update();
     return result.count === 0 ? null : read();
+  }
+
+  async getInventorySummary(organizationId: string) {
+    const [properties, floors, rooms, beds, bedsInService, bedsOutOfService, bedsArchived] =
+      await Promise.all([
+        this.prisma.db.property.count({ where: { organizationId, archivedAt: null } }),
+        this.prisma.db.floor.count({ where: { organizationId, archivedAt: null } }),
+        this.prisma.db.room.count({ where: { organizationId, archivedAt: null } }),
+        this.prisma.db.bed.count({ where: { organizationId, archivedAt: null } }),
+        this.prisma.db.bed.count({
+          where: { organizationId, archivedAt: null, operationalStatus: 'IN_SERVICE' },
+        }),
+        this.prisma.db.bed.count({
+          where: { organizationId, archivedAt: null, operationalStatus: 'OUT_OF_SERVICE' },
+        }),
+        this.prisma.db.bed.count({ where: { organizationId, archivedAt: { not: null } } }),
+      ]);
+    return { properties, floors, rooms, beds, bedsInService, bedsOutOfService, bedsArchived };
   }
 }

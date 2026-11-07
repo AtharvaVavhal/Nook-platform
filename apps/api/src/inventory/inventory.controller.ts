@@ -223,4 +223,9 @@ export class InventoryController {
   archiveBed(@Req() request: AuthenticatedRequest, @Param('bedId') bedId: string) {
     return this.inventory.archiveBed(request.auth!, parseUuid(bedId, 'bedId'));
   }
+
+  @Get('inventory/summary')
+  getInventorySummary(@Req() request: AuthenticatedRequest) {
+    return this.inventory.getInventorySummary(request.auth!);
+  }
 }

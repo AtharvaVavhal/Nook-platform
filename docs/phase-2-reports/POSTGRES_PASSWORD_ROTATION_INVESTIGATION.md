@@ -11,7 +11,7 @@
 - **psql version:** 16.13 (Homebrew) — client
 - **Server:** PostgreSQL 17.11 (Docker container `nook-postgres-1`)
 - **Target:** `nook_phase3c_migrator` on `nook_test` @ 127.0.0.1:5433
-- **Superuser:** `nook` (password: `nook_local_only`)
+- **Superuser:** `nook` (password: `<password>`)
 
 ### Verified Behavior (Executed Non-Secret Tests)
 
@@ -22,7 +22,7 @@
 | Input hidden from terminal | **YES** | Standard ttys readline with echo off |
 | Plaintext in SQL history | **NO** | `\password` is a meta-command; sends `ALTER ROLE` with pre-hashed password to server |
 | Plaintext in server logs | **NO** | Server receives only SCRAM-SHA-256 verifier; `log_statement` does not log password |
-| Works over TCP (host→container) | **YES** | Tested: `PGPASSWORD=nook_local_only psql -h 127.0.0.1 -p 5433 -U nook -d nook_test -c "\password nook_phase3c_migrator"` |
+| Works over TCP (host→container) | **YES** | Tested: `PGPASSWORD=<password> psql -h 127.0.0.1 -p 5433 -U nook -d nook_test -c "\password nook_phase3c_migrator"` |
 | No password in shell args/env | **YES** | Superuser password via `PGPASSWORD` env (short-lived); new password via stdin only |
 | No password in process table | **YES** | Only `psql` process visible; password never in argv |
 
@@ -33,7 +33,7 @@
 ```bash
 # Superuser authenticates via PGPASSWORD (or .pgpass)
 # New password supplied via heredoc/stdin — never in command line
-PGPASSWORD=nook_local_only psql -h 127.0.0.1 -p 5433 -U nook -d nook_test \
+PGPASSWORD=<password> psql -h 127.0.0.1 -p 5433 -U nook -d nook_test \
   -c "\password nook_phase3c_migrator" <<'EOF'
 new_generated_password
 new_generated_password
@@ -56,7 +56,7 @@ EOF
                            ▼
 ┌─────────────────────────────────────────────────────────────────┐
 │ 2. SUPPLY TO POSTGRES  (via psql \password stdin)               │
-│    PGPASSWORD=nook_local_only psql -h 127.0.0.1 -p 5433         │
+│    PGPASSWORD=<password> psql -h 127.0.0.1 -p 5433         │
 │      -U nook -d nook_test -c "\password nook_phase3c_migrator"  │
 │      <<EOF                                                       │
 │      $(cat -)    # password from stdin                          │

@@ -59,7 +59,21 @@ export const ModelName = {
   Property: 'Property',
   Floor: 'Floor',
   Room: 'Room',
-  Bed: 'Bed'
+  Bed: 'Bed',
+  Resident: 'Resident',
+  Booking: 'Booking',
+  Admission: 'Admission',
+  Enquiry: 'Enquiry',
+  EnquiryFollowUp: 'EnquiryFollowUp',
+  CheckIn: 'CheckIn',
+  CheckOut: 'CheckOut',
+  Invoice: 'Invoice',
+  Payment: 'Payment',
+  PaymentReversal: 'PaymentReversal',
+  InvoiceAdjustment: 'InvoiceAdjustment',
+  InvoiceVoid: 'InvoiceVoid',
+  PaymentIdempotencyKey: 'PaymentIdempotencyKey',
+  LoginThrottle: 'LoginThrottle'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -95,6 +109,7 @@ export const UserScalarFieldEnum = {
   passwordHash: 'passwordHash',
   displayName: 'displayName',
   status: 'status',
+  passwordChangeRequired: 'passwordChangeRequired',
   lastLoginAt: 'lastLoginAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -199,10 +214,251 @@ export const BedScalarFieldEnum = {
   outOfServiceReason: 'outOfServiceReason',
   archivedAt: 'archivedAt',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  price: 'price'
 } as const
 
 export type BedScalarFieldEnum = (typeof BedScalarFieldEnum)[keyof typeof BedScalarFieldEnum]
+
+
+export const ResidentScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  firstName: 'firstName',
+  lastName: 'lastName',
+  dateOfBirth: 'dateOfBirth',
+  gender: 'gender',
+  phone: 'phone',
+  email: 'email',
+  address: 'address',
+  emergencyContactName: 'emergencyContactName',
+  emergencyContactPhone: 'emergencyContactPhone',
+  emergencyContactRelation: 'emergencyContactRelation',
+  documentMetadata: 'documentMetadata',
+  documentUrl: 'documentUrl',
+  documentVerificationStatus: 'documentVerificationStatus',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ResidentScalarFieldEnum = (typeof ResidentScalarFieldEnum)[keyof typeof ResidentScalarFieldEnum]
+
+
+export const BookingScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  residentId: 'residentId',
+  bedId: 'bedId',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  status: 'status',
+  paymentStatus: 'paymentStatus',
+  monthlyPrice: 'monthlyPrice',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BookingScalarFieldEnum = (typeof BookingScalarFieldEnum)[keyof typeof BookingScalarFieldEnum]
+
+
+export const AdmissionScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  bookingId: 'bookingId',
+  residentId: 'residentId',
+  bedId: 'bedId',
+  propertyId: 'propertyId',
+  roomId: 'roomId',
+  admissionDate: 'admissionDate',
+  status: 'status',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AdmissionScalarFieldEnum = (typeof AdmissionScalarFieldEnum)[keyof typeof AdmissionScalarFieldEnum]
+
+
+export const EnquiryScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  propertyId: 'propertyId',
+  firstName: 'firstName',
+  lastName: 'lastName',
+  phone: 'phone',
+  email: 'email',
+  preferredRoomType: 'preferredRoomType',
+  expectedMoveInDate: 'expectedMoveInDate',
+  expectedDurationOfStay: 'expectedDurationOfStay',
+  numberOfOccupants: 'numberOfOccupants',
+  source: 'source',
+  notes: 'notes',
+  status: 'status',
+  assignedUserId: 'assignedUserId',
+  residentId: 'residentId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type EnquiryScalarFieldEnum = (typeof EnquiryScalarFieldEnum)[keyof typeof EnquiryScalarFieldEnum]
+
+
+export const EnquiryFollowUpScalarFieldEnum = {
+  id: 'id',
+  enquiryId: 'enquiryId',
+  userId: 'userId',
+  notes: 'notes',
+  followUpAt: 'followUpAt',
+  outcome: 'outcome',
+  createdAt: 'createdAt'
+} as const
+
+export type EnquiryFollowUpScalarFieldEnum = (typeof EnquiryFollowUpScalarFieldEnum)[keyof typeof EnquiryFollowUpScalarFieldEnum]
+
+
+export const CheckInScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  admissionId: 'admissionId',
+  residentId: 'residentId',
+  bedId: 'bedId',
+  bookingId: 'bookingId',
+  checkInAt: 'checkInAt',
+  status: 'status',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CheckInScalarFieldEnum = (typeof CheckInScalarFieldEnum)[keyof typeof CheckInScalarFieldEnum]
+
+
+export const CheckOutScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  checkInId: 'checkInId',
+  residentId: 'residentId',
+  bedId: 'bedId',
+  bookingId: 'bookingId',
+  checkOutAt: 'checkOutAt',
+  reason: 'reason',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CheckOutScalarFieldEnum = (typeof CheckOutScalarFieldEnum)[keyof typeof CheckOutScalarFieldEnum]
+
+
+export const InvoiceScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  residentId: 'residentId',
+  bookingId: 'bookingId',
+  number: 'number',
+  periodStart: 'periodStart',
+  periodEnd: 'periodEnd',
+  amount: 'amount',
+  paidAmount: 'paidAmount',
+  adjustmentTotal: 'adjustmentTotal',
+  status: 'status',
+  dueDate: 'dueDate',
+  issuedAt: 'issuedAt',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InvoiceScalarFieldEnum = (typeof InvoiceScalarFieldEnum)[keyof typeof InvoiceScalarFieldEnum]
+
+
+export const PaymentScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  invoiceId: 'invoiceId',
+  residentId: 'residentId',
+  amount: 'amount',
+  method: 'method',
+  reference: 'reference',
+  receivedAt: 'receivedAt',
+  notes: 'notes',
+  correctsPaymentId: 'correctsPaymentId',
+  creditTotalAtPayment: 'creditTotalAtPayment',
+  balanceAfterPayment: 'balanceAfterPayment',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PaymentScalarFieldEnum = (typeof PaymentScalarFieldEnum)[keyof typeof PaymentScalarFieldEnum]
+
+
+export const PaymentReversalScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  paymentId: 'paymentId',
+  invoiceId: 'invoiceId',
+  reason: 'reason',
+  reversedBy: 'reversedBy',
+  createdAt: 'createdAt'
+} as const
+
+export type PaymentReversalScalarFieldEnum = (typeof PaymentReversalScalarFieldEnum)[keyof typeof PaymentReversalScalarFieldEnum]
+
+
+export const InvoiceAdjustmentScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  invoiceId: 'invoiceId',
+  residentId: 'residentId',
+  amount: 'amount',
+  reason: 'reason',
+  createdBy: 'createdBy',
+  createdAt: 'createdAt'
+} as const
+
+export type InvoiceAdjustmentScalarFieldEnum = (typeof InvoiceAdjustmentScalarFieldEnum)[keyof typeof InvoiceAdjustmentScalarFieldEnum]
+
+
+export const InvoiceVoidScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  invoiceId: 'invoiceId',
+  residentId: 'residentId',
+  previousStatus: 'previousStatus',
+  amountAtVoid: 'amountAtVoid',
+  reason: 'reason',
+  voidedBy: 'voidedBy',
+  createdAt: 'createdAt'
+} as const
+
+export type InvoiceVoidScalarFieldEnum = (typeof InvoiceVoidScalarFieldEnum)[keyof typeof InvoiceVoidScalarFieldEnum]
+
+
+export const PaymentIdempotencyKeyScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  key: 'key',
+  requestHash: 'requestHash',
+  paymentId: 'paymentId',
+  response: 'response',
+  createdAt: 'createdAt'
+} as const
+
+export type PaymentIdempotencyKeyScalarFieldEnum = (typeof PaymentIdempotencyKeyScalarFieldEnum)[keyof typeof PaymentIdempotencyKeyScalarFieldEnum]
+
+
+export const LoginThrottleScalarFieldEnum = {
+  scope: 'scope',
+  keyHash: 'keyHash',
+  failures: 'failures',
+  windowStartedAt: 'windowStartedAt',
+  lockedUntil: 'lockedUntil',
+  updatedAt: 'updatedAt'
+} as const
+
+export type LoginThrottleScalarFieldEnum = (typeof LoginThrottleScalarFieldEnum)[keyof typeof LoginThrottleScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -218,6 +474,14 @@ export const JsonNullValueInput = {
 } as const
 
 export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
+
+
+export const NullableJsonNullValueInput = {
+  DbNull: DbNull,
+  JsonNull: JsonNull
+} as const
+
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
 export const QueryMode = {

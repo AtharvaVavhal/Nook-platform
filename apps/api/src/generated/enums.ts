@@ -47,3 +47,102 @@ export const BedOperationalStatus = {
 } as const
 
 export type BedOperationalStatus = (typeof BedOperationalStatus)[keyof typeof BedOperationalStatus]
+
+
+export const ResidentStatus = {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE',
+  ARCHIVED: 'ARCHIVED'
+} as const
+
+export type ResidentStatus = (typeof ResidentStatus)[keyof typeof ResidentStatus]
+
+
+export const DocumentVerificationStatus = {
+  PENDING: 'PENDING',
+  VERIFIED: 'VERIFIED',
+  REJECTED: 'REJECTED'
+} as const
+
+export type DocumentVerificationStatus = (typeof DocumentVerificationStatus)[keyof typeof DocumentVerificationStatus]
+
+
+export const EnquiryStatus = {
+  NEW: 'NEW',
+  CONTACTED: 'CONTACTED',
+  FOLLOW_UP: 'FOLLOW_UP',
+  INTERESTED: 'INTERESTED',
+  CONVERTED: 'CONVERTED',
+  LOST: 'LOST',
+  ARCHIVED: 'ARCHIVED'
+} as const
+
+export type EnquiryStatus = (typeof EnquiryStatus)[keyof typeof EnquiryStatus]
+
+
+export const EnquirySource = {
+  WEBSITE: 'WEBSITE',
+  PHONE_CALL: 'PHONE_CALL',
+  WALK_IN: 'WALK_IN',
+  REFERRAL: 'REFERRAL',
+  SOCIAL_MEDIA: 'SOCIAL_MEDIA',
+  OTHER: 'OTHER'
+} as const
+
+export type EnquirySource = (typeof EnquirySource)[keyof typeof EnquirySource]
+
+
+export const BookingStatus = {
+  CONFIRMED: 'CONFIRMED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type BookingStatus = (typeof BookingStatus)[keyof typeof BookingStatus]
+
+
+export const PaymentStatus = {
+  PENDING: 'PENDING',
+  PAID: 'PAID',
+  OVERDUE: 'OVERDUE',
+  REFUNDED: 'REFUNDED'
+} as const
+
+export type PaymentStatus = (typeof PaymentStatus)[keyof typeof PaymentStatus]
+
+
+export const CheckInStatus = {
+  ACTIVE: 'ACTIVE',
+  CHECKED_OUT: 'CHECKED_OUT'
+} as const
+
+export type CheckInStatus = (typeof CheckInStatus)[keyof typeof CheckInStatus]
+
+
+export const AdmissionStatus = {
+  PENDING: 'PENDING',
+  ADMITTED: 'ADMITTED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type AdmissionStatus = (typeof AdmissionStatus)[keyof typeof AdmissionStatus]
+
+
+export const InvoiceStatus = {
+  DRAFT: 'DRAFT',
+  ISSUED: 'ISSUED',
+  PAID: 'PAID',
+  PARTIALLY_PAID: 'PARTIALLY_PAID',
+  OVERDUE: 'OVERDUE',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type InvoiceStatus = (typeof InvoiceStatus)[keyof typeof InvoiceStatus]
+
+
+export const PaymentMethod = {
+  CASH: 'CASH',
+  UPI: 'UPI',
+  BANK_TRANSFER: 'BANK_TRANSFER'
+} as const
+
+export type PaymentMethod = (typeof PaymentMethod)[keyof typeof PaymentMethod]

@@ -415,6 +415,9 @@ h1 {
 .available-text {
   color: var(--color-success-text);
 }
+.unavailable-text {
+  color: var(--color-neutral-text);
+}
 .availability-strip {
   display: flex;
   align-items: center;
@@ -1433,4 +1436,9 @@ h1 {
   .bed-tile {
     transition: box-shadow 0.12s ease;
   }
+}
+
+.demo-badge {
+  margin-left: 8px;
+  vertical-align: middle;
 }

@@ -30,7 +30,7 @@
 | Component | Finding |
 |-----------|---------|
 | `scripts/db/provision_roles.sql` | Template only (lines 1-20); contains no `ALTER ROLE` or credentials |
-| `docker-compose.yml` | Maps host 5433 → container 5432; superuser `nook`/`nook_local_only` on `nook_dev` only |
+| `docker-compose.yml` | Maps host 5433 → container 5432; superuser `nook`/`<password>` on `nook_dev` only |
 | `seed_milestone_3c_fixtures.sh` | Uses `psql -U nook_phase3c_migrator` with password from `DATABASE_URL` env var (line 88) |
 | Prisma / `pg` driver | No programmatic `ALTER ROLE ... PASSWORD` API that accepts password via parameter binding |
 
