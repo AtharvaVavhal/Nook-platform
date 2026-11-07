@@ -47,12 +47,17 @@ test('missing results fail closed and arbitrary output is discarded', () => {
   assert.ok(!out.join('').includes('secret'));
 });
 test('reporter suppresses names, messages, output and assertion values', async () => {
-  const file = '/repo/apps/api/test/integration/account-security.integration.test.ts';
+  const file = fileURLToPath(
+    new URL(
+      '../../apps/api/test/integration/account-security.integration.test.ts',
+      import.meta.url,
+    ),
+  );
   const secret = 'sensitive-password-token';
   async function* events() {
     yield {
       type: 'test:dequeue',
-      data: { file, name: file, nesting: 0, parentId: 0, type: 'test' },
+      data: { file, name: cliPathFor(file), nesting: 0, parentId: 0, type: 'test' },
     };
     yield { type: 'test:stdout', data: { file, message: secret } };
     yield {
@@ -84,20 +89,19 @@ test('reporter suppresses names, messages, output and assertion values', async (
 });
 
 test('real Node reporter: nested tests, two files, secrets and nonzero exit', async () => {
-  const { mkdtempSync, writeFileSync, rmSync } = await import('node:fs');
-  const { tmpdir } = await import('node:os');
+  const { writeFileSync, rmSync } = await import('node:fs');
   const { join } = await import('node:path');
   const { spawnSync } = await import('node:child_process');
-  const dir = mkdtempSync(join(tmpdir(), 'nook-safe-reporter-'));
+  const dir = await prepareReporterFixture('safe');
   try {
-    const first = join(dir, 'account-security.integration.test.ts');
-    const second = join(dir, 'auth.integration.test.ts');
+    const first = cliPathFor('account-security.integration.test.ts');
+    const second = cliPathFor('auth.integration.test.ts');
     writeFileSync(
-      first,
+      join(dir, first),
       `import { test, describe } from 'node:test'; describe('secret-name',()=>{test('pass',()=>{});test.skip('skip',()=>{});test.todo('todo');});`,
     );
     writeFileSync(
-      second,
+      join(dir, second),
       `import { test } from 'node:test'; import assert from 'node:assert/strict'; test('secret-name',()=>{console.log('synthetic-secret');console.error('synthetic-secret');assert.equal('synthetic-secret','other');});`,
     );
     const child = spawnSync(
@@ -105,11 +109,11 @@ test('real Node reporter: nested tests, two files, secrets and nonzero exit', as
       [
         '--test',
         '--test-concurrency=1',
-        '--test-reporter=' + new URL('./integration-test-reporter.js', import.meta.url).pathname,
+        '--test-reporter=./scripts/ci/integration-test-reporter.js',
         first,
         second,
       ],
-      { encoding: 'utf8', env: { PATH: process.env.PATH } },
+      { cwd: dir, encoding: 'utf8', env: { PATH: process.env.PATH } },
     );
     assert.equal(child.status, 1);
     assert.ok(!child.stdout.includes('synthetic-secret'));
@@ -262,14 +266,16 @@ async function reportEvents(events) {
     if (file)
       yield {
         type: 'test:dequeue',
-        data: { file, name: file, nesting: 0, parentId: 0, type: 'test' },
+        data: { file, name: cliPathFor(file), nesting: 0, parentId: 0, type: 'test' },
       };
     yield* events;
   }
   for await (const s of reporter(stream())) output.push(s);
   return output;
 }
-const eventFile = '/synthetic/account-security.integration.test.ts';
+const eventFile = fileURLToPath(
+  new URL('../../apps/api/test/integration/account-security.integration.test.ts', import.meta.url),
+);
 for (const [label, summary] of [
   ['empty', { tests: 0, passed: 0, failed: 0, skipped: 0, todo: 0, cancelled: 0 }],
   ['cancelled', { tests: 2, passed: 0, failed: 0, skipped: 0, todo: 0, cancelled: 2 }],
@@ -313,7 +319,13 @@ for (const mode of ['empty stream', 'interrupted', 'reporter throws', 'bad summa
       if (mode === 'empty stream') return;
       yield {
         type: 'test:dequeue',
-        data: { file: eventFile, name: eventFile, nesting: 0, parentId: 0, type: 'test' },
+        data: {
+          file: eventFile,
+          name: cliPathFor(eventFile),
+          nesting: 0,
+          parentId: 0,
+          type: 'test',
+        },
       };
       yield { type: 'test:start', data: { file: eventFile } };
       if (mode === 'reporter throws') throw new Error(privateText);
@@ -517,11 +529,10 @@ for (const cleanupFails of [false, true])
   });
 
 test('actual Node multi-file pass, failure, cancellation, crash and never-started accounting', async () => {
-  const { mkdtempSync, writeFileSync, rmSync } = await import('node:fs');
-  const { tmpdir } = await import('node:os');
+  const { writeFileSync, rmSync } = await import('node:fs');
   const { join } = await import('node:path');
   const { spawnSync } = await import('node:child_process');
-  const dir = mkdtempSync(join(tmpdir(), 'nook-reporter-completion-'));
+  const dir = await prepareReporterFixture('completion');
   const scripts = [
     "test('private name',()=>{});",
     "test('private name',()=>{});",
@@ -531,9 +542,9 @@ test('actual Node multi-file pass, failure, cancellation, crash and never-starte
   ];
   try {
     const paths = scripts.map((body, i) => {
-      const path = join(dir, `${names[i]}.integration.test.ts`);
+      const path = cliPathFor(`${names[i]}.integration.test.ts`);
       writeFileSync(
-        path,
+        join(dir, path),
         `import { test } from 'node:test';import assert from 'node:assert/strict';${body}`,
       );
       return path;
@@ -543,10 +554,10 @@ test('actual Node multi-file pass, failure, cancellation, crash and never-starte
       [
         '--test',
         '--test-concurrency=1',
-        '--test-reporter=' + new URL('./integration-test-reporter.js', import.meta.url).pathname,
+        '--test-reporter=./scripts/ci/integration-test-reporter.js',
         ...paths,
       ],
-      { encoding: 'utf8', env: { PATH: process.env.PATH }, timeout: 10000 },
+      { cwd: dir, encoding: 'utf8', env: { PATH: process.env.PATH }, timeout: 10000 },
     );
     assert.equal(child.status, 1);
     const out = [];
@@ -720,7 +731,7 @@ test('queue and nested dequeue cannot launch a file', async () => {
   async function* events() {
     yield {
       type: 'test:enqueue',
-      data: { file, name: file, nesting: 0, parentId: 0, type: 'test' },
+      data: { file, name: cliPathFor(file), nesting: 0, parentId: 0, type: 'test' },
     };
     yield {
       type: 'test:dequeue',
@@ -737,16 +748,15 @@ test('queue and nested dequeue cannot launch a file', async () => {
 });
 
 async function runOutcomeFixture(body) {
-  const { mkdtempSync, writeFileSync, rmSync } = await import('node:fs');
-  const { tmpdir } = await import('node:os');
+  const { writeFileSync, rmSync } = await import('node:fs');
   const { join } = await import('node:path');
   const { spawnSync } = await import('node:child_process');
-  const dir = mkdtempSync(join(tmpdir(), 'nook-four-outcomes-'));
+  const dir = await prepareReporterFixture('outcomes');
   try {
     const paths = names.map((name, index) => {
-      const path = join(dir, `${name}.integration.test.ts`);
+      const path = cliPathFor(`${name}.integration.test.ts`);
       writeFileSync(
-        path,
+        join(dir, path),
         `import {test,describe,before,after,it} from 'node:test';import assert from 'node:assert/strict';import {verifyIdentityFacts} from ${JSON.stringify(new URL('./g6b-preflight.js', import.meta.url).href)};${index === 0 ? body : "test('pass',()=>{});"}`,
       );
       return path;
@@ -758,10 +768,10 @@ async function runOutcomeFixture(body) {
         'tsx',
         '--test',
         '--test-concurrency=1',
-        '--test-reporter=' + new URL('./integration-test-reporter.js', import.meta.url).pathname,
+        '--test-reporter=./scripts/ci/integration-test-reporter.js',
         ...paths,
       ],
-      { encoding: 'utf8', env: { PATH: process.env.PATH }, timeout: 15000 },
+      { cwd: dir, encoding: 'utf8', env: { PATH: process.env.PATH }, timeout: 15000 },
     );
     assert.equal(child.error, undefined);
     const out = [];
@@ -839,23 +849,22 @@ test('real ordinary assertion remains a hard failure with ordinal one', async ()
 });
 
 test('real file launch interrupted during module import is incomplete, never not_started', async () => {
-  const { mkdtempSync, writeFileSync, rmSync } = await import('node:fs');
-  const { tmpdir } = await import('node:os');
+  const { writeFileSync, rmSync } = await import('node:fs');
   const { join } = await import('node:path');
   const { spawn } = await import('node:child_process');
-  const dir = mkdtempSync(join(tmpdir(), 'nook-import-interruption-'));
+  const dir = await prepareReporterFixture('interruption');
   try {
-    const first = join(dir, 'account-security.integration.test.ts');
-    const second = join(dir, 'auth.integration.test.ts');
+    const first = cliPathFor('account-security.integration.test.ts');
+    const second = cliPathFor('auth.integration.test.ts');
     writeFileSync(
-      first,
+      join(dir, first),
       `setInterval(()=>{},1000);console.log('NOOK_IMPORT_PHASE_PROBE');await new Promise(()=>{});`,
     );
-    writeFileSync(second, `import {test} from 'node:test';test('never runs',()=>{});`);
+    writeFileSync(join(dir, second), `import {test} from 'node:test';test('never runs',()=>{});`);
     const wrapper = join(dir, 'reporter.mjs');
     writeFileSync(
       wrapper,
-      `import reporter from ${JSON.stringify(new URL('./integration-test-reporter.js', import.meta.url).href)};export default async function* (events){async function* observed(){let testStarted=false;for await(const e of events){if(e.type==='test:start')testStarted=true;if(e.type==='test:stdout'&&e.data.message.trim()==='NOOK_IMPORT_PHASE_PROBE'){process.stderr.write(testStarted?'PROBE_WRONG_ORDER':'PROBE_IMPORT_BEFORE_TEST');process.kill(process.pid,'SIGTERM');await new Promise(()=>{});}yield e;}}yield* reporter(observed());}`,
+      `import reporter from ${JSON.stringify(join(dir, 'scripts/ci/integration-test-reporter.js'))};export default async function* (events){async function* observed(){let testStarted=false;for await(const e of events){if(e.type==='test:start')testStarted=true;if(e.type==='test:stdout'&&e.data.message.trim()==='NOOK_IMPORT_PHASE_PROBE'){process.stderr.write(testStarted?'PROBE_WRONG_ORDER':'PROBE_IMPORT_BEFORE_TEST');process.kill(process.pid,'SIGTERM');await new Promise(()=>{});}yield e;}}yield* reporter(observed());}`,
     );
     let importBeforeTest = false;
     const out = [];
@@ -865,7 +874,7 @@ test('real file launch interrupted during module import is incomplete, never not
           supervise(
             process.execPath,
             ['--test', '--test-concurrency=1', '--test-reporter=' + wrapper, first, second],
-            { env: { PATH: process.env.PATH } },
+            { cwd: dir, env: { PATH: process.env.PATH } },
             {
               onOutput,
               identity: 'integration_tests',
@@ -896,3 +905,177 @@ test('real file launch interrupted during module import is incomplete, never not
     rmSync(dir, { recursive: true, force: true });
   }
 });
+
+for (const failing of [false, true])
+  test(`hosted relative-path startup (ordinary failure=${failing})`, async () => {
+    const { mkdtempSync, writeFileSync, mkdirSync, copyFileSync, rmSync } = await import('node:fs');
+    const { join } = await import('node:path');
+    const { spawnSync } = await import('node:child_process');
+    // Nest only the temporary synthetic tree under the existing installation so
+    // --import tsx resolves normally, exactly as in hosted CI; no new dependencies.
+    const dir = mkdtempSync(
+      join(fileURLToPath(new URL('../../', import.meta.url)), '.nook-startup-'),
+    );
+    try {
+      writeFileSync(join(dir, 'package.json'), '{"type":"module"}');
+      mkdirSync(join(dir, 'scripts/ci'), { recursive: true });
+      for (const name of ['integration-test-reporter.js', 'diagnostics.js', 'test-files.json'])
+        copyFileSync(new URL(name, import.meta.url), join(dir, 'scripts/ci', name));
+      mkdirSync(join(dir, 'apps/api/test/integration'), { recursive: true });
+      const paths = names.map((name, i) => {
+        const path = `apps/api/test/integration/${name}.integration.test.ts`;
+        const body = failing && i === 0 ? `assert.fail(${JSON.stringify(privateText)})` : '';
+        writeFileSync(
+          join(dir, path),
+          `import test from 'node:test';import assert from 'node:assert/strict';test('private synthetic',()=>{${body}});`,
+        );
+        return path;
+      });
+      const child = spawnSync(
+        process.execPath,
+        [
+          '--import',
+          'tsx',
+          '--test',
+          '--test-concurrency=1',
+          '--test-reporter=./scripts/ci/integration-test-reporter.js',
+          ...paths,
+        ],
+        {
+          cwd: dir,
+          env: { PATH: process.env.PATH, APP_ENV: 'test' },
+          encoding: 'utf8',
+          timeout: 15000,
+        },
+      );
+      assert.equal(child.error, undefined);
+      // Before the correction both cases exit 7 with no FILE_START records.
+      assert.equal(child.status, failing ? 1 : 0);
+      assert.equal(child.signal, null);
+      const output = [];
+      const protocol = createTestProtocol((s) => output.push(s));
+      protocol.push(child.stdout);
+      if (failing) assert.throws(() => protocol.finish());
+      else protocol.finish();
+      const summary = decode(output.at(-1));
+      assert.equal(summary.files_started, 12);
+      assert.equal(summary.files_completed, 12);
+      assert.equal(summary.files_not_started, 0);
+      assert.equal(summary.tests, 12);
+      assert.equal(summary.passed, failing ? 11 : 12);
+      assert.equal(summary.failed, failing ? 1 : 0);
+      const failures = output.filter((s) => s.startsWith('NOOK_TEST_FAILURE ')).map(decode);
+      assert.equal(failures.length, failing ? 1 : 0);
+      if (failing) {
+        assert.equal(failures[0].file, 'account-security.integration.test.ts');
+        assert.equal(failures[0].index, 1);
+        assert.equal(failures[0].name, 'AssertionError');
+      }
+      assertPrivate(child.stdout);
+      assertPrivate(output);
+      assert.ok(!child.stderr.includes('Test event before file launch'));
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
+function cliPathFor(file) {
+  return `apps/api/test/integration/${file.split('/').at(-1)}`;
+}
+async function prepareReporterFixture(label) {
+  const { mkdtempSync, mkdirSync, copyFileSync, writeFileSync } = await import('node:fs');
+  const { join } = await import('node:path');
+  const dir = mkdtempSync(join(repo, `.nook-${label}-`));
+  mkdirSync(join(dir, 'scripts/ci'), { recursive: true });
+  mkdirSync(join(dir, 'apps/api/test/integration'), { recursive: true });
+  writeFileSync(join(dir, 'package.json'), '{"type":"module"}');
+  for (const file of ['integration-test-reporter.js', 'test-files.json'])
+    copyFileSync(new URL(file, import.meta.url), join(dir, 'scripts/ci', file));
+  // Use the real sanitizer against real repository sources used by hook probes.
+  // The reporter itself computes its launch boundary from this fixture's root.
+  writeFileSync(
+    join(dir, 'scripts/ci/diagnostics.js'),
+    `export {safeError,safeSourceLocation} from ${JSON.stringify(new URL('./diagnostics.js', import.meta.url).href)};`,
+  );
+  return dir;
+}
+
+function launchEvent(name, file, changes = {}) {
+  return {
+    type: 'test:dequeue',
+    data: { name, file, nesting: 0, parentId: 0, type: 'test', ...changes },
+  };
+}
+async function launchRecords(event) {
+  const output = [];
+  async function* events() {
+    yield event;
+  }
+  for await (const record of reporter(events())) output.push(record);
+  return output;
+}
+for (const name of names)
+  test(`launch boundary accepts expected hosted path: ${name}`, async () => {
+    const cli = `apps/api/test/integration/${name}.integration.test.ts`;
+    const file = fileURLToPath(new URL('../../' + cli, import.meta.url));
+    const out = await launchRecords(launchEvent(cli, file));
+    assert.equal(out.length, 1);
+    assert.equal(decode(out[0]).file, `${name}.integration.test.ts`);
+  });
+const approvedCli = 'apps/api/test/integration/account-security.integration.test.ts';
+const approvedFile = fileURLToPath(new URL('../../' + approvedCli, import.meta.url));
+for (const [label, name, file, extra] of [
+  [
+    'outside POSIX traversal',
+    '../../../../tmp/outside/account-security.integration.test.ts',
+    '/tmp/outside/account-security.integration.test.ts',
+  ],
+  ['traversal back inside root', '../nook/' + approvedCli, approvedFile],
+  [
+    'internal traversal',
+    'apps/api/test/integration/../integration/account-security.integration.test.ts',
+    approvedFile,
+  ],
+  [
+    'Windows traversal',
+    '..\\nook\\apps\\api\\test\\integration\\account-security.integration.test.ts',
+    approvedFile,
+  ],
+  ['absolute name', approvedFile, approvedFile],
+  ['URL name', 'file://' + approvedFile, approvedFile],
+  [
+    'Windows drive path',
+    'C:\\apps\\api\\test\\integration\\account-security.integration.test.ts',
+    approvedFile,
+  ],
+  [
+    'matching basename in wrong directory',
+    'other/account-security.integration.test.ts',
+    repo + 'other/account-security.integration.test.ts',
+  ],
+  ['outside absolute file', approvedCli, '/tmp/outside/account-security.integration.test.ts'],
+  [
+    'wrong contained absolute file',
+    approvedCli,
+    repo + 'other/account-security.integration.test.ts',
+  ],
+  ['relative file', approvedCli, approvedCli],
+  ['file URL', approvedCli, 'file://' + approvedFile],
+  [
+    'raw file traversal',
+    approvedCli,
+    repo + 'apps/api/test/integration/../integration/account-security.integration.test.ts',
+  ],
+  ['worker event', approvedCli, approvedFile, { entryFile: approvedFile }],
+  ['nested event', approvedCli, approvedFile, { nesting: 1, parentId: 1 }],
+  ['malformed name', null, approvedFile],
+])
+  test(`launch boundary rejects ${label}`, async () => {
+    const out = await launchRecords(launchEvent(name, file, extra));
+    assert.deepEqual(out, []);
+    const parentOutput = [];
+    const protocol = createTestProtocol((s) => parentOutput.push(s));
+    assert.throws(() => protocol.finish());
+    assert.equal(decode(parentOutput.at(-1)).files_started, 0);
+    assert.equal(decode(parentOutput.at(-1)).files_not_started, 12);
+  });

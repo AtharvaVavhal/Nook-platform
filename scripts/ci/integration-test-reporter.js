@@ -1,10 +1,49 @@
-import { readFileSync } from 'node:fs';
-import { basename, isAbsolute } from 'node:path';
+import { readFileSync, realpathSync } from 'node:fs';
+import { basename, isAbsolute, resolve, relative } from 'node:path';
 import { safeError, safeSourceLocation } from './diagnostics.js';
+import { fileURLToPath } from 'node:url';
+
+const ROOT = realpathSync(fileURLToPath(new URL('../../', import.meta.url)));
 
 export const files = JSON.parse(
   readFileSync(new URL('./test-files.json', import.meta.url)),
 ).full.map((name) => `${name}.integration.test.ts`);
+const expectedPaths = new Map(
+  files.map((file) => [
+    `apps/api/test/integration/${file}`,
+    resolve(ROOT, 'apps/api/test/integration', file),
+  ]),
+);
+function isExpectedLaunch(name, file) {
+  // Validate raw input before resolve can erase traversal, including Windows syntax.
+  if (
+    typeof name !== 'string' ||
+    name.split(/[\\/]/).includes('..') ||
+    !expectedPaths.has(name) ||
+    typeof file !== 'string' ||
+    !isAbsolute(file) ||
+    file.split(/[\\/]/).includes('..') ||
+    /[\\?#%]/.test(file)
+  )
+    return false;
+  const expected = expectedPaths.get(name);
+  const resolvedName = resolve(ROOT, name);
+  const resolvedFile = resolve(ROOT, file);
+  const rel = relative(ROOT, resolvedFile);
+  if (
+    rel === '..' ||
+    rel.startsWith('../') ||
+    isAbsolute(rel) ||
+    resolvedName !== expected ||
+    resolvedFile !== expected
+  )
+    return false;
+  try {
+    return realpathSync(resolvedFile) === expected;
+  } catch {
+    return false;
+  }
+}
 const keys = ['tests', 'passed', 'failed', 'skipped', 'todo', 'cancelled'];
 const record = (event, data) => `NOOK_TEST_${event} ${JSON.stringify(data)}\n`;
 const counts = (value) => {
@@ -31,8 +70,7 @@ export default async function* reporter(events) {
         d.parentId === 0 &&
         d.type === 'test' &&
         !Object.hasOwn(d, 'entryFile') &&
-        d.name === d.file &&
-        isAbsolute(d.file)
+        isExpectedLaunch(d.name, d.file)
       ) {
         if (started.has(file)) throw new Error('Duplicate file launch');
         started.add(file);
