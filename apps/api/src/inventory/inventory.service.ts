@@ -8,6 +8,8 @@ import {
 import { Prisma } from '../generated/client.js';
 import { INVENTORY_REPOSITORY } from './inventory.repository.js';
 import type { InventoryRepository } from './inventory.types.js';
+import { classifyFailure } from '../common/tx-errors.js';
+import { BULK_MAX_BEDS, BULK_MAX_ROOMS, type BulkRoomInput } from './inventory.bulk.validation.js';
 import type { AuthenticatedContext } from '../auth/auth.types.js';
 
 @Injectable()
@@ -125,6 +127,50 @@ export class InventoryService {
       data: await this.createNullable(() =>
         this.repository.createRoom(context.organizationId, propertyId, input),
       ),
+    };
+  }
+
+  async bulkCreateRooms(
+    context: AuthenticatedContext,
+    propertyId: string,
+    input: { rooms: BulkRoomInput[]; dryRun: boolean },
+  ) {
+    this.assertRole(context);
+    let outcome;
+    try {
+      outcome = await this.repository.bulkCreateRooms(context.organizationId, propertyId, input);
+    } catch (error) {
+      // The partial unique indexes are the final authority: a concurrent writer that slipped past the pre-check
+      // rolls the whole batch back and is reported as the same duplicate conflict.
+      this.handleDatabaseError(error);
+      const failure = classifyFailure(error);
+      if (failure === 'UNIQUE_VIOLATION') {
+        throw new ConflictException({ code: 'DUPLICATE_ACTIVE_IDENTIFIER' });
+      }
+      // Gate wait timed out or the database chose this transaction as a deadlock victim: nothing was written.
+      if (failure === 'LOCK_TIMEOUT' || failure === 'DEADLOCK' || failure === 'SERIALIZATION') {
+        throw new ConflictException({ code: 'INVENTORY_BUSY' });
+      }
+      throw error;
+    }
+    if (outcome.kind === 'not_found') throw notFound();
+    if (outcome.kind === 'conflict') {
+      throw new ConflictException({
+        code: 'DUPLICATE_ACTIVE_IDENTIFIER',
+        details: outcome.details,
+      });
+    }
+    return {
+      data: {
+        propertyId,
+        dryRun: input.dryRun,
+        limits: { maxRooms: BULK_MAX_ROOMS, maxBeds: BULK_MAX_BEDS },
+        summary: {
+          rooms: outcome.rooms.length,
+          beds: outcome.rooms.reduce((sum, room) => sum + room.beds.length, 0),
+        },
+        rooms: outcome.rooms,
+      },
     };
   }
 

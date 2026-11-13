@@ -1,4 +1,25 @@
 import type { AuthenticatedContext } from '../auth/auth.types.js';
+import type { BulkRoomInput } from './inventory.bulk.validation.js';
+
+export interface BulkCreatedBed {
+  id: string;
+  label: string;
+  operationalStatus: 'IN_SERVICE' | 'OUT_OF_SERVICE';
+  outOfServiceReason: string | null;
+}
+
+export interface BulkCreatedRoom {
+  id: string | null;
+  floorId: string;
+  label: string;
+  beds: Array<Omit<BulkCreatedBed, 'id'> & { id: string | null }>;
+}
+
+/** Outcome of a bulk room/bed request. `not_found` covers a missing, archived or other-organization property or floor. */
+export type BulkRoomsOutcome =
+  | { kind: 'not_found' }
+  | { kind: 'conflict'; details: Array<{ field: string; code: string }> }
+  | { kind: 'ok'; rooms: BulkCreatedRoom[] };
 
 export type InventoryResource = 'property' | 'floor' | 'room' | 'bed';
 
@@ -61,6 +82,15 @@ export interface InventoryRepository {
     },
   ): Promise<unknown | null>;
   archiveBed(organizationId: string, bedId: string): Promise<unknown | null>;
+  /**
+   * Creates every room and bed of the batch in ONE transaction, or none of them. With `dryRun` it runs the same
+   * validation and conflict detection and writes nothing (ids are null in the result).
+   */
+  bulkCreateRooms(
+    organizationId: string,
+    propertyId: string,
+    input: { rooms: BulkRoomInput[]; dryRun: boolean },
+  ): Promise<BulkRoomsOutcome>;
   getInventorySummary(organizationId: string): Promise<{
     properties: number;
     floors: number;

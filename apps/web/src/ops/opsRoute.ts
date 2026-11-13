@@ -24,6 +24,7 @@ export type OpsRoute =
   | { name: 'property-new' }
   | { name: 'floor-new'; propertyId: string }
   | { name: 'room-new'; propertyId: string }
+  | { name: 'room-bulk'; propertyId: string }
   | { name: 'bed-new'; roomId: string }
   | { name: 'bed'; roomId: string; id: string }
   | { name: 'property'; id: string }
@@ -100,6 +101,7 @@ export function parseOpsRoute(hash: string): OpsRoute {
   }
   if (first === 'floors' || first === 'rooms') {
     if (!second || !UUID.test(second)) return { name: 'properties' };
+    if (first === 'rooms' && third === 'bulk') return { name: 'room-bulk', propertyId: second };
     if (third === 'new')
       return { name: first === 'floors' ? 'floor-new' : 'room-new', propertyId: second };
     if (third && UUID.test(third))
@@ -137,6 +139,7 @@ export const opsLinks = {
   propertyNew: '#properties/new',
   floorNew: (propertyId: string) => `#floors/${propertyId}/new`,
   roomNew: (propertyId: string) => `#rooms/${propertyId}/new`,
+  roomBulk: (propertyId: string) => `#rooms/${propertyId}/bulk`,
   bedNew: (roomId: string) => `#beds/${roomId}/new`,
   bed: (roomId: string, id: string) => `#beds/${roomId}/${id}`,
   property: (id: string) => `#properties/${id}`,

@@ -482,9 +482,14 @@ export function RoomList({ propertyId }: { propertyId: string }) {
         id="room-title"
         title="Rooms"
         action={
-          <a className="primary-button" href={opsLinks.roomNew(propertyId)}>
-            Add room
-          </a>
+          <span className="ops-actions">
+            <a className="outline-button" href={opsLinks.roomBulk(propertyId)}>
+              Add multiple rooms
+            </a>
+            <a className="primary-button" href={opsLinks.roomNew(propertyId)}>
+              Add room
+            </a>
+          </span>
         }
       />
       <form

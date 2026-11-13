@@ -10,6 +10,8 @@ export class OpsApiError extends Error {
     readonly status: number,
     /** Stable machine-readable code from the server (corrections API), when there is one. */
     readonly code?: string,
+    /** Field-level problems the server reported (inventory bulk API), with indexed paths. */
+    readonly details?: ReadonlyArray<{ field: string; code: string }>,
   ) {
     super(message);
   }
@@ -39,6 +41,7 @@ async function request<T>(
     const payload = (await response.json().catch(() => ({}))) as {
       message?: string | string[];
       code?: string;
+      details?: Array<{ field: string; code: string }>;
     };
     const message = Array.isArray(payload.message) ? payload.message.join(', ') : payload.message;
     // A 403 from the CSRF/Origin guards is a generic security refusal; a 403 that carries a code (not enough role,
@@ -56,6 +59,7 @@ async function request<T>(
             `Request failed (${response.status})`),
       response.status,
       payload.code,
+      Array.isArray(payload.details) ? payload.details : undefined,
     );
   }
   return (await response.json()) as T;
@@ -450,6 +454,23 @@ export interface RoomInput {
   floorId: string;
   label: string;
 }
+export interface BulkRoomsResult {
+  propertyId: string;
+  dryRun: boolean;
+  limits: { maxRooms: number; maxBeds: number };
+  summary: { rooms: number; beds: number };
+  rooms: Array<{
+    id: string | null;
+    floorId: string;
+    label: string;
+    beds: Array<{
+      id: string | null;
+      label: string;
+      operationalStatus: 'IN_SERVICE' | 'OUT_OF_SERVICE';
+      outOfServiceReason: string | null;
+    }>;
+  }>;
+}
 export interface BedInput {
   label: string;
   operationalStatus: 'IN_SERVICE' | 'OUT_OF_SERVICE';
@@ -726,6 +747,13 @@ export const opsApi = {
         ),
       create: (propertyId: string, body: RoomInput) =>
         request<ApiResponse<Room>>('POST', `/properties/${propertyId}/rooms`, body).then(unwrap),
+      /** Rooms and their beds in one transaction. `body.dryRun` validates and previews without writing. */
+      bulkCreate: (propertyId: string, body: unknown) =>
+        request<ApiResponse<BulkRoomsResult>>(
+          'POST',
+          `/properties/${propertyId}/rooms/bulk`,
+          body,
+        ).then(unwrap),
       update: (id: string, body: { label?: string }) =>
         request<ApiResponse<Room>>('PATCH', `/rooms/${id}`, body).then(unwrap),
       archive: (id: string) =>

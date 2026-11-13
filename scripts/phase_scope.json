@@ -367,6 +367,21 @@
       "routes": [],
       "allowsVocabulary": []
     },
+    "3.9": {
+      "status": "approved",
+      "approver": "AtharvaVavhal",
+      "date": "2026-11-13",
+      "ref": "docs/nook-phase-3/PHASE_3_SCOPE_REGISTER.md#slice-39-bulk-room-and-bed-creation",
+      "description": "Bulk room and bed creation: the single route POST /api/v1/properties/:propertyId/rooms/bulk (with its dryRun mode) and its tests, on existing tables. No schema change. Not extended to any other route or operation.",
+      "models": [],
+      "enums": [],
+      "tables": [],
+      "functions": [],
+      "extensions": [],
+      "routes": [
+        "POST /api/v1/properties/:propertyId/rooms/bulk"
+      ]
+    },
     "4.1": {
       "status": "approved",
       "approver": "Repository user via explicit Phase 4 implementation mission",
