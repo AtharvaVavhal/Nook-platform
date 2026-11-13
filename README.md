@@ -9,7 +9,9 @@
 
 ![Milestone 0](https://img.shields.io/badge/Milestone%200-not%20accepted-B42318?style=flat-square&labelColor=171338)
 ![Phase 1](https://img.shields.io/badge/Phase%201-accepted%20with%20limitations-157B55?style=flat-square&labelColor=171338)
-![Phase 3](https://img.shields.io/badge/Phase%203-in%20progress-B54708?style=flat-square&labelColor=171338)
+![Phase 3](https://img.shields.io/badge/Phase%203-merged-7657F6?style=flat-square&labelColor=171338)
+![Phase 4](https://img.shields.io/badge/Phase%204-merged%2C%20restricted%20features%20off-B54708?style=flat-square&labelColor=171338)
+[![CI](https://github.com/AtharvaVavhal/Nook-platform/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/AtharvaVavhal/Nook-platform/actions/workflows/ci.yml)
 ![Audit](https://img.shields.io/badge/npm%20audit-0%20vulnerabilities-157B55?style=flat-square&labelColor=171338)
 ![Node](https://img.shields.io/badge/Node-24.22.1-7657F6?style=flat-square&labelColor=171338)
 ![NestJS](https://img.shields.io/badge/NestJS-12.3.2-7657F6?style=flat-square&labelColor=171338)
@@ -24,13 +26,15 @@
 
 > ### This is a pre-release build, not a launched product.
 >
-> The repository now holds the **Phase 2 authentication and inventory foundation** and the **Phase 3
-> core workflows** — residents, enquiries, bookings, admissions, check-in/check-out and a finance
-> ledger — on a real PostgreSQL schema with tenant isolation. It is under active development on
-> `feature/phase-3-core-workflows`.
+> `main` now holds the **Phase 2 authentication and inventory foundation**, the **Phase 3 core
+> workflows** — residents, enquiries, bookings, admissions, check-in/check-out and a finance ledger —
+> and **Phase 4** lifecycle audit, corrections and transfer previews, on a real PostgreSQL schema with
+> tenant isolation, plus an owner and property-manager web application. The restricted Phase 4
+> operations are **disabled by default in code**.
 >
-> **Milestone 0 is not accepted** and the platform is **not launch-ready**. Launch readiness has not
-> been independently verified; see [`NOOK_LAUNCH_ROADMAP.md`](NOOK_LAUNCH_ROADMAP.md) and
+> **Nothing is deployed to production.** **Milestone 0 is not accepted** and the platform is **not
+> launch-ready**. Launch readiness has not been independently verified; see
+> [`NOOK_LAUNCH_ROADMAP.md`](NOOK_LAUNCH_ROADMAP.md) and
 > [`NOOK_BLOCKER_REGISTER.md`](NOOK_BLOCKER_REGISTER.md).
 >
 > Nothing here records an approval, a signature or a test result that has not occurred.
@@ -48,8 +52,8 @@ Three commitments shape every decision in this codebase:
 |                           |                                                                                                                                                                                                                           |
 | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **The bed is the unit**   | Availability, allocation and occupancy are computed per bed, never per room. Allocation is atomic and re-checked inside the transaction, so two staff cannot double-book the same bed.                                    |
-| **Money is never edited** | Charges, payments, allocations, deposits, adjustments and reversals are immutable once posted. The balance is always derived, never stored as truth. Amounts are integer paise in `BIGINT` — never binary floating point. |
-| **No rule is guessed**    | Where a business rule is unapproved, the API refuses the operation with `422 RULE_NOT_CONFIGURED`. It names the rule, writes nothing, and applies no default.                                                             |
+| **Money is never edited** | Payments, reversals, adjustments and voids are append-only records, protected by database triggers and by the application role's privileges (no `DELETE` anywhere). Corrections are new records, not edits. Amounts are exact decimals (`NUMERIC`) — never binary floating point. |
+| **No rule is guessed**    | Where a business rule or a restricted operation is unapproved, it stays disabled in code and the operation is refused. Transfer execution, assignment adoption and financial correction apply are off until the owner approves them. |
 
 <br>
 
@@ -127,31 +131,38 @@ DATABASE_URL='postgresql://nook:<password>@127.0.0.1:5433/nook_dev' npm run pris
 
 | Area                      | State                                                                                                  |
 | ------------------------- | ------------------------------------------------------------------------------------------------------ |
-| Auth and account security | Login, sessions, CSRF, login throttling, change-password, auth audit events                            |
+| Auth and account security | Login, sessions, CSRF, login throttling, change-password, auth audit events; `OWNER` and `PROPERTY_MANAGER` roles behind a default-deny permission layer |
 | Inventory                 | Properties, floors, rooms and beds; interactive floor plan                                             |
-| Residents                 | CRUD with tenant isolation                                                                             |
+| Residents                 | CRUD with tenant isolation; resident profile and stay summary                                          |
 | Enquiries                 | Lead management, follow-ups, archive, conversion                                                       |
-| Bookings                  | Reservations with bed availability and concurrency safety                                              |
+| Bookings                  | Reservations with bed availability and concurrency safety; extensions with a reason and an audit event |
 | Admissions                | Bed allocation inside a re-checked transaction                                                         |
 | Check-in / check-out      | Lifecycle management with concurrency safety                                                           |
 | Finance                   | Invoices, payments with idempotency keys, reversals, adjustments, voids, receipts, monthly reports, overstay banner |
+| Corrections (Phase 4)     | Request, review and audit workflow; non-financial corrections apply; **financial application is gated off** |
+| Transfers (Phase 4)       | Preview and history only; **execution is disabled**                                                    |
+| Web application           | Owner and property-manager shell: operations, finance, resident profile, settings                      |
+| Operations tooling        | CLI for provisioning users and resetting passwords; restore-drill script and runbooks                  |
 | Invoice scheduler         | Implemented and tested on a scratch database; **not deployed, scheduled or enabled**                   |
-| Observability             | Sentry reporter wired in; no event has ever been sent                                                  |
+| Observability             | Structured logs and request ids; Sentry reporter implemented, off until configured; no event has ever been sent |
 
-The schema has 23 models across 18 migrations. Out of scope until the owner approves it: payment
-gateway, OTP, SMS/WhatsApp, KYC/Aadhaar and document upload.
+The schema has 33 models across 24 migrations. Out of scope until the owner approves it: payment
+gateway, OTP, SMS/WhatsApp, KYC/Aadhaar and document upload, and any resident-facing login or portal.
 
 <br>
 
 ## Layout
 
 ```
-apps/api            NestJS API — auth, inventory, resident, enquiry, booking, admission,
-                    checkin, finance, jobs, observability, database
+apps/api            NestJS API — auth, inventory, resident, enquiry, booking, admission, checkin,
+                    finance, corrections, transfer, resident-history, stay-summary, jobs,
+                    observability, database
 apps/web            React + Vite — login, ops shell, finance shell, floor plan, design tokens
 prisma/             schema.prisma and migrations
-scripts/            secret scan, scope verifiers, phase guard, db guard, ops and db helpers
-docs/               milestone and phase validation, Phase 2/3 planning, ops runbooks, handbook
+scripts/            CI scripts, QA and end-to-end harnesses, ops CLI, secret scan, scope verifiers,
+                    db guard
+docs/               milestone and phase validation, Phase 2/3/4 documents, ops runbooks, release
+                    documents, UI readiness, handbook
 marketing/          brand assets and campaign artwork
 .github/workflows/  CI definition
 ```
@@ -168,10 +179,11 @@ with composite keys, and the integration suites assert cross-tenant isolation.
 
 **Financial logic is gated.** Rent calculation, automated billing, payment allocation order, payment
 confirmation policy, deposit deduction, refund and final checkout settlement are not applied beyond
-what the owner has signed off. **Seventy-three business rules await a decision** — seventy unresolved
-and three needing professional confirmation. Each one names what it blocks and who decides. The
-paid-amount invariant is documented inconsistently across the finance docs and still needs
-independent resolution.
+what the owner has signed off. Phase 4 financial operations (financial correction apply, transfer
+execution, assignment adoption) are disabled in code and stay off until the owner approves them.
+Unapproved rules and their blockers are tracked in
+[`NOOK_BLOCKER_REGISTER.md`](NOOK_BLOCKER_REGISTER.md) and the owner-decision documents under
+[`docs/phase-4/`](docs/phase-4/).
 
 **Secrets never enter the repository.** `.env` is never committed; `.env.example` holds local-only
 placeholders; `VITE_*` values are public by definition and must never carry a secret. A committed
@@ -187,7 +199,10 @@ secret is revoked and rotated — deleting it in a later commit is not sufficien
 | [`docs/MILESTONE_0_SCOPE.md`](docs/MILESTONE_0_SCOPE.md)                             | What Milestone 0 includes and excludes                                                                        |
 | [`docs/MILESTONE_0_VALIDATION.md`](docs/MILESTONE_0_VALIDATION.md)                   | Executed checks, exit codes, and the remaining acceptance blockers                                            |
 | [`docs/nook-phase-3/`](docs/nook-phase-3/)                                           | Phase 3 scope register, check-in/check-out and finance plans, pilot account requirements                      |
-| [`docs/ops/`](docs/ops/)                                                             | Runbooks — invoice scheduler, backup and restore                                                              |
+| [`docs/phase-4/`](docs/phase-4/)                                                     | Phase 4 specifications, owner decisions required, and evidence                                                |
+| [`docs/ops/`](docs/ops/)                                                             | Runbooks — invoice scheduler, backup and restore, web and API topology, observability                         |
+| [`docs/release/`](docs/release/)                                                     | Pilot release readiness and backup/restore verification procedure                                             |
+| [`docs/ui-readiness/`](docs/ui-readiness/)                                           | UI implementation and readiness record                                                                        |
 | [`NOOK_LAUNCH_ROADMAP.md`](NOOK_LAUNCH_ROADMAP.md)                                   | Planning-only launch roadmap; nothing in it has been executed                                                 |
 | [`NOOK_BLOCKER_REGISTER.md`](NOOK_BLOCKER_REGISTER.md)                               | Launch blockers (`BLK-nn`)                                                                                    |
 
@@ -220,20 +235,25 @@ palette, or add a gradient, shadow or outline to it.
 **Phase 1 — accepted with documented limitations** (2026-10-28). The property view and floor plan
 passed browser QA. It was a frontend-only demonstration driven by static fixtures.
 
-**Phase 2 and Phase 3 — in progress** on `feature/phase-3-core-workflows`. Phases 3.1–3.5 (residents,
-enquiries, bookings, admissions, check-in/check-out) and the finance baseline are committed; later
-finance corrections, account security and invoice-integrity migrations are in the working tree.
+**Phases 2 and 3 — merged** into `main` (pull request #1, 2026-11-07).
+
+**Phase 4 — merged** into `main` (pull request #2, 2026-11-13): lifecycle audit, corrections,
+transfer previews, a default-deny permission layer and the owner and property-manager web
+application. Transfer execution, assignment adoption and financial correction apply remain
+**disabled**. Hosted CI (`quality` and `full-integration`) passed on the merge commit.
 
 **Milestone 0 — not accepted.** Approval is not verification, and the remaining evidence has not
 been produced.
 
-Known gaps, as recorded in the roadmap and blocker register:
+**Nothing is deployed to production.** Merging code is not a release.
 
-- Backup restore readiness is not established
-- Hosted CI has not been shown to run to completion, and the integration suite is not enforced in CI
-- General API rate limiting, and explicit CSP/HSTS headers, are unconfigured and unverified
+Known gaps, as recorded in the roadmap, blocker register and release documents:
+
+- Backup and restore readiness is not established; no production backup or restore drill has been performed
 - Hosting topology is only partly decided and has not been verified on live infrastructure
 - The invoice scheduler is not operational
+- Browser end-to-end tests run locally, not in hosted CI
+- General API rate limiting, and explicit CSP/HSTS headers, are unconfigured and unverified
 - Safari, Firefox, real touch devices, screen readers and a measured contrast audit have not been done
 
 The scope verifier is a local static guardrail. It is not a substitute for runtime, security or
