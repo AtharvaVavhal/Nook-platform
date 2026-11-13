@@ -7,6 +7,7 @@
 
 <br>
 
+![Status](https://img.shields.io/badge/status-in%20development-B54708?style=flat-square&labelColor=171338)
 [![CI](https://github.com/AtharvaVavhal/Nook-platform/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/AtharvaVavhal/Nook-platform/actions/workflows/ci.yml)
 ![Milestone 0](https://img.shields.io/badge/Milestone%200-not%20accepted-B42318?style=flat-square&labelColor=171338)
 ![Phase 3](https://img.shields.io/badge/Phase%203-merged-7657F6?style=flat-square&labelColor=171338)
