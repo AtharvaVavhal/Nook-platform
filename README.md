@@ -17,7 +17,7 @@
 ![React](https://img.shields.io/badge/React-19.3.1-7657F6?style=flat-square&labelColor=171338)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-17-7657F6?style=flat-square&labelColor=171338)
 ![Prisma](https://img.shields.io/badge/Prisma-7.10.1-7657F6?style=flat-square&labelColor=171338)
-![Licence](https://img.shields.io/badge/licence-none%20declared-625E78?style=flat-square&labelColor=171338)
+[![Licence](https://img.shields.io/badge/licence-proprietary-625E78?style=flat-square&labelColor=171338)](LICENSE)
 
 # nook
 
@@ -281,8 +281,9 @@ palette, or add a gradient, shadow or outline to it.
 
 ## Licence
 
-No licence is declared. Unless a licence is added, no permission to use, copy, modify or distribute this
-code is granted.
+This is proprietary software. Copyright (c) 2026 Forge. All rights reserved. No licence is granted to
+use, copy, modify, distribute or host the code or the brand assets without a separate written agreement
+with Forge. See [`LICENSE`](LICENSE).
 
 <br>
 
