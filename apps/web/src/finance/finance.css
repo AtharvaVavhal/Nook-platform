@@ -16,13 +16,16 @@
   margin: 22px 0 10px;
   font-size: 15px;
 }
-.fin a {
+.fin a,
+.fin-shell a {
   color: var(--color-accent-text);
 }
-.fin a.primary-button {
+.fin a.primary-button,
+.fin-shell a.primary-button {
   color: var(--color-text-on-accent);
 }
-.fin a.outline-button {
+.fin a.outline-button,
+.fin-shell a.outline-button {
   color: var(--color-text-primary);
 }
 .fin-tabs {
@@ -42,7 +45,7 @@
   white-space: nowrap;
 }
 .fin-tabs a[aria-current='page'] {
-  color: var(--color-brand-primary);
+  color: var(--color-accent-text);
   border-bottom-color: var(--color-brand-accent);
 }
 .fin-card,
@@ -117,6 +120,7 @@
   margin-bottom: 16px;
 }
 .fin-field {
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 5px;
@@ -127,6 +131,8 @@
 .fin-field input,
 .fin-field select,
 .fin-field textarea {
+  min-width: 0;
+  max-width: 100%;
   min-height: 40px;
   padding: 8px 10px;
   border: 1px solid var(--color-border-strong);
@@ -495,8 +501,8 @@
   margin-left: 8px;
   padding: 1px 8px;
   border-radius: 999px;
-  background: var(--nook-soft-lavender, #f4f1ff);
-  color: var(--nook-midnight-indigo, #171338);
+  background: var(--color-brand-subtle);
+  color: var(--color-text-primary);
   font-size: 0.72rem;
   font-weight: 600;
   letter-spacing: 0.02em;

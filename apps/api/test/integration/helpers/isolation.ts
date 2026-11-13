@@ -70,13 +70,19 @@ const MEMBERSHIP_SQL = `
   ORDER BY 1`;
 
 // Privilege inspections, never attempts: nothing is truncated, deleted or created to find out whether it could be.
-// MAINTAIN exists from PostgreSQL 17, which is the pinned server version; an older server fails closed here.
+// MAINTAIN exists from PostgreSQL 17. We check for its existence to avoid errors on older servers.
 const PRIVILEGES_SQL = `
   SELECT
     (SELECT count(*)::int
        FROM pg_class c
        JOIN pg_namespace n ON n.oid = c.relnamespace
-       CROSS JOIN unnest(ARRAY['TRUNCATE', 'DELETE', 'REFERENCES', 'TRIGGER', 'MAINTAIN']) AS p(priv)
+       CROSS JOIN unnest(
+         CASE
+           WHEN (SELECT setting::int FROM pg_settings WHERE name = 'server_version_num') >= 170000
+           THEN ARRAY['TRUNCATE', 'DELETE', 'REFERENCES', 'TRIGGER', 'MAINTAIN']
+           ELSE ARRAY['TRUNCATE', 'DELETE', 'REFERENCES', 'TRIGGER']
+         END
+       ) AS p(priv)
        WHERE n.nspname = 'public' AND c.relkind IN ('r', 'p')
          AND has_table_privilege(current_user, c.oid, p.priv)) AS forbidden_table_privileges,
     (has_table_privilege(current_user, 'public.audit_events', 'UPDATE')

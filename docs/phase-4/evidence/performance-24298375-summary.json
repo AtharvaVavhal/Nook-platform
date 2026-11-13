@@ -1,0 +1,1539 @@
+{
+  "probe": "performance-gate-holds",
+  "timestamp": "2026-11-10T05:28:44.609Z",
+  "hardware": {
+    "platform": "darwin",
+    "arch": "arm64",
+    "cpu": "Apple M4",
+    "cpus": 10,
+    "memoryBytes": 17179869184,
+    "node": "v24.22.1"
+  },
+  "fixture": {
+    "beds": 100,
+    "residents": 100,
+    "bookings": 100,
+    "activeStays": 100,
+    "historicalInvoices": 1200
+  },
+  "profile": {
+    "correctionSamples": 20,
+    "generationSamples": 5,
+    "concurrency": 1
+  },
+  "attempts": [
+    {
+      "workload": "correction",
+      "timeoutMs": 30000,
+      "locks": [
+        {
+          "kind": "advisory",
+          "durationMs": 0.521125000000211,
+          "remainingAtStartMs": 29998.891
+        },
+        {
+          "kind": "advisory",
+          "durationMs": 0.5021670000000995,
+          "remainingAtStartMs": 29993.908042
+        }
+      ],
+      "committed": true,
+      "attemptMs": 26.81295799999998,
+      "gateHoldMs": 18.624917000000096
+    },
+    {
+      "workload": "correction",
+      "timeoutMs": 30000,
+      "locks": [
+        {
+          "kind": "advisory",
+          "durationMs": 0.4011249999998654,
+          "remainingAtStartMs": 29999.601625
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.3809579999997368,
+          "remainingAtStartMs": 29996.229666
+        },
+        {
+          "kind": "advisory",
+          "durationMs": 0.27841699999999037,
+          "remainingAtStartMs": 29994.697833
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.6080419999998412,
+          "remainingAtStartMs": 29991.83675
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.31987500000013824,
+          "remainingAtStartMs": 29991.221
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.35716699999966295,
+          "remainingAtStartMs": 29990.891625
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.33762499999966167,
+          "remainingAtStartMs": 29990.525833
+        }
+      ],
+      "committed": true,
+      "attemptMs": 35.94320800000014,
+      "gateHoldMs": 30.01712499999985
+    },
+    {
+      "workload": "correction",
+      "timeoutMs": 30000,
+      "locks": [
+        {
+          "kind": "advisory",
+          "durationMs": 0.2720840000001772,
+          "remainingAtStartMs": 29999.692792
+        },
+        {
+          "kind": "advisory",
+          "durationMs": 0.264625000000251,
+          "remainingAtStartMs": 29997.901125
+        }
+      ],
+      "committed": true,
+      "attemptMs": 7.91537500000004,
+      "gateHoldMs": 5.235375000000204
+    },
+    {
+      "workload": "correction",
+      "timeoutMs": 30000,
+      "locks": [
+        {
+          "kind": "advisory",
+          "durationMs": 0.29108399999995527,
+          "remainingAtStartMs": 29999.677917
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.3182090000000244,
+          "remainingAtStartMs": 29997.771292
+        },
+        {
+          "kind": "advisory",
+          "durationMs": 0.28579199999967386,
+          "remainingAtStartMs": 29996.749625
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.3081250000000182,
+          "remainingAtStartMs": 29995.567333
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.2663750000001528,
+          "remainingAtStartMs": 29995.253375
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.28708300000016607,
+          "remainingAtStartMs": 29994.978625
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.2755419999998594,
+          "remainingAtStartMs": 29994.685542
+        }
+      ],
+      "committed": true,
+      "attemptMs": 21.168625000000247,
+      "gateHoldMs": 17.349083000000064
+    },
+    {
+      "workload": "correction",
+      "timeoutMs": 30000,
+      "locks": [
+        {
+          "kind": "advisory",
+          "durationMs": 0.256083000000217,
+          "remainingAtStartMs": 29999.696666
+        },
+        {
+          "kind": "advisory",
+          "durationMs": 0.2440839999999298,
+          "remainingAtStartMs": 29998.007625
+        }
+      ],
+      "committed": true,
+      "attemptMs": 7.628416999999899,
+      "gateHoldMs": 5.084332999999788
+    },
+    {
+      "workload": "correction",
+      "timeoutMs": 30000,
+      "locks": [
+        {
+          "kind": "advisory",
+          "durationMs": 0.3170000000000073,
+          "remainingAtStartMs": 29999.676292
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.30129200000010314,
+          "remainingAtStartMs": 29997.809584
+        },
+        {
+          "kind": "advisory",
+          "durationMs": 0.26533400000016627,
+          "remainingAtStartMs": 29996.796459
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.3219170000002123,
+          "remainingAtStartMs": 29995.662959
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.282416000000012,
+          "remainingAtStartMs": 29995.334125
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.26912499999980355,
+          "remainingAtStartMs": 29995.045959
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.26549999999997453,
+          "remainingAtStartMs": 29994.7725
+        }
+      ],
+      "committed": true,
+      "attemptMs": 20.969333000000006,
+      "gateHoldMs": 17.210250000000087
+    },
+    {
+      "workload": "correction",
+      "timeoutMs": 30000,
+      "locks": [
+        {
+          "kind": "advisory",
+          "durationMs": 0.26137500000004366,
+          "remainingAtStartMs": 29999.714834
+        },
+        {
+          "kind": "advisory",
+          "durationMs": 0.2487500000002001,
+          "remainingAtStartMs": 29998.091459
+        }
+      ],
+      "committed": true,
+      "attemptMs": 7.4428750000001855,
+      "gateHoldMs": 5.00591600000007
+    },
+    {
+      "workload": "correction",
+      "timeoutMs": 30000,
+      "locks": [
+        {
+          "kind": "advisory",
+          "durationMs": 0.27145900000004985,
+          "remainingAtStartMs": 29999.711417
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.29520800000000236,
+          "remainingAtStartMs": 29997.935833
+        },
+        {
+          "kind": "advisory",
+          "durationMs": 0.2576249999997344,
+          "remainingAtStartMs": 29996.994749999998
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.3026249999998072,
+          "remainingAtStartMs": 29995.922749999998
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.26366600000028484,
+          "remainingAtStartMs": 29995.612708
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.31899999999996,
+          "remainingAtStartMs": 29995.343375
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.27862499999991996,
+          "remainingAtStartMs": 29995.017958
+        }
+      ],
+      "committed": true,
+      "attemptMs": 22.81775000000016,
+      "gateHoldMs": 19.248167000000194
+    },
+    {
+      "workload": "correction",
+      "timeoutMs": 30000,
+      "locks": [
+        {
+          "kind": "advisory",
+          "durationMs": 0.2720830000002934,
+          "remainingAtStartMs": 29999.6875
+        },
+        {
+          "kind": "advisory",
+          "durationMs": 0.26050000000032014,
+          "remainingAtStartMs": 29998.02925
+        }
+      ],
+      "committed": true,
+      "attemptMs": 7.564624999999978,
+      "gateHoldMs": 5.031041999999616
+    },
+    {
+      "workload": "correction",
+      "timeoutMs": 30000,
+      "locks": [
+        {
+          "kind": "advisory",
+          "durationMs": 0.284291000000394,
+          "remainingAtStartMs": 29999.710041
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.30912499999976717,
+          "remainingAtStartMs": 29997.949541
+        },
+        {
+          "kind": "advisory",
+          "durationMs": 0.26787500000000364,
+          "remainingAtStartMs": 29996.985791
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.3406249999998181,
+          "remainingAtStartMs": 29995.681540999998
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.2907500000001164,
+          "remainingAtStartMs": 29995.333875
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.30695799999966766,
+          "remainingAtStartMs": 29995.038207999998
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.2972909999998592,
+          "remainingAtStartMs": 29994.726916
+        }
+      ],
+      "committed": true,
+      "attemptMs": 20.473833000000013,
+      "gateHoldMs": 16.908500000000004
+    },
+    {
+      "workload": "correction",
+      "timeoutMs": 30000,
+      "locks": [
+        {
+          "kind": "advisory",
+          "durationMs": 0.2597920000002887,
+          "remainingAtStartMs": 29999.7345
+        },
+        {
+          "kind": "advisory",
+          "durationMs": 0.25999999999976353,
+          "remainingAtStartMs": 29998.038708
+        }
+      ],
+      "committed": true,
+      "attemptMs": 7.417875000000095,
+      "gateHoldMs": 4.922125000000051
+    },
+    {
+      "workload": "correction",
+      "timeoutMs": 30000,
+      "locks": [
+        {
+          "kind": "advisory",
+          "durationMs": 0.2814579999999296,
+          "remainingAtStartMs": 29999.703916
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.2663750000001528,
+          "remainingAtStartMs": 29997.981
+        },
+        {
+          "kind": "advisory",
+          "durationMs": 0.25595800000019153,
+          "remainingAtStartMs": 29997.056458
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.31141699999989214,
+          "remainingAtStartMs": 29995.977082999998
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.2881670000001577,
+          "remainingAtStartMs": 29995.660458
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.3154580000000351,
+          "remainingAtStartMs": 29995.365665999998
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.2904580000003989,
+          "remainingAtStartMs": 29995.041541
+        }
+      ],
+      "committed": true,
+      "attemptMs": 19.909375000000182,
+      "gateHoldMs": 16.459041999999954
+    },
+    {
+      "workload": "correction",
+      "timeoutMs": 30000,
+      "locks": [
+        {
+          "kind": "advisory",
+          "durationMs": 0.25462500000003274,
+          "remainingAtStartMs": 29999.747125
+        },
+        {
+          "kind": "advisory",
+          "durationMs": 0.22854099999995015,
+          "remainingAtStartMs": 29998.132166
+        }
+      ],
+      "committed": true,
+      "attemptMs": 7.1292090000001735,
+      "gateHoldMs": 4.7702909999998155
+    },
+    {
+      "workload": "correction",
+      "timeoutMs": 30000,
+      "locks": [
+        {
+          "kind": "advisory",
+          "durationMs": 0.26529200000004494,
+          "remainingAtStartMs": 29999.739999999998
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.2980830000001333,
+          "remainingAtStartMs": 29998.018208
+        },
+        {
+          "kind": "advisory",
+          "durationMs": 0.24841699999979028,
+          "remainingAtStartMs": 29997.095208
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.31500000000005457,
+          "remainingAtStartMs": 29996.058582999998
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.26820800000041345,
+          "remainingAtStartMs": 29995.739958
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.25958399999990434,
+          "remainingAtStartMs": 29995.467375
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.2804999999998472,
+          "remainingAtStartMs": 29995.203208
+        }
+      ],
+      "committed": true,
+      "attemptMs": 19.335541999999805,
+      "gateHoldMs": 15.934291999999914
+    },
+    {
+      "workload": "correction",
+      "timeoutMs": 30000,
+      "locks": [
+        {
+          "kind": "advisory",
+          "durationMs": 0.24712499999986903,
+          "remainingAtStartMs": 29999.710082999998
+        },
+        {
+          "kind": "advisory",
+          "durationMs": 0.22691600000007384,
+          "remainingAtStartMs": 29998.010916
+        }
+      ],
+      "committed": true,
+      "attemptMs": 7.327374999999847,
+      "gateHoldMs": 4.822416999999859
+    },
+    {
+      "workload": "correction",
+      "timeoutMs": 30000,
+      "locks": [
+        {
+          "kind": "advisory",
+          "durationMs": 0.2498329999998532,
+          "remainingAtStartMs": 29999.727208
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.30091600000014296,
+          "remainingAtStartMs": 29998.054958
+        },
+        {
+          "kind": "advisory",
+          "durationMs": 0.25537500000018554,
+          "remainingAtStartMs": 29997.073292
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.34304199999996854,
+          "remainingAtStartMs": 29996.016542
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.2896249999998872,
+          "remainingAtStartMs": 29995.669083
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.29283299999997325,
+          "remainingAtStartMs": 29995.374333
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.2858329999999114,
+          "remainingAtStartMs": 29995.077458
+        }
+      ],
+      "committed": true,
+      "attemptMs": 23.302000000000135,
+      "gateHoldMs": 19.85050000000001
+    },
+    {
+      "workload": "correction",
+      "timeoutMs": 30000,
+      "locks": [
+        {
+          "kind": "advisory",
+          "durationMs": 0.3420000000000982,
+          "remainingAtStartMs": 29999.724708
+        },
+        {
+          "kind": "advisory",
+          "durationMs": 0.24687500000027285,
+          "remainingAtStartMs": 29998.013417000002
+        }
+      ],
+      "committed": true,
+      "attemptMs": 7.2476669999996375,
+      "gateHoldMs": 4.750042000000121
+    },
+    {
+      "workload": "correction",
+      "timeoutMs": 30000,
+      "locks": [
+        {
+          "kind": "advisory",
+          "durationMs": 0.24395800000002055,
+          "remainingAtStartMs": 29999.745415999998
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.3049590000000535,
+          "remainingAtStartMs": 29998.05475
+        },
+        {
+          "kind": "advisory",
+          "durationMs": 0.24091700000008132,
+          "remainingAtStartMs": 29997.104833
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.28470800000013696,
+          "remainingAtStartMs": 29996.069083
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.26908300000013696,
+          "remainingAtStartMs": 29995.777458
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.2844169999998485,
+          "remainingAtStartMs": 29995.503708
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.31816699999990306,
+          "remainingAtStartMs": 29995.215875
+        }
+      ],
+      "committed": true,
+      "attemptMs": 19.60799999999972,
+      "gateHoldMs": 16.230958999999984
+    },
+    {
+      "workload": "correction",
+      "timeoutMs": 30000,
+      "locks": [
+        {
+          "kind": "advisory",
+          "durationMs": 0.24291600000015023,
+          "remainingAtStartMs": 29999.718958
+        },
+        {
+          "kind": "advisory",
+          "durationMs": 0.23129199999993943,
+          "remainingAtStartMs": 29998.025542
+        }
+      ],
+      "committed": true,
+      "attemptMs": 7.212958999999955,
+      "gateHoldMs": 4.734417000000121
+    },
+    {
+      "workload": "correction",
+      "timeoutMs": 30000,
+      "locks": [
+        {
+          "kind": "advisory",
+          "durationMs": 0.2582089999996242,
+          "remainingAtStartMs": 29999.724709
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.3521249999998872,
+          "remainingAtStartMs": 29998.11425
+        },
+        {
+          "kind": "advisory",
+          "durationMs": 0.26591700000017227,
+          "remainingAtStartMs": 29997.060792
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.30512499999986176,
+          "remainingAtStartMs": 29995.921542
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.2665420000002996,
+          "remainingAtStartMs": 29995.612584
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.2890419999998812,
+          "remainingAtStartMs": 29995.342209
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.29304099999990285,
+          "remainingAtStartMs": 29995.047375
+        }
+      ],
+      "committed": true,
+      "attemptMs": 19.72595900000033,
+      "gateHoldMs": 16.24712499999987
+    },
+    {
+      "workload": "correction",
+      "timeoutMs": 30000,
+      "locks": [
+        {
+          "kind": "advisory",
+          "durationMs": 0.25420800000028976,
+          "remainingAtStartMs": 29999.725458
+        },
+        {
+          "kind": "advisory",
+          "durationMs": 0.257082999999966,
+          "remainingAtStartMs": 29998.166333
+        }
+      ],
+      "committed": true,
+      "attemptMs": 7.044750000000022,
+      "gateHoldMs": 4.6837500000001455
+    },
+    {
+      "workload": "correction",
+      "timeoutMs": 30000,
+      "locks": [
+        {
+          "kind": "advisory",
+          "durationMs": 0.23079099999995378,
+          "remainingAtStartMs": 29999.749416
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.2756660000000011,
+          "remainingAtStartMs": 29998.219666
+        },
+        {
+          "kind": "advisory",
+          "durationMs": 0.23679100000026665,
+          "remainingAtStartMs": 29997.337041
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.29575000000022555,
+          "remainingAtStartMs": 29996.332791
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.25758300000006784,
+          "remainingAtStartMs": 29996.033666
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.2534579999996822,
+          "remainingAtStartMs": 29995.769833
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.25737500000013824,
+          "remainingAtStartMs": 29995.512375
+        }
+      ],
+      "committed": true,
+      "attemptMs": 18.924834000000374,
+      "gateHoldMs": 15.762291999999889
+    },
+    {
+      "workload": "correction",
+      "timeoutMs": 30000,
+      "locks": [
+        {
+          "kind": "advisory",
+          "durationMs": 0.2717499999998836,
+          "remainingAtStartMs": 29999.732583
+        },
+        {
+          "kind": "advisory",
+          "durationMs": 0.25758399999995163,
+          "remainingAtStartMs": 29997.99375
+        }
+      ],
+      "committed": true,
+      "attemptMs": 7.170999999999822,
+      "gateHoldMs": 4.606333000000177
+    },
+    {
+      "workload": "correction",
+      "timeoutMs": 30000,
+      "locks": [
+        {
+          "kind": "advisory",
+          "durationMs": 0.23645799999985684,
+          "remainingAtStartMs": 29999.744333
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.3331670000002305,
+          "remainingAtStartMs": 29998.03225
+        },
+        {
+          "kind": "advisory",
+          "durationMs": 0.2503750000000764,
+          "remainingAtStartMs": 29997.008916
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.284874999999829,
+          "remainingAtStartMs": 29995.940166
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.2757920000003651,
+          "remainingAtStartMs": 29995.651083
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.2880840000002536,
+          "remainingAtStartMs": 29995.371375
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.2622500000002219,
+          "remainingAtStartMs": 29995.077916000002
+        }
+      ],
+      "committed": true,
+      "attemptMs": 27.681290999999874,
+      "gateHoldMs": 24.197833999999602
+    },
+    {
+      "workload": "correction",
+      "timeoutMs": 30000,
+      "locks": [
+        {
+          "kind": "advisory",
+          "durationMs": 0.2502079999999296,
+          "remainingAtStartMs": 29999.720416
+        },
+        {
+          "kind": "advisory",
+          "durationMs": 0.2558339999995951,
+          "remainingAtStartMs": 29998.086
+        }
+      ],
+      "committed": true,
+      "attemptMs": 7.374250000000302,
+      "gateHoldMs": 4.915207999999893
+    },
+    {
+      "workload": "correction",
+      "timeoutMs": 30000,
+      "locks": [
+        {
+          "kind": "advisory",
+          "durationMs": 0.2738329999997404,
+          "remainingAtStartMs": 29999.748
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.2692090000000462,
+          "remainingAtStartMs": 29998.127167
+        },
+        {
+          "kind": "advisory",
+          "durationMs": 0.23841600000014296,
+          "remainingAtStartMs": 29997.200708
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.3027500000002874,
+          "remainingAtStartMs": 29996.213042
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.2706669999997757,
+          "remainingAtStartMs": 29995.906375
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.27175000000033833,
+          "remainingAtStartMs": 29995.631583000002
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.27937500000007276,
+          "remainingAtStartMs": 29995.354375
+        }
+      ],
+      "committed": true,
+      "attemptMs": 19.302832999999737,
+      "gateHoldMs": 16.004750000000058
+    },
+    {
+      "workload": "correction",
+      "timeoutMs": 30000,
+      "locks": [
+        {
+          "kind": "advisory",
+          "durationMs": 0.24012500000026193,
+          "remainingAtStartMs": 29999.740583
+        },
+        {
+          "kind": "advisory",
+          "durationMs": 0.23862499999995634,
+          "remainingAtStartMs": 29998.170458
+        }
+      ],
+      "committed": true,
+      "attemptMs": 6.915291999999681,
+      "gateHoldMs": 4.528582999999799
+    },
+    {
+      "workload": "correction",
+      "timeoutMs": 30000,
+      "locks": [
+        {
+          "kind": "advisory",
+          "durationMs": 0.24970900000016627,
+          "remainingAtStartMs": 29999.728334
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.2807910000001357,
+          "remainingAtStartMs": 29998.160499999998
+        },
+        {
+          "kind": "advisory",
+          "durationMs": 0.2494579999997768,
+          "remainingAtStartMs": 29997.207292
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.2974589999998898,
+          "remainingAtStartMs": 29996.218584
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.2624580000001515,
+          "remainingAtStartMs": 29995.916375
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.26641700000027413,
+          "remainingAtStartMs": 29995.650333999998
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.2683750000001055,
+          "remainingAtStartMs": 29995.380084
+        }
+      ],
+      "committed": true,
+      "attemptMs": 19.503208000000086,
+      "gateHoldMs": 16.210250000000087
+    },
+    {
+      "workload": "correction",
+      "timeoutMs": 30000,
+      "locks": [
+        {
+          "kind": "advisory",
+          "durationMs": 0.268083999999817,
+          "remainingAtStartMs": 29999.724084
+        },
+        {
+          "kind": "advisory",
+          "durationMs": 0.25529099999994287,
+          "remainingAtStartMs": 29997.986
+        }
+      ],
+      "committed": true,
+      "attemptMs": 7.2588339999997515,
+      "gateHoldMs": 4.712957999999617
+    },
+    {
+      "workload": "correction",
+      "timeoutMs": 30000,
+      "locks": [
+        {
+          "kind": "advisory",
+          "durationMs": 0.2732500000001892,
+          "remainingAtStartMs": 29999.720459
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.29337500000019645,
+          "remainingAtStartMs": 29998.126834
+        },
+        {
+          "kind": "advisory",
+          "durationMs": 0.2679169999996702,
+          "remainingAtStartMs": 29997.171167
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.31237499999997453,
+          "remainingAtStartMs": 29996.12525
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.27579199999991033,
+          "remainingAtStartMs": 29995.807667
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.2727500000000873,
+          "remainingAtStartMs": 29995.526375
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.3105000000000473,
+          "remainingAtStartMs": 29995.24825
+        }
+      ],
+      "committed": true,
+      "attemptMs": 19.447250000000167,
+      "gateHoldMs": 16.090584000000035
+    },
+    {
+      "workload": "correction",
+      "timeoutMs": 30000,
+      "locks": [
+        {
+          "kind": "advisory",
+          "durationMs": 0.2450420000000122,
+          "remainingAtStartMs": 29999.728125
+        },
+        {
+          "kind": "advisory",
+          "durationMs": 0.24162499999965803,
+          "remainingAtStartMs": 29998.10675
+        }
+      ],
+      "committed": true,
+      "attemptMs": 7.2090830000001915,
+      "gateHoldMs": 4.806458999999904
+    },
+    {
+      "workload": "correction",
+      "timeoutMs": 30000,
+      "locks": [
+        {
+          "kind": "advisory",
+          "durationMs": 0.23166700000001583,
+          "remainingAtStartMs": 29999.742917
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.2665839999999662,
+          "remainingAtStartMs": 29998.179959
+        },
+        {
+          "kind": "advisory",
+          "durationMs": 0.24279099999967002,
+          "remainingAtStartMs": 29997.266125000002
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.3101669999996375,
+          "remainingAtStartMs": 29996.252042
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.26754099999971004,
+          "remainingAtStartMs": 29995.93825
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.25912500000004,
+          "remainingAtStartMs": 29995.666709
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.2644999999997708,
+          "remainingAtStartMs": 29995.402167
+        }
+      ],
+      "committed": true,
+      "attemptMs": 19.345208000000184,
+      "gateHoldMs": 16.11916700000029
+    },
+    {
+      "workload": "correction",
+      "timeoutMs": 30000,
+      "locks": [
+        {
+          "kind": "advisory",
+          "durationMs": 0.26433399999996254,
+          "remainingAtStartMs": 29999.679375
+        },
+        {
+          "kind": "advisory",
+          "durationMs": 0.2601670000003651,
+          "remainingAtStartMs": 29998.01275
+        }
+      ],
+      "committed": true,
+      "attemptMs": 7.424249999999574,
+      "gateHoldMs": 4.771666000000096
+    },
+    {
+      "workload": "correction",
+      "timeoutMs": 30000,
+      "locks": [
+        {
+          "kind": "advisory",
+          "durationMs": 0.266624999999749,
+          "remainingAtStartMs": 29999.72075
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.30270800000016607,
+          "remainingAtStartMs": 29998.096625
+        },
+        {
+          "kind": "advisory",
+          "durationMs": 0.24079200000005585,
+          "remainingAtStartMs": 29997.157125
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.3089580000000751,
+          "remainingAtStartMs": 29996.154125
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.28158299999995506,
+          "remainingAtStartMs": 29995.841125
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.2685839999999189,
+          "remainingAtStartMs": 29995.556042
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.27841699999999037,
+          "remainingAtStartMs": 29995.2835
+        }
+      ],
+      "committed": true,
+      "attemptMs": 19.46958399999994,
+      "gateHoldMs": 16.108957999999802
+    },
+    {
+      "workload": "correction",
+      "timeoutMs": 30000,
+      "locks": [
+        {
+          "kind": "advisory",
+          "durationMs": 0.27254199999970297,
+          "remainingAtStartMs": 29999.736792
+        },
+        {
+          "kind": "advisory",
+          "durationMs": 0.2555409999999938,
+          "remainingAtStartMs": 29998.070625
+        }
+      ],
+      "committed": true,
+      "attemptMs": 7.225416000000223,
+      "gateHoldMs": 4.784124999999676
+    },
+    {
+      "workload": "correction",
+      "timeoutMs": 30000,
+      "locks": [
+        {
+          "kind": "advisory",
+          "durationMs": 0.2660839999998643,
+          "remainingAtStartMs": 29999.743875
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.3115410000000338,
+          "remainingAtStartMs": 29998.100291
+        },
+        {
+          "kind": "advisory",
+          "durationMs": 0.25512499999967986,
+          "remainingAtStartMs": 29997.13325
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.3036250000000109,
+          "remainingAtStartMs": 29996.086208
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.24779099999977916,
+          "remainingAtStartMs": 29995.778041
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.3429169999999431,
+          "remainingAtStartMs": 29995.526375
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.25291699999979755,
+          "remainingAtStartMs": 29995.177875
+        }
+      ],
+      "committed": true,
+      "attemptMs": 19.385874999999942,
+      "gateHoldMs": 16.02362499999981
+    },
+    {
+      "workload": "correction",
+      "timeoutMs": 30000,
+      "locks": [
+        {
+          "kind": "advisory",
+          "durationMs": 0.24575000000004366,
+          "remainingAtStartMs": 29999.714084
+        },
+        {
+          "kind": "advisory",
+          "durationMs": 0.24537499999996726,
+          "remainingAtStartMs": 29998.213042
+        }
+      ],
+      "committed": true,
+      "attemptMs": 6.945458000000144,
+      "gateHoldMs": 4.652542000000267
+    },
+    {
+      "workload": "correction",
+      "timeoutMs": 30000,
+      "locks": [
+        {
+          "kind": "advisory",
+          "durationMs": 0.2804169999999431,
+          "remainingAtStartMs": 29999.714875
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.3359580000001188,
+          "remainingAtStartMs": 29997.877
+        },
+        {
+          "kind": "advisory",
+          "durationMs": 0.24733299999979863,
+          "remainingAtStartMs": 29996.906708
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.3118340000000899,
+          "remainingAtStartMs": 29995.868542
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.3017500000000837,
+          "remainingAtStartMs": 29995.552333
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.2733330000000933,
+          "remainingAtStartMs": 29995.24325
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.25125000000025466,
+          "remainingAtStartMs": 29994.965583
+        }
+      ],
+      "committed": true,
+      "attemptMs": 21.429333000000042,
+      "gateHoldMs": 17.80962499999987
+    },
+    {
+      "workload": "correction",
+      "timeoutMs": 30000,
+      "locks": [
+        {
+          "kind": "advisory",
+          "durationMs": 0.30408299999999144,
+          "remainingAtStartMs": 29999.674458
+        },
+        {
+          "kind": "advisory",
+          "durationMs": 0.28250000000025466,
+          "remainingAtStartMs": 29997.866666
+        }
+      ],
+      "committed": true,
+      "attemptMs": 8.562333999999737,
+      "gateHoldMs": 5.8525830000003225
+    },
+    {
+      "workload": "correction",
+      "timeoutMs": 30000,
+      "locks": [
+        {
+          "kind": "advisory",
+          "durationMs": 0.2688749999997526,
+          "remainingAtStartMs": 29999.653541
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.30979200000001583,
+          "remainingAtStartMs": 29997.789958
+        },
+        {
+          "kind": "advisory",
+          "durationMs": 0.267207999999755,
+          "remainingAtStartMs": 29996.792166
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.29270800000040254,
+          "remainingAtStartMs": 29995.697666
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.2910420000002887,
+          "remainingAtStartMs": 29995.400208
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.2959160000000338,
+          "remainingAtStartMs": 29995.101166
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.2670410000000629,
+          "remainingAtStartMs": 29994.799666
+        }
+      ],
+      "committed": true,
+      "attemptMs": 20.817540999999892,
+      "gateHoldMs": 17.05554200000006
+    },
+    {
+      "workload": "real-retry",
+      "timeoutMs": 30000,
+      "locks": [
+        {
+          "kind": "advisory",
+          "durationMs": 0.2672909999996591,
+          "remainingAtStartMs": 29999.708625
+        }
+      ],
+      "committed": true,
+      "attemptMs": 6.967833000000155
+    },
+    {
+      "workload": "real-retry",
+      "timeoutMs": 30000,
+      "locks": [
+        {
+          "kind": "advisory",
+          "durationMs": 0.3247080000001006,
+          "remainingAtStartMs": 29999.696208
+        },
+        {
+          "kind": "row",
+          "durationMs": 0.29266699999971024,
+          "remainingAtStartMs": 29997.948375
+        },
+        {
+          "kind": "row",
+          "durationMs": 1027.2840420000002,
+          "remainingAtStartMs": 29997.211375
+        }
+      ],
+      "error": {
+        "name": "PrismaClientKnownRequestError",
+        "code": "P2010",
+        "sqlStates": [
+          "40P01"
+        ],
+        "classification": "DEADLOCK"
+      },
+      "attemptMs": 1032.0160420000002
+    },
+    {
+      "workload": "real-retry",
+      "timeoutMs": 30000,
+      "locks": [
+        {
+          "kind": "advisory",
+          "durationMs": 1.6775420000003578,
+          "remainingAtStartMs": 29997.709625
+        },
+        {
+          "kind": "row",
+          "durationMs": 1.2722499999999854,
+          "remainingAtStartMs": 29988.159541
+        },
+        {
+          "kind": "row",
+          "durationMs": 1.0872089999993477,
+          "remainingAtStartMs": 29985.226125
+        }
+      ],
+      "committed": true,
+      "attemptMs": 34.22099999999955
+    },
+    {
+      "workload": "real-retry",
+      "timeoutMs": 30000,
+      "locks": [
+        {
+          "kind": "advisory",
+          "durationMs": 0.7315829999997732,
+          "remainingAtStartMs": 29999.124875
+        }
+      ],
+      "committed": true,
+      "attemptMs": 7.347458000000188
+    },
+    {
+      "workload": "monthly-generation",
+      "timeoutMs": 30000,
+      "locks": [
+        {
+          "kind": "advisory",
+          "durationMs": 0.6065840000001117,
+          "remainingAtStartMs": 29998.677667
+        },
+        {
+          "kind": "advisory",
+          "durationMs": 0.8080420000005688,
+          "remainingAtStartMs": 29998.015417000002
+        }
+      ],
+      "committed": true,
+      "attemptMs": 78.71262500000012,
+      "gateHoldMs": 75.80379099999936
+    },
+    {
+      "workload": "monthly-generation",
+      "timeoutMs": 30000,
+      "locks": [
+        {
+          "kind": "advisory",
+          "durationMs": 0.29841599999963364,
+          "remainingAtStartMs": 29999.639583
+        },
+        {
+          "kind": "advisory",
+          "durationMs": 0.30691699999988487,
+          "remainingAtStartMs": 29999.331667
+        }
+      ],
+      "committed": true,
+      "attemptMs": 9.22729099999924,
+      "gateHoldMs": 8.24383299999954
+    },
+    {
+      "workload": "monthly-generation",
+      "timeoutMs": 30000,
+      "locks": [
+        {
+          "kind": "advisory",
+          "durationMs": 0.29662499999994907,
+          "remainingAtStartMs": 29999.663792
+        },
+        {
+          "kind": "advisory",
+          "durationMs": 0.28637499999967986,
+          "remainingAtStartMs": 29999.358417
+        }
+      ],
+      "committed": true,
+      "attemptMs": 6.77087500000016,
+      "gateHoldMs": 5.7943750000004
+    },
+    {
+      "workload": "monthly-generation",
+      "timeoutMs": 30000,
+      "locks": [
+        {
+          "kind": "advisory",
+          "durationMs": 0.3092500000002474,
+          "remainingAtStartMs": 29999.691958
+        },
+        {
+          "kind": "advisory",
+          "durationMs": 0.27683300000080635,
+          "remainingAtStartMs": 29999.375666
+        }
+      ],
+      "committed": true,
+      "attemptMs": 6.8643330000004426,
+      "gateHoldMs": 5.963125000000218
+    },
+    {
+      "workload": "monthly-generation",
+      "timeoutMs": 30000,
+      "locks": [
+        {
+          "kind": "advisory",
+          "durationMs": 0.31183299999975134,
+          "remainingAtStartMs": 29999.689666
+        },
+        {
+          "kind": "advisory",
+          "durationMs": 0.32808399999976245,
+          "remainingAtStartMs": 29999.364625000002
+        }
+      ],
+      "committed": true,
+      "attemptMs": 6.601708000000144,
+      "gateHoldMs": 5.686208000000079
+    }
+  ],
+  "generation": [
+    {
+      "month": "2026-11",
+      "eligibleBookings": 100,
+      "eligibleResidents": 100,
+      "created": 100,
+      "skippedExisting": 0,
+      "skippedZeroPrice": 0,
+      "skippedPendingReview": 0
+    },
+    {
+      "month": "2026-11",
+      "eligibleBookings": 100,
+      "eligibleResidents": 100,
+      "created": 0,
+      "skippedExisting": 100,
+      "skippedZeroPrice": 0,
+      "skippedPendingReview": 0
+    },
+    {
+      "month": "2026-11",
+      "eligibleBookings": 100,
+      "eligibleResidents": 100,
+      "created": 0,
+      "skippedExisting": 100,
+      "skippedZeroPrice": 0,
+      "skippedPendingReview": 0
+    },
+    {
+      "month": "2026-11",
+      "eligibleBookings": 100,
+      "eligibleResidents": 100,
+      "created": 0,
+      "skippedExisting": 100,
+      "skippedZeroPrice": 0,
+      "skippedPendingReview": 0
+    },
+    {
+      "month": "2026-11",
+      "eligibleBookings": 100,
+      "eligibleResidents": 100,
+      "created": 0,
+      "skippedExisting": 100,
+      "skippedZeroPrice": 0,
+      "skippedPendingReview": 0
+    }
+  ],
+  "correctionHolds": {
+    "count": 40,
+    "p50": 15.762291999999889,
+    "p95": 19.85050000000001,
+    "p99": 30.01712499999985,
+    "max": 30.01712499999985
+  },
+  "generationHolds": {
+    "count": 5,
+    "p50": 5.963125000000218,
+    "p95": 75.80379099999936,
+    "p99": 75.80379099999936,
+    "max": 75.80379099999936
+  },
+  "attemptDurations": {
+    "count": 49,
+    "p50": 9.22729099999924,
+    "p95": 35.94320800000014,
+    "p99": 1032.0160420000002,
+    "max": 1032.0160420000002
+  },
+  "acquisitionDurations": {
+    "count": 198,
+    "p50": 0.2755419999998594,
+    "p95": 0.5021670000000995,
+    "p99": 1.6775420000003578,
+    "max": 1027.2840420000002
+  },
+  "lockMaxByKind": {
+    "advisory": 1.6775420000003578,
+    "row": 1027.2840420000002
+  }
+}

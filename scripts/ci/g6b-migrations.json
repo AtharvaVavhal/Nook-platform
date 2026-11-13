@@ -73,6 +73,30 @@
     {
       "name": "20261103130000_invoice_active_uniqueness",
       "checksum": "a657461c3ba28a1bcf4cfb8ee762f1e57cc930deceb43d1232fba55f694c1d99"
+    },
+    {
+      "name": "20261108120000_p4_2_corrections",
+      "checksum": "c163bc40de9a133623afca817ef5ece54b4a6cc5b233bf0719cc65b120aae939"
+    },
+    {
+      "name": "20261110100000_p4_2_correction_guards",
+      "checksum": "60c434ca592f8b27a042df3990030a7c27a4abfa64f2112b50f1b61ff45ab87e"
+    },
+    {
+      "name": "20261110110000_p4_3_transfers",
+      "checksum": "ba77b8e257c90665d8ae1b7339b6a6205c8b9627958d1e8ca54273d100bd5d1f"
+    },
+    {
+      "name": "20261110120000_transfer_command_receipts",
+      "checksum": "98c532ceb162cd8983b21745a2cb9c9b178435f7bf65460be4117ec9a6f96942"
+    },
+    {
+      "name": "20261111110000_assignment_replacements_transfer_reviews",
+      "checksum": "74bd229246a7b4f94512fc4ca0b3b454f74c011a6abbd3e7e763e7d0a550b970"
+    },
+    {
+      "name": "20261111130000_assignment_replacement_chain_guards",
+      "checksum": "e969606be1f87a2b4b1e86f67c9e280112f2b6be7bf58c5efa65993e040b1b0f"
     }
   ]
 }

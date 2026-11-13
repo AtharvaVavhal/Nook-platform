@@ -117,3 +117,31 @@ test('bed usability: no active check-in never blocks on occupancy', () => {
     ),
   );
 });
+
+test('archived floor/property also prevents booking', () => {
+  for (const level of ['floor', 'property']) {
+    assert.throws(
+      () =>
+        assertBedBookable(
+          {
+            archivedAt: null,
+            operationalStatus: 'IN_SERVICE',
+            room: {
+              archivedAt: null,
+              floor: {
+                archivedAt: level === 'floor' ? new Date() : null,
+                property: { archivedAt: level === 'property' ? new Date() : null },
+              },
+            },
+          },
+          {
+            hasActiveCheckIn: false,
+            start: new Date('2026-11-01'),
+            end: new Date('2026-12-01'),
+            today: new Date('2026-11-11'),
+          },
+        ),
+      /archived/i,
+    );
+  }
+});

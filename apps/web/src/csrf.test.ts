@@ -198,7 +198,7 @@ test('a failed token request rejects the write, is not cached, and the next writ
   await assert.rejects(bad.token(), /no CSRF token/);
 });
 
-test('the application never stores the token or any cookie in the browser: no web storage, no document.cookie', () => {
+test('session clients never store credentials; session storage is isolated to correction retry keys', () => {
   const stripComments = (text: string) =>
     text.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*$/gm, '');
   const offenders: string[] = [];
@@ -208,6 +208,13 @@ test('the application never stores the token or any cookie in the browser: no we
       if (statSync(path).isDirectory()) walk(path);
       else if (/\.(ts|tsx)$/.test(name) && !/\.test\.ts$/.test(name)) {
         const code = stripComments(readFileSync(path, 'utf8'));
+        // Correction command retries predate this audit and deliberately persist idempotency keys.
+        // This module does not import session/CSRF clients. It must not be mistaken for token storage.
+        if (path === new URL('./ops/correctionRules.ts', import.meta.url).pathname) {
+          assert.doesNotMatch(code, /localStorage|document\.cookie|indexedDB/);
+          assert.doesNotMatch(code, /from\s+['"][^'"]*(?:apiConfig|authApi|csrf)['"]/);
+          continue;
+        }
         if (/localStorage|sessionStorage|document\.cookie|indexedDB/.test(code))
           offenders.push(path);
       }

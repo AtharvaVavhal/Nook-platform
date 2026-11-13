@@ -1,0 +1,14 @@
+{"probe":"race-pair","pair":"1","description":"two transfers, same resident/source","iterations":40,"deadlocks":0,"unexpected":0,"violations":[],"outcomes":{"409/200":22,"200/409":18},"transfers":40,"receipts":40,"audits":120,"violationCount":0}
+{"probe":"race-pair","pair":"2","description":"transfer vs checkout, same resident","iterations":40,"deadlocks":0,"unexpected":0,"violations":[],"outcomes":{"409/200":28,"200/200":12},"transfers":12,"receipts":12,"audits":36,"violationCount":0}
+{"probe":"race-pair","pair":"3","description":"transfer vs extension, same booking, destination has a later booking","iterations":40,"deadlocks":0,"unexpected":0,"violations":[],"outcomes":{"409/200":28,"200/409":12},"transfers":12,"receipts":12,"audits":36,"violationCount":0}
+{"probe":"race-pair","pair":"4","description":"transfer vs booking create on destination","iterations":40,"deadlocks":0,"unexpected":0,"violations":[],"outcomes":{"200/409":17,"409/200":23},"transfers":17,"receipts":17,"audits":51,"violationCount":0}
+{"probe":"race-pair","pair":"7","description":"two residents, same destination bed","iterations":40,"deadlocks":0,"unexpected":0,"violations":[],"outcomes":{"200/409":20,"409/200":20},"transfers":40,"receipts":40,"audits":120,"violationCount":0}
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 27493.540916
+Exit: 0

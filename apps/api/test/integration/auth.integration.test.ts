@@ -6,6 +6,7 @@ import type { INestApplication } from '@nestjs/common';
 import { AppModule } from '../../src/app.module.js';
 import request from 'supertest';
 import { requireTestDatabaseUrl } from './helpers/env.js';
+import { withMigratorClient } from './helpers/db.js';
 
 // ---- Test configuration ----
 process.env.APP_ENV = 'test';
@@ -27,6 +28,11 @@ const UNKNOWN_EMAIL = 'unknown@example.com';
 
 // ---- Setup NestJS app ----
 test.before(async () => {
+  // Clear login throttle state to ensure test isolation
+  await withMigratorClient(async (client) => {
+    await client.query('DELETE FROM login_throttles');
+  });
+
   app = await NestFactory.create(AppModule, { abortOnError: true });
   app.setGlobalPrefix('api/v1');
   await app.init();

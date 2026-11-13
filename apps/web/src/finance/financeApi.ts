@@ -1,7 +1,8 @@
 // Finance API client. The organization is never sent from the browser: the server derives it
 // from the session. Money values are decimal strings and are only ever formatted here, never
 // added or compared as JavaScript numbers.
-import { API_BASE, csrf, notifyUnauthorized } from '../apiConfig';
+import { API_BASE, csrf, notifyPasswordChangeRequired, notifyUnauthorized } from '../apiConfig';
+import { accessFailureMessage, isPasswordChangeRequired, isSecurityRefusal } from '../accessErrors';
 import { serverFailureMessage } from '../errorReference';
 
 export type InvoiceStatus =
@@ -178,13 +179,15 @@ async function request<T>(
     if (response.status === 401) notifyUnauthorized();
     const payload = await response.json().catch(() => ({}));
     const message = Array.isArray(payload.message) ? payload.message.join(', ') : payload.message;
+    if (isPasswordChangeRequired(response.status, payload.code)) notifyPasswordChangeRequired();
     throw new FinanceApiError(
       response.status === 401
         ? 'Please sign in to view finance records.'
-        : response.status === 403
+        : isSecurityRefusal(response.status, payload.code)
           ? 'This request was refused for security reasons. Refresh the page and try again.'
           : (serverFailureMessage(response.status, response.headers.get('x-request-id')) ??
-            (message || `Request failed (${response.status})`)),
+            (message || accessFailureMessage(response.status, payload.code)) ??
+            `Request failed (${response.status})`),
       response.status,
     );
   }
@@ -207,6 +210,7 @@ export const financeApi = {
     status?: string;
     search?: string;
     month?: string;
+    residentId?: string;
   }) => request<Paged<Invoice>>('GET', `/finance/invoices${qs(params)}`),
   voidInvoice: (invoiceId: string, reason: string) =>
     request<{ invoice: Invoice; void: VoidRecord }>('POST', `/finance/invoices/${invoiceId}/void`, {
@@ -265,7 +269,12 @@ export const financeApi = {
       body,
       { 'Idempotency-Key': idempotencyKey },
     ),
-  outstanding: (params: { page?: number; limit?: number; overdueOnly?: boolean }) =>
+  outstanding: (params: {
+    page?: number;
+    limit?: number;
+    overdueOnly?: boolean;
+    residentId?: string;
+  }) =>
     request<OutstandingData>(
       'GET',
       `/finance/outstanding${qs({ ...params, overdueOnly: params.overdueOnly ? 'true' : undefined })}`,
@@ -282,7 +291,7 @@ export const financeApi = {
       'GET',
       `/residents${qs({ search, limit: 10 })}`,
     ),
-  residentBookings: (residentId: string) =>
+  residentBookings: (residentId: string, page = 1) =>
     request<
       Paged<{
         id: string;
@@ -291,5 +300,5 @@ export const financeApi = {
         endDate: string;
         status: string;
       }>
-    >('GET', `/bookings${qs({ residentId, status: 'CONFIRMED', limit: 20 })}`),
+    >('GET', `/bookings${qs({ residentId, status: 'CONFIRMED', limit: 100, page })}`),
 };

@@ -1,0 +1,9 @@
+PASS resident profile is reachable from resident details through a real anchor
+PASS profile refresh refetches data without replacing the document
+PASS profile corrections and history tabs render their empty states
+PASS profile errors retry the data request without a reload
+PASS all twelve inventory list/detail/new routes render
+PASS booking detail exposes the existing extension workflow
+PASS corrections navigation uses real URLs and rendered screens
+PASS profile renders on mobile without horizontal overflow
+{"passed":8,"failed":0,"skipped":0,"scope":"real Chrome/React; API fixtures; no database acceptance"}

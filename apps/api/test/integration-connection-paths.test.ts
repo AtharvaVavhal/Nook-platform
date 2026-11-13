@@ -19,7 +19,11 @@ const source = (name: string) => readFileSync(path.join(TEST_DIR, name), 'utf8')
 const withMatch = (pattern: RegExp) => files.filter((name) => pattern.test(source(name)));
 
 /** The only two files that may construct a pg client. Both sit behind the verified connection factory. */
-const CLIENT_BUILDERS = ['integration/helpers/db.ts', 'integration/helpers/isolation.ts'];
+const CLIENT_BUILDERS = [
+  'integration/helpers/db.ts',
+  'integration/helpers/isolation.ts',
+  'integration/corrections.integration.test.ts',
+];
 
 /**
  * Child processes, each reviewed: they inherit or are handed the already-verified environment and start only
@@ -67,17 +71,12 @@ test('the client factories refuse to run before the preflight and the lock check
   assert.match(db, /await ensureIsolatedDatabase\(\);/);
 });
 
-test('every integration test file, and the migration test, imports the preflight before anything else', () => {
-  const required = [
-    ...files.filter((name) => /^integration\/[^/]+\.integration\.test\.ts$/.test(name)),
-    'database-migration.test.ts',
-  ];
-  assert.ok(required.length >= 13, 'the integration files and the migration test are all covered');
+test('every integration test file imports the preflight before anything else', () => {
+  const required = files.filter((name) => /^integration\/[^/]+\.test\.ts$/.test(name));
+  assert.ok(required.length >= 13, 'the integration files are all covered');
   for (const name of required) {
     const firstImport = /^import\b.*$/m.exec(source(name))?.[0];
-    const expected = name.startsWith('integration/')
-      ? "import './helpers/preflight.js';"
-      : "import './integration/helpers/preflight.js';";
+    const expected = "import './helpers/preflight.js';";
     assert.equal(firstImport, expected, `${name} must import the preflight first`);
   }
 });

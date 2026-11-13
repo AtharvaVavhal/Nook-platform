@@ -19,6 +19,7 @@ export function useAsync<T>(load: () => Promise<T>, deps: unknown[]): AsyncState
   useEffect(() => {
     const run = ++latest.current;
     setLoading(true);
+    setData(null);
     setError(null);
     load()
       .then((result) => {
@@ -31,6 +32,9 @@ export function useAsync<T>(load: () => Promise<T>, deps: unknown[]): AsyncState
       .finally(() => {
         if (run === latest.current) setLoading(false);
       });
+    return () => {
+      latest.current++;
+    };
   }, [...deps, tick]);
 
   const reload = useCallback(() => setTick((n) => n + 1), []);

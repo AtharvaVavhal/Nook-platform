@@ -1,4 +1,4 @@
-import { useRef, useState, type FormEvent } from 'react';
+import { useEffect, useRef, useState, type FormEvent } from 'react';
 import './auth.css';
 import { PasswordChangeError, authApi } from './authApi';
 import { useAuth } from './AuthContext';
@@ -9,9 +9,10 @@ interface Props {
   forced: boolean;
   onDone: () => void;
   onCancel?: () => void;
+  onBusyChange?: (busy: boolean) => void;
 }
 
-export function ChangePasswordForm({ forced, onDone, onCancel }: Props) {
+export function ChangePasswordForm({ forced, onDone, onCancel, onBusyChange }: Props) {
   const { refresh } = useAuth();
   const [current, setCurrent] = useState('');
   const [next, setNext] = useState('');
@@ -20,6 +21,9 @@ export function ChangePasswordForm({ forced, onDone, onCancel }: Props) {
   const [formError, setFormError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const inFlight = useRef(false);
+  useEffect(() => {
+    onBusyChange?.(submitting);
+  }, [onBusyChange, submitting]);
 
   async function submit(event: FormEvent) {
     event.preventDefault();

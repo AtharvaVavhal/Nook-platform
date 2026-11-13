@@ -1,5 +1,5 @@
 import { BadRequestException } from '@nestjs/common';
-import { istDateOf } from '../common/time.js';
+import { istDateOf, resolveInstant } from '../common/time.js';
 
 /** Roles that may approve a booking extension (OWNER and PROPERTY_MANAGER have equal authority). */
 export const EXTENSION_APPROVER_ROLES = ['OWNER', 'PROPERTY_MANAGER'] as const;
@@ -27,7 +27,9 @@ export function parseExtensionRequest(body: unknown): ExtensionRequest {
     throw new BadRequestException('newEndDate is required');
   }
   const text = raw.trim();
-  const parsed = new Date(DATE_ONLY.test(text) ? `${text}T00:00:00Z` : text);
+  const parsed = DATE_ONLY.test(text)
+    ? new Date(`${text}T00:00:00Z`)
+    : resolveInstant(text, 'newEndDate');
   if (
     Number.isNaN(parsed.getTime()) ||
     (DATE_ONLY.test(text) && parsed.toISOString().slice(0, 10) !== text)

@@ -1,0 +1,137 @@
+[
+  {
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "scripts/test_phase_scope.py",
+      "scripts/test_db_guard.py"
+    ],
+    "exit": 0,
+    "log": "/tmp/nook-phase4-quality-side-0.log"
+  },
+  {
+    "command": [
+      "npm",
+      "run",
+      "verify:scope"
+    ],
+    "exit": 1,
+    "log": "/tmp/nook-phase4-quality-side-1.log"
+  },
+  {
+    "command": [
+      "npm",
+      "run",
+      "typecheck"
+    ],
+    "exit": 0,
+    "log": "/tmp/nook-phase4-quality-side-2.log"
+  },
+  {
+    "command": [
+      "node_modules/.bin/eslint",
+      "apps/api",
+      "apps/web",
+      "scripts/ci",
+      "scripts/qa/assignment-finance.test.ts"
+    ],
+    "exit": 0,
+    "log": "/tmp/nook-phase4-quality-side-3.log"
+  },
+  {
+    "command": [
+      "node_modules/.bin/prettier",
+      "--check",
+      "apps/api",
+      "!apps/api/src/generated/**",
+      "apps/web",
+      ".github/workflows/ci.yml",
+      ".github/workflows/g6a.yml",
+      "scripts/ci"
+    ],
+    "exit": 1,
+    "log": "/tmp/nook-phase4-quality-side-4.log"
+  },
+  {
+    "command": [
+      "node",
+      "scripts/ci/run-unit.js"
+    ],
+    "exit": 1,
+    "log": "/tmp/nook-phase4-quality-side-5.log"
+  },
+  {
+    "command": [
+      "npm",
+      "run",
+      "test",
+      "--workspace",
+      "@nook/web"
+    ],
+    "exit": 0,
+    "log": "/tmp/nook-phase4-quality-side-6.log"
+  },
+  {
+    "command": [
+      "node",
+      "scripts/ci/check.js"
+    ],
+    "exit": 0,
+    "log": "/tmp/nook-phase4-quality-side-7.log"
+  },
+  {
+    "command": [
+      "node",
+      "--import",
+      "tsx",
+      "--test",
+      "scripts/ci/catalog-arrays.test.js",
+      "scripts/ci/diagnostics.test.js",
+      "scripts/ci/migration-ledger.test.js",
+      "scripts/ci/integration-test-reporter.test.js",
+      "scripts/ci/g6a-migration.test.js",
+      "scripts/ci/g6b-migration.test.js",
+      "scripts/ci/g6b-preflight.test.js"
+    ],
+    "exit": 1,
+    "log": "/tmp/nook-phase4-quality-side-8.log"
+  },
+  {
+    "command": [
+      "npm",
+      "run",
+      "build"
+    ],
+    "exit": 0,
+    "log": "/tmp/nook-phase4-quality-side-9.log"
+  },
+  {
+    "command": [
+      "node_modules/.bin/prisma",
+      "validate",
+      "--config",
+      "scripts/ci/prisma.config.ts"
+    ],
+    "exit": 0,
+    "log": "/tmp/nook-phase4-quality-side-10.log"
+  },
+  {
+    "command": [
+      "npm",
+      "run",
+      "verify:migration"
+    ],
+    "exit": 0,
+    "log": "/tmp/nook-phase4-quality-side-11.log"
+  },
+  {
+    "command": [
+      "npm",
+      "run",
+      "verify:secrets"
+    ],
+    "exit": 0,
+    "log": "/tmp/nook-phase4-quality-side-12.log"
+  }
+]

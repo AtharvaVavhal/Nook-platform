@@ -66,7 +66,7 @@ function migrationCopy(t) {
   copyFileSync(join(source, 'migration_lock.toml'), join(directory, 'migration_lock.toml'));
   return directory;
 }
-test('approved source migration set has exactly 18 lexically ordered hashes', () =>
+test('approved source migration set has exactly 24 lexically ordered hashes', () =>
   verifyMigrationFiles(source, manifest));
 for (const [name, mutate] of [
   ['count', (m) => m.migrations.pop()],
@@ -434,9 +434,12 @@ test('dedicated Prisma config cannot load root/dotenv/runtime URL', () => {
 
 // All adapters below are in-memory; the injected CLI records arguments but launches nothing.
 test('deployment wrapper stages exact history, isolates CLI environment and gates real adapters', async () => {
-  const { SCHEMA, TARGET } = await import('./g6b-preflight.js');
+  const { SCHEMA, TARGET, APPEND_ONLY_RUNTIME_TABLES } = await import('./g6b-preflight.js');
   const { DATABASE_MARKER } = await import('../../apps/api/test/integration/helpers/guard.ts');
   const { LEDGER_COLUMNS } = await import('./migration-ledger.js');
+  const native = JSON.parse(
+    readFileSync(new URL('./phase4-catalog.json', import.meta.url), 'utf8'),
+  ).catalog;
   let deployed = false;
   let granted = false;
   let verifierGranted = false;
@@ -472,13 +475,16 @@ test('deployment wrapper stages exact history, isolates CLI environment and gate
           user === TARGET.verifier
             ? [{ name: '_prisma_migrations', privileges: ['SELECT'] }]
             : granted
-              ? Object.keys(SCHEMA.tables).map((name) => ({
-                  name,
-                  privileges:
-                    name === 'audit_events' || name === 'invoice_voids'
-                      ? ['INSERT', 'SELECT']
-                      : ['INSERT', 'SELECT', 'UPDATE'],
-                }))
+              ? [
+                  ...Object.keys(SCHEMA.tables).map((name) => ({
+                    name,
+                    privileges:
+                      name === 'audit_events' || APPEND_ONLY_RUNTIME_TABLES.includes(name)
+                        ? ['INSERT', 'SELECT']
+                        : ['INSERT', 'SELECT', 'UPDATE'],
+                  })),
+                  { name: 'effective_stay_assignments', privileges: ['SELECT'] },
+                ]
               : [],
       };
     }
@@ -522,6 +528,19 @@ test('deployment wrapper stages exact history, isolates CLI environment and gate
       return { rows: [] };
     }
     assert.ok(deployed);
+    const catalogQueries = [
+      ['c.relrowsecurity', 'relations'],
+      ['a.attidentity', 'columns'],
+      ['ORDER BY r.relname,c.conname', 'constraints'],
+      ['i.indisprimary', 'indexes'],
+      ['oidvectortypes(p.proargtypes)', 'functions'],
+      ['t.typcategory AS category', 'types'],
+      ['pg_get_triggerdef', 'triggers'],
+      ['e.extversion', 'extensions'],
+      ['SELECT nspname AS name', 'schemas'],
+    ];
+    const catalogQuery = catalogQueries.find(([match]) => sql.includes(match));
+    if (catalogQuery) return { rows: native[catalogQuery[1]] };
     if (sql.includes('COALESCE('))
       return {
         rows: [
@@ -761,6 +780,7 @@ test('runtime grants keep invoice_voids append-only and preserve every other tab
   const { FULL_APPLICATION_TABLES } = await import(
     '../../apps/api/test/integration/helpers/guard.ts'
   );
+  const { APPEND_ONLY_RUNTIME_TABLES } = await import('./g6b-preflight.js');
   const source = ts.createSourceFile(
     'integration.js',
     readFileSync(new URL('./integration.js', import.meta.url), 'utf8'),
@@ -789,7 +809,8 @@ test('runtime grants keep invoice_voids append-only and preserve every other tab
   );
   assert.match(queries[0], /tablename <> '_prisma_migrations'/);
   const tableGrants = queries.slice(1, -1);
-  assert.equal(tableGrants.length, 23);
+  assert.equal(tableGrants.length, FULL_APPLICATION_TABLES.length + 1);
+  assert.equal(tableGrants.length, 33);
   assert.ok(
     tableGrants.includes(
       'GRANT SELECT, INSERT ON TABLE public."invoice_voids" TO "synthetic_runtime"',
@@ -797,7 +818,7 @@ test('runtime grants keep invoice_voids append-only and preserve every other tab
   );
   for (const table of FULL_APPLICATION_TABLES) {
     const privileges =
-      table === 'invoice_voids' || table === 'audit_events'
+      APPEND_ONLY_RUNTIME_TABLES.includes(table) || table === 'audit_events'
         ? 'SELECT, INSERT'
         : 'SELECT, INSERT, UPDATE';
     assert.ok(

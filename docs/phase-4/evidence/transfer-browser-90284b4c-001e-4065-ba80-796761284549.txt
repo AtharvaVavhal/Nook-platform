@@ -1,0 +1,2 @@
+TRANSFER_ACCEPTANCE {"cases":[],"status":"FAIL","error":"Waiting for selector `#login-email` failed"}
+Exit: 1

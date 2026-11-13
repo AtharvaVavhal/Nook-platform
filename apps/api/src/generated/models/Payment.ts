@@ -296,6 +296,7 @@ export type PaymentWhereInput = {
   balanceAfterPayment?: Prisma.DecimalNullableFilter<"Payment"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFilter<"Payment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Payment"> | Date | string
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkListRelationFilter
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
   resident?: Prisma.XOR<Prisma.ResidentScalarRelationFilter, Prisma.ResidentWhereInput>
   invoice?: Prisma.XOR<Prisma.InvoiceScalarRelationFilter, Prisma.InvoiceWhereInput>
@@ -320,6 +321,7 @@ export type PaymentOrderByWithRelationInput = {
   balanceAfterPayment?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkOrderByRelationAggregateInput
   organization?: Prisma.OrganizationOrderByWithRelationInput
   resident?: Prisma.ResidentOrderByWithRelationInput
   invoice?: Prisma.InvoiceOrderByWithRelationInput
@@ -349,6 +351,7 @@ export type PaymentWhereUniqueInput = Prisma.AtLeast<{
   balanceAfterPayment?: Prisma.DecimalNullableFilter<"Payment"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFilter<"Payment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Payment"> | Date | string
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkListRelationFilter
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
   resident?: Prisma.XOR<Prisma.ResidentScalarRelationFilter, Prisma.ResidentWhereInput>
   invoice?: Prisma.XOR<Prisma.InvoiceScalarRelationFilter, Prisma.InvoiceWhereInput>
@@ -411,6 +414,7 @@ export type PaymentCreateInput = {
   balanceAfterPayment?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutPaymentInput
   organization: Prisma.OrganizationCreateNestedOneWithoutPaymentsInput
   resident: Prisma.ResidentCreateNestedOneWithoutPaymentsInput
   invoice: Prisma.InvoiceCreateNestedOneWithoutPaymentsInput
@@ -435,6 +439,7 @@ export type PaymentUncheckedCreateInput = {
   balanceAfterPayment?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutPaymentInput
   idempotencyKeys?: Prisma.PaymentIdempotencyKeyUncheckedCreateNestedManyWithoutPaymentInput
   replacements?: Prisma.PaymentUncheckedCreateNestedManyWithoutCorrectsInput
   reversals?: Prisma.PaymentReversalUncheckedCreateNestedManyWithoutPaymentInput
@@ -451,6 +456,7 @@ export type PaymentUpdateInput = {
   balanceAfterPayment?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUpdateManyWithoutPaymentNestedInput
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutPaymentsNestedInput
   resident?: Prisma.ResidentUpdateOneRequiredWithoutPaymentsNestedInput
   invoice?: Prisma.InvoiceUpdateOneRequiredWithoutPaymentsNestedInput
@@ -475,6 +481,7 @@ export type PaymentUncheckedUpdateInput = {
   balanceAfterPayment?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutPaymentNestedInput
   idempotencyKeys?: Prisma.PaymentIdempotencyKeyUncheckedUpdateManyWithoutPaymentNestedInput
   replacements?: Prisma.PaymentUncheckedUpdateManyWithoutCorrectsNestedInput
   reversals?: Prisma.PaymentReversalUncheckedUpdateManyWithoutPaymentNestedInput
@@ -845,6 +852,22 @@ export type PaymentUpdateOneRequiredWithoutIdempotencyKeysNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.PaymentUpdateToOneWithWhereWithoutIdempotencyKeysInput, Prisma.PaymentUpdateWithoutIdempotencyKeysInput>, Prisma.PaymentUncheckedUpdateWithoutIdempotencyKeysInput>
 }
 
+export type PaymentCreateNestedOneWithoutCorrectionFinanceLinksInput = {
+  create?: Prisma.XOR<Prisma.PaymentCreateWithoutCorrectionFinanceLinksInput, Prisma.PaymentUncheckedCreateWithoutCorrectionFinanceLinksInput>
+  connectOrCreate?: Prisma.PaymentCreateOrConnectWithoutCorrectionFinanceLinksInput
+  connect?: Prisma.PaymentWhereUniqueInput
+}
+
+export type PaymentUpdateOneWithoutCorrectionFinanceLinksNestedInput = {
+  create?: Prisma.XOR<Prisma.PaymentCreateWithoutCorrectionFinanceLinksInput, Prisma.PaymentUncheckedCreateWithoutCorrectionFinanceLinksInput>
+  connectOrCreate?: Prisma.PaymentCreateOrConnectWithoutCorrectionFinanceLinksInput
+  upsert?: Prisma.PaymentUpsertWithoutCorrectionFinanceLinksInput
+  disconnect?: Prisma.PaymentWhereInput | boolean
+  delete?: Prisma.PaymentWhereInput | boolean
+  connect?: Prisma.PaymentWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.PaymentUpdateToOneWithWhereWithoutCorrectionFinanceLinksInput, Prisma.PaymentUpdateWithoutCorrectionFinanceLinksInput>, Prisma.PaymentUncheckedUpdateWithoutCorrectionFinanceLinksInput>
+}
+
 export type PaymentCreateWithoutOrganizationInput = {
   id?: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -856,6 +879,7 @@ export type PaymentCreateWithoutOrganizationInput = {
   balanceAfterPayment?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutPaymentInput
   resident: Prisma.ResidentCreateNestedOneWithoutPaymentsInput
   invoice: Prisma.InvoiceCreateNestedOneWithoutPaymentsInput
   idempotencyKeys?: Prisma.PaymentIdempotencyKeyCreateNestedManyWithoutPaymentInput
@@ -878,6 +902,7 @@ export type PaymentUncheckedCreateWithoutOrganizationInput = {
   balanceAfterPayment?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutPaymentInput
   idempotencyKeys?: Prisma.PaymentIdempotencyKeyUncheckedCreateNestedManyWithoutPaymentInput
   replacements?: Prisma.PaymentUncheckedCreateNestedManyWithoutCorrectsInput
   reversals?: Prisma.PaymentReversalUncheckedCreateNestedManyWithoutPaymentInput
@@ -940,6 +965,7 @@ export type PaymentCreateWithoutResidentInput = {
   balanceAfterPayment?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutPaymentInput
   organization: Prisma.OrganizationCreateNestedOneWithoutPaymentsInput
   invoice: Prisma.InvoiceCreateNestedOneWithoutPaymentsInput
   idempotencyKeys?: Prisma.PaymentIdempotencyKeyCreateNestedManyWithoutPaymentInput
@@ -961,6 +987,7 @@ export type PaymentUncheckedCreateWithoutResidentInput = {
   balanceAfterPayment?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutPaymentInput
   idempotencyKeys?: Prisma.PaymentIdempotencyKeyUncheckedCreateNestedManyWithoutPaymentInput
   replacements?: Prisma.PaymentUncheckedCreateNestedManyWithoutCorrectsInput
   reversals?: Prisma.PaymentReversalUncheckedCreateNestedManyWithoutPaymentInput
@@ -1003,6 +1030,7 @@ export type PaymentCreateWithoutInvoiceInput = {
   balanceAfterPayment?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutPaymentInput
   organization: Prisma.OrganizationCreateNestedOneWithoutPaymentsInput
   resident: Prisma.ResidentCreateNestedOneWithoutPaymentsInput
   idempotencyKeys?: Prisma.PaymentIdempotencyKeyCreateNestedManyWithoutPaymentInput
@@ -1023,6 +1051,7 @@ export type PaymentUncheckedCreateWithoutInvoiceInput = {
   balanceAfterPayment?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutPaymentInput
   idempotencyKeys?: Prisma.PaymentIdempotencyKeyUncheckedCreateNestedManyWithoutPaymentInput
   replacements?: Prisma.PaymentUncheckedCreateNestedManyWithoutCorrectsInput
   reversals?: Prisma.PaymentReversalUncheckedCreateNestedManyWithoutPaymentInput
@@ -1065,6 +1094,7 @@ export type PaymentCreateWithoutReplacementsInput = {
   balanceAfterPayment?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutPaymentInput
   organization: Prisma.OrganizationCreateNestedOneWithoutPaymentsInput
   resident: Prisma.ResidentCreateNestedOneWithoutPaymentsInput
   invoice: Prisma.InvoiceCreateNestedOneWithoutPaymentsInput
@@ -1088,6 +1118,7 @@ export type PaymentUncheckedCreateWithoutReplacementsInput = {
   balanceAfterPayment?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutPaymentInput
   idempotencyKeys?: Prisma.PaymentIdempotencyKeyUncheckedCreateNestedManyWithoutPaymentInput
   reversals?: Prisma.PaymentReversalUncheckedCreateNestedManyWithoutPaymentInput
 }
@@ -1108,6 +1139,7 @@ export type PaymentCreateWithoutCorrectsInput = {
   balanceAfterPayment?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutPaymentInput
   organization: Prisma.OrganizationCreateNestedOneWithoutPaymentsInput
   resident: Prisma.ResidentCreateNestedOneWithoutPaymentsInput
   invoice: Prisma.InvoiceCreateNestedOneWithoutPaymentsInput
@@ -1129,6 +1161,7 @@ export type PaymentUncheckedCreateWithoutCorrectsInput = {
   balanceAfterPayment?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutPaymentInput
   idempotencyKeys?: Prisma.PaymentIdempotencyKeyUncheckedCreateNestedManyWithoutPaymentInput
   replacements?: Prisma.PaymentUncheckedCreateNestedManyWithoutCorrectsInput
   reversals?: Prisma.PaymentReversalUncheckedCreateNestedManyWithoutPaymentInput
@@ -1166,6 +1199,7 @@ export type PaymentUpdateWithoutReplacementsInput = {
   balanceAfterPayment?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUpdateManyWithoutPaymentNestedInput
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutPaymentsNestedInput
   resident?: Prisma.ResidentUpdateOneRequiredWithoutPaymentsNestedInput
   invoice?: Prisma.InvoiceUpdateOneRequiredWithoutPaymentsNestedInput
@@ -1189,6 +1223,7 @@ export type PaymentUncheckedUpdateWithoutReplacementsInput = {
   balanceAfterPayment?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutPaymentNestedInput
   idempotencyKeys?: Prisma.PaymentIdempotencyKeyUncheckedUpdateManyWithoutPaymentNestedInput
   reversals?: Prisma.PaymentReversalUncheckedUpdateManyWithoutPaymentNestedInput
 }
@@ -1220,6 +1255,7 @@ export type PaymentCreateWithoutReversalsInput = {
   balanceAfterPayment?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutPaymentInput
   organization: Prisma.OrganizationCreateNestedOneWithoutPaymentsInput
   resident: Prisma.ResidentCreateNestedOneWithoutPaymentsInput
   invoice: Prisma.InvoiceCreateNestedOneWithoutPaymentsInput
@@ -1243,6 +1279,7 @@ export type PaymentUncheckedCreateWithoutReversalsInput = {
   balanceAfterPayment?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutPaymentInput
   idempotencyKeys?: Prisma.PaymentIdempotencyKeyUncheckedCreateNestedManyWithoutPaymentInput
   replacements?: Prisma.PaymentUncheckedCreateNestedManyWithoutCorrectsInput
 }
@@ -1274,6 +1311,7 @@ export type PaymentUpdateWithoutReversalsInput = {
   balanceAfterPayment?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUpdateManyWithoutPaymentNestedInput
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutPaymentsNestedInput
   resident?: Prisma.ResidentUpdateOneRequiredWithoutPaymentsNestedInput
   invoice?: Prisma.InvoiceUpdateOneRequiredWithoutPaymentsNestedInput
@@ -1297,6 +1335,7 @@ export type PaymentUncheckedUpdateWithoutReversalsInput = {
   balanceAfterPayment?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutPaymentNestedInput
   idempotencyKeys?: Prisma.PaymentIdempotencyKeyUncheckedUpdateManyWithoutPaymentNestedInput
   replacements?: Prisma.PaymentUncheckedUpdateManyWithoutCorrectsNestedInput
 }
@@ -1312,6 +1351,7 @@ export type PaymentCreateWithoutIdempotencyKeysInput = {
   balanceAfterPayment?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutPaymentInput
   organization: Prisma.OrganizationCreateNestedOneWithoutPaymentsInput
   resident: Prisma.ResidentCreateNestedOneWithoutPaymentsInput
   invoice: Prisma.InvoiceCreateNestedOneWithoutPaymentsInput
@@ -1335,6 +1375,7 @@ export type PaymentUncheckedCreateWithoutIdempotencyKeysInput = {
   balanceAfterPayment?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutPaymentInput
   replacements?: Prisma.PaymentUncheckedCreateNestedManyWithoutCorrectsInput
   reversals?: Prisma.PaymentReversalUncheckedCreateNestedManyWithoutPaymentInput
 }
@@ -1366,6 +1407,7 @@ export type PaymentUpdateWithoutIdempotencyKeysInput = {
   balanceAfterPayment?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUpdateManyWithoutPaymentNestedInput
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutPaymentsNestedInput
   resident?: Prisma.ResidentUpdateOneRequiredWithoutPaymentsNestedInput
   invoice?: Prisma.InvoiceUpdateOneRequiredWithoutPaymentsNestedInput
@@ -1389,6 +1431,103 @@ export type PaymentUncheckedUpdateWithoutIdempotencyKeysInput = {
   balanceAfterPayment?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutPaymentNestedInput
+  replacements?: Prisma.PaymentUncheckedUpdateManyWithoutCorrectsNestedInput
+  reversals?: Prisma.PaymentReversalUncheckedUpdateManyWithoutPaymentNestedInput
+}
+
+export type PaymentCreateWithoutCorrectionFinanceLinksInput = {
+  id?: string
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  method: $Enums.PaymentMethod
+  reference?: string | null
+  receivedAt: Date | string
+  notes?: string | null
+  creditTotalAtPayment?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  balanceAfterPayment?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  organization: Prisma.OrganizationCreateNestedOneWithoutPaymentsInput
+  resident: Prisma.ResidentCreateNestedOneWithoutPaymentsInput
+  invoice: Prisma.InvoiceCreateNestedOneWithoutPaymentsInput
+  idempotencyKeys?: Prisma.PaymentIdempotencyKeyCreateNestedManyWithoutPaymentInput
+  corrects?: Prisma.PaymentCreateNestedOneWithoutReplacementsInput
+  replacements?: Prisma.PaymentCreateNestedManyWithoutCorrectsInput
+  reversals?: Prisma.PaymentReversalCreateNestedManyWithoutPaymentInput
+}
+
+export type PaymentUncheckedCreateWithoutCorrectionFinanceLinksInput = {
+  id?: string
+  organizationId: string
+  invoiceId: string
+  residentId: string
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  method: $Enums.PaymentMethod
+  reference?: string | null
+  receivedAt: Date | string
+  notes?: string | null
+  correctsPaymentId?: string | null
+  creditTotalAtPayment?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  balanceAfterPayment?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  idempotencyKeys?: Prisma.PaymentIdempotencyKeyUncheckedCreateNestedManyWithoutPaymentInput
+  replacements?: Prisma.PaymentUncheckedCreateNestedManyWithoutCorrectsInput
+  reversals?: Prisma.PaymentReversalUncheckedCreateNestedManyWithoutPaymentInput
+}
+
+export type PaymentCreateOrConnectWithoutCorrectionFinanceLinksInput = {
+  where: Prisma.PaymentWhereUniqueInput
+  create: Prisma.XOR<Prisma.PaymentCreateWithoutCorrectionFinanceLinksInput, Prisma.PaymentUncheckedCreateWithoutCorrectionFinanceLinksInput>
+}
+
+export type PaymentUpsertWithoutCorrectionFinanceLinksInput = {
+  update: Prisma.XOR<Prisma.PaymentUpdateWithoutCorrectionFinanceLinksInput, Prisma.PaymentUncheckedUpdateWithoutCorrectionFinanceLinksInput>
+  create: Prisma.XOR<Prisma.PaymentCreateWithoutCorrectionFinanceLinksInput, Prisma.PaymentUncheckedCreateWithoutCorrectionFinanceLinksInput>
+  where?: Prisma.PaymentWhereInput
+}
+
+export type PaymentUpdateToOneWithWhereWithoutCorrectionFinanceLinksInput = {
+  where?: Prisma.PaymentWhereInput
+  data: Prisma.XOR<Prisma.PaymentUpdateWithoutCorrectionFinanceLinksInput, Prisma.PaymentUncheckedUpdateWithoutCorrectionFinanceLinksInput>
+}
+
+export type PaymentUpdateWithoutCorrectionFinanceLinksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  method?: Prisma.EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+  reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  receivedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  creditTotalAtPayment?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  balanceAfterPayment?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutPaymentsNestedInput
+  resident?: Prisma.ResidentUpdateOneRequiredWithoutPaymentsNestedInput
+  invoice?: Prisma.InvoiceUpdateOneRequiredWithoutPaymentsNestedInput
+  idempotencyKeys?: Prisma.PaymentIdempotencyKeyUpdateManyWithoutPaymentNestedInput
+  corrects?: Prisma.PaymentUpdateOneWithoutReplacementsNestedInput
+  replacements?: Prisma.PaymentUpdateManyWithoutCorrectsNestedInput
+  reversals?: Prisma.PaymentReversalUpdateManyWithoutPaymentNestedInput
+}
+
+export type PaymentUncheckedUpdateWithoutCorrectionFinanceLinksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  invoiceId?: Prisma.StringFieldUpdateOperationsInput | string
+  residentId?: Prisma.StringFieldUpdateOperationsInput | string
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  method?: Prisma.EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+  reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  receivedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  correctsPaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  creditTotalAtPayment?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  balanceAfterPayment?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  idempotencyKeys?: Prisma.PaymentIdempotencyKeyUncheckedUpdateManyWithoutPaymentNestedInput
   replacements?: Prisma.PaymentUncheckedUpdateManyWithoutCorrectsNestedInput
   reversals?: Prisma.PaymentReversalUncheckedUpdateManyWithoutPaymentNestedInput
 }
@@ -1420,6 +1559,7 @@ export type PaymentUpdateWithoutOrganizationInput = {
   balanceAfterPayment?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUpdateManyWithoutPaymentNestedInput
   resident?: Prisma.ResidentUpdateOneRequiredWithoutPaymentsNestedInput
   invoice?: Prisma.InvoiceUpdateOneRequiredWithoutPaymentsNestedInput
   idempotencyKeys?: Prisma.PaymentIdempotencyKeyUpdateManyWithoutPaymentNestedInput
@@ -1442,6 +1582,7 @@ export type PaymentUncheckedUpdateWithoutOrganizationInput = {
   balanceAfterPayment?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutPaymentNestedInput
   idempotencyKeys?: Prisma.PaymentIdempotencyKeyUncheckedUpdateManyWithoutPaymentNestedInput
   replacements?: Prisma.PaymentUncheckedUpdateManyWithoutCorrectsNestedInput
   reversals?: Prisma.PaymentReversalUncheckedUpdateManyWithoutPaymentNestedInput
@@ -1489,6 +1630,7 @@ export type PaymentUpdateWithoutResidentInput = {
   balanceAfterPayment?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUpdateManyWithoutPaymentNestedInput
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutPaymentsNestedInput
   invoice?: Prisma.InvoiceUpdateOneRequiredWithoutPaymentsNestedInput
   idempotencyKeys?: Prisma.PaymentIdempotencyKeyUpdateManyWithoutPaymentNestedInput
@@ -1510,6 +1652,7 @@ export type PaymentUncheckedUpdateWithoutResidentInput = {
   balanceAfterPayment?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutPaymentNestedInput
   idempotencyKeys?: Prisma.PaymentIdempotencyKeyUncheckedUpdateManyWithoutPaymentNestedInput
   replacements?: Prisma.PaymentUncheckedUpdateManyWithoutCorrectsNestedInput
   reversals?: Prisma.PaymentReversalUncheckedUpdateManyWithoutPaymentNestedInput
@@ -1555,6 +1698,7 @@ export type PaymentUpdateWithoutInvoiceInput = {
   balanceAfterPayment?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUpdateManyWithoutPaymentNestedInput
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutPaymentsNestedInput
   resident?: Prisma.ResidentUpdateOneRequiredWithoutPaymentsNestedInput
   idempotencyKeys?: Prisma.PaymentIdempotencyKeyUpdateManyWithoutPaymentNestedInput
@@ -1575,6 +1719,7 @@ export type PaymentUncheckedUpdateWithoutInvoiceInput = {
   balanceAfterPayment?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutPaymentNestedInput
   idempotencyKeys?: Prisma.PaymentIdempotencyKeyUncheckedUpdateManyWithoutPaymentNestedInput
   replacements?: Prisma.PaymentUncheckedUpdateManyWithoutCorrectsNestedInput
   reversals?: Prisma.PaymentReversalUncheckedUpdateManyWithoutPaymentNestedInput
@@ -1620,6 +1765,7 @@ export type PaymentUpdateWithoutCorrectsInput = {
   balanceAfterPayment?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUpdateManyWithoutPaymentNestedInput
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutPaymentsNestedInput
   resident?: Prisma.ResidentUpdateOneRequiredWithoutPaymentsNestedInput
   invoice?: Prisma.InvoiceUpdateOneRequiredWithoutPaymentsNestedInput
@@ -1641,6 +1787,7 @@ export type PaymentUncheckedUpdateWithoutCorrectsInput = {
   balanceAfterPayment?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutPaymentNestedInput
   idempotencyKeys?: Prisma.PaymentIdempotencyKeyUncheckedUpdateManyWithoutPaymentNestedInput
   replacements?: Prisma.PaymentUncheckedUpdateManyWithoutCorrectsNestedInput
   reversals?: Prisma.PaymentReversalUncheckedUpdateManyWithoutPaymentNestedInput
@@ -1667,12 +1814,14 @@ export type PaymentUncheckedUpdateManyWithoutCorrectsInput = {
  */
 
 export type PaymentCountOutputType = {
+  correctionFinanceLinks: number
   idempotencyKeys: number
   replacements: number
   reversals: number
 }
 
 export type PaymentCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  correctionFinanceLinks?: boolean | PaymentCountOutputTypeCountCorrectionFinanceLinksArgs
   idempotencyKeys?: boolean | PaymentCountOutputTypeCountIdempotencyKeysArgs
   replacements?: boolean | PaymentCountOutputTypeCountReplacementsArgs
   reversals?: boolean | PaymentCountOutputTypeCountReversalsArgs
@@ -1686,6 +1835,13 @@ export type PaymentCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Exte
    * Select specific fields to fetch from the PaymentCountOutputType
    */
   select?: Prisma.PaymentCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * PaymentCountOutputType without action
+ */
+export type PaymentCountOutputTypeCountCorrectionFinanceLinksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CorrectionFinanceLinkWhereInput
 }
 
 /**
@@ -1725,6 +1881,7 @@ export type PaymentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   balanceAfterPayment?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  correctionFinanceLinks?: boolean | Prisma.Payment$correctionFinanceLinksArgs<ExtArgs>
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   resident?: boolean | Prisma.ResidentDefaultArgs<ExtArgs>
   invoice?: boolean | Prisma.InvoiceDefaultArgs<ExtArgs>
@@ -1796,6 +1953,7 @@ export type PaymentSelectScalar = {
 
 export type PaymentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organizationId" | "invoiceId" | "residentId" | "amount" | "method" | "reference" | "receivedAt" | "notes" | "correctsPaymentId" | "creditTotalAtPayment" | "balanceAfterPayment" | "createdAt" | "updatedAt", ExtArgs["result"]["payment"]>
 export type PaymentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  correctionFinanceLinks?: boolean | Prisma.Payment$correctionFinanceLinksArgs<ExtArgs>
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   resident?: boolean | Prisma.ResidentDefaultArgs<ExtArgs>
   invoice?: boolean | Prisma.InvoiceDefaultArgs<ExtArgs>
@@ -1821,6 +1979,7 @@ export type PaymentIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
 export type $PaymentPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Payment"
   objects: {
+    correctionFinanceLinks: Prisma.$CorrectionFinanceLinkPayload<ExtArgs>[]
     organization: Prisma.$OrganizationPayload<ExtArgs>
     resident: Prisma.$ResidentPayload<ExtArgs>
     invoice: Prisma.$InvoicePayload<ExtArgs>
@@ -2245,6 +2404,7 @@ readonly fields: PaymentFieldRefs;
  */
 export interface Prisma__PaymentClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  correctionFinanceLinks<T extends Prisma.Payment$correctionFinanceLinksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Payment$correctionFinanceLinksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CorrectionFinanceLinkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   organization<T extends Prisma.OrganizationDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrganizationDefaultArgs<ExtArgs>>): Prisma.Prisma__OrganizationClient<runtime.Types.Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   resident<T extends Prisma.ResidentDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ResidentDefaultArgs<ExtArgs>>): Prisma.Prisma__ResidentClient<runtime.Types.Result.GetResult<Prisma.$ResidentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   invoice<T extends Prisma.InvoiceDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.InvoiceDefaultArgs<ExtArgs>>): Prisma.Prisma__InvoiceClient<runtime.Types.Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
@@ -2693,6 +2853,30 @@ export type PaymentDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Limit how many Payments to delete.
    */
   limit?: number
+}
+
+/**
+ * Payment.correctionFinanceLinks
+ */
+export type Payment$correctionFinanceLinksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CorrectionFinanceLink
+   */
+  select?: Prisma.CorrectionFinanceLinkSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CorrectionFinanceLink
+   */
+  omit?: Prisma.CorrectionFinanceLinkOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CorrectionFinanceLinkInclude<ExtArgs> | null
+  where?: Prisma.CorrectionFinanceLinkWhereInput
+  orderBy?: Prisma.CorrectionFinanceLinkOrderByWithRelationInput | Prisma.CorrectionFinanceLinkOrderByWithRelationInput[]
+  cursor?: Prisma.CorrectionFinanceLinkWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CorrectionFinanceLinkScalarFieldEnum | Prisma.CorrectionFinanceLinkScalarFieldEnum[]
 }
 
 /**

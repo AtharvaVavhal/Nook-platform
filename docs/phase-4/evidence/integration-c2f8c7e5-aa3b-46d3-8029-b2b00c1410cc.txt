@@ -1,0 +1,17 @@
+{"probe":"readiness-sql-failure","sqlstate":"23001","table":"unknown"}
+{"probe":"readiness-sql-failure","sqlstate":"23001","table":"stay_assignment_replacements"}
+{"probe":"readiness-sql-failure","sqlstate":"22P02","table":"stay_assignment_replacements"}
+✖ independent owner resolution is atomic, replayable, visible, and never auto-issues the released invoice (20.423583ms)
+✖ self-review and cross-tenant resolution are refused; unsupported remedy retains billing suppression (8.654959ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 6
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1449.464666
+✖ failing tests:
+✖ independent owner resolution is atomic, replayable, visible, and never auto-issues the released invoice (20.423583ms)
+✖ self-review and cross-tenant resolution are refused; unsupported remedy retains billing suppression (8.654959ms)
+Exit: 1

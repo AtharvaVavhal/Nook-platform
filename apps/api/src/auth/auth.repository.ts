@@ -17,11 +17,15 @@ export class PrismaAuthRepository implements AuthRepository {
   async findUserByLogin(
     loginIdentifier: string,
   ): Promise<(AuthUserRecord & { memberships: AuthMembershipRecord[] }) | null> {
-    const user = await this.prisma.db.user.findUnique({
+    const user = await this.prisma.db.user.findFirst({
       where: { loginIdentifier },
-      include: { memberships: { include: { organization: true } } },
     });
-    return user as (AuthUserRecord & { memberships: AuthMembershipRecord[] }) | null;
+    if (!user) return null;
+    const memberships = await this.prisma.db.membership.findMany({
+      where: { userId: user.id },
+      include: { organization: true },
+    });
+    return { ...user, memberships } as AuthUserRecord & { memberships: AuthMembershipRecord[] };
   }
 
   async updateLastLogin(userId: string, lastLoginAt: Date): Promise<void> {

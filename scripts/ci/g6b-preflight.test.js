@@ -1,3 +1,4 @@
+import { phase4Facts, verifyPhase4Catalog } from './phase4-catalog.js';
 // Exercise the locked PostgreSQL driver boundary in the existing G6B test selection.
 import './catalog-arrays.test.js';
 import test from 'node:test';
@@ -13,6 +14,7 @@ import {
   verifyIdentityFacts,
   verifySchemaFacts,
   verifyPrivileges,
+  APPEND_ONLY_RUNTIME_TABLES,
   readLedger,
   readIdentity,
   readFreshFacts,
@@ -63,10 +65,23 @@ const ENUM_COLUMNS = [
   ['invoices', 'status', 'InvoiceStatus', 'DRAFT'],
   ['payments', 'method', 'PaymentMethod', null],
   ['invoice_voids', 'previous_status', 'InvoiceStatus', null],
+  ['correction_proposals', 'target_type', 'CorrectionTargetType', null],
+  ['correction_proposals', 'field_key', 'CorrectionFieldKey', null],
+  ['correction_proposals', 'status', 'CorrectionStatus', 'PENDING'],
+  ['correction_proposals', 'requested_role', 'MembershipRole', null],
+  ['correction_proposals', 'relation_kind', 'CorrectionRelationKind', null, true],
+  ['correction_command_receipts', 'action', 'CorrectionCommandAction', null],
+  ['correction_finance_links', 'kind', 'CorrectionFinanceLinkKind', null],
+  ['correction_finance_links', 'outcome', 'CorrectionFinanceOutcome', null],
+  ['stay_assignments', 'kind', 'StayAssignmentKind', 'ORIGINAL'],
+  ['stay_assignments', 'status', 'StayAssignmentStatus', 'ACTIVE'],
+  ['transfers', 'type', 'TransferType', null],
+  ['transfers', 'actor_role', 'MembershipRole', null],
+  ['stay_assignment_replacements', 'field_key', 'CorrectionFieldKey', null],
 ];
-const enumColumn = (type, label) => ({
+const enumColumn = (type, label, nullable = false) => ({
   type: `"${type}"`,
-  nullable: false,
+  nullable,
   default: label === null ? null : `'${label}'::"${type}"`,
 });
 
@@ -158,57 +173,11 @@ function migrationCatalog() {
 }
 
 function schema() {
-  const c = migrationCatalog();
-  return {
-    tables: {
-      ...Object.fromEntries(
-        Object.entries(c.tables).map(([name, columns]) => [
-          name,
-          { owner: TARGET.migrator, kind: 'r', columns },
-        ]),
-      ),
-      _prisma_migrations: { owner: TARGET.migrator, kind: 'r' },
-    },
-    enums: c.enums,
-    constraints: Object.fromEntries(
-      Object.entries(c.constraints).map(([n, x]) => [
-        n,
-        { ...x, validated: true, deferrable: false, deferred: false },
-      ]),
-    ),
-    indexes: Object.fromEntries(
-      Object.entries(c.indexes).map(([n, x]) => [n, { ...x, valid: true, ready: true }]),
-    ),
-    functions: Object.fromEntries(
-      Object.entries(c.functions).map(([n, body]) => [
-        n,
-        {
-          body,
-          owner: TARGET.migrator,
-          language: 'plpgsql',
-          result: 'trigger',
-          arguments: 0,
-          securityDefiner: false,
-          config: null,
-          volatility: 'v',
-          parallel: 'u',
-          leakproof: false,
-          strict: false,
-        },
-      ]),
-    ),
-    triggers: Object.fromEntries(
-      Object.entries(c.triggers).map(([n, x]) => [
-        n,
-        { ...x, enabled: 'O', when: null, arguments: 0 },
-      ]),
-    ),
-    userSchemas: ['public'],
-    schemaOwner: 'pg_database_owner',
-    foreignOwnedObjects: 0,
-    unexpectedObjects: 0,
-  };
+  return phase4Facts(
+    JSON.parse(readFileSync(new URL('./phase4-catalog.json', import.meta.url), 'utf8')).catalog,
+  );
 }
+
 const privileges = (role = TARGET.verifier) => ({
   role,
   ownsObjects: 0,
@@ -242,7 +211,7 @@ for (const [name, mutate] of [
     mutate(f);
     assert.throws(() => verifyFreshFacts(f));
   });
-test('independent migration-derived catalog passes exact structural comparison', () =>
+test('independently captured PostgreSQL catalog passes exact structural comparison', () =>
   verifySchemaFacts(schema()));
 for (const [name, mutate] of [
   ['missing table', (f) => delete f.tables.users],
@@ -309,6 +278,7 @@ for (const [name, mutate] of [
     mutate(f);
     assert.throws(() => verifyPrivileges(f, f.role, 'before'));
   });
+
 function runtimePrivileges() {
   const f = privileges(TARGET.runtime);
   f.tablePrivileges = Object.fromEntries(
@@ -317,7 +287,8 @@ function runtimePrivileges() {
       t === 'audit_events' ? ['INSERT', 'SELECT'] : ['INSERT', 'SELECT', 'UPDATE'],
     ]),
   );
-  f.tablePrivileges.invoice_voids = ['INSERT', 'SELECT'];
+  for (const table of APPEND_ONLY_RUNTIME_TABLES) f.tablePrivileges[table] = ['INSERT', 'SELECT'];
+  f.tablePrivileges.effective_stay_assignments = ['SELECT'];
   return f;
 }
 test('runtime gets exactly application CRUD subset and append-only audit and void history', () => {
@@ -326,20 +297,20 @@ test('runtime gets exactly application CRUD subset and append-only audit and voi
   f.tablePrivileges.audit_events.push('UPDATE');
   assert.throws(() => verifyPrivileges(f, TARGET.runtime));
 });
-for (const privilege of ['UPDATE', 'DELETE'])
-  test(`runtime invoice_voids rejects ${privilege}`, () => {
-    const f = runtimePrivileges();
-    f.tablePrivileges.invoice_voids.push(privilege);
-    assert.throws(() => verifyPrivileges(f, TARGET.runtime));
-  });
-for (const privilege of ['SELECT', 'INSERT'])
-  test(`runtime invoice_voids requires ${privilege}`, () => {
-    const f = runtimePrivileges();
-    f.tablePrivileges.invoice_voids = f.tablePrivileges.invoice_voids.filter(
-      (p) => p !== privilege,
-    );
-    assert.throws(() => verifyPrivileges(f, TARGET.runtime));
-  });
+for (const table of APPEND_ONLY_RUNTIME_TABLES) {
+  for (const privilege of ['UPDATE', 'DELETE'])
+    test(`runtime ${table} rejects ${privilege}`, () => {
+      const f = runtimePrivileges();
+      f.tablePrivileges[table].push(privilege);
+      assert.throws(() => verifyPrivileges(f, TARGET.runtime));
+    });
+  for (const privilege of ['SELECT', 'INSERT'])
+    test(`runtime ${table} requires ${privilege}`, () => {
+      const f = runtimePrivileges();
+      f.tablePrivileges[table] = f.tablePrivileges[table].filter((p) => p !== privilege);
+      assert.throws(() => verifyPrivileges(f, TARGET.runtime));
+    });
+}
 function ledgerAdapter({ missing = false, fail = false, badSchema = false, mutate = false } = {}) {
   const calls = [];
   return {
@@ -445,8 +416,15 @@ test('unexpected user relations or domains fail schema acceptance', () => {
   assert.throws(() => verifySchemaFacts(f));
 });
 
-test('literal enum matrix agrees with every enum column declared by approved migration SQL', () => {
-  const catalog = migrationCatalog();
+test('literal enum matrix agrees with the independently captured migration catalog', () => {
+  const captured = schema();
+  const catalog = {
+    tables: Object.fromEntries(
+      Object.entries(captured.tables)
+        .filter(([, t]) => t.columns)
+        .map(([name, t]) => [name, t.columns]),
+    ),
+  };
   const actual = Object.entries(catalog.tables)
     .flatMap(([table, cols]) =>
       Object.entries(cols)
@@ -455,12 +433,13 @@ test('literal enum matrix agrees with every enum column declared by approved mig
     )
     .sort();
   assert.deepEqual(actual, ENUM_COLUMNS.map(([table, column]) => `${table}.${column}`).sort());
-  for (const [table, column, type, label] of ENUM_COLUMNS)
-    assert.deepEqual(catalog.tables[table][column], enumColumn(type, label));
+  for (const [table, column, type, label, nullable] of ENUM_COLUMNS)
+    assert.deepEqual(catalog.tables[table][column], enumColumn(type, label, nullable));
+  assert.deepEqual(migrationCatalog().enums, captured.enums);
 });
-for (const [table, column, type, label] of ENUM_COLUMNS) {
+for (const [table, column, type, label, nullable] of ENUM_COLUMNS) {
   test(`reviewed enum contract includes ${table}.${column}: ${type}`, () => {
-    assert.deepEqual(SCHEMA.tables[table][column], enumColumn(type, label));
+    assert.deepEqual(SCHEMA.tables[table][column], enumColumn(type, label, nullable));
   });
   test(`missing enum column rejected: ${table}.${column}`, () => {
     const f = schema();
@@ -474,7 +453,7 @@ for (const [table, column, type, label] of ENUM_COLUMNS) {
   });
   test(`enum nullability mismatch rejected: ${table}.${column}`, () => {
     const f = schema();
-    f.tables[table].columns[column].nullable = true;
+    f.tables[table].columns[column].nullable = !nullable;
     assert.throws(() => verifySchemaFacts(f));
   });
   test(`enum default mismatch rejected: ${table}.${column}`, () => {
@@ -496,3 +475,73 @@ test('a changed enum default value or cast is rejected', () => {
     assert.throws(() => verifySchemaFacts(f));
   }
 });
+
+test('exact Phase 4 catalog remains pinned to the checked migration chain', () => {
+  const actual = JSON.parse(
+    readFileSync(new URL('./phase4-catalog.json', import.meta.url), 'utf8'),
+  ).catalog;
+  verifyPhase4Catalog(actual);
+});
+for (const [name, mutate] of [
+  ['extra relation', (c) => c.relations.push({ ...c.relations[0], name: 'unexpected' })],
+  [
+    'changed corrected-assignment view',
+    (c) => {
+      c.relations.find((r) => r.name === 'effective_stay_assignments').definition = 'SELECT 1';
+    },
+  ],
+  [
+    'missing allocation exclusion',
+    (c) => {
+      c.constraints = c.constraints.filter((x) => x.name !== 'stay_assignments_no_overlap_excl');
+    },
+  ],
+  [
+    'disabled deferred correction proof',
+    (c) => {
+      c.constraints.find((x) => x.name === 'assignment_replacement_requires_applied').deferred =
+        false;
+    },
+  ],
+  [
+    'changed history function',
+    (c) => {
+      c.functions.find((x) => x.signature === 'phase4_append_only()').body =
+        'BEGIN RETURN NEW; END';
+    },
+  ],
+  [
+    'unapproved extension member',
+    (c) => {
+      c.functions.push({
+        ...c.functions.find((x) => x.extension === 'btree_gist'),
+        signature: 'unexpected_extension_member()',
+      });
+    },
+  ],
+  [
+    'security definer on extension function',
+    (c) => {
+      c.functions.find((x) => x.extension === 'btree_gist').securityDefiner = true;
+    },
+  ],
+  [
+    'different extension version',
+    (c) => {
+      c.extensions[0].version = 'unapproved';
+    },
+  ],
+])
+  test(`exact Phase 4 catalog rejects ${name}`, () => {
+    const actual = JSON.parse(
+      readFileSync(new URL('./phase4-catalog.json', import.meta.url), 'utf8'),
+    ).catalog;
+    mutate(actual);
+    assert.throws(() => verifyPhase4Catalog(actual));
+  });
+for (const privilege of ['INSERT', 'UPDATE', 'DELETE', 'TRUNCATE'])
+  test(`corrected assignment view rejects runtime ${privilege}`, () => {
+    const facts = runtimePrivileges();
+    facts.tablePrivileges.effective_stay_assignments.push(privilege);
+    assert.throws(() => verifyPrivileges(facts, TARGET.runtime));
+  });

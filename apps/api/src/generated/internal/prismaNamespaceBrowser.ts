@@ -73,7 +73,17 @@ export const ModelName = {
   InvoiceAdjustment: 'InvoiceAdjustment',
   InvoiceVoid: 'InvoiceVoid',
   PaymentIdempotencyKey: 'PaymentIdempotencyKey',
-  LoginThrottle: 'LoginThrottle'
+  LoginThrottle: 'LoginThrottle',
+  CorrectionProposal: 'CorrectionProposal',
+  CorrectionCommandReceipt: 'CorrectionCommandReceipt',
+  CorrectionFinanceLink: 'CorrectionFinanceLink',
+  StayAssignment: 'StayAssignment',
+  Transfer: 'Transfer',
+  TransferCommandReceipt: 'TransferCommandReceipt',
+  StayAssignmentReplacement: 'StayAssignmentReplacement',
+  EffectiveStayAssignment: 'EffectiveStayAssignment',
+  TransferFinanceReview: 'TransferFinanceReview',
+  TransferFinanceResolution: 'TransferFinanceResolution'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -459,6 +469,200 @@ export const LoginThrottleScalarFieldEnum = {
 } as const
 
 export type LoginThrottleScalarFieldEnum = (typeof LoginThrottleScalarFieldEnum)[keyof typeof LoginThrottleScalarFieldEnum]
+
+
+export const CorrectionProposalScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  targetType: 'targetType',
+  fieldKey: 'fieldKey',
+  status: 'status',
+  residentTargetId: 'residentTargetId',
+  bookingTargetId: 'bookingTargetId',
+  admissionTargetId: 'admissionTargetId',
+  checkInTargetId: 'checkInTargetId',
+  checkOutTargetId: 'checkOutTargetId',
+  originalValue: 'originalValue',
+  proposedValue: 'proposedValue',
+  appliedValue: 'appliedValue',
+  expectedSnapshot: 'expectedSnapshot',
+  reason: 'reason',
+  evidenceReference: 'evidenceReference',
+  effectiveAt: 'effectiveAt',
+  recordedAt: 'recordedAt',
+  requestedBy: 'requestedBy',
+  requestedRole: 'requestedRole',
+  decidedBy: 'decidedBy',
+  decidedAt: 'decidedAt',
+  appliedAt: 'appliedAt',
+  decisionReason: 'decisionReason',
+  exceptionRationale: 'exceptionRationale',
+  staleCause: 'staleCause',
+  financialImpact: 'financialImpact',
+  correlationId: 'correlationId',
+  relatedProposalId: 'relatedProposalId',
+  relationKind: 'relationKind'
+} as const
+
+export type CorrectionProposalScalarFieldEnum = (typeof CorrectionProposalScalarFieldEnum)[keyof typeof CorrectionProposalScalarFieldEnum]
+
+
+export const CorrectionCommandReceiptScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  actorId: 'actorId',
+  idempotencyKey: 'idempotencyKey',
+  requestCheck: 'requestCheck',
+  proposalId: 'proposalId',
+  action: 'action',
+  outcomeCode: 'outcomeCode',
+  recordedAt: 'recordedAt'
+} as const
+
+export type CorrectionCommandReceiptScalarFieldEnum = (typeof CorrectionCommandReceiptScalarFieldEnum)[keyof typeof CorrectionCommandReceiptScalarFieldEnum]
+
+
+export const CorrectionFinanceLinkScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  proposalId: 'proposalId',
+  kind: 'kind',
+  outcome: 'outcome',
+  residentId: 'residentId',
+  bookingId: 'bookingId',
+  periodStart: 'periodStart',
+  invoiceId: 'invoiceId',
+  adjustmentId: 'adjustmentId',
+  reversalId: 'reversalId',
+  voidId: 'voidId',
+  paymentId: 'paymentId',
+  resolvesLinkId: 'resolvesLinkId',
+  resolvedBy: 'resolvedBy',
+  reason: 'reason',
+  createdAt: 'createdAt'
+} as const
+
+export type CorrectionFinanceLinkScalarFieldEnum = (typeof CorrectionFinanceLinkScalarFieldEnum)[keyof typeof CorrectionFinanceLinkScalarFieldEnum]
+
+
+export const StayAssignmentScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  bookingId: 'bookingId',
+  residentId: 'residentId',
+  bedId: 'bedId',
+  kind: 'kind',
+  status: 'status',
+  startAt: 'startAt',
+  endAt: 'endAt',
+  transferId: 'transferId',
+  createdAt: 'createdAt'
+} as const
+
+export type StayAssignmentScalarFieldEnum = (typeof StayAssignmentScalarFieldEnum)[keyof typeof StayAssignmentScalarFieldEnum]
+
+
+export const TransferScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  residentId: 'residentId',
+  bookingId: 'bookingId',
+  type: 'type',
+  sourceBedId: 'sourceBedId',
+  sourceRoomId: 'sourceRoomId',
+  sourcePropertyId: 'sourcePropertyId',
+  destinationBedId: 'destinationBedId',
+  destinationRoomId: 'destinationRoomId',
+  destinationPropertyId: 'destinationPropertyId',
+  reason: 'reason',
+  effectiveAt: 'effectiveAt',
+  actorUserId: 'actorUserId',
+  actorRole: 'actorRole',
+  idempotencyKey: 'idempotencyKey',
+  recordedAt: 'recordedAt'
+} as const
+
+export type TransferScalarFieldEnum = (typeof TransferScalarFieldEnum)[keyof typeof TransferScalarFieldEnum]
+
+
+export const TransferCommandReceiptScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  actorId: 'actorId',
+  idempotencyKey: 'idempotencyKey',
+  transferId: 'transferId',
+  requestCheck: 'requestCheck',
+  responseBody: 'responseBody',
+  responseVersion: 'responseVersion',
+  recordedAt: 'recordedAt'
+} as const
+
+export type TransferCommandReceiptScalarFieldEnum = (typeof TransferCommandReceiptScalarFieldEnum)[keyof typeof TransferCommandReceiptScalarFieldEnum]
+
+
+export const StayAssignmentReplacementScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  bookingId: 'bookingId',
+  residentId: 'residentId',
+  proposalId: 'proposalId',
+  actorUserId: 'actorUserId',
+  version: 'version',
+  fieldKey: 'fieldKey',
+  beforeSegments: 'beforeSegments',
+  segments: 'segments',
+  recordedAt: 'recordedAt'
+} as const
+
+export type StayAssignmentReplacementScalarFieldEnum = (typeof StayAssignmentReplacementScalarFieldEnum)[keyof typeof StayAssignmentReplacementScalarFieldEnum]
+
+
+export const EffectiveStayAssignmentScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  bookingId: 'bookingId',
+  residentId: 'residentId',
+  bedId: 'bedId',
+  kind: 'kind',
+  status: 'status',
+  startAt: 'startAt',
+  endAt: 'endAt',
+  transferId: 'transferId',
+  createdAt: 'createdAt',
+  replacementId: 'replacementId'
+} as const
+
+export type EffectiveStayAssignmentScalarFieldEnum = (typeof EffectiveStayAssignmentScalarFieldEnum)[keyof typeof EffectiveStayAssignmentScalarFieldEnum]
+
+
+export const TransferFinanceReviewScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  transferId: 'transferId',
+  bookingId: 'bookingId',
+  residentId: 'residentId',
+  requestedByUserId: 'requestedByUserId',
+  periodStart: 'periodStart',
+  reason: 'reason',
+  recordedAt: 'recordedAt'
+} as const
+
+export type TransferFinanceReviewScalarFieldEnum = (typeof TransferFinanceReviewScalarFieldEnum)[keyof typeof TransferFinanceReviewScalarFieldEnum]
+
+
+export const TransferFinanceResolutionScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  reviewId: 'reviewId',
+  actorUserId: 'actorUserId',
+  outcome: 'outcome',
+  reason: 'reason',
+  idempotencyKey: 'idempotencyKey',
+  requestCheck: 'requestCheck',
+  recordedAt: 'recordedAt'
+} as const
+
+export type TransferFinanceResolutionScalarFieldEnum = (typeof TransferFinanceResolutionScalarFieldEnum)[keyof typeof TransferFinanceResolutionScalarFieldEnum]
 
 
 export const SortOrder = {

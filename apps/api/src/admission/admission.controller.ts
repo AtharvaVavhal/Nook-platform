@@ -16,6 +16,7 @@ import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { CsrfGuard, OriginGuard, SessionGuard } from '../auth/auth.guards.js';
 import type { AuthenticatedRequest } from '../auth/auth.types.js';
 import { AdmissionService } from './admission.service.js';
+import { RequirePermission } from '../auth/permissions.js';
 
 @ApiTags('Admissions')
 @ApiBearerAuth()
@@ -24,14 +25,16 @@ import { AdmissionService } from './admission.service.js';
 export class AdmissionController {
   constructor(@Inject(AdmissionService) private readonly admissionService: AdmissionService) {}
 
+  @RequirePermission('admission.write')
   @Post()
   @UseGuards(OriginGuard, CsrfGuard)
   @ApiOperation({ summary: 'Create a new admission from a confirmed booking' })
   async create(@Req() req: AuthenticatedRequest, @Body() dto: unknown) {
     const organizationId = req.auth!.organizationId;
-    return this.admissionService.create(organizationId, dto);
+    return this.admissionService.create(organizationId, dto, req.auth!.userId);
   }
 
+  @RequirePermission('admission.read')
   @Get()
   @ApiOperation({ summary: 'List admissions with pagination and filters' })
   async findAll(@Req() req: AuthenticatedRequest, @Query() query: unknown) {
@@ -39,6 +42,7 @@ export class AdmissionController {
     return this.admissionService.findAll(organizationId, query);
   }
 
+  @RequirePermission('admission.read')
   @Get(':id')
   @ApiOperation({ summary: 'Get an admission by id' })
   async findOne(@Req() req: AuthenticatedRequest, @Param('id', ParseUUIDPipe) id: string) {
@@ -46,6 +50,7 @@ export class AdmissionController {
     return this.admissionService.findOne(organizationId, id);
   }
 
+  @RequirePermission('admission.write')
   @Put(':id')
   @UseGuards(OriginGuard, CsrfGuard)
   @ApiOperation({ summary: 'Update an admission' })
@@ -55,14 +60,15 @@ export class AdmissionController {
     @Body() dto: unknown,
   ) {
     const organizationId = req.auth!.organizationId;
-    return this.admissionService.update(organizationId, id, dto);
+    return this.admissionService.update(organizationId, id, dto, req.auth!.userId);
   }
 
+  @RequirePermission('admission.delete')
   @Delete(':id')
   @UseGuards(OriginGuard, CsrfGuard)
   @ApiOperation({ summary: 'Cancel an admission' })
   async cancel(@Req() req: AuthenticatedRequest, @Param('id', ParseUUIDPipe) id: string) {
     const organizationId = req.auth!.organizationId;
-    return this.admissionService.cancel(organizationId, id);
+    return this.admissionService.cancel(organizationId, id, req.auth!.userId);
   }
 }

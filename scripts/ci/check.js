@@ -51,15 +51,16 @@ const testNames = (directory) =>
     .filter((x) => x.endsWith('.test.ts'))
     .sort();
 assert.deepEqual(
-  [...manifest.quality, ...manifest['initial-migration'], ...manifest.manual]
-    .map((name) => `${name}.test.ts`)
-    .sort(),
+  [...manifest.quality, ...manifest.manual].map((name) => `${name}.test.ts`).sort(),
   testNames('apps/api/test'),
 );
 assert.deepEqual(manifest['initial-migration'], ['database-migration']);
 assert.deepEqual(manifest.manual, ['restore-drill']);
 assert.deepEqual(
-  manifest.full.map((name) => `${name}.integration.test.ts`).sort(),
+  [
+    ...manifest.full.map((name) => `${name}.integration.test.ts`),
+    ...manifest['initial-migration'].map((name) => `${name}.test.ts`),
+  ].sort(),
   testNames('apps/api/test/integration'),
 );
 for (const name of manifest.full) {
@@ -87,7 +88,9 @@ assert.ok(read('scripts/ci/g6a-prisma.config.ts').includes("env('NOOK_CI_G6A_MIG
 assert.ok(runner.includes('DATABASE_MARKER'));
 assert.ok(runner.includes('validateEnvironment(env)'));
 assert.ok(
-  read('apps/api/test/database-migration.test.ts').includes('NOOK_DATABASE_TESTS_REQUIRED'),
+  read('apps/api/test/integration/database-migration.test.ts').includes(
+    'NOOK_DATABASE_TESTS_REQUIRED',
+  ),
 );
 for (const dir of fs
   .readdirSync('prisma/migrations', { withFileTypes: true })
@@ -130,9 +133,9 @@ for (const file of [
 const history = JSON.parse(read('scripts/ci/g6b-migrations.json'));
 assert.equal(history.version, 1);
 assert.equal(history.provider, 'postgresql');
-assert.equal(history.migrations.length, 18);
+assert.equal(history.migrations.length, 24);
 const migrationNames = history.migrations.map((m) => m.name);
-assert.equal(new Set(migrationNames).size, 18);
+assert.equal(new Set(migrationNames).size, 24);
 assert.deepEqual(migrationNames, [...migrationNames].sort());
 assert.deepEqual(
   fs.readdirSync('prisma/migrations').sort(),

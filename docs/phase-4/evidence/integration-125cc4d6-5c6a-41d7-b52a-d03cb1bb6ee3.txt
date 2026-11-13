@@ -1,0 +1,29 @@
+{"probe":"permission-setup-error","message":"inconsistent types deduced for parameter $1","stack":["    at /Users/atharva/Downloads/nook-phase4-1/node_modules/pg/lib/client.js:545:17","    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)","    at async seedOrg (/Users/atharva/Downloads/nook-phase4-1/apps/api/test/integration/permission-layer.integration.test.ts:68:3)"]}
+✖ every registered route is discovered and none is an unsupported method (8.113083ms)
+✖ OWNER and PROPERTY_MANAGER behavior is identical to the pre-permission-layer baseline on every route (0.218042ms)
+✖ no authenticated OWNER or PM request ends in a server error (0.059666ms)
+✖ anonymous callers are refused on every route that is not public (0.025458ms)
+✖ cross-organization reads: a foreign identifier is 404, an own identifier is 200 (0.025ms)
+✖ cross-organization lists never contain the other tenant (0.021375ms)
+✖ cross-organization writes are refused and change nothing (0.030875ms)
+✖ a client-supplied organization id never overrides the session organization (0.03225ms)
+✖ /Users/atharva/Downloads/nook-phase4-1/apps/api/test/integration/permission-layer.integration.test.ts (0.063709ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 0
+ℹ fail 9
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 773.143834
+✖ failing tests:
+✖ every registered route is discovered and none is an unsupported method (8.113083ms)
+✖ OWNER and PROPERTY_MANAGER behavior is identical to the pre-permission-layer baseline on every route (0.218042ms)
+✖ no authenticated OWNER or PM request ends in a server error (0.059666ms)
+✖ anonymous callers are refused on every route that is not public (0.025458ms)
+✖ cross-organization reads: a foreign identifier is 404, an own identifier is 200 (0.025ms)
+✖ cross-organization lists never contain the other tenant (0.021375ms)
+✖ cross-organization writes are refused and change nothing (0.030875ms)
+✖ a client-supplied organization id never overrides the session organization (0.03225ms)
+✖ /Users/atharva/Downloads/nook-phase4-1/apps/api/test/integration/permission-layer.integration.test.ts (0.063709ms)
+Exit: 1

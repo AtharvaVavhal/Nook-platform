@@ -1,8 +1,15 @@
+import { OriginalAssignmentWriter } from '../common/assignment-adoption.js';
+import {
+  activeBedOccupancyWhere,
+  physicalBedId,
+  assertAssignmentTimeline,
+} from '../common/stay-occupancy.js';
 import {
   BadRequestException,
   ConflictException,
   Inject,
   Injectable,
+  Optional,
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from '../database/prisma.service.js';
@@ -17,6 +24,9 @@ import {
   optionalText,
   resolveInstant,
 } from './checkin.rules.js';
+import { auditRequestId } from '../observability/request-context.js';
+import { acquireOrgGate } from '../common/org-gate.js';
+import { CorrectionError } from '../corrections/corrections.rules.js';
 
 type Tx = Prisma.TransactionClient;
 
@@ -26,10 +36,19 @@ const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const INCLUDE = {
   resident: true,
   bed: { include: { room: true } },
-  booking: true,
+  booking: { include: { effectiveAssignments: { include: { bed: { include: { room: true } } } } } },
   admission: true,
   checkOut: true,
 } satisfies Prisma.CheckInInclude;
+
+/** Preserve the original check-in identity while exposing the reconciled physical location to readers. */
+function withPhysicalBed(stay: Prisma.CheckInGetPayload<{ include: typeof INCLUDE }>) {
+  assertAssignmentTimeline(stay);
+  const segments = [...stay.booking.effectiveAssignments].sort(
+    (a, b) => a.startAt.getTime() - b.startAt.getTime(),
+  );
+  return { ...stay, physicalBed: segments.at(-1)?.bed ?? stay.bed };
+}
 
 /**
  * Check-in / check-out.
@@ -54,7 +73,12 @@ const INCLUDE = {
  */
 @Injectable()
 export class CheckInService {
-  constructor(@Inject(PrismaService) private readonly prisma: PrismaService) {}
+  constructor(
+    @Inject(PrismaService) private readonly prisma: PrismaService,
+    @Optional()
+    @Inject(OriginalAssignmentWriter)
+    private readonly assignments?: OriginalAssignmentWriter,
+  ) {}
 
   private async lock(
     tx: Tx,
@@ -71,7 +95,7 @@ export class CheckInService {
     return rows.length > 0;
   }
 
-  async create(organizationId: string, dto: Record<string, unknown>) {
+  async create(organizationId: string, dto: Record<string, unknown>, actorUserId?: string) {
     const admissionId = requireUuid(dto.admissionId, 'admissionId');
     const checkInAt = resolveInstant(dto.checkInAt, 'checkInAt');
     const notes = optionalText(dto.notes, 'notes', MAX_NOTES_LENGTH);
@@ -85,6 +109,10 @@ export class CheckInService {
 
     try {
       return await this.prisma.db.$transaction(async (tx) => {
+        // Organization gate first (specification v1.3 10.2), then the existing Bed -> Resident -> Booking -> Admission locks.
+        // Revalidate both active occupancy and recorded physical intervals under the lifecycle gate.
+        // Assignment segments are authoritative; bookings with no assignments retain legacy interval checks.
+        await acquireOrgGate(tx, organizationId);
         if (!(await this.lock(tx, 'beds', probe.bedId, organizationId)))
           throw new NotFoundException('Bed not found');
         await this.lock(tx, 'residents', probe.residentId, organizationId);
@@ -106,13 +134,22 @@ export class CheckInService {
           tx.booking.findFirstOrThrow({ where: { id: admission.bookingId, organizationId } }),
           tx.bed.findFirstOrThrow({
             where: { id: admission.bedId, organizationId },
-            include: { room: { select: { archivedAt: true } } },
+            include: {
+              room: {
+                select: {
+                  archivedAt: true,
+                  floor: {
+                    select: { archivedAt: true, property: { select: { archivedAt: true } } },
+                  },
+                },
+              },
+            },
           }),
           tx.checkIn.findFirst({
             where: { admissionId, organizationId },
             select: { status: true },
           }),
-          tx.checkIn.count({ where: { organizationId, bedId: admission.bedId, status: 'ACTIVE' } }),
+          tx.checkIn.count({ where: activeBedOccupancyWhere(organizationId, admission.bedId) }),
           tx.checkIn.count({
             where: { organizationId, residentId: admission.residentId, status: 'ACTIVE' },
           }),
@@ -135,9 +172,30 @@ export class CheckInService {
           activeOnBed: onBed > 0,
           activeForResident: forResident > 0,
         });
+        // A new stay is open-ended, so it overlaps any recorded stay of this bed or resident that ended after its start.
+        // Corrections may move a completed stay's check-out (corrections.apply.ts); both writers hold the organization
+        // gate, so whichever commits second sees the other and one of the two is refused rather than overlapping.
+        const overlapping = await tx.$queryRaw<{ id: string }[]>(Prisma.sql`
+          SELECT s.id FROM effective_stay_assignments s
+          WHERE s.organization_id = ${organizationId}::uuid
+            AND (s.bed_id = ${admission.bedId}::uuid OR s.resident_id = ${admission.residentId}::uuid)
+            AND COALESCE(s.end_at, 'infinity'::timestamptz) > ${checkInAt}::timestamptz
+          UNION ALL
+          SELECT o.id FROM check_outs o
+          JOIN check_ins c ON c.id = o.check_in_id AND c.organization_id = o.organization_id
+          WHERE o.organization_id = ${organizationId}::uuid
+            AND (c.bed_id = ${admission.bedId}::uuid OR c.resident_id = ${admission.residentId}::uuid)
+            AND NOT EXISTS (SELECT 1 FROM stay_assignments s WHERE s.organization_id = c.organization_id AND s.booking_id = c.booking_id)
+            AND o.check_out_at > ${checkInAt}::timestamptz
+          LIMIT 1`);
+        if (overlapping.length > 0) {
+          throw new ConflictException(
+            'This check-in would overlap an earlier stay recorded for this bed or resident',
+          );
+        }
         // KYC integration point: see the class comment. Pending; nothing is checked here yet.
 
-        return tx.checkIn.create({
+        const checkIn = await tx.checkIn.create({
           data: {
             checkInAt,
             notes,
@@ -150,6 +208,25 @@ export class CheckInService {
           },
           include: INCLUDE,
         });
+        await this.assignments?.mirror(tx, organizationId, checkIn.id);
+        await tx.auditEvent.create({
+          data: {
+            organizationId,
+            actorUserId: actorUserId ?? null,
+            action: 'checkin.created',
+            targetType: 'check_in',
+            targetId: checkIn.id,
+            requestId: auditRequestId(),
+            metadata: {
+              admissionId,
+              residentId: admission.residentId,
+              bedId: admission.bedId,
+              bookingId: admission.bookingId,
+              checkInAt: checkInAt.toISOString(),
+            } as Prisma.InputJsonObject,
+          },
+        });
+        return checkIn;
       }, TX_OPTIONS);
     } catch (error) {
       throw this.translate(error);
@@ -196,7 +273,13 @@ export class CheckInService {
       }),
       this.prisma.db.checkIn.count({ where }),
     ]);
-    return { items, total, page, limit, totalPages: Math.ceil(total / limit) };
+    return {
+      items: items.map(withPhysicalBed),
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+    };
   }
 
   /** Occupancy is the set of ACTIVE check-ins. Bed status alone (in service / out of service) never means occupied. */
@@ -206,11 +289,20 @@ export class CheckInService {
       select: {
         id: true,
         bedId: true,
-        booking: { select: { id: true, endDate: true } },
+        booking: {
+          select: {
+            id: true,
+            endDate: true,
+            effectiveAssignments: {
+              where: { organizationId },
+              select: { bedId: true, status: true, endAt: true },
+            },
+          },
+        },
         resident: { select: { firstName: true, lastName: true } },
       },
     });
-    const occupiedBedIds = [...new Set(active.map((row) => row.bedId))];
+    const occupiedBedIds = [...new Set(active.map(physicalBedId))];
     // Residents still checked in past their booking's end date: not billed without an approved extension.
     const now = new Date();
     const overstays = active
@@ -218,7 +310,7 @@ export class CheckInService {
       .map((row) => ({
         checkInId: row.id,
         bookingId: row.booking.id,
-        bedId: row.bedId,
+        bedId: physicalBedId(row),
         residentName: `${row.resident.firstName} ${row.resident.lastName}`.trim(),
         bookingEndDate: row.booking.endDate.toISOString(),
       }))
@@ -243,7 +335,7 @@ export class CheckInService {
       include: INCLUDE,
     });
     if (!checkIn) throw new NotFoundException('Check-in not found');
-    return checkIn;
+    return withPhysicalBed(checkIn);
   }
 
   /**
@@ -270,12 +362,39 @@ export class CheckInService {
     await this.findOne(organizationId, id);
     const data: Prisma.CheckInUpdateInput = {};
     if (dto.notes !== undefined) data.notes = optionalText(dto.notes, 'notes', MAX_NOTES_LENGTH);
-    const result = await this.prisma.db.checkIn.updateMany({ where: { id, organizationId }, data });
-    if (result.count !== 1) throw new NotFoundException('Check-in not found');
+    if (Object.keys(data).length > 0) {
+      await this.prisma.db.$transaction(async (tx) => {
+        await acquireOrgGate(tx, organizationId);
+        if (!(await this.lock(tx, 'check_ins', id, organizationId))) {
+          throw new NotFoundException('Check-in not found');
+        }
+        const current = await tx.checkIn.findFirst({
+          where: { id, organizationId },
+          select: { status: true, checkOut: { select: { id: true } } },
+        });
+        if (!current) throw new NotFoundException('Check-in not found');
+        // A CHECKED_OUT check-in with no CheckOut row uses `updatedAt` as its billing end. A notes edit would move that
+        // boundary, so it is refused (fail closed); no checkout is fabricated.
+        if (current.status === 'CHECKED_OUT' && !current.checkOut) {
+          throw new CorrectionError(
+            409,
+            'LIFECYCLE_CONFLICT',
+            'This legacy check-in has no check-out record, so its notes cannot be edited without moving its billing boundary.',
+          );
+        }
+        const result = await tx.checkIn.updateMany({ where: { id, organizationId }, data });
+        if (result.count !== 1) throw new NotFoundException('Check-in not found');
+      }, TX_OPTIONS);
+    }
     return this.findOne(organizationId, id);
   }
 
-  async checkOut(organizationId: string, checkInId: string, dto: Record<string, unknown>) {
+  async checkOut(
+    organizationId: string,
+    checkInId: string,
+    dto: Record<string, unknown>,
+    actorUserId?: string,
+  ) {
     requireUuid(checkInId, 'checkInId');
     const checkOutAt = resolveInstant(dto.checkOutAt, 'checkOutAt');
     const reason = optionalText(dto.reason, 'reason', MAX_REASON_LENGTH);
@@ -283,6 +402,21 @@ export class CheckInService {
 
     try {
       return await this.prisma.db.$transaction(async (tx) => {
+        await acquireOrgGate(tx, organizationId);
+        const probe = await tx.checkIn.findFirst({ where: { id: checkInId, organizationId } });
+        if (!probe) throw new NotFoundException('Check-in not found');
+        const segments = await tx.effectiveStayAssignment.findMany({
+          where: { organizationId, bookingId: probe.bookingId },
+        });
+        const activeSegments = segments.filter(
+          (segment) => segment.status === 'ACTIVE' && segment.endAt === null,
+        );
+        if (segments.length && activeSegments.length !== 1)
+          throw new ConflictException('Active stay assignment requires review');
+        const assignment = activeSegments[0];
+        const currentBedId = assignment?.bedId ?? probe.bedId;
+        await this.lock(tx, 'beds', currentBedId, organizationId);
+        await this.lock(tx, 'bookings', probe.bookingId, organizationId);
         if (!(await this.lock(tx, 'check_ins', checkInId, organizationId))) {
           throw new NotFoundException('Check-in not found');
         }
@@ -295,6 +429,17 @@ export class CheckInService {
         assertMatchesParent(dto.bookingId, checkIn.bookingId, 'bookingId', 'check-in');
         assertCanCheckOut(checkIn, checkOutAt);
 
+        if (assignment && checkOutAt <= assignment.startAt) {
+          throw new ConflictException('Check-out must be after the current assignment start');
+        }
+        if (assignment) {
+          const closed = await tx.stayAssignment.updateMany({
+            where: { id: assignment.id, organizationId, status: 'ACTIVE', endAt: null },
+            data: { status: 'COMPLETED', endAt: checkOutAt },
+          });
+          if (closed.count !== 1)
+            throw new ConflictException('Current assignment changed; refresh and retry');
+        }
         const checkOut = await tx.checkOut.create({
           data: {
             checkOutAt,
@@ -303,6 +448,8 @@ export class CheckInService {
             organization: { connect: { id: organizationId } },
             checkIn: { connect: { id: checkInId } },
             resident: { connect: { id: checkIn.residentId } },
+            // The lifecycle integrity trigger retains the original check-in bed on CheckOut.
+            // StayAssignment records the physical destination and is closed in this transaction.
             bed: { connect: { id: checkIn.bedId } },
             booking: { connect: { id: checkIn.bookingId } },
           },
@@ -314,6 +461,26 @@ export class CheckInService {
         if (moved.count !== 1)
           throw new ConflictException('This check-in has already been checked out');
         // Nothing else is touched: the booking, admission and invoices are deliberately left as they are.
+        await tx.auditEvent.create({
+          data: {
+            organizationId,
+            actorUserId: actorUserId ?? null,
+            action: 'checkout.created',
+            targetType: 'check_out',
+            targetId: checkOut.id,
+            requestId: auditRequestId(),
+            metadata: {
+              checkInId,
+              residentId: checkIn.residentId,
+              bedId: checkIn.bedId,
+              physicalBedId: currentBedId,
+              stayAssignmentId: assignment?.id ?? null,
+              bookingId: checkIn.bookingId,
+              checkOutAt: checkOutAt.toISOString(),
+              reason: reason ?? null,
+            } as Prisma.InputJsonObject,
+          },
+        });
         return checkOut;
       }, TX_OPTIONS);
     } catch (error) {

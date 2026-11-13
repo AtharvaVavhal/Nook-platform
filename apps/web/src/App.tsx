@@ -6,21 +6,12 @@ import { FloorPlan } from './components/FloorPlan';
 import { InventoryOverview } from './components/InventoryOverview';
 import { FinanceShell } from './finance/FinanceShell';
 import { isFinanceHash } from './finance/financeRoute';
-import { isOpsHash, parseOpsRoute, opsLinks } from './ops/opsRoute';
-import { ResidentList, ResidentNew, ResidentDetail } from './ops/Residents';
-import {
-  PropertyList,
-  PropertyDetail,
-  FloorList,
-  FloorDetail,
-  RoomList,
-  RoomDetail,
-  BedList,
-} from './ops/Inventory';
-import { EnquiryList, EnquiryNew, EnquiryDetail } from './ops/Enquiries';
-import { BookingList, BookingNew } from './ops/Bookings';
+import { isOpsHash, parseOpsRoute, opsLinks, correctionsLinks } from './ops/opsRoute';
+import { OpsShell } from './ops/OpsShell';
+import { AdminShell } from './admin/AdminShell';
+import { adminLinks, isAdminHash, parseAdminRoute } from './admin/adminRoute';
+import { roleLabel as describeRole } from './access';
 import { AdmissionPanel } from './ops/Admissions';
-import { CheckInList, CheckInNew, CheckInDetail } from './ops/CheckIns';
 import { UserMenu } from './auth/UserMenu';
 import { useAuth } from './auth/AuthContext';
 import { DemoBadge } from './components/DemoBadge';
@@ -28,24 +19,51 @@ import { DemoBadge } from './components/DemoBadge';
 export function App() {
   const [state, dispatch] = useReducer(floorPlanReducer, initialFloorPlanState);
   const [navigationOpen, setNavigationOpen] = useState(false);
-  const [financeView, setFinanceView] = useState(() => isFinanceHash(window.location.hash));
-  const [opsView, setOpsView] = useState(() => isOpsHash(window.location.hash));
+  const [hash, setHash] = useState(() => window.location.hash);
+  const financeView = isFinanceHash(hash);
+  const opsView = isOpsHash(hash);
+  const adminView = isAdminHash(hash);
+  const adminRoute = adminView ? parseAdminRoute(hash).name : '';
+  const opsRoute = opsView ? parseOpsRoute(hash).name : '';
+  const section = adminView
+    ? adminRoute === 'transfer'
+      ? 'transfers'
+      : adminRoute
+    : financeView
+      ? 'finance'
+      : /^(propert|floor|room|bed)/.test(opsRoute)
+        ? 'properties'
+        : /^(enquir|overdue|upcoming)/.test(opsRoute)
+          ? 'enquiries'
+          : opsRoute.startsWith('resident')
+            ? 'residents'
+            : opsRoute.startsWith('booking')
+              ? 'bookings'
+              : opsRoute.startsWith('admission')
+                ? 'admissions'
+                : opsRoute.startsWith('check-in')
+                  ? 'check-ins'
+                  : opsRoute
+                    ? 'corrections'
+                    : hash.slice(1) || 'overview';
+  const sectionLabel =
+    section === 'overview'
+      ? 'Property overview'
+      : section === 'floor-plan'
+        ? 'Demonstration floor plan'
+        : section === 'inventory'
+          ? 'Inventory overview'
+          : section.replace(/-/g, ' ').replace(/^./, (letter) => letter.toUpperCase());
   useEffect(() => {
     const onHash = () => {
-      setFinanceView(isFinanceHash(window.location.hash));
-      setOpsView(isOpsHash(window.location.hash));
+      setHash(window.location.hash);
     };
     window.addEventListener('hashchange', onHash);
     return () => window.removeEventListener('hashchange', onHash);
   }, []);
   const { state: auth } = useAuth();
   const organizationName = auth.status === 'authenticated' ? auth.user.organization.name : '';
-  const roleLabel =
-    auth.status === 'authenticated'
-      ? auth.user.role === 'OWNER'
-        ? 'Owner'
-        : 'Property manager'
-      : '';
+  const roleLabel = auth.status === 'authenticated' ? describeRole(auth.user.role) : '';
   const initials = organizationName
     .split(/\s+/)
     .filter(Boolean)
@@ -54,10 +72,16 @@ export function App() {
     .join('');
   const totals = summarize(demoFloors.flatMap((floor) => floor.rooms));
   const populatedFloors = demoFloors.filter((floor) => floor.rooms.length).length;
-  const opsRoute = opsView ? parseOpsRoute(window.location.hash) : null;
   return (
     <div className="app-shell">
-      <a className="skip-link" href="#main">
+      <a
+        className="skip-link"
+        href="#main"
+        onClick={(event) => {
+          event.preventDefault();
+          document.getElementById('main')?.focus();
+        }}
+      >
         Skip to content
       </a>
       <aside className="sidebar">
@@ -92,58 +116,123 @@ export function App() {
         >
           <p className="sidebar-label">YOUR WORKSPACE</p>
           <nav aria-label="Primary navigation" onClick={() => setNavigationOpen(false)}>
-            <a className="nav-item" href="#overview">
+            <a
+              className="nav-item"
+              href="#overview"
+              aria-current={section === 'overview' ? 'page' : undefined}
+            >
               <Icon name="building" />
               Property overview
             </a>
-            <a className="nav-item" href="#floor-plan">
+            <a
+              className="nav-item"
+              href="#floor-plan"
+              aria-current={section === 'floor-plan' ? 'page' : undefined}
+            >
               <Icon name="layers" />
               Interactive floor plan
             </a>
-            <a className="nav-item" href="#inventory">
+            <a
+              className="nav-item"
+              href="#inventory"
+              aria-current={section === 'inventory' ? 'page' : undefined}
+            >
               <Icon name="grid" />
               Inventory overview
             </a>
-            <a className="nav-item" href={opsLinks.admissions}>
+            <a
+              className="nav-item"
+              href={opsLinks.admissions}
+              aria-current={section === 'admissions' ? 'page' : undefined}
+            >
               <Icon name="layers" />
               Admissions
             </a>
-            <a className="nav-item" href={opsLinks.properties}>
+            <a
+              className="nav-item"
+              href={opsLinks.properties}
+              aria-current={section === 'properties' ? 'page' : undefined}
+            >
               <Icon name="grid" />
               Properties
             </a>
-            <a className="nav-item" href={opsLinks.residents}>
+            <a
+              className="nav-item"
+              href={opsLinks.residents}
+              aria-current={section === 'residents' ? 'page' : undefined}
+            >
               <Icon name="layers" />
               Residents
             </a>
-            <a className="nav-item" href={opsLinks.enquiries}>
+            <a
+              className="nav-item"
+              href={opsLinks.enquiries}
+              aria-current={section === 'enquiries' ? 'page' : undefined}
+            >
               <Icon name="layers" />
               Enquiries
             </a>
-            <a className="nav-item" href={opsLinks.bookings}>
+            <a
+              className="nav-item"
+              href={opsLinks.bookings}
+              aria-current={section === 'bookings' ? 'page' : undefined}
+            >
               <Icon name="layers" />
               Bookings
             </a>
-            <a className="nav-item" href={opsLinks.checkIns}>
+            <a
+              className="nav-item"
+              href={opsLinks.checkIns}
+              aria-current={section === 'check-ins' ? 'page' : undefined}
+            >
               <Icon name="layers" />
               Check-ins
+            </a>
+            <a
+              className="nav-item"
+              href={correctionsLinks.list}
+              aria-current={section === 'corrections' ? 'page' : undefined}
+            >
+              <Icon name="layers" />
+              Corrections
             </a>
             <a className="nav-item" href="#finance" aria-current={financeView ? 'page' : undefined}>
               <Icon name="layers" />
               Finance
             </a>
+            <a
+              className="nav-item"
+              href={adminLinks.transfers}
+              aria-current={section === 'transfers' ? 'page' : undefined}
+            >
+              <Icon name="layers" />
+              Transfers
+            </a>
+            <a
+              className="nav-item"
+              href={adminLinks.notifications}
+              aria-current={section === 'notifications' ? 'page' : undefined}
+            >
+              <Icon name="layers" />
+              Notifications
+            </a>
+            <a
+              className="nav-item"
+              href={adminLinks.staff}
+              aria-current={section === 'staff' ? 'page' : undefined}
+            >
+              <Icon name="layers" />
+              Staff and access
+            </a>
+            <a
+              className="nav-item"
+              href={adminLinks.settings()}
+              aria-current={section === 'settings' ? 'page' : undefined}
+            >
+              <Icon name="layers" />
+              Settings
+            </a>
           </nav>
-          <div className="planned-modules">
-            <p className="sidebar-label">ON THE HORIZON</p>
-            <ul>
-              {['Booking', 'Operations'].map((module) => (
-                <li key={module}>
-                  <span>{module}</span>
-                  <small>Planned</small>
-                </li>
-              ))}
-            </ul>
-          </div>
         </div>
         <div className="sidebar-note">
           <span className="sidebar-note-icon">
@@ -158,40 +247,20 @@ export function App() {
       </aside>
       <main className="main-content" id="main" tabIndex={-1}>
         <header className="topbar">
-          <div className="breadcrumb">
-            Workspace <Icon name="arrow" size={13} />
-            <span>Property management</span>
-          </div>
+          <nav className="breadcrumb" aria-label="Breadcrumb">
+            <a href="#overview">Workspace</a> <Icon name="arrow" size={13} />
+            <span aria-current="page">{sectionLabel}</span>
+          </nav>
           <div className="topbar-actions">
             <UserMenu />
           </div>
         </header>
-        {financeView ? (
+        {adminView ? (
+          <AdminShell />
+        ) : financeView ? (
           <FinanceShell />
         ) : opsView ? (
-          (() => {
-            const r = opsRoute;
-            if (!r) return <ResidentList />;
-            if (r.name === 'resident-new') return <ResidentNew />;
-            if (r.name === 'resident') return <ResidentDetail id={r.id} />;
-            if (r.name === 'properties') return <PropertyList />;
-            if (r.name === 'property') return <PropertyDetail id={r.id} />;
-            if (r.name === 'floors') return <FloorList propertyId={r.propertyId} />;
-            if (r.name === 'floor') return <FloorDetail propertyId={r.propertyId} id={r.id} />;
-            if (r.name === 'rooms') return <RoomList propertyId={r.propertyId} />;
-            if (r.name === 'room') return <RoomDetail propertyId={r.propertyId} id={r.id} />;
-            if (r.name === 'beds') return <BedList roomId={r.roomId} />;
-            if (r.name === 'enquiries') return <EnquiryList />;
-            if (r.name === 'enquiry-new') return <EnquiryNew />;
-            if (r.name === 'enquiry') return <EnquiryDetail id={r.id} />;
-            if (r.name === 'bookings' || r.name === 'booking') return <BookingList />;
-            if (r.name === 'booking-new') return <BookingNew />;
-            if (r.name === 'admissions' || r.name === 'admission') return <AdmissionPanel />;
-            if (r.name === 'check-ins') return <CheckInList />;
-            if (r.name === 'check-in-new') return <CheckInNew />;
-            if (r.name === 'check-in') return <CheckInDetail id={r.id} />;
-            return <ResidentList />;
-          })()
+          <OpsShell />
         ) : (
           <>
             <section id="overview" aria-labelledby="page-title">
@@ -292,7 +361,7 @@ export function App() {
         )}
         <footer className="footer-note">
           <span>Thoughtfully organised. Simply nook.</span>
-          {financeView ? null : (
+          {financeView || adminView ? null : (
             <span>
               Sections marked DEMO DATA are samples. Admissions and finance use your real records.
             </span>

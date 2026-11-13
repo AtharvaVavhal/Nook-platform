@@ -16,6 +16,7 @@ import { CsrfGuard, OriginGuard, SessionGuard } from '../auth/auth.guards.js';
 import type { AuthenticatedRequest } from '../auth/auth.types.js';
 import { BookingService } from './booking.service.js';
 import { parseAvailabilityQuery } from './booking.input.js';
+import { RequirePermission } from '../auth/permissions.js';
 
 @ApiTags('Bookings')
 @ApiBearerAuth()
@@ -24,14 +25,16 @@ import { parseAvailabilityQuery } from './booking.input.js';
 export class BookingController {
   constructor(@Inject(BookingService) private readonly bookingService: BookingService) {}
 
+  @RequirePermission('booking.write')
   @Post()
   @UseGuards(OriginGuard, CsrfGuard)
   @ApiOperation({ summary: 'Create a new booking' })
   async create(@Req() req: AuthenticatedRequest, @Body() dto: unknown) {
     const organizationId = req.auth!.organizationId;
-    return this.bookingService.create(organizationId, dto);
+    return this.bookingService.create(organizationId, dto, req.auth!.userId);
   }
 
+  @RequirePermission('booking.read')
   @Get()
   @ApiOperation({ summary: 'List bookings with pagination and filters' })
   async findAll(@Req() req: AuthenticatedRequest, @Query() query: unknown) {
@@ -39,6 +42,7 @@ export class BookingController {
     return this.bookingService.findAll(organizationId, query);
   }
 
+  @RequirePermission('booking.read')
   @Get(':id')
   @ApiOperation({ summary: 'Get a booking by id' })
   async findOne(@Req() req: AuthenticatedRequest, @Param('id', ParseUUIDPipe) id: string) {
@@ -46,6 +50,7 @@ export class BookingController {
     return this.bookingService.findOne(organizationId, id);
   }
 
+  @RequirePermission('booking.write')
   @Put(':id')
   @UseGuards(OriginGuard, CsrfGuard)
   @ApiOperation({ summary: 'Update a booking' })
@@ -58,6 +63,7 @@ export class BookingController {
     return this.bookingService.update(organizationId, id, dto, req.auth!.userId);
   }
 
+  @RequirePermission('booking.extend')
   @Post(':id/extend')
   @UseGuards(OriginGuard, CsrfGuard)
   @ApiOperation({ summary: 'Extend a booking end date (reason required, audited)' })
@@ -66,6 +72,7 @@ export class BookingController {
     return this.bookingService.extend({ organizationId, userId, role }, id, body);
   }
 
+  @RequirePermission('booking.cancel')
   @Delete(':id')
   @UseGuards(OriginGuard, CsrfGuard)
   @ApiOperation({ summary: 'Cancel a booking' })
@@ -74,6 +81,7 @@ export class BookingController {
     return this.bookingService.cancel(organizationId, id);
   }
 
+  @RequirePermission('booking.read')
   @Get('beds/available')
   @ApiOperation({ summary: 'Get available beds for a date range' })
   async getAvailableBeds(@Req() req: AuthenticatedRequest, @Query() query: unknown) {

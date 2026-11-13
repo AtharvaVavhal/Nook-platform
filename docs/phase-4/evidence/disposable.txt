@@ -1,0 +1,41 @@
+{"runId":"f43a7951-3edb-474c-a9b2-1f0bd77b0fff","host":"127.0.0.1","port":50655,"storage":"tmpfs","freshCluster":true}
+G6A: locked Prisma migrate deploy exited successfully.
+G6A: ledger verified for 20261031154500_slice_2_2_foundation; checksum b7f83263a0bbe212148640a337cef02cc87fee68a73eb55da4ebcd639ae26b78; completed, not rolled back.
+G6A: exactly nine application tables: audit_events, beds, floors, memberships, organizations, properties, rooms, sessions, users.
+✔ initial migration creates exactly the approved tables (13.010875ms)
+✔ initial migration creates the five approved active-row indexes (9.848708ms)
+✔ initial migration uses restrictive foreign keys (6.121042ms)
+✔ active-row uniqueness permits archived-row reuse at every approved scope (16.064375ms)
+✔ tenant-scoped foreign keys and restrictive deletion are enforced (9.885ms)
+✔ audit events accept the approved structure (5.617375ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 267.730584
+{"probe":"advisory-55P03","shape":{"name":"PrismaClientKnownRequestError","code":"P2010","meta":{"driverAdapterError":{"name":"DriverAdapterError","cause":{"code":"55P03","originalCode":"55P03","kind":"postgres"}}}},"sqlStates":["55P03","55P03"],"classification":"LOCK_TIMEOUT"}
+{"probe":"ordinary-advisory-wait","elapsedMs":3102.731083,"configuredLockTimeoutMs":3000}
+✔ advisory lock_timeout aborts the ordinary gate wait and rolls back preceding writes (3119.642041ms)
+{"probe":"row-55P03","shape":{"name":"PrismaClientKnownRequestError","code":"P2010","meta":{"driverAdapterError":{"name":"DriverAdapterError","cause":{"code":"55P03","originalCode":"55P03","kind":"postgres"}}}},"sqlStates":["55P03","55P03"],"classification":"LOCK_TIMEOUT"}
+✔ row lock_timeout aborts with exact 55P03 and no automatic-retry classification (178.541917ms)
+{"probe":"intentional-40P01","shape":{"name":"PrismaClientKnownRequestError","code":"P2010","meta":{"driverAdapterError":{"name":"DriverAdapterError","cause":{"originalCode":"40P01","kind":"TransactionWriteConflict"}}}},"sqlStates":["40P01"],"classification":"DEADLOCK"}
+✔ intentional deadlock exposes exact 40P01 through the installed Prisma adapter (1026.09975ms)
+{"probe":"partial-index-23505","shape":{"name":"PrismaClientKnownRequestError","code":"P2010","meta":{"driverAdapterError":{"name":"DriverAdapterError","cause":{"originalCode":"23505","kind":"UniqueConstraintViolation","constraint":{"index":"properties_organization_id_code_active_key"}}}}},"sqlStates":["23505"],"classification":"UNIQUE_VIOLATION"}
+{"probe":"partial-index-model-create-23505","shape":{"name":"PrismaClientKnownRequestError","code":"P2002","meta":{"driverAdapterError":{"name":"DriverAdapterError","cause":{"originalCode":"23505","kind":"UniqueConstraintViolation","constraint":{"index":"properties_organization_id_code_active_key"}}},"modelName":"Property"}},"sqlStates":["23505"],"classification":"UNIQUE_VIOLATION"}
+✔ partial unique index violation exposes 23505; this is the foundation property index (71.571291ms)
+{"probe":"expired-P2028","shape":{"name":"PrismaClientKnownRequestError","code":"P2028","meta":{}},"sqlStates":[],"classification":"UNCERTAIN"}
+✔ expired interactive transaction exposes P2028 and remains UNCERTAIN (162.856833ms)
+{"probe":"queue-and-pool","holderMs":2000,"waitingRequests":2,"poolMax":10,"firstMs":2003.5744159999995,"nextMs":1904.326666,"unrelatedSqlMs":16.29279200000019}
+✔ two-second holder queues both exclusive requests; available pool capacity serves unrelated SQL (2025.559417ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 6783.244875
+CLEANUP VERIFIED f43a7951-3edb-474c-a9b2-1f0bd77b0fff: exact container removed; tmpfs discarded; no volumes created or deleted.

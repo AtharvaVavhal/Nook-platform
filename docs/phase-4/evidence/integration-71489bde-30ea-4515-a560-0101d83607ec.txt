@@ -1,0 +1,20 @@
+✖ request id: every response carries one, whatever the outcome (247.989583ms)
+✖ access log: levels follow the status, and health checks stay quiet at info (3.405916ms)
+✖ errors: an unexpected exception returns a safe 500 with the request id and nothing else (1.524167ms)
+✖ errors: a database-client error never puts its query values in the response or the log (1.02575ms)
+✖ Sentry: an unexpected 500 is reported with its request id; client errors are not; nothing sensitive is sent (397.936709ms)
+ℹ tests 169
+ℹ suites 0
+ℹ pass 164
+ℹ fail 5
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 30580.783708
+✖ failing tests:
+✖ request id: every response carries one, whatever the outcome (247.989583ms)
+✖ access log: levels follow the status, and health checks stay quiet at info (3.405916ms)
+✖ errors: an unexpected exception returns a safe 500 with the request id and nothing else (1.524167ms)
+✖ errors: a database-client error never puts its query values in the response or the log (1.02575ms)
+✖ Sentry: an unexpected 500 is reported with its request id; client errors are not; nothing sensitive is sent (397.936709ms)
+Exit: 1

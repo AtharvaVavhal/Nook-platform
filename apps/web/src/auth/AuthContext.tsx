@@ -7,7 +7,7 @@ import {
   useState,
   type ReactNode,
 } from 'react';
-import { UNAUTHORIZED_EVENT } from '../apiConfig';
+import { PASSWORD_CHANGE_REQUIRED_EVENT, UNAUTHORIZED_EVENT } from '../apiConfig';
 import { authApi, type AuthUser } from './authApi';
 
 type AuthState =
@@ -59,6 +59,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       );
     window.addEventListener(UNAUTHORIZED_EVENT, onUnauthorized);
     return () => window.removeEventListener(UNAUTHORIZED_EVENT, onUnauthorized);
+  }, []);
+
+  // A request refused because a temporary password is now in use (for example an operator reset it while this
+  // session was open): re-read the user so the gate shows the password-change page instead of failing screens.
+  useEffect(() => {
+    const onPasswordChangeRequired = () => {
+      authApi
+        .me()
+        .then((user) => {
+          if (user) setState({ status: 'authenticated', user });
+        })
+        .catch(() => undefined);
+    };
+    window.addEventListener(PASSWORD_CHANGE_REQUIRED_EVENT, onPasswordChangeRequired);
+    return () =>
+      window.removeEventListener(PASSWORD_CHANGE_REQUIRED_EVENT, onPasswordChangeRequired);
   }, []);
 
   const signIn = useCallback(async (email: string, password: string) => {

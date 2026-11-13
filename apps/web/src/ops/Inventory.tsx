@@ -22,9 +22,10 @@ export function PropertyList() {
   return (
     <section aria-labelledby="prop-title">
       <PageHead
+        id="prop-title"
         title="Properties"
         action={
-          <a className="primary-button" href={opsLinks.properties}>
+          <a className="primary-button" href={opsLinks.propertyNew}>
             Add property
           </a>
         }
@@ -36,7 +37,7 @@ export function PropertyList() {
           title="No properties found"
           hint="Add the first property to get started."
           action={
-            <a className="primary-button" href={opsLinks.properties}>
+            <a className="primary-button" href={opsLinks.propertyNew}>
               Add property
             </a>
           }
@@ -136,7 +137,7 @@ export function PropertyNew() {
       <p>
         <a href={opsLinks.properties}>← All properties</a>
       </p>
-      <PageHead title="Add property" />
+      <PageHead id="prop-new" title="Add property" />
       <PropertyForm
         onSaved={(p) => {
           window.location.hash = opsLinks.property(p.id);
@@ -162,6 +163,7 @@ export function PropertyDetail({ id }: { id: string }) {
   if (!data) return null;
   const p = data;
   const archive = () =>
+    window.confirm(`Archive ${p.name}? It will no longer be available for new stays.`) &&
     statusAction.run(async () => {
       await opsApi.inventory.properties.archive(p.id);
       setNotice('Property archived.');
@@ -172,7 +174,11 @@ export function PropertyDetail({ id }: { id: string }) {
       <p>
         <a href={opsLinks.properties}>← All properties</a>
       </p>
-      <PageHead title={p.name} action={p.archivedAt ? <Tag>Archived</Tag> : <Tag>Active</Tag>} />
+      <PageHead
+        id="prop-detail"
+        title={p.name}
+        action={p.archivedAt ? <Tag>Archived</Tag> : <Tag>Active</Tag>}
+      />
       {notice ? (
         <p className="fin-success" role="status">
           {notice}
@@ -241,10 +247,16 @@ export function FloorList({ propertyId }: { propertyId: string }) {
   );
   return (
     <section aria-labelledby="floor-title">
+      {window.location.hash.endsWith('?archived=1') ? (
+        <p className="fin-success" role="status">
+          Floor archived.
+        </p>
+      ) : null}
       <PageHead
+        id="floor-title"
         title="Floors"
         action={
-          <a className="primary-button" href={opsLinks.floors(propertyId)}>
+          <a className="primary-button" href={opsLinks.floorNew(propertyId)}>
             Add floor
           </a>
         }
@@ -256,7 +268,7 @@ export function FloorList({ propertyId }: { propertyId: string }) {
           title="No floors found"
           hint="Add the first floor to get started."
           action={
-            <a className="primary-button" href={opsLinks.floors(propertyId)}>
+            <a className="primary-button" href={opsLinks.floorNew(propertyId)}>
               Add floor
             </a>
           }
@@ -363,7 +375,7 @@ export function FloorNew({ propertyId }: { propertyId: string }) {
       <p>
         <a href={opsLinks.floors(propertyId)}>← All floors</a>
       </p>
-      <PageHead title="Add floor" />
+      <PageHead id="floor-new" title="Add floor" />
       <FloorForm
         propertyId={propertyId}
         onSaved={() => {
@@ -390,17 +402,17 @@ export function FloorDetail({ propertyId, id }: { propertyId: string; id: string
   if (error) return <ErrorState message={error} onRetry={reload} />;
   if (!floor) return <ErrorState message="Floor not found" />;
   const archive = () =>
+    window.confirm(`Archive ${floor.label}?`) &&
     statusAction.run(async () => {
       await opsApi.inventory.floors.archive(floor.id);
-      setNotice('Floor archived.');
-      reload();
+      window.location.hash = `${opsLinks.floors(propertyId)}?archived=1`;
     });
   return (
     <section aria-labelledby="floor-detail">
       <p>
         <a href={opsLinks.floors(propertyId)}>← All floors</a>
       </p>
-      <PageHead title={floor.label} />
+      <PageHead id="floor-detail" title={floor.label} />
       {notice ? (
         <p className="fin-success" role="status">
           {notice}
@@ -447,6 +459,7 @@ export function FloorDetail({ propertyId, id }: { propertyId: string; id: string
 }
 
 export function RoomList({ propertyId }: { propertyId: string }) {
+  const floors = useAsync(() => opsApi.inventory.floors.list(propertyId), [propertyId]);
   const [search, setSearch] = useState('');
   const [applied, setApplied] = useState('');
   const [floorId, setFloorId] = useState('');
@@ -460,10 +473,16 @@ export function RoomList({ propertyId }: { propertyId: string }) {
   );
   return (
     <section aria-labelledby="room-title">
+      {window.location.hash.endsWith('?archived=1') ? (
+        <p className="fin-success" role="status">
+          Room archived.
+        </p>
+      ) : null}
       <PageHead
+        id="room-title"
         title="Rooms"
         action={
-          <a className="primary-button" href={opsLinks.rooms(propertyId)}>
+          <a className="primary-button" href={opsLinks.roomNew(propertyId)}>
             Add room
           </a>
         }
@@ -490,9 +509,9 @@ export function RoomList({ propertyId }: { propertyId: string }) {
             }}
           >
             <option value="">All floors</option>
-            {data?.map((r) => (
-              <option key={r.floorId} value={r.floorId}>
-                {r.floor?.label ?? r.floorId}
+            {floors.data?.map((f) => (
+              <option key={f.id} value={f.id}>
+                {f.label}
               </option>
             ))}
           </select>
@@ -501,6 +520,7 @@ export function RoomList({ propertyId }: { propertyId: string }) {
           Search
         </button>
       </form>
+      {floors.error ? <ErrorState message={floors.error} onRetry={floors.reload} /> : null}
       {loading && !data ? <LoadingState label="Loading rooms…" /> : null}
       {error ? <ErrorState message={error} onRetry={reload} /> : null}
       {data && data.length === 0 ? (
@@ -520,7 +540,7 @@ export function RoomList({ propertyId }: { propertyId: string }) {
               <tr>
                 <th>Label</th>
                 <th>Floor</th>
-                <th>Beds</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -529,8 +549,12 @@ export function RoomList({ propertyId }: { propertyId: string }) {
                   <td>
                     <a href={opsLinks.room(propertyId, r.id)}>{r.label}</a>
                   </td>
-                  <td>{r.floor?.label ?? '—'}</td>
-                  <td>—</td>
+                  <td>
+                    {r.floor?.label ?? floors.data?.find((f) => f.id === r.floorId)?.label ?? '—'}
+                  </td>
+                  <td>
+                    <a href={opsLinks.beds(r.id)}>Manage beds</a>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -609,23 +633,32 @@ export function RoomForm({
 }
 
 export function RoomNew({ propertyId }: { propertyId: string }) {
-  const { data } = useAsync(() => opsApi.inventory.floors.list(propertyId), [propertyId]);
+  const { data, loading, error, reload } = useAsync(
+    () => opsApi.inventory.floors.list(propertyId),
+    [propertyId],
+  );
   return (
     <section aria-labelledby="room-new">
       <p>
         <a href={opsLinks.rooms(propertyId)}>← All rooms</a>
       </p>
-      <PageHead title="Add room" />
-      <RoomForm
-        propertyId={propertyId}
-        floors={data ?? []}
-        onSaved={(r) => {
-          window.location.hash = opsLinks.room(propertyId, r.id);
-        }}
-        onCancel={() => {
-          window.location.hash = opsLinks.rooms(propertyId);
-        }}
-      />
+      <PageHead id="room-new" title="Add room" />
+      {loading ? (
+        <LoadingState label="Loading floors…" />
+      ) : error ? (
+        <ErrorState message={error} onRetry={reload} />
+      ) : (
+        <RoomForm
+          propertyId={propertyId}
+          floors={data ?? []}
+          onSaved={(r) => {
+            window.location.hash = opsLinks.room(propertyId, r.id);
+          }}
+          onCancel={() => {
+            window.location.hash = opsLinks.rooms(propertyId);
+          }}
+        />
+      )}
     </section>
   );
 }
@@ -638,11 +671,10 @@ export function RoomDetail({ propertyId, id }: { propertyId: string; id: string 
     reload,
   } = useAsync(() => opsApi.inventory.rooms.list(propertyId), [propertyId]);
   const room = roomData?.find((r) => r.id === id);
-  const { data: bedData } = useAsync(() => opsApi.inventory.beds.list(id), [id]);
-  const { data: floorData } = useAsync(
-    () => opsApi.inventory.floors.list(propertyId),
-    [propertyId],
-  );
+  const beds = useAsync(() => opsApi.inventory.beds.list(id), [id]);
+  const { data: bedData } = beds;
+  const floors = useAsync(() => opsApi.inventory.floors.list(propertyId), [propertyId]);
+  const { data: floorData } = floors;
   const [editing, setEditing] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
   const statusAction = useGuardedAction();
@@ -650,39 +682,47 @@ export function RoomDetail({ propertyId, id }: { propertyId: string; id: string 
   if (error) return <ErrorState message={error} onRetry={reload} />;
   if (!room) return <ErrorState message="Room not found" />;
   const archive = () =>
+    window.confirm(`Archive ${room.label}?`) &&
     statusAction.run(async () => {
       await opsApi.inventory.rooms.archive(room.id);
-      setNotice('Room archived.');
-      reload();
+      window.location.hash = `${opsLinks.rooms(propertyId)}?archived=1`;
     });
   return (
     <section aria-labelledby="room-detail">
       <p>
         <a href={opsLinks.rooms(propertyId)}>← All rooms</a>
       </p>
-      <PageHead title={room.label} />
+      <PageHead id="room-detail" title={room.label} />
       {notice ? (
         <p className="fin-success" role="status">
           {notice}
         </p>
       ) : null}
       {editing ? (
-        <RoomForm
-          propertyId={propertyId}
-          room={room}
-          floors={floorData ?? []}
-          onCancel={() => setEditing(false)}
-          onSaved={() => {
-            setEditing(false);
-            setNotice('Details saved.');
-            reload();
-          }}
-        />
+        floors.error ? (
+          <ErrorState message={floors.error} onRetry={floors.reload} />
+        ) : floors.loading ? (
+          <LoadingState label="Loading floors…" />
+        ) : (
+          <RoomForm
+            propertyId={propertyId}
+            room={room}
+            floors={floorData ?? []}
+            onCancel={() => setEditing(false)}
+            onSaved={() => {
+              setEditing(false);
+              setNotice('Details saved.');
+              reload();
+            }}
+          />
+        )
       ) : (
         <>
           <dl className="ops-kv">
             <dt>Floor</dt>
-            <dd>{room.floor?.label ?? '—'}</dd>
+            <dd>
+              {room.floor?.label ?? floorData?.find((f) => f.id === room.floorId)?.label ?? '—'}
+            </dd>
           </dl>
           <div className="ops-actions">
             <button type="button" className="outline-button" onClick={() => setEditing(true)}>
@@ -702,13 +742,15 @@ export function RoomDetail({ propertyId, id }: { propertyId: string; id: string 
           </div>
           <FormError message={statusAction.error} />
           <h3 style={{ marginTop: 24 }}>Beds</h3>
-          {bedData ? (
+          {beds.error ? (
+            <ErrorState message={beds.error} onRetry={beds.reload} />
+          ) : bedData ? (
             bedData.length === 0 ? (
               <EmptyState
                 title="No beds"
                 hint="Add the first bed to this room."
                 action={
-                  <a className="primary-button" href={opsLinks.beds(room.id)}>
+                  <a className="primary-button" href={opsLinks.bedNew(room.id)}>
                     Add bed
                   </a>
                 }
@@ -727,7 +769,9 @@ export function RoomDetail({ propertyId, id }: { propertyId: string; id: string 
                   <tbody>
                     {bedData.map((b) => (
                       <tr key={b.id}>
-                        <td>{b.label}</td>
+                        <td>
+                          <a href={opsLinks.bed(id, b.id)}>{b.label}</a>
+                        </td>
                         <td>
                           <Tag>{label(b.operationalStatus)}</Tag>
                         </td>
@@ -755,10 +799,16 @@ export function BedList({ roomId }: { roomId: string }) {
   );
   return (
     <section aria-labelledby="bed-title">
+      {window.location.hash.endsWith('?archived=1') ? (
+        <p className="fin-success" role="status">
+          Bed archived.
+        </p>
+      ) : null}
       <PageHead
+        id="bed-title"
         title="Beds"
         action={
-          <a className="primary-button" href={opsLinks.beds(roomId)}>
+          <a className="primary-button" href={opsLinks.bedNew(roomId)}>
             Add bed
           </a>
         }
@@ -770,7 +820,7 @@ export function BedList({ roomId }: { roomId: string }) {
           title="No beds"
           hint="Add the first bed to get started."
           action={
-            <a className="primary-button" href={opsLinks.beds(roomId)}>
+            <a className="primary-button" href={opsLinks.bedNew(roomId)}>
               Add bed
             </a>
           }
@@ -790,7 +840,9 @@ export function BedList({ roomId }: { roomId: string }) {
             <tbody>
               {data.map((b) => (
                 <tr key={b.id}>
-                  <td>{b.label}</td>
+                  <td>
+                    <a href={opsLinks.bed(roomId, b.id)}>{b.label}</a>
+                  </td>
                   <td>
                     <Tag>{label(b.operationalStatus)}</Tag>
                   </td>
@@ -844,11 +896,16 @@ export function BedForm({
     }
     setErrors(found);
     if (Object.keys(found).length) return;
+    const body: BedInput = {
+      label: v.label.trim(),
+      operationalStatus: v.operationalStatus,
+      ...(v.operationalStatus === 'OUT_OF_SERVICE' ? { outOfServiceReason: reason.trim() } : {}),
+    };
     await run(async () =>
       onSaved(
         bed
-          ? await opsApi.inventory.beds.update(bed.id, v)
-          : await opsApi.inventory.beds.create(roomId, v),
+          ? await opsApi.inventory.beds.update(bed.id, body)
+          : await opsApi.inventory.beds.create(roomId, body),
       ),
     );
   }
@@ -899,7 +956,7 @@ export function BedNew({ roomId }: { roomId: string }) {
       <p>
         <a href={opsLinks.beds(roomId)}>← All beds</a>
       </p>
-      <PageHead title="Add bed" />
+      <PageHead id="bed-new" title="Add bed" />
       <BedForm
         roomId={roomId}
         onSaved={() => {
@@ -921,6 +978,7 @@ export function BedDetail({ roomId, id }: { roomId: string; id: string }) {
   const bed = data?.find((b) => b.id === id);
   const [editing, setEditing] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
+  const archive = useGuardedAction();
   if (loading && !data) return <LoadingState label="Loading bed…" />;
   if (error) return <ErrorState message={error} onRetry={reload} />;
   if (!bed) return <ErrorState message="Bed not found" />;
@@ -929,7 +987,11 @@ export function BedDetail({ roomId, id }: { roomId: string; id: string }) {
       <p>
         <a href={opsLinks.beds(roomId)}>← All beds</a>
       </p>
-      <PageHead title={bed.label} action={<Tag>{label(bed.operationalStatus)}</Tag>} />
+      <PageHead
+        id="bed-detail"
+        title={bed.label}
+        action={<Tag>{label(bed.operationalStatus)}</Tag>}
+      />
       {notice ? (
         <p className="fin-success" role="status">
           {notice}
@@ -960,7 +1022,22 @@ export function BedDetail({ roomId, id }: { roomId: string; id: string }) {
             <button type="button" className="outline-button" onClick={() => setEditing(true)}>
               Edit details
             </button>
+            <button
+              type="button"
+              className="outline-button"
+              disabled={archive.busy}
+              onClick={() => {
+                if (window.confirm(`Archive ${bed.label}?`))
+                  void archive.run(async () => {
+                    await opsApi.inventory.beds.archive(bed.id);
+                    window.location.hash = `${opsLinks.beds(roomId)}?archived=1`;
+                  });
+              }}
+            >
+              Archive bed
+            </button>
           </div>
+          <FormError message={archive.error} />
         </>
       )}
     </section>

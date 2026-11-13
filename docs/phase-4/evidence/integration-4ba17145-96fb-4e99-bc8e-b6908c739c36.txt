@@ -1,0 +1,38 @@
+﹣ performance evidence: gate holds and explicit lock acquisitions on 100 beds (69.108833ms) # SKIP
+{"probe":"historical-withdrawal","phase":"proposal-update-before-receipt","sqlStates":["23514","23514"],"prismaName":"PrismaClientKnownRequestError","prismaCode":"P2039","classification":"OTHER","constraint":"correction_proposals_self_review_check","httpStatus":500,"response":{"message":"Internal server error","statusCode":500},"transaction":"rolled-back","decisionReceipts":0}
+{"probe":"decision-race","round":0,"opponent":"reject","approve":{"status":409,"code":"INVALID_STATE"},"other":{"status":200,"code":null},"finalStatus":"REJECTED","residentFirstName":"Arahv","winnerCommitted":true,"loserRolledBack":true}
+{"probe":"decision-race","round":1,"opponent":"withdraw","approve":{"status":409,"code":"INVALID_STATE"},"other":{"status":200,"code":null},"finalStatus":"WITHDRAWN","residentFirstName":"Arahv","winnerCommitted":true,"loserRolledBack":true}
+{"probe":"decision-race","round":2,"opponent":"reject","approve":{"status":200,"code":null},"other":{"status":409,"code":"INVALID_STATE"},"finalStatus":"APPLIED","residentFirstName":"Aarav","winnerCommitted":true,"loserRolledBack":true}
+{"probe":"decision-race","round":3,"opponent":"withdraw","approve":{"status":200,"code":null},"other":{"status":409,"code":"INVALID_STATE"},"finalStatus":"APPLIED","residentFirstName":"Aarav","winnerCommitted":true,"loserRolledBack":true}
+{"probe":"decision-race","round":4,"opponent":"reject","approve":{"status":409,"code":"INVALID_STATE"},"other":{"status":200,"code":null},"finalStatus":"REJECTED","residentFirstName":"Arahv","winnerCommitted":true,"loserRolledBack":true}
+{"probe":"decision-race","round":5,"opponent":"withdraw","approve":{"status":200,"code":null},"other":{"status":409,"code":"INVALID_STATE"},"finalStatus":"APPLIED","residentFirstName":"Aarav","winnerCommitted":true,"loserRolledBack":true}
+{"probe":"decision-race","round":6,"opponent":"reject","approve":{"status":200,"code":null},"other":{"status":409,"code":"INVALID_STATE"},"finalStatus":"APPLIED","residentFirstName":"Aarav","winnerCommitted":true,"loserRolledBack":true}
+{"probe":"decision-race","round":7,"opponent":"withdraw","approve":{"status":409,"code":"INVALID_STATE"},"other":{"status":200,"code":null},"finalStatus":"WITHDRAWN","residentFirstName":"Arahv","winnerCommitted":true,"loserRolledBack":true}
+﹣ A6 scenario 1: same-field proposals, different keys (0.082625ms) # SKIP
+﹣ A6 scenario 2: different-field proposals, one resident (0.027417ms) # SKIP
+﹣ A6 scenario 3: independent name approvals (0.021291ms) # SKIP
+﹣ A6 scenario 4: booking correction vs new booking (0.018625ms) # SKIP
+﹣ A6 scenario 5: booking correction vs admission creation (0.019292ms) # SKIP
+﹣ A6 scenario 6: admission update vs check-in (0.016833ms) # SKIP
+﹣ A6 scenario 8: check-out correction vs new stay (0.018375ms) # SKIP
+﹣ A6 scenario 7: check-in correction vs check-out (0.018667ms) # SKIP
+﹣ A6 scenario 9: price correction vs createDraft (0.019291ms) # SKIP
+﹣ A6 scenario 10: check-in correction vs monthly generation (billing gap) (0.015875ms) # SKIP
+﹣ A6 scenario 11: price correction vs invoice issue (0.019ms) # SKIP
+﹣ A6 scenario 12: price correction vs payment (Resident-Invoice lock order) (0.030375ms) # SKIP
+﹣ A6 scenario 13: approve vs reject (0.020167ms) # SKIP
+﹣ A6 scenario 14: approve vs withdraw (0.023625ms) # SKIP
+﹣ A6 scenario 15: duplicate same-key approvals / lost response (0.022666ms) # SKIP
+﹣ A6 scenario 12-reversal: price correction vs reversal (0.080875ms) # SKIP
+﹣ A6 scenario 12-credit: price correction vs credit (0.023417ms) # SKIP
+﹣ A6 scenario 12-void: price correction vs void (0.021666ms) # SKIP
+﹣ A6 scenario 10-scheduler: check-in correction vs real scheduler with a billing gap (0.019833ms) # SKIP
+ℹ tests 341
+ℹ suites 0
+ℹ pass 321
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 20
+ℹ todo 0
+ℹ duration_ms 67692.627916
+Exit: 0

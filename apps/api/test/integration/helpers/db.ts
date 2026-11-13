@@ -22,12 +22,18 @@ function requireVerified(): void {
 // row lock). They refuse to hand out a client until the identity checks and the suite lock have succeeded.
 export function createMigratorClient(): Client {
   requireVerified();
-  return new Client({ connectionString: requireMigratorDatabaseUrl() });
+  const client = new Client({ connectionString: requireMigratorDatabaseUrl() });
+  // @ts-expect-error - pg Client emit 'connect' event but types don't include it
+  client.on('connect', () => client.query('SET timezone = UTC'));
+  return client;
 }
 
 export function createRuntimeClient(): Client {
   requireVerified();
-  return new Client({ connectionString: requireTestDatabaseUrl() });
+  const client = new Client({ connectionString: requireTestDatabaseUrl() });
+  // @ts-expect-error - pg Client emit 'connect' event but types don't include it
+  client.on('connect', () => client.query('SET timezone = UTC'));
+  return client;
 }
 
 export async function withMigratorClient<T>(fn: (client: Client) => Promise<T>): Promise<T> {

@@ -1,0 +1,16 @@
+{"probe":"loaded-http-timeouts","configuredLockTimeoutMs":3000,"concurrency":10,"http":[{"timestamp":"2026-11-10T05:49:03.634Z","startedMs":3176.246208,"completedMs":6247.806208,"wallMs":3071.5602080000003,"status":409,"code":"RETRY_REQUIRED"},{"timestamp":"2026-11-10T05:49:03.634Z","startedMs":3176.406583,"completedMs":6247.266208,"wallMs":3070.8614580000003,"status":409,"code":"RETRY_REQUIRED"},{"timestamp":"2026-11-10T05:49:03.634Z","startedMs":3176.437375,"completedMs":6247.657916,"wallMs":3071.220791,"status":409,"code":"RETRY_REQUIRED"},{"timestamp":"2026-11-10T05:49:03.634Z","startedMs":3176.454875,"completedMs":6247.560708,"wallMs":3071.1060410000005,"status":409,"code":"RETRY_REQUIRED"},{"timestamp":"2026-11-10T05:49:03.634Z","startedMs":3176.468833,"completedMs":6248.163166,"wallMs":3071.694625,"status":409,"code":"RETRY_REQUIRED"},{"timestamp":"2026-11-10T05:49:03.634Z","startedMs":3176.487125,"completedMs":6248.092125,"wallMs":3071.6052910000003,"status":409,"code":"RETRY_REQUIRED"},{"timestamp":"2026-11-10T05:49:03.634Z","startedMs":3176.523708,"completedMs":6247.487291,"wallMs":3070.9638330000002,"status":409,"code":"RETRY_REQUIRED"},{"timestamp":"2026-11-10T05:49:03.634Z","startedMs":3176.537958,"completedMs":6248.221166,"wallMs":3071.683417,"status":409,"code":"RETRY_REQUIRED"},{"timestamp":"2026-11-10T05:49:03.634Z","startedMs":3176.5515,"completedMs":6247.399333,"wallMs":3070.8480830000003,"status":409,"code":"RETRY_REQUIRED"},{"timestamp":"2026-11-10T05:49:03.634Z","startedMs":3176.57175,"completedMs":6248.283958,"wallMs":3071.712625,"status":409,"code":"RETRY_REQUIRED"}],"bookingCount":100,"bookingCreatedAudits":0}
+{"probe":"server-lock-timeout","failedAt":"2026-11-10T05:49:09.74675+00:00","sqlState":"55P03","startedAt":"2026-11-10T05:49:06.743351+00:00","unchanged":true,"configured":"3s","serverElapsedMs":3003.399,"exceptionBlockRolledBack":true}
+{"probe":"concurrent-correction-outcomes","concurrency":20,"outcomes":[{"status":200,"code":null},{"status":200,"code":null},{"status":200,"code":null},{"status":200,"code":null},{"status":200,"code":null},{"status":200,"code":null},{"status":200,"code":null},{"status":200,"code":null},{"status":200,"code":null},{"status":200,"code":null},{"status":200,"code":null},{"status":200,"code":null},{"status":200,"code":null},{"status":200,"code":null},{"status":200,"code":null},{"status":200,"code":null},{"status":200,"code":null},{"status":200,"code":null},{"status":200,"code":null},{"status":200,"code":null}]}
+{"probe":"performance-failure","name":"AssertionError","code":"ERR_ASSERTION","message":"The expression evaluated to a falsy value:"}
+✖ performance evidence: gate holds and explicit lock acquisitions on 100 beds (10152.843208ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 10930.412167
+✖ failing tests:
+✖ performance evidence: gate holds and explicit lock acquisitions on 100 beds (10152.843208ms)
+Exit: 1

@@ -9,12 +9,12 @@ export default [
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {
-    files: ['apps/api/**/*.ts', 'prisma.config.ts', 'scripts/**/*.js'],
+    files: ['apps/api/**/*.ts', 'prisma.config.ts', 'scripts/**/*.js', 'scripts/qa/*.{mjs,ts}', 'apps/web/vite.config.ts'],
     languageOptions: { globals: globals.node },
   },
   {
     // Browser globals are used inside page.evaluate callbacks that run in Chromium.
-    files: ['scripts/verify_property_ui.js'],
+    files: ['scripts/verify_property_ui.js', 'scripts/e2e/**/*.mjs'],
     languageOptions: { globals: { ...globals.node, ...globals.browser } },
   },
   {

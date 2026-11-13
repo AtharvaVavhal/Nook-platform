@@ -17,6 +17,7 @@ import { CsrfGuard, OriginGuard, SessionGuard } from '../auth/auth.guards.js';
 import type { AuthenticatedRequest } from '../auth/auth.types.js';
 import { ResidentService } from './resident.service.js';
 import { CreateResidentDto, UpdateResidentDto } from './resident.dto.js';
+import { RequirePermission } from '../auth/permissions.js';
 
 @ApiTags('Residents')
 @ApiBearerAuth()
@@ -25,6 +26,7 @@ import { CreateResidentDto, UpdateResidentDto } from './resident.dto.js';
 export class ResidentController {
   constructor(@Inject(ResidentService) private readonly residentService: ResidentService) {}
 
+  @RequirePermission('resident.write')
   @Post()
   @UseGuards(OriginGuard, CsrfGuard)
   @ApiOperation({ summary: 'Create a new resident' })
@@ -33,6 +35,7 @@ export class ResidentController {
     return this.residentService.create(organizationId, dto);
   }
 
+  @RequirePermission('resident.read')
   @Get()
   @ApiOperation({ summary: 'List residents with pagination and filters' })
   async findAll(@Req() req: AuthenticatedRequest, @Query() query: unknown) {
@@ -40,6 +43,7 @@ export class ResidentController {
     return this.residentService.findAll(organizationId, query);
   }
 
+  @RequirePermission('resident.read')
   @Get(':id')
   @ApiOperation({ summary: 'Get a resident by id' })
   async findOne(@Req() req: AuthenticatedRequest, @Param('id', ParseUUIDPipe) id: string) {
@@ -47,6 +51,7 @@ export class ResidentController {
     return this.residentService.findOne(organizationId, id);
   }
 
+  @RequirePermission('resident.write')
   @Put(':id')
   @UseGuards(OriginGuard, CsrfGuard)
   @ApiOperation({ summary: 'Update a resident' })
@@ -59,6 +64,7 @@ export class ResidentController {
     return this.residentService.update(organizationId, id, dto);
   }
 
+  @RequirePermission('resident.delete')
   @Delete(':id')
   @UseGuards(OriginGuard, CsrfGuard)
   @ApiOperation({ summary: 'Archive a resident' })

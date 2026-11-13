@@ -27,17 +27,20 @@ import {
   rejectOrganizationFields,
   stringField,
 } from './inventory.validation.js';
+import { RequirePermission } from '../auth/permissions.js';
 
 @Controller()
 @UseGuards(SessionGuard)
 export class InventoryController {
   constructor(@Inject(InventoryService) private readonly inventory: InventoryService) {}
 
+  @RequirePermission('inventory.read')
   @Get('properties')
   listProperties(@Req() request: AuthenticatedRequest) {
     return this.inventory.listProperties(request.auth!);
   }
 
+  @RequirePermission('inventory.write')
   @Post('properties')
   @UseGuards(OriginGuard, CsrfGuard)
   createProperty(@Req() request: AuthenticatedRequest, @Body() body: unknown) {
@@ -49,11 +52,13 @@ export class InventoryController {
     });
   }
 
+  @RequirePermission('inventory.read')
   @Get('properties/:propertyId')
   getProperty(@Req() request: AuthenticatedRequest, @Param('propertyId') propertyId: string) {
     return this.inventory.getProperty(request.auth!, parseUuid(propertyId, 'propertyId'));
   }
 
+  @RequirePermission('inventory.write')
   @Patch('properties/:propertyId')
   @UseGuards(OriginGuard, CsrfGuard)
   updateProperty(
@@ -71,6 +76,7 @@ export class InventoryController {
     });
   }
 
+  @RequirePermission('inventory.write')
   @Post('properties/:propertyId/archive')
   @UseGuards(OriginGuard, CsrfGuard)
   @HttpCode(HttpStatus.OK)
@@ -78,11 +84,13 @@ export class InventoryController {
     return this.inventory.archiveProperty(request.auth!, parseUuid(propertyId, 'propertyId'));
   }
 
+  @RequirePermission('inventory.read')
   @Get('properties/:propertyId/floors')
   listFloors(@Req() request: AuthenticatedRequest, @Param('propertyId') propertyId: string) {
     return this.inventory.listFloors(request.auth!, parseUuid(propertyId, 'propertyId'));
   }
 
+  @RequirePermission('inventory.write')
   @Post('properties/:propertyId/floors')
   @UseGuards(OriginGuard, CsrfGuard)
   createFloor(
@@ -98,6 +106,7 @@ export class InventoryController {
     });
   }
 
+  @RequirePermission('inventory.write')
   @Patch('floors/:floorId')
   @UseGuards(OriginGuard, CsrfGuard)
   updateFloor(
@@ -115,6 +124,7 @@ export class InventoryController {
     });
   }
 
+  @RequirePermission('inventory.write')
   @Post('floors/:floorId/archive')
   @UseGuards(OriginGuard, CsrfGuard)
   @HttpCode(HttpStatus.OK)
@@ -122,6 +132,7 @@ export class InventoryController {
     return this.inventory.archiveFloor(request.auth!, parseUuid(floorId, 'floorId'));
   }
 
+  @RequirePermission('inventory.read')
   @Get('properties/:propertyId/rooms')
   listRooms(
     @Req() request: AuthenticatedRequest,
@@ -137,6 +148,7 @@ export class InventoryController {
     );
   }
 
+  @RequirePermission('inventory.write')
   @Post('properties/:propertyId/rooms')
   @UseGuards(OriginGuard, CsrfGuard)
   createRoom(
@@ -152,6 +164,7 @@ export class InventoryController {
     });
   }
 
+  @RequirePermission('inventory.write')
   @Patch('rooms/:roomId')
   @UseGuards(OriginGuard, CsrfGuard)
   updateRoom(
@@ -167,6 +180,7 @@ export class InventoryController {
     });
   }
 
+  @RequirePermission('inventory.write')
   @Post('rooms/:roomId/archive')
   @UseGuards(OriginGuard, CsrfGuard)
   @HttpCode(HttpStatus.OK)
@@ -174,11 +188,13 @@ export class InventoryController {
     return this.inventory.archiveRoom(request.auth!, parseUuid(roomId, 'roomId'));
   }
 
+  @RequirePermission('inventory.read')
   @Get('rooms/:roomId/beds')
   listBeds(@Req() request: AuthenticatedRequest, @Param('roomId') roomId: string) {
     return this.inventory.listBeds(request.auth!, parseUuid(roomId, 'roomId'));
   }
 
+  @RequirePermission('inventory.write')
   @Post('rooms/:roomId/beds')
   @UseGuards(OriginGuard, CsrfGuard)
   createBed(
@@ -198,6 +214,7 @@ export class InventoryController {
     });
   }
 
+  @RequirePermission('inventory.write')
   @Patch('beds/:bedId')
   @UseGuards(OriginGuard, CsrfGuard)
   updateBed(
@@ -217,6 +234,7 @@ export class InventoryController {
     });
   }
 
+  @RequirePermission('inventory.write')
   @Post('beds/:bedId/archive')
   @UseGuards(OriginGuard, CsrfGuard)
   @HttpCode(HttpStatus.OK)
@@ -224,6 +242,7 @@ export class InventoryController {
     return this.inventory.archiveBed(request.auth!, parseUuid(bedId, 'bedId'));
   }
 
+  @RequirePermission('inventory.read')
   @Get('inventory/summary')
   getInventorySummary(@Req() request: AuthenticatedRequest) {
     return this.inventory.getInventorySummary(request.auth!);

@@ -52,3 +52,13 @@ test('extension request: missing, malformed or impossible dates and weak reasons
   bad({ newEndDate: '2027-04-01', reason: 'x'.repeat(501) });
   bad({ newEndDate: '2027-04-01', reason: 42 });
 });
+
+test('zone-less extension timestamps use Asia/Kolkata consistently with lifecycle inputs', () => {
+  assert.equal(
+    parseExtensionRequest({
+      newEndDate: '2027-04-01T00:30:00',
+      reason: 'Extension',
+    }).newEndDate.toISOString(),
+    '2027-04-01T00:00:00.000Z',
+  );
+});

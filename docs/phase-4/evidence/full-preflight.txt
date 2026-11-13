@@ -1,0 +1,74 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+... Skipped lines
+
+  [
+    '20261031154500_slice_2_2_foundation',
+    '20261101093228_add_resident_model',
+    '20261101101417_add_enquiry_lead_management',
+    '20261101101956_add_archived_enquiry_status',
+...
+    '20261103130000_invoice_active_uniqueness',
+-   '20261108120000_p4_2_corrections',
+    'migration_lock.toml'
+  ]
+
+    at verifyMigrationFiles (file:///Users/atharva/Downloads/nook-phase4-1/scripts/ci/g6b-migration.js:82:10)
+    at file:///Users/atharva/Downloads/nook-phase4-1/scripts/qa/phase4-disposable.mjs:16:25
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [
+    '20261031154500_slice_2_2_foundation',
+    '20261101093228_add_resident_model',
+    '20261101101417_add_enquiry_lead_management',
+    '20261101101956_add_archived_enquiry_status',
+    '20261101104957_add_booking_reservation',
+    '20261101110350_add_admission_model',
+    '20261101113306_add_checkin_checkout',
+    '20261101130000_add_finance_billing',
+    '20261101150000_add_payment_idempotency',
+    '20261101170000_add_financial_corrections',
+    '20261101190000_tenant_composite_keys_phase_3_3_to_3_5',
+    '20261101210000_admission_and_lifecycle_integrity',
+    '20261102100000_account_security',
+    '20261103090000_payment_receipt_snapshot',
+    '20261103100000_invoice_void_record',
+    '20261103110000_invoice_guard_hardening',
+    '20261103120000_invoice_status_consistency',
+    '20261103130000_invoice_active_uniqueness',
+    'migration_lock.toml'
+  ],
+  expected: [
+    '20261031154500_slice_2_2_foundation',
+    '20261101093228_add_resident_model',
+    '20261101101417_add_enquiry_lead_management',
+    '20261101101956_add_archived_enquiry_status',
+    '20261101104957_add_booking_reservation',
+    '20261101110350_add_admission_model',
+    '20261101113306_add_checkin_checkout',
+    '20261101130000_add_finance_billing',
+    '20261101150000_add_payment_idempotency',
+    '20261101170000_add_financial_corrections',
+    '20261101190000_tenant_composite_keys_phase_3_3_to_3_5',
+    '20261101210000_admission_and_lifecycle_integrity',
+    '20261102100000_account_security',
+    '20261103090000_payment_receipt_snapshot',
+    '20261103100000_invoice_void_record',
+    '20261103110000_invoice_guard_hardening',
+    '20261103120000_invoice_status_consistency',
+    '20261103130000_invoice_active_uniqueness',
+    '20261108120000_p4_2_corrections',
+    'migration_lock.toml'
+  ],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.22.1

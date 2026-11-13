@@ -1,0 +1,106 @@
+{
+  "source": "docs/phase-4/P4-3_TRANSFER_SPECIFICATION.md sections 5,7-11,14",
+  "executed": false,
+  "runtime_gates_must_remain_disabled": true,
+  "cases": [
+    {
+      "id": "T1",
+      "scenario": "Submit \u2192 preview \u2192 confirm \u2192 applied",
+      "readiness": "BLOCKED_POLICY_AND_RUNTIME",
+      "dependencies": [
+        "A1",
+        "D1-D8",
+        "F1",
+        "R1"
+      ],
+      "execution_and_evidence": "Two distinct authorized users; real UI submission and independent review; after confirmation one transfer, source close, destination open, three mandatory audits and one receipt; booking/rent/issued invoices unchanged."
+    },
+    {
+      "id": "T2",
+      "scenario": "Queue with filters",
+      "readiness": "BLOCKED_MISSING_SPECIFICATION",
+      "dependencies": [
+        "A1"
+      ],
+      "execution_and_evidence": "Specify allowed viewer roles, queue membership, filter fields/semantics, ordering, paging and terminal-item treatment. Then create mixed tenant/status records through the approved proposal API and assert exact rows/counts for every supported filter."
+    },
+    {
+      "id": "T3",
+      "scenario": "Protected detail",
+      "readiness": "BLOCKED_MISSING_SPECIFICATION",
+      "dependencies": [
+        "A1"
+      ],
+      "execution_and_evidence": "Specify detail route/schema and requester/reviewer visibility. Then independent eligible reviewer sees approved fields, anonymous user gets no detail, and foreign-tenant identifier reveals no protected data."
+    },
+    {
+      "id": "T4",
+      "scenario": "Concurrent destination conflict",
+      "readiness": "BLOCKED_RUNTIME",
+      "dependencies": [
+        "A1",
+        "D policies",
+        "F1",
+        "R1"
+      ],
+      "execution_and_evidence": "Two real browser sessions submit permitted moves competing for one destination; exactly one commits, the other receives the documented conflict; assert no overlapping occupancy and exact audit/receipt counts."
+    },
+    {
+      "id": "T5",
+      "scenario": "Self-approval refused",
+      "readiness": "BLOCKED_POLICY_AND_RUNTIME",
+      "dependencies": [
+        "A1"
+      ],
+      "execution_and_evidence": "Requester attempts the real approval action under current authorized role; server returns SELF_REVIEW/403 and no assignment, transfer or receipt effect. Role change must not defeat distinct-user enforcement."
+    },
+    {
+      "id": "T6",
+      "scenario": "Resident profile transfer history",
+      "readiness": "POLICY_READY_READ_SCENARIO",
+      "dependencies": [],
+      "execution_and_evidence": "Real Chrome renders seeded historical PostgreSQL transfer records through real authenticated API. Assert source/destination, actor, reason, effective/recorded times, pagination and tenant scoping; do not claim transfer execution or pending-queue acceptance."
+    },
+    {
+      "id": "T7",
+      "scenario": "Mid-month billing-gap review",
+      "readiness": "BLOCKED_CONFLICTING_SPECIFICATION",
+      "dependencies": [
+        "F1",
+        "A1",
+        "R1"
+      ],
+      "execution_and_evidence": "After F1 fixes trigger/timing, exercise real transfer-linked obligation and independent OWNER resolution. Verify suppression, no self-review, supported outcomes, immutable invoice/payment history, replay and no automatic issue."
+    },
+    {
+      "id": "T8",
+      "scenario": "Same-key retry after network loss",
+      "readiness": "BLOCKED_RUNTIME",
+      "dependencies": [
+        "A1",
+        "D1",
+        "F1",
+        "R1"
+      ],
+      "execution_and_evidence": "Drop only the response after the real server commits, preserve request payload/key, retry through browser, and compare exact response plus one transfer/receipt/audit set. Request abort before commit is not lost-ack proof."
+    },
+    {
+      "id": "T9",
+      "scenario": "Tenant isolation",
+      "readiness": "POLICY_READY_READ_SUBSET",
+      "dependencies": [],
+      "execution_and_evidence": "Real tenant A and B sessions; A cannot obtain B resident summary/history/preview, and B remains able to access its own data. Anonymous requests denied. Full proposal/approval/write-isolation acceptance remains blocked on A1/runtime."
+    },
+    {
+      "id": "T10",
+      "scenario": "Retryable lock timeout",
+      "readiness": "BLOCKED_RUNTIME",
+      "dependencies": [
+        "A1",
+        "F1",
+        "R1"
+      ],
+      "execution_and_evidence": "Use dedicated migrator connection to hold the documented organization gate in the disposable database. Real authorized browser command receives RETRY_REQUIRED/409 with no effects, retains key, then succeeds exactly once after lock release."
+    }
+  ]
+}

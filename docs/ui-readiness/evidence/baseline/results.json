@@ -1,0 +1,1712 @@
+{
+  "phase": "baseline",
+  "scope": "real Chrome + Vite + Nest + disposable PostgreSQL; synthetic records only",
+  "results": [
+    {
+      "name": "A01 protected deep link and invalid login",
+      "ok": true,
+      "ms": 1380
+    },
+    {
+      "name": "W01 create property, floor, room and two beds through UI",
+      "ok": false,
+      "ms": 16350,
+      "error": "Error: timeout waiting for: Audit Bed A\n--- page text ---\nSkip to content\nEA\nE2E a\nOwner\n\nYOUR WORKSPACE\n\nProperty overview\nInteractive floor plan\nInventory overview\nAdmissions\nProperties\nResidents\nEnquiries\nBookings\nCheck-ins\nCorrections\nFinance\n\nON THE HORIZON\n\nBooking\nPlanned\nOperations\nPlanned\nA little space.\nA lot of possibility.\n\nYour property, thoughtfully organised.\n\nWorkspace\nProperty management\nOwner a0\nE2E a · Owner\nChange password\nSign out\n\nOPERATIONS\n\nResidents and stays\n\nEnquiries, residents, bookings, admissions and check-ins for your property.\n\nResidents\nEnquiries\nBookings\nAdmissions\nCheck-ins\nCorrections\n\n← All beds\n\nAdd bed\nLabel\nOperational status\nIn service\nOut of service\nOut of service reason\n\nRequest failed (400)\n\nAdd bed\nCancel\nThoughtfully organised. Simply nook.\nSections marked DEMO DATA are samples. Admissions and finance use your real records.\n    at until (file:///Users/atharva/Downloads/nook-phase4-1/scripts/e2e/ui-readiness.e2e.mjs:183:13)\n    at async file:///Users/atharva/Downloads/nook-phase4-1/scripts/e2e/ui-readiness.e2e.mjs:330:69\n    at async scenario (file:///Users/atharva/Downloads/nook-phase4-1/scripts/e2e/ui-readiness.e2e.mjs:218:5)\n    at async file:///Users/atharva/Downloads/nook-phase4-1/scripts/e2e/ui-readiness.e2e.mjs:315:3"
+    },
+    {
+      "name": "W02 enquiry validation, creation, status, follow-up and resident conversion",
+      "ok": true,
+      "ms": 946
+    },
+    {
+      "name": "W03 booking search, availability, create and conflict handling",
+      "ok": true,
+      "ms": 773
+    },
+    {
+      "name": "W04 admission create, admit and check-in updates occupancy",
+      "ok": true,
+      "ms": 1264
+    },
+    {
+      "name": "W05 single draft, issue, partial payment, receipt, dues and reports",
+      "ok": false,
+      "ms": 1162,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n0 !== 1\n\n    at file:///Users/atharva/Downloads/nook-phase4-1/scripts/e2e/ui-readiness.e2e.mjs:392:12\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async scenario (file:///Users/atharva/Downloads/nook-phase4-1/scripts/e2e/ui-readiness.e2e.mjs:218:5)\n    at async file:///Users/atharva/Downloads/nook-phase4-1/scripts/e2e/ui-readiness.e2e.mjs:383:3"
+    },
+    {
+      "name": "W06 correction submit and requester cannot self-approve",
+      "ok": true,
+      "ms": 623
+    },
+    {
+      "name": "W07 transfer preview respects execution safety gate",
+      "ok": true,
+      "ms": 1063
+    },
+    {
+      "name": "R01 every route at 1440/768/390 with real API data",
+      "ok": false,
+      "ms": 31260,
+      "error": "AssertionError [ERR_ASSERTION]: 9 route/viewport failures (see route-scan.json)\n    at file:///Users/atharva/Downloads/nook-phase4-1/scripts/e2e/ui-readiness.e2e.mjs:435:12\n    at async scenario (file:///Users/atharva/Downloads/nook-phase4-1/scripts/e2e/ui-readiness.e2e.mjs:218:5)\n    at async file:///Users/atharva/Downloads/nook-phase4-1/scripts/e2e/ui-readiness.e2e.mjs:420:3"
+    },
+    {
+      "name": "X03 navigating to another property discards the prior record editor",
+      "ok": false,
+      "ms": 499,
+      "error": "AssertionError [ERR_ASSERTION]: Old property editor remains active on another record\n    at file:///Users/atharva/Downloads/nook-phase4-1/scripts/e2e/ui-readiness.e2e.mjs:445:12\n    at async scenario (file:///Users/atharva/Downloads/nook-phase4-1/scripts/e2e/ui-readiness.e2e.mjs:218:5)\n    at async file:///Users/atharva/Downloads/nook-phase4-1/scripts/e2e/ui-readiness.e2e.mjs:438:3"
+    },
+    {
+      "name": "W09 invoice credit displayed consistently in resident financial profile",
+      "ok": false,
+      "ms": 1084,
+      "error": "AssertionError [ERR_ASSERTION]: Expected remaining balance 3500 after 1000 cash and 500 credit: ₹3,000.00\n    at file:///Users/atharva/Downloads/nook-phase4-1/scripts/e2e/ui-readiness.e2e.mjs:453:12\n    at async scenario (file:///Users/atharva/Downloads/nook-phase4-1/scripts/e2e/ui-readiness.e2e.mjs:218:5)\n    at async file:///Users/atharva/Downloads/nook-phase4-1/scripts/e2e/ui-readiness.e2e.mjs:447:3"
+    },
+    {
+      "name": "X01 form failures visibly report errors and allow retry (injected 503)",
+      "ok": false,
+      "ms": 1090,
+      "error": "AssertionError [ERR_ASSERTION]: One or more form data failures are hidden\n    at file:///Users/atharva/Downloads/nook-phase4-1/scripts/e2e/ui-readiness.e2e.mjs:479:14\n    at async scenario (file:///Users/atharva/Downloads/nook-phase4-1/scripts/e2e/ui-readiness.e2e.mjs:218:5)\n    at async file:///Users/atharva/Downloads/nook-phase4-1/scripts/e2e/ui-readiness.e2e.mjs:456:3"
+    },
+    {
+      "name": "X02 payment dialog traps Tab, restores focus and fits mobile",
+      "ok": false,
+      "ms": 346,
+      "error": "AssertionError [ERR_ASSERTION]: Tab escaped payment dialog\n    at file:///Users/atharva/Downloads/nook-phase4-1/scripts/e2e/ui-readiness.e2e.mjs:485:68\n    at async scenario (file:///Users/atharva/Downloads/nook-phase4-1/scripts/e2e/ui-readiness.e2e.mjs:218:5)\n    at async file:///Users/atharva/Downloads/nook-phase4-1/scripts/e2e/ui-readiness.e2e.mjs:482:3"
+    },
+    {
+      "name": "A02 manager review permission and cross-tenant denial",
+      "ok": true,
+      "ms": 1190
+    },
+    {
+      "name": "W08 extension confirmation and completed checkout/history",
+      "ok": true,
+      "ms": 1735
+    },
+    {
+      "name": "A03 logout clears protected UI and returning session",
+      "ok": true,
+      "ms": 785
+    }
+  ],
+  "scans": [
+    {
+      "name": "Workspace demo",
+      "hash": "#overview",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [
+        "inventory-heading",
+        "adm-title"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Residents",
+      "hash": "#residents",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [
+        "res-title"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Register resident",
+      "hash": "#residents/new",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [
+        "res-new"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Resident details",
+      "hash": "#residents/55bb50ba-a052-4909-907a-2ac8252456e8",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [
+        "res-detail"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Resident profile",
+      "hash": "#residents/55bb50ba-a052-4909-907a-2ac8252456e8/profile",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [
+        "res-profile"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Enquiries",
+      "hash": "#enquiries",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [
+        "enq-title"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "New enquiry",
+      "hash": "#enquiries/new",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [
+        "enq-new"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Enquiry details",
+      "hash": "#enquiries/0046996e-bf4e-4c8b-8c5a-4ec355659774",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [
+        "enq-detail"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Overdue follow-ups",
+      "hash": "#enquiries/follow-ups/overdue",
+      "width": 1440,
+      "expectedContent": false,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [
+        "enq-title"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Upcoming follow-ups",
+      "hash": "#enquiries/follow-ups/upcoming",
+      "width": 1440,
+      "expectedContent": false,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [
+        "enq-title"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Bookings",
+      "hash": "#bookings",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [
+        "bk-title"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "New booking",
+      "hash": "#bookings/new",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [
+        "bk-new"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Booking details",
+      "hash": "#bookings/f834562f-b166-433e-a990-201b0e526989",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "name": "Admissions",
+      "hash": "#admissions",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [
+        "adm-title"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Admission details",
+      "hash": "#admissions/f2a46e4a-0e02-45bb-baf1-dc1e998b59a3",
+      "width": 1440,
+      "expectedContent": false,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "name": "Check-ins",
+      "hash": "#check-ins",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [
+        "ci-title"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "New check-in",
+      "hash": "#check-ins/new",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [
+        "ci-new"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Check-in details",
+      "hash": "#check-ins/6e21b054-145c-4ceb-b700-e6bfc0aa62e3",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [
+        "ci-detail"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Properties",
+      "hash": "#properties",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [
+        "prop-title"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Add property",
+      "hash": "#properties/new",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [
+        "prop-new"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Property details",
+      "hash": "#properties/edec0544-2f73-484f-85f8-919fa8930c92",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [
+        "prop-detail"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Floors",
+      "hash": "#floors/edec0544-2f73-484f-85f8-919fa8930c92",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [
+        "floor-title"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Add floor",
+      "hash": "#floors/edec0544-2f73-484f-85f8-919fa8930c92/new",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [
+        "floor-new"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Floor details",
+      "hash": "#floors/edec0544-2f73-484f-85f8-919fa8930c92/91d6ffae-a5e6-4f6d-a7eb-fd306bfc7230",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [
+        "floor-detail"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Rooms",
+      "hash": "#rooms/edec0544-2f73-484f-85f8-919fa8930c92",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [
+        "room-title"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Add room",
+      "hash": "#rooms/edec0544-2f73-484f-85f8-919fa8930c92/new",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [
+        "room-new"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Room details",
+      "hash": "#rooms/edec0544-2f73-484f-85f8-919fa8930c92/c3b33264-b8e2-493a-a6e7-4bc956bee5e2",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [
+        "room-detail"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Beds",
+      "hash": "#beds/c3b33264-b8e2-493a-a6e7-4bc956bee5e2",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [
+        "bed-title"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Add bed",
+      "hash": "#beds/c3b33264-b8e2-493a-a6e7-4bc956bee5e2/new",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [
+        "bed-new"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Bed details",
+      "hash": "#beds/c3b33264-b8e2-493a-a6e7-4bc956bee5e2/066604f3-6a5c-4f20-9b4f-5de590fc5c91",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [
+        "bed-detail"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Corrections",
+      "hash": "#corrections",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "name": "New correction",
+      "hash": "#corrections/new",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "name": "Correction details",
+      "hash": "#corrections/db09b4ce-a5f4-40c7-bfbf-1a8d7f28636f",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [
+        "correction-head"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Billing reviews",
+      "hash": "#corrections/finance-reviews",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "name": "Finance overview",
+      "hash": "#finance",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "name": "Invoices",
+      "hash": "#finance/invoices",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "name": "Create invoices",
+      "hash": "#finance/invoices/new",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "name": "Invoice details",
+      "hash": "#finance/invoices/77bca261-fca2-4238-a092-b38132d3eb79",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "name": "Outstanding",
+      "hash": "#finance/outstanding",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "name": "Financial report",
+      "hash": "#finance/reports",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "name": "Finance correction history",
+      "hash": "#finance/corrections",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "name": "Receipt",
+      "hash": "#finance/receipt/77bca261-fca2-4238-a092-b38132d3eb79",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "name": "Workspace demo",
+      "hash": "#overview",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [
+        "inventory-heading",
+        "adm-title"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Residents",
+      "hash": "#residents",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [
+        "res-title"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Register resident",
+      "hash": "#residents/new",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [
+        "res-new"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Resident details",
+      "hash": "#residents/55bb50ba-a052-4909-907a-2ac8252456e8",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [
+        "res-detail"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Resident profile",
+      "hash": "#residents/55bb50ba-a052-4909-907a-2ac8252456e8/profile",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [
+        "res-profile"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Enquiries",
+      "hash": "#enquiries",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [
+        "enq-title"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "New enquiry",
+      "hash": "#enquiries/new",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [
+        "enq-new"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Enquiry details",
+      "hash": "#enquiries/0046996e-bf4e-4c8b-8c5a-4ec355659774",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [
+        "enq-detail"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Overdue follow-ups",
+      "hash": "#enquiries/follow-ups/overdue",
+      "width": 768,
+      "expectedContent": false,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [
+        "enq-title"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Upcoming follow-ups",
+      "hash": "#enquiries/follow-ups/upcoming",
+      "width": 768,
+      "expectedContent": false,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [
+        "enq-title"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Bookings",
+      "hash": "#bookings",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [
+        "bk-title"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "New booking",
+      "hash": "#bookings/new",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [
+        "bk-new"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Booking details",
+      "hash": "#bookings/f834562f-b166-433e-a990-201b0e526989",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "name": "Admissions",
+      "hash": "#admissions",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [
+        "adm-title"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Admission details",
+      "hash": "#admissions/f2a46e4a-0e02-45bb-baf1-dc1e998b59a3",
+      "width": 768,
+      "expectedContent": false,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "name": "Check-ins",
+      "hash": "#check-ins",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [
+        "ci-title"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "New check-in",
+      "hash": "#check-ins/new",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [
+        "ci-new"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Check-in details",
+      "hash": "#check-ins/6e21b054-145c-4ceb-b700-e6bfc0aa62e3",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [
+        "ci-detail"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Properties",
+      "hash": "#properties",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [
+        "prop-title"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Add property",
+      "hash": "#properties/new",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [
+        "prop-new"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Property details",
+      "hash": "#properties/edec0544-2f73-484f-85f8-919fa8930c92",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [
+        "prop-detail"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Floors",
+      "hash": "#floors/edec0544-2f73-484f-85f8-919fa8930c92",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [
+        "floor-title"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Add floor",
+      "hash": "#floors/edec0544-2f73-484f-85f8-919fa8930c92/new",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [
+        "floor-new"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Floor details",
+      "hash": "#floors/edec0544-2f73-484f-85f8-919fa8930c92/91d6ffae-a5e6-4f6d-a7eb-fd306bfc7230",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [
+        "floor-detail"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Rooms",
+      "hash": "#rooms/edec0544-2f73-484f-85f8-919fa8930c92",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [
+        "room-title"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Add room",
+      "hash": "#rooms/edec0544-2f73-484f-85f8-919fa8930c92/new",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [
+        "room-new"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Room details",
+      "hash": "#rooms/edec0544-2f73-484f-85f8-919fa8930c92/c3b33264-b8e2-493a-a6e7-4bc956bee5e2",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [
+        "room-detail"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Beds",
+      "hash": "#beds/c3b33264-b8e2-493a-a6e7-4bc956bee5e2",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [
+        "bed-title"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Add bed",
+      "hash": "#beds/c3b33264-b8e2-493a-a6e7-4bc956bee5e2/new",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [
+        "bed-new"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Bed details",
+      "hash": "#beds/c3b33264-b8e2-493a-a6e7-4bc956bee5e2/066604f3-6a5c-4f20-9b4f-5de590fc5c91",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [
+        "bed-detail"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Corrections",
+      "hash": "#corrections",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "name": "New correction",
+      "hash": "#corrections/new",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "name": "Correction details",
+      "hash": "#corrections/db09b4ce-a5f4-40c7-bfbf-1a8d7f28636f",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [
+        "correction-head"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Billing reviews",
+      "hash": "#corrections/finance-reviews",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "name": "Finance overview",
+      "hash": "#finance",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "name": "Invoices",
+      "hash": "#finance/invoices",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "name": "Create invoices",
+      "hash": "#finance/invoices/new",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "name": "Invoice details",
+      "hash": "#finance/invoices/77bca261-fca2-4238-a092-b38132d3eb79",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "name": "Outstanding",
+      "hash": "#finance/outstanding",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "name": "Financial report",
+      "hash": "#finance/reports",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "name": "Finance correction history",
+      "hash": "#finance/corrections",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "name": "Receipt",
+      "hash": "#finance/receipt/77bca261-fca2-4238-a092-b38132d3eb79",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "name": "Workspace demo",
+      "hash": "#overview",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [
+        "inventory-heading",
+        "adm-title"
+      ],
+      "overflow": [
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "name": "Residents",
+      "hash": "#residents",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [
+        "res-title"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Register resident",
+      "hash": "#residents/new",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [
+        "res-new"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Resident details",
+      "hash": "#residents/55bb50ba-a052-4909-907a-2ac8252456e8",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [
+        "res-detail"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Resident profile",
+      "hash": "#residents/55bb50ba-a052-4909-907a-2ac8252456e8/profile",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [
+        "res-profile"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Enquiries",
+      "hash": "#enquiries",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [
+        "enq-title"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "New enquiry",
+      "hash": "#enquiries/new",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [
+        "enq-new"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Enquiry details",
+      "hash": "#enquiries/0046996e-bf4e-4c8b-8c5a-4ec355659774",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [
+        "enq-detail"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Overdue follow-ups",
+      "hash": "#enquiries/follow-ups/overdue",
+      "width": 390,
+      "expectedContent": false,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [
+        "enq-title"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Upcoming follow-ups",
+      "hash": "#enquiries/follow-ups/upcoming",
+      "width": 390,
+      "expectedContent": false,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [
+        "enq-title"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Bookings",
+      "hash": "#bookings",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [
+        "bk-title"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "New booking",
+      "hash": "#bookings/new",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [
+        "bk-new"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Booking details",
+      "hash": "#bookings/f834562f-b166-433e-a990-201b0e526989",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "name": "Admissions",
+      "hash": "#admissions",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [
+        "adm-title"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Admission details",
+      "hash": "#admissions/f2a46e4a-0e02-45bb-baf1-dc1e998b59a3",
+      "width": 390,
+      "expectedContent": false,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "name": "Check-ins",
+      "hash": "#check-ins",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [
+        "ci-title"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "New check-in",
+      "hash": "#check-ins/new",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [
+        "ci-new"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Check-in details",
+      "hash": "#check-ins/6e21b054-145c-4ceb-b700-e6bfc0aa62e3",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [
+        "ci-detail"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Properties",
+      "hash": "#properties",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [
+        "prop-title"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Add property",
+      "hash": "#properties/new",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [
+        "prop-new"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Property details",
+      "hash": "#properties/edec0544-2f73-484f-85f8-919fa8930c92",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [
+        "prop-detail"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Floors",
+      "hash": "#floors/edec0544-2f73-484f-85f8-919fa8930c92",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [
+        "floor-title"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Add floor",
+      "hash": "#floors/edec0544-2f73-484f-85f8-919fa8930c92/new",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [
+        "floor-new"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Floor details",
+      "hash": "#floors/edec0544-2f73-484f-85f8-919fa8930c92/91d6ffae-a5e6-4f6d-a7eb-fd306bfc7230",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [
+        "floor-detail"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Rooms",
+      "hash": "#rooms/edec0544-2f73-484f-85f8-919fa8930c92",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [
+        "room-title"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Add room",
+      "hash": "#rooms/edec0544-2f73-484f-85f8-919fa8930c92/new",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [
+        "room-new"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Room details",
+      "hash": "#rooms/edec0544-2f73-484f-85f8-919fa8930c92/c3b33264-b8e2-493a-a6e7-4bc956bee5e2",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [
+        "room-detail"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Beds",
+      "hash": "#beds/c3b33264-b8e2-493a-a6e7-4bc956bee5e2",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [
+        "bed-title"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Add bed",
+      "hash": "#beds/c3b33264-b8e2-493a-a6e7-4bc956bee5e2/new",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [
+        "bed-new"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Bed details",
+      "hash": "#beds/c3b33264-b8e2-493a-a6e7-4bc956bee5e2/066604f3-6a5c-4f20-9b4f-5de590fc5c91",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [
+        "bed-detail"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Corrections",
+      "hash": "#corrections",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "name": "New correction",
+      "hash": "#corrections/new",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "name": "Correction details",
+      "hash": "#corrections/db09b4ce-a5f4-40c7-bfbf-1a8d7f28636f",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [
+        "correction-head"
+      ],
+      "overflow": []
+    },
+    {
+      "name": "Billing reviews",
+      "hash": "#corrections/finance-reviews",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "name": "Finance overview",
+      "hash": "#finance",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "name": "Invoices",
+      "hash": "#finance/invoices",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "name": "Create invoices",
+      "hash": "#finance/invoices/new",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "name": "Invoice details",
+      "hash": "#finance/invoices/77bca261-fca2-4238-a092-b38132d3eb79",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "name": "Outstanding",
+      "hash": "#finance/outstanding",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "name": "Financial report",
+      "hash": "#finance/reports",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "name": "Finance correction history",
+      "hash": "#finance/corrections",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "name": "Receipt",
+      "hash": "#finance/receipt/77bca261-fca2-4238-a092-b38132d3eb79",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [],
+      "overflow": []
+    }
+  ],
+  "probes": [
+    {
+      "name": "Inventory fallback",
+      "scope": "direct disposable fixture seed after UI failure; W01 stays failed"
+    },
+    {
+      "name": "Transfer workflow",
+      "scope": "real API; new check-in has no active assignment; preview refused, execution unavailable",
+      "available": false
+    },
+    {
+      "name": "Record editor identity",
+      "retained": [
+        "UI-AUDIT",
+        "Unsaved prior property"
+      ]
+    },
+    {
+      "name": "Credit balance",
+      "scope": "real API credit",
+      "cells": [
+        "INV-2026-0001",
+        "1 Nov 2026 – 30 Nov 2026",
+        "₹5,000.00",
+        "₹1,500.00",
+        "₹3,000.00",
+        "Partially paid",
+        "13 Nov 2026"
+      ]
+    },
+    {
+      "name": "503 handling",
+      "hash": "#rooms/edec0544-2f73-484f-85f8-919fa8930c92/new",
+      "path": "/properties/edec0544-2f73-484f-85f8-919fa8930c92/floors",
+      "visibleError": false
+    },
+    {
+      "name": "503 handling",
+      "hash": "#admissions",
+      "path": "/bookings",
+      "visibleError": false
+    },
+    {
+      "name": "503 handling",
+      "hash": "#finance/invoices/new",
+      "path": "/residents",
+      "visibleError": false
+    }
+  ],
+  "pageErrors": []
+}

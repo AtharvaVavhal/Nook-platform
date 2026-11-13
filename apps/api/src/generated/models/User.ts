@@ -214,6 +214,14 @@ export type UserWhereInput = {
   lastLoginAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementListRelationFilter
+  transferReviewRequests?: Prisma.TransferFinanceReviewListRelationFilter
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionListRelationFilter
+  correctionsRequested?: Prisma.CorrectionProposalListRelationFilter
+  correctionsDecided?: Prisma.CorrectionProposalListRelationFilter
+  correctionReceipts?: Prisma.CorrectionCommandReceiptListRelationFilter
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkListRelationFilter
+  transfers?: Prisma.TransferListRelationFilter
   memberships?: Prisma.MembershipListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
   auditEvents?: Prisma.AuditEventListRelationFilter
@@ -233,6 +241,14 @@ export type UserOrderByWithRelationInput = {
   lastLoginAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  assignmentReplacements?: Prisma.StayAssignmentReplacementOrderByRelationAggregateInput
+  transferReviewRequests?: Prisma.TransferFinanceReviewOrderByRelationAggregateInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionOrderByRelationAggregateInput
+  correctionsRequested?: Prisma.CorrectionProposalOrderByRelationAggregateInput
+  correctionsDecided?: Prisma.CorrectionProposalOrderByRelationAggregateInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptOrderByRelationAggregateInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkOrderByRelationAggregateInput
+  transfers?: Prisma.TransferOrderByRelationAggregateInput
   memberships?: Prisma.MembershipOrderByRelationAggregateInput
   sessions?: Prisma.SessionOrderByRelationAggregateInput
   auditEvents?: Prisma.AuditEventOrderByRelationAggregateInput
@@ -255,6 +271,14 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   lastLoginAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementListRelationFilter
+  transferReviewRequests?: Prisma.TransferFinanceReviewListRelationFilter
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionListRelationFilter
+  correctionsRequested?: Prisma.CorrectionProposalListRelationFilter
+  correctionsDecided?: Prisma.CorrectionProposalListRelationFilter
+  correctionReceipts?: Prisma.CorrectionCommandReceiptListRelationFilter
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkListRelationFilter
+  transfers?: Prisma.TransferListRelationFilter
   memberships?: Prisma.MembershipListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
   auditEvents?: Prisma.AuditEventListRelationFilter
@@ -304,6 +328,14 @@ export type UserCreateInput = {
   lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementCreateNestedManyWithoutActorInput
+  transferReviewRequests?: Prisma.TransferFinanceReviewCreateNestedManyWithoutRequesterInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionCreateNestedManyWithoutActorInput
+  correctionsRequested?: Prisma.CorrectionProposalCreateNestedManyWithoutRequesterInput
+  correctionsDecided?: Prisma.CorrectionProposalCreateNestedManyWithoutDeciderInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptCreateNestedManyWithoutActorInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutResolverInput
+  transfers?: Prisma.TransferCreateNestedManyWithoutActorInput
   memberships?: Prisma.MembershipCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
@@ -323,6 +355,14 @@ export type UserUncheckedCreateInput = {
   lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedCreateNestedManyWithoutActorInput
+  transferReviewRequests?: Prisma.TransferFinanceReviewUncheckedCreateNestedManyWithoutRequesterInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionUncheckedCreateNestedManyWithoutActorInput
+  correctionsRequested?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutRequesterInput
+  correctionsDecided?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutDeciderInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedCreateNestedManyWithoutActorInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutResolverInput
+  transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutActorInput
   memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
@@ -342,6 +382,14 @@ export type UserUpdateInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUpdateManyWithoutActorNestedInput
+  transferReviewRequests?: Prisma.TransferFinanceReviewUpdateManyWithoutRequesterNestedInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionUpdateManyWithoutActorNestedInput
+  correctionsRequested?: Prisma.CorrectionProposalUpdateManyWithoutRequesterNestedInput
+  correctionsDecided?: Prisma.CorrectionProposalUpdateManyWithoutDeciderNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUpdateManyWithoutActorNestedInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkUpdateManyWithoutResolverNestedInput
+  transfers?: Prisma.TransferUpdateManyWithoutActorNestedInput
   memberships?: Prisma.MembershipUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
@@ -361,6 +409,14 @@ export type UserUncheckedUpdateInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedUpdateManyWithoutActorNestedInput
+  transferReviewRequests?: Prisma.TransferFinanceReviewUncheckedUpdateManyWithoutRequesterNestedInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionUncheckedUpdateManyWithoutActorNestedInput
+  correctionsRequested?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutRequesterNestedInput
+  correctionsDecided?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutDeciderNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedUpdateManyWithoutActorNestedInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutResolverNestedInput
+  transfers?: Prisma.TransferUncheckedUpdateManyWithoutActorNestedInput
   memberships?: Prisma.MembershipUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
@@ -564,6 +620,122 @@ export type UserUpdateOneRequiredWithoutInvoiceVoidsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutInvoiceVoidsInput, Prisma.UserUpdateWithoutInvoiceVoidsInput>, Prisma.UserUncheckedUpdateWithoutInvoiceVoidsInput>
 }
 
+export type UserCreateNestedOneWithoutCorrectionsRequestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCorrectionsRequestedInput, Prisma.UserUncheckedCreateWithoutCorrectionsRequestedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCorrectionsRequestedInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutCorrectionsDecidedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCorrectionsDecidedInput, Prisma.UserUncheckedCreateWithoutCorrectionsDecidedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCorrectionsDecidedInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutCorrectionsRequestedNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCorrectionsRequestedInput, Prisma.UserUncheckedCreateWithoutCorrectionsRequestedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCorrectionsRequestedInput
+  upsert?: Prisma.UserUpsertWithoutCorrectionsRequestedInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCorrectionsRequestedInput, Prisma.UserUpdateWithoutCorrectionsRequestedInput>, Prisma.UserUncheckedUpdateWithoutCorrectionsRequestedInput>
+}
+
+export type UserUpdateOneWithoutCorrectionsDecidedNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCorrectionsDecidedInput, Prisma.UserUncheckedCreateWithoutCorrectionsDecidedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCorrectionsDecidedInput
+  upsert?: Prisma.UserUpsertWithoutCorrectionsDecidedInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCorrectionsDecidedInput, Prisma.UserUpdateWithoutCorrectionsDecidedInput>, Prisma.UserUncheckedUpdateWithoutCorrectionsDecidedInput>
+}
+
+export type UserCreateNestedOneWithoutCorrectionReceiptsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCorrectionReceiptsInput, Prisma.UserUncheckedCreateWithoutCorrectionReceiptsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCorrectionReceiptsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutCorrectionReceiptsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCorrectionReceiptsInput, Prisma.UserUncheckedCreateWithoutCorrectionReceiptsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCorrectionReceiptsInput
+  upsert?: Prisma.UserUpsertWithoutCorrectionReceiptsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCorrectionReceiptsInput, Prisma.UserUpdateWithoutCorrectionReceiptsInput>, Prisma.UserUncheckedUpdateWithoutCorrectionReceiptsInput>
+}
+
+export type UserCreateNestedOneWithoutCorrectionLinksResolvedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCorrectionLinksResolvedInput, Prisma.UserUncheckedCreateWithoutCorrectionLinksResolvedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCorrectionLinksResolvedInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutCorrectionLinksResolvedNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCorrectionLinksResolvedInput, Prisma.UserUncheckedCreateWithoutCorrectionLinksResolvedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCorrectionLinksResolvedInput
+  upsert?: Prisma.UserUpsertWithoutCorrectionLinksResolvedInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCorrectionLinksResolvedInput, Prisma.UserUpdateWithoutCorrectionLinksResolvedInput>, Prisma.UserUncheckedUpdateWithoutCorrectionLinksResolvedInput>
+}
+
+export type UserCreateNestedOneWithoutTransfersInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutTransfersInput, Prisma.UserUncheckedCreateWithoutTransfersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTransfersInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutTransfersNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutTransfersInput, Prisma.UserUncheckedCreateWithoutTransfersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTransfersInput
+  upsert?: Prisma.UserUpsertWithoutTransfersInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutTransfersInput, Prisma.UserUpdateWithoutTransfersInput>, Prisma.UserUncheckedUpdateWithoutTransfersInput>
+}
+
+export type UserCreateNestedOneWithoutAssignmentReplacementsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAssignmentReplacementsInput, Prisma.UserUncheckedCreateWithoutAssignmentReplacementsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAssignmentReplacementsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutAssignmentReplacementsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAssignmentReplacementsInput, Prisma.UserUncheckedCreateWithoutAssignmentReplacementsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAssignmentReplacementsInput
+  upsert?: Prisma.UserUpsertWithoutAssignmentReplacementsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAssignmentReplacementsInput, Prisma.UserUpdateWithoutAssignmentReplacementsInput>, Prisma.UserUncheckedUpdateWithoutAssignmentReplacementsInput>
+}
+
+export type UserCreateNestedOneWithoutTransferReviewRequestsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutTransferReviewRequestsInput, Prisma.UserUncheckedCreateWithoutTransferReviewRequestsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTransferReviewRequestsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutTransferReviewRequestsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutTransferReviewRequestsInput, Prisma.UserUncheckedCreateWithoutTransferReviewRequestsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTransferReviewRequestsInput
+  upsert?: Prisma.UserUpsertWithoutTransferReviewRequestsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutTransferReviewRequestsInput, Prisma.UserUpdateWithoutTransferReviewRequestsInput>, Prisma.UserUncheckedUpdateWithoutTransferReviewRequestsInput>
+}
+
+export type UserCreateNestedOneWithoutTransferReviewResolutionsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutTransferReviewResolutionsInput, Prisma.UserUncheckedCreateWithoutTransferReviewResolutionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTransferReviewResolutionsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutTransferReviewResolutionsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutTransferReviewResolutionsInput, Prisma.UserUncheckedCreateWithoutTransferReviewResolutionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTransferReviewResolutionsInput
+  upsert?: Prisma.UserUpsertWithoutTransferReviewResolutionsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutTransferReviewResolutionsInput, Prisma.UserUpdateWithoutTransferReviewResolutionsInput>, Prisma.UserUncheckedUpdateWithoutTransferReviewResolutionsInput>
+}
+
 export type UserCreateWithoutMembershipsInput = {
   id?: string
   loginIdentifier: string
@@ -574,6 +746,14 @@ export type UserCreateWithoutMembershipsInput = {
   lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementCreateNestedManyWithoutActorInput
+  transferReviewRequests?: Prisma.TransferFinanceReviewCreateNestedManyWithoutRequesterInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionCreateNestedManyWithoutActorInput
+  correctionsRequested?: Prisma.CorrectionProposalCreateNestedManyWithoutRequesterInput
+  correctionsDecided?: Prisma.CorrectionProposalCreateNestedManyWithoutDeciderInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptCreateNestedManyWithoutActorInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutResolverInput
+  transfers?: Prisma.TransferCreateNestedManyWithoutActorInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
   enquiryFollowUps?: Prisma.EnquiryFollowUpCreateNestedManyWithoutUserInput
@@ -592,6 +772,14 @@ export type UserUncheckedCreateWithoutMembershipsInput = {
   lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedCreateNestedManyWithoutActorInput
+  transferReviewRequests?: Prisma.TransferFinanceReviewUncheckedCreateNestedManyWithoutRequesterInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionUncheckedCreateNestedManyWithoutActorInput
+  correctionsRequested?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutRequesterInput
+  correctionsDecided?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutDeciderInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedCreateNestedManyWithoutActorInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutResolverInput
+  transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutActorInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
   enquiryFollowUps?: Prisma.EnquiryFollowUpUncheckedCreateNestedManyWithoutUserInput
@@ -626,6 +814,14 @@ export type UserUpdateWithoutMembershipsInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUpdateManyWithoutActorNestedInput
+  transferReviewRequests?: Prisma.TransferFinanceReviewUpdateManyWithoutRequesterNestedInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionUpdateManyWithoutActorNestedInput
+  correctionsRequested?: Prisma.CorrectionProposalUpdateManyWithoutRequesterNestedInput
+  correctionsDecided?: Prisma.CorrectionProposalUpdateManyWithoutDeciderNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUpdateManyWithoutActorNestedInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkUpdateManyWithoutResolverNestedInput
+  transfers?: Prisma.TransferUpdateManyWithoutActorNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
   enquiryFollowUps?: Prisma.EnquiryFollowUpUpdateManyWithoutUserNestedInput
@@ -644,6 +840,14 @@ export type UserUncheckedUpdateWithoutMembershipsInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedUpdateManyWithoutActorNestedInput
+  transferReviewRequests?: Prisma.TransferFinanceReviewUncheckedUpdateManyWithoutRequesterNestedInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionUncheckedUpdateManyWithoutActorNestedInput
+  correctionsRequested?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutRequesterNestedInput
+  correctionsDecided?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutDeciderNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedUpdateManyWithoutActorNestedInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutResolverNestedInput
+  transfers?: Prisma.TransferUncheckedUpdateManyWithoutActorNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
   enquiryFollowUps?: Prisma.EnquiryFollowUpUncheckedUpdateManyWithoutUserNestedInput
@@ -662,6 +866,14 @@ export type UserCreateWithoutSessionsInput = {
   lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementCreateNestedManyWithoutActorInput
+  transferReviewRequests?: Prisma.TransferFinanceReviewCreateNestedManyWithoutRequesterInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionCreateNestedManyWithoutActorInput
+  correctionsRequested?: Prisma.CorrectionProposalCreateNestedManyWithoutRequesterInput
+  correctionsDecided?: Prisma.CorrectionProposalCreateNestedManyWithoutDeciderInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptCreateNestedManyWithoutActorInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutResolverInput
+  transfers?: Prisma.TransferCreateNestedManyWithoutActorInput
   memberships?: Prisma.MembershipCreateNestedManyWithoutUserInput
   auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
   enquiryFollowUps?: Prisma.EnquiryFollowUpCreateNestedManyWithoutUserInput
@@ -680,6 +892,14 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedCreateNestedManyWithoutActorInput
+  transferReviewRequests?: Prisma.TransferFinanceReviewUncheckedCreateNestedManyWithoutRequesterInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionUncheckedCreateNestedManyWithoutActorInput
+  correctionsRequested?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutRequesterInput
+  correctionsDecided?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutDeciderInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedCreateNestedManyWithoutActorInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutResolverInput
+  transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutActorInput
   memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutUserInput
   auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
   enquiryFollowUps?: Prisma.EnquiryFollowUpUncheckedCreateNestedManyWithoutUserInput
@@ -714,6 +934,14 @@ export type UserUpdateWithoutSessionsInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUpdateManyWithoutActorNestedInput
+  transferReviewRequests?: Prisma.TransferFinanceReviewUpdateManyWithoutRequesterNestedInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionUpdateManyWithoutActorNestedInput
+  correctionsRequested?: Prisma.CorrectionProposalUpdateManyWithoutRequesterNestedInput
+  correctionsDecided?: Prisma.CorrectionProposalUpdateManyWithoutDeciderNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUpdateManyWithoutActorNestedInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkUpdateManyWithoutResolverNestedInput
+  transfers?: Prisma.TransferUpdateManyWithoutActorNestedInput
   memberships?: Prisma.MembershipUpdateManyWithoutUserNestedInput
   auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
   enquiryFollowUps?: Prisma.EnquiryFollowUpUpdateManyWithoutUserNestedInput
@@ -732,6 +960,14 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedUpdateManyWithoutActorNestedInput
+  transferReviewRequests?: Prisma.TransferFinanceReviewUncheckedUpdateManyWithoutRequesterNestedInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionUncheckedUpdateManyWithoutActorNestedInput
+  correctionsRequested?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutRequesterNestedInput
+  correctionsDecided?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutDeciderNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedUpdateManyWithoutActorNestedInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutResolverNestedInput
+  transfers?: Prisma.TransferUncheckedUpdateManyWithoutActorNestedInput
   memberships?: Prisma.MembershipUncheckedUpdateManyWithoutUserNestedInput
   auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
   enquiryFollowUps?: Prisma.EnquiryFollowUpUncheckedUpdateManyWithoutUserNestedInput
@@ -750,6 +986,14 @@ export type UserCreateWithoutAuditEventsInput = {
   lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementCreateNestedManyWithoutActorInput
+  transferReviewRequests?: Prisma.TransferFinanceReviewCreateNestedManyWithoutRequesterInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionCreateNestedManyWithoutActorInput
+  correctionsRequested?: Prisma.CorrectionProposalCreateNestedManyWithoutRequesterInput
+  correctionsDecided?: Prisma.CorrectionProposalCreateNestedManyWithoutDeciderInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptCreateNestedManyWithoutActorInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutResolverInput
+  transfers?: Prisma.TransferCreateNestedManyWithoutActorInput
   memberships?: Prisma.MembershipCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   enquiryFollowUps?: Prisma.EnquiryFollowUpCreateNestedManyWithoutUserInput
@@ -768,6 +1012,14 @@ export type UserUncheckedCreateWithoutAuditEventsInput = {
   lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedCreateNestedManyWithoutActorInput
+  transferReviewRequests?: Prisma.TransferFinanceReviewUncheckedCreateNestedManyWithoutRequesterInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionUncheckedCreateNestedManyWithoutActorInput
+  correctionsRequested?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutRequesterInput
+  correctionsDecided?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutDeciderInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedCreateNestedManyWithoutActorInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutResolverInput
+  transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutActorInput
   memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   enquiryFollowUps?: Prisma.EnquiryFollowUpUncheckedCreateNestedManyWithoutUserInput
@@ -802,6 +1054,14 @@ export type UserUpdateWithoutAuditEventsInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUpdateManyWithoutActorNestedInput
+  transferReviewRequests?: Prisma.TransferFinanceReviewUpdateManyWithoutRequesterNestedInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionUpdateManyWithoutActorNestedInput
+  correctionsRequested?: Prisma.CorrectionProposalUpdateManyWithoutRequesterNestedInput
+  correctionsDecided?: Prisma.CorrectionProposalUpdateManyWithoutDeciderNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUpdateManyWithoutActorNestedInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkUpdateManyWithoutResolverNestedInput
+  transfers?: Prisma.TransferUpdateManyWithoutActorNestedInput
   memberships?: Prisma.MembershipUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   enquiryFollowUps?: Prisma.EnquiryFollowUpUpdateManyWithoutUserNestedInput
@@ -820,6 +1080,14 @@ export type UserUncheckedUpdateWithoutAuditEventsInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedUpdateManyWithoutActorNestedInput
+  transferReviewRequests?: Prisma.TransferFinanceReviewUncheckedUpdateManyWithoutRequesterNestedInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionUncheckedUpdateManyWithoutActorNestedInput
+  correctionsRequested?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutRequesterNestedInput
+  correctionsDecided?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutDeciderNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedUpdateManyWithoutActorNestedInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutResolverNestedInput
+  transfers?: Prisma.TransferUncheckedUpdateManyWithoutActorNestedInput
   memberships?: Prisma.MembershipUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   enquiryFollowUps?: Prisma.EnquiryFollowUpUncheckedUpdateManyWithoutUserNestedInput
@@ -838,6 +1106,14 @@ export type UserCreateWithoutEnquiryFollowUpsInput = {
   lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementCreateNestedManyWithoutActorInput
+  transferReviewRequests?: Prisma.TransferFinanceReviewCreateNestedManyWithoutRequesterInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionCreateNestedManyWithoutActorInput
+  correctionsRequested?: Prisma.CorrectionProposalCreateNestedManyWithoutRequesterInput
+  correctionsDecided?: Prisma.CorrectionProposalCreateNestedManyWithoutDeciderInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptCreateNestedManyWithoutActorInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutResolverInput
+  transfers?: Prisma.TransferCreateNestedManyWithoutActorInput
   memberships?: Prisma.MembershipCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
@@ -856,6 +1132,14 @@ export type UserUncheckedCreateWithoutEnquiryFollowUpsInput = {
   lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedCreateNestedManyWithoutActorInput
+  transferReviewRequests?: Prisma.TransferFinanceReviewUncheckedCreateNestedManyWithoutRequesterInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionUncheckedCreateNestedManyWithoutActorInput
+  correctionsRequested?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutRequesterInput
+  correctionsDecided?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutDeciderInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedCreateNestedManyWithoutActorInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutResolverInput
+  transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutActorInput
   memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
@@ -890,6 +1174,14 @@ export type UserUpdateWithoutEnquiryFollowUpsInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUpdateManyWithoutActorNestedInput
+  transferReviewRequests?: Prisma.TransferFinanceReviewUpdateManyWithoutRequesterNestedInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionUpdateManyWithoutActorNestedInput
+  correctionsRequested?: Prisma.CorrectionProposalUpdateManyWithoutRequesterNestedInput
+  correctionsDecided?: Prisma.CorrectionProposalUpdateManyWithoutDeciderNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUpdateManyWithoutActorNestedInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkUpdateManyWithoutResolverNestedInput
+  transfers?: Prisma.TransferUpdateManyWithoutActorNestedInput
   memberships?: Prisma.MembershipUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
@@ -908,6 +1200,14 @@ export type UserUncheckedUpdateWithoutEnquiryFollowUpsInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedUpdateManyWithoutActorNestedInput
+  transferReviewRequests?: Prisma.TransferFinanceReviewUncheckedUpdateManyWithoutRequesterNestedInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionUncheckedUpdateManyWithoutActorNestedInput
+  correctionsRequested?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutRequesterNestedInput
+  correctionsDecided?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutDeciderNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedUpdateManyWithoutActorNestedInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutResolverNestedInput
+  transfers?: Prisma.TransferUncheckedUpdateManyWithoutActorNestedInput
   memberships?: Prisma.MembershipUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
@@ -926,6 +1226,14 @@ export type UserCreateWithoutPaymentReversalsInput = {
   lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementCreateNestedManyWithoutActorInput
+  transferReviewRequests?: Prisma.TransferFinanceReviewCreateNestedManyWithoutRequesterInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionCreateNestedManyWithoutActorInput
+  correctionsRequested?: Prisma.CorrectionProposalCreateNestedManyWithoutRequesterInput
+  correctionsDecided?: Prisma.CorrectionProposalCreateNestedManyWithoutDeciderInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptCreateNestedManyWithoutActorInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutResolverInput
+  transfers?: Prisma.TransferCreateNestedManyWithoutActorInput
   memberships?: Prisma.MembershipCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
@@ -944,6 +1252,14 @@ export type UserUncheckedCreateWithoutPaymentReversalsInput = {
   lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedCreateNestedManyWithoutActorInput
+  transferReviewRequests?: Prisma.TransferFinanceReviewUncheckedCreateNestedManyWithoutRequesterInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionUncheckedCreateNestedManyWithoutActorInput
+  correctionsRequested?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutRequesterInput
+  correctionsDecided?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutDeciderInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedCreateNestedManyWithoutActorInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutResolverInput
+  transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutActorInput
   memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
@@ -978,6 +1294,14 @@ export type UserUpdateWithoutPaymentReversalsInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUpdateManyWithoutActorNestedInput
+  transferReviewRequests?: Prisma.TransferFinanceReviewUpdateManyWithoutRequesterNestedInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionUpdateManyWithoutActorNestedInput
+  correctionsRequested?: Prisma.CorrectionProposalUpdateManyWithoutRequesterNestedInput
+  correctionsDecided?: Prisma.CorrectionProposalUpdateManyWithoutDeciderNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUpdateManyWithoutActorNestedInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkUpdateManyWithoutResolverNestedInput
+  transfers?: Prisma.TransferUpdateManyWithoutActorNestedInput
   memberships?: Prisma.MembershipUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
@@ -996,6 +1320,14 @@ export type UserUncheckedUpdateWithoutPaymentReversalsInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedUpdateManyWithoutActorNestedInput
+  transferReviewRequests?: Prisma.TransferFinanceReviewUncheckedUpdateManyWithoutRequesterNestedInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionUncheckedUpdateManyWithoutActorNestedInput
+  correctionsRequested?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutRequesterNestedInput
+  correctionsDecided?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutDeciderNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedUpdateManyWithoutActorNestedInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutResolverNestedInput
+  transfers?: Prisma.TransferUncheckedUpdateManyWithoutActorNestedInput
   memberships?: Prisma.MembershipUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
@@ -1014,6 +1346,14 @@ export type UserCreateWithoutInvoiceAdjustmentsInput = {
   lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementCreateNestedManyWithoutActorInput
+  transferReviewRequests?: Prisma.TransferFinanceReviewCreateNestedManyWithoutRequesterInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionCreateNestedManyWithoutActorInput
+  correctionsRequested?: Prisma.CorrectionProposalCreateNestedManyWithoutRequesterInput
+  correctionsDecided?: Prisma.CorrectionProposalCreateNestedManyWithoutDeciderInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptCreateNestedManyWithoutActorInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutResolverInput
+  transfers?: Prisma.TransferCreateNestedManyWithoutActorInput
   memberships?: Prisma.MembershipCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
@@ -1032,6 +1372,14 @@ export type UserUncheckedCreateWithoutInvoiceAdjustmentsInput = {
   lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedCreateNestedManyWithoutActorInput
+  transferReviewRequests?: Prisma.TransferFinanceReviewUncheckedCreateNestedManyWithoutRequesterInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionUncheckedCreateNestedManyWithoutActorInput
+  correctionsRequested?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutRequesterInput
+  correctionsDecided?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutDeciderInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedCreateNestedManyWithoutActorInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutResolverInput
+  transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutActorInput
   memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
@@ -1066,6 +1414,14 @@ export type UserUpdateWithoutInvoiceAdjustmentsInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUpdateManyWithoutActorNestedInput
+  transferReviewRequests?: Prisma.TransferFinanceReviewUpdateManyWithoutRequesterNestedInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionUpdateManyWithoutActorNestedInput
+  correctionsRequested?: Prisma.CorrectionProposalUpdateManyWithoutRequesterNestedInput
+  correctionsDecided?: Prisma.CorrectionProposalUpdateManyWithoutDeciderNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUpdateManyWithoutActorNestedInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkUpdateManyWithoutResolverNestedInput
+  transfers?: Prisma.TransferUpdateManyWithoutActorNestedInput
   memberships?: Prisma.MembershipUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
@@ -1084,6 +1440,14 @@ export type UserUncheckedUpdateWithoutInvoiceAdjustmentsInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedUpdateManyWithoutActorNestedInput
+  transferReviewRequests?: Prisma.TransferFinanceReviewUncheckedUpdateManyWithoutRequesterNestedInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionUncheckedUpdateManyWithoutActorNestedInput
+  correctionsRequested?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutRequesterNestedInput
+  correctionsDecided?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutDeciderNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedUpdateManyWithoutActorNestedInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutResolverNestedInput
+  transfers?: Prisma.TransferUncheckedUpdateManyWithoutActorNestedInput
   memberships?: Prisma.MembershipUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
@@ -1102,6 +1466,14 @@ export type UserCreateWithoutInvoiceVoidsInput = {
   lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementCreateNestedManyWithoutActorInput
+  transferReviewRequests?: Prisma.TransferFinanceReviewCreateNestedManyWithoutRequesterInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionCreateNestedManyWithoutActorInput
+  correctionsRequested?: Prisma.CorrectionProposalCreateNestedManyWithoutRequesterInput
+  correctionsDecided?: Prisma.CorrectionProposalCreateNestedManyWithoutDeciderInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptCreateNestedManyWithoutActorInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutResolverInput
+  transfers?: Prisma.TransferCreateNestedManyWithoutActorInput
   memberships?: Prisma.MembershipCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
@@ -1120,6 +1492,14 @@ export type UserUncheckedCreateWithoutInvoiceVoidsInput = {
   lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedCreateNestedManyWithoutActorInput
+  transferReviewRequests?: Prisma.TransferFinanceReviewUncheckedCreateNestedManyWithoutRequesterInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionUncheckedCreateNestedManyWithoutActorInput
+  correctionsRequested?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutRequesterInput
+  correctionsDecided?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutDeciderInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedCreateNestedManyWithoutActorInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutResolverInput
+  transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutActorInput
   memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
@@ -1154,6 +1534,14 @@ export type UserUpdateWithoutInvoiceVoidsInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUpdateManyWithoutActorNestedInput
+  transferReviewRequests?: Prisma.TransferFinanceReviewUpdateManyWithoutRequesterNestedInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionUpdateManyWithoutActorNestedInput
+  correctionsRequested?: Prisma.CorrectionProposalUpdateManyWithoutRequesterNestedInput
+  correctionsDecided?: Prisma.CorrectionProposalUpdateManyWithoutDeciderNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUpdateManyWithoutActorNestedInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkUpdateManyWithoutResolverNestedInput
+  transfers?: Prisma.TransferUpdateManyWithoutActorNestedInput
   memberships?: Prisma.MembershipUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
@@ -1172,6 +1560,14 @@ export type UserUncheckedUpdateWithoutInvoiceVoidsInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedUpdateManyWithoutActorNestedInput
+  transferReviewRequests?: Prisma.TransferFinanceReviewUncheckedUpdateManyWithoutRequesterNestedInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionUncheckedUpdateManyWithoutActorNestedInput
+  correctionsRequested?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutRequesterNestedInput
+  correctionsDecided?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutDeciderNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedUpdateManyWithoutActorNestedInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutResolverNestedInput
+  transfers?: Prisma.TransferUncheckedUpdateManyWithoutActorNestedInput
   memberships?: Prisma.MembershipUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
@@ -1180,12 +1576,980 @@ export type UserUncheckedUpdateWithoutInvoiceVoidsInput = {
   invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedUpdateManyWithoutActorNestedInput
 }
 
+export type UserCreateWithoutCorrectionsRequestedInput = {
+  id?: string
+  loginIdentifier: string
+  passwordHash: string
+  displayName: string
+  status?: $Enums.UserStatus
+  passwordChangeRequired?: boolean
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementCreateNestedManyWithoutActorInput
+  transferReviewRequests?: Prisma.TransferFinanceReviewCreateNestedManyWithoutRequesterInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionCreateNestedManyWithoutActorInput
+  correctionsDecided?: Prisma.CorrectionProposalCreateNestedManyWithoutDeciderInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptCreateNestedManyWithoutActorInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutResolverInput
+  transfers?: Prisma.TransferCreateNestedManyWithoutActorInput
+  memberships?: Prisma.MembershipCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
+  enquiryFollowUps?: Prisma.EnquiryFollowUpCreateNestedManyWithoutUserInput
+  paymentReversals?: Prisma.PaymentReversalCreateNestedManyWithoutActorInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentCreateNestedManyWithoutActorInput
+  invoiceVoids?: Prisma.InvoiceVoidCreateNestedManyWithoutActorInput
+}
+
+export type UserUncheckedCreateWithoutCorrectionsRequestedInput = {
+  id?: string
+  loginIdentifier: string
+  passwordHash: string
+  displayName: string
+  status?: $Enums.UserStatus
+  passwordChangeRequired?: boolean
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedCreateNestedManyWithoutActorInput
+  transferReviewRequests?: Prisma.TransferFinanceReviewUncheckedCreateNestedManyWithoutRequesterInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionUncheckedCreateNestedManyWithoutActorInput
+  correctionsDecided?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutDeciderInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedCreateNestedManyWithoutActorInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutResolverInput
+  transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutActorInput
+  memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
+  enquiryFollowUps?: Prisma.EnquiryFollowUpUncheckedCreateNestedManyWithoutUserInput
+  paymentReversals?: Prisma.PaymentReversalUncheckedCreateNestedManyWithoutActorInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedCreateNestedManyWithoutActorInput
+  invoiceVoids?: Prisma.InvoiceVoidUncheckedCreateNestedManyWithoutActorInput
+}
+
+export type UserCreateOrConnectWithoutCorrectionsRequestedInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCorrectionsRequestedInput, Prisma.UserUncheckedCreateWithoutCorrectionsRequestedInput>
+}
+
+export type UserCreateWithoutCorrectionsDecidedInput = {
+  id?: string
+  loginIdentifier: string
+  passwordHash: string
+  displayName: string
+  status?: $Enums.UserStatus
+  passwordChangeRequired?: boolean
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementCreateNestedManyWithoutActorInput
+  transferReviewRequests?: Prisma.TransferFinanceReviewCreateNestedManyWithoutRequesterInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionCreateNestedManyWithoutActorInput
+  correctionsRequested?: Prisma.CorrectionProposalCreateNestedManyWithoutRequesterInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptCreateNestedManyWithoutActorInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutResolverInput
+  transfers?: Prisma.TransferCreateNestedManyWithoutActorInput
+  memberships?: Prisma.MembershipCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
+  enquiryFollowUps?: Prisma.EnquiryFollowUpCreateNestedManyWithoutUserInput
+  paymentReversals?: Prisma.PaymentReversalCreateNestedManyWithoutActorInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentCreateNestedManyWithoutActorInput
+  invoiceVoids?: Prisma.InvoiceVoidCreateNestedManyWithoutActorInput
+}
+
+export type UserUncheckedCreateWithoutCorrectionsDecidedInput = {
+  id?: string
+  loginIdentifier: string
+  passwordHash: string
+  displayName: string
+  status?: $Enums.UserStatus
+  passwordChangeRequired?: boolean
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedCreateNestedManyWithoutActorInput
+  transferReviewRequests?: Prisma.TransferFinanceReviewUncheckedCreateNestedManyWithoutRequesterInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionUncheckedCreateNestedManyWithoutActorInput
+  correctionsRequested?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutRequesterInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedCreateNestedManyWithoutActorInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutResolverInput
+  transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutActorInput
+  memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
+  enquiryFollowUps?: Prisma.EnquiryFollowUpUncheckedCreateNestedManyWithoutUserInput
+  paymentReversals?: Prisma.PaymentReversalUncheckedCreateNestedManyWithoutActorInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedCreateNestedManyWithoutActorInput
+  invoiceVoids?: Prisma.InvoiceVoidUncheckedCreateNestedManyWithoutActorInput
+}
+
+export type UserCreateOrConnectWithoutCorrectionsDecidedInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCorrectionsDecidedInput, Prisma.UserUncheckedCreateWithoutCorrectionsDecidedInput>
+}
+
+export type UserUpsertWithoutCorrectionsRequestedInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCorrectionsRequestedInput, Prisma.UserUncheckedUpdateWithoutCorrectionsRequestedInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCorrectionsRequestedInput, Prisma.UserUncheckedCreateWithoutCorrectionsRequestedInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCorrectionsRequestedInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCorrectionsRequestedInput, Prisma.UserUncheckedUpdateWithoutCorrectionsRequestedInput>
+}
+
+export type UserUpdateWithoutCorrectionsRequestedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  loginIdentifier?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  passwordChangeRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUpdateManyWithoutActorNestedInput
+  transferReviewRequests?: Prisma.TransferFinanceReviewUpdateManyWithoutRequesterNestedInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionUpdateManyWithoutActorNestedInput
+  correctionsDecided?: Prisma.CorrectionProposalUpdateManyWithoutDeciderNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUpdateManyWithoutActorNestedInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkUpdateManyWithoutResolverNestedInput
+  transfers?: Prisma.TransferUpdateManyWithoutActorNestedInput
+  memberships?: Prisma.MembershipUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
+  enquiryFollowUps?: Prisma.EnquiryFollowUpUpdateManyWithoutUserNestedInput
+  paymentReversals?: Prisma.PaymentReversalUpdateManyWithoutActorNestedInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUpdateManyWithoutActorNestedInput
+  invoiceVoids?: Prisma.InvoiceVoidUpdateManyWithoutActorNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCorrectionsRequestedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  loginIdentifier?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  passwordChangeRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedUpdateManyWithoutActorNestedInput
+  transferReviewRequests?: Prisma.TransferFinanceReviewUncheckedUpdateManyWithoutRequesterNestedInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionUncheckedUpdateManyWithoutActorNestedInput
+  correctionsDecided?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutDeciderNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedUpdateManyWithoutActorNestedInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutResolverNestedInput
+  transfers?: Prisma.TransferUncheckedUpdateManyWithoutActorNestedInput
+  memberships?: Prisma.MembershipUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
+  enquiryFollowUps?: Prisma.EnquiryFollowUpUncheckedUpdateManyWithoutUserNestedInput
+  paymentReversals?: Prisma.PaymentReversalUncheckedUpdateManyWithoutActorNestedInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedUpdateManyWithoutActorNestedInput
+  invoiceVoids?: Prisma.InvoiceVoidUncheckedUpdateManyWithoutActorNestedInput
+}
+
+export type UserUpsertWithoutCorrectionsDecidedInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCorrectionsDecidedInput, Prisma.UserUncheckedUpdateWithoutCorrectionsDecidedInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCorrectionsDecidedInput, Prisma.UserUncheckedCreateWithoutCorrectionsDecidedInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCorrectionsDecidedInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCorrectionsDecidedInput, Prisma.UserUncheckedUpdateWithoutCorrectionsDecidedInput>
+}
+
+export type UserUpdateWithoutCorrectionsDecidedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  loginIdentifier?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  passwordChangeRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUpdateManyWithoutActorNestedInput
+  transferReviewRequests?: Prisma.TransferFinanceReviewUpdateManyWithoutRequesterNestedInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionUpdateManyWithoutActorNestedInput
+  correctionsRequested?: Prisma.CorrectionProposalUpdateManyWithoutRequesterNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUpdateManyWithoutActorNestedInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkUpdateManyWithoutResolverNestedInput
+  transfers?: Prisma.TransferUpdateManyWithoutActorNestedInput
+  memberships?: Prisma.MembershipUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
+  enquiryFollowUps?: Prisma.EnquiryFollowUpUpdateManyWithoutUserNestedInput
+  paymentReversals?: Prisma.PaymentReversalUpdateManyWithoutActorNestedInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUpdateManyWithoutActorNestedInput
+  invoiceVoids?: Prisma.InvoiceVoidUpdateManyWithoutActorNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCorrectionsDecidedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  loginIdentifier?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  passwordChangeRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedUpdateManyWithoutActorNestedInput
+  transferReviewRequests?: Prisma.TransferFinanceReviewUncheckedUpdateManyWithoutRequesterNestedInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionUncheckedUpdateManyWithoutActorNestedInput
+  correctionsRequested?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutRequesterNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedUpdateManyWithoutActorNestedInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutResolverNestedInput
+  transfers?: Prisma.TransferUncheckedUpdateManyWithoutActorNestedInput
+  memberships?: Prisma.MembershipUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
+  enquiryFollowUps?: Prisma.EnquiryFollowUpUncheckedUpdateManyWithoutUserNestedInput
+  paymentReversals?: Prisma.PaymentReversalUncheckedUpdateManyWithoutActorNestedInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedUpdateManyWithoutActorNestedInput
+  invoiceVoids?: Prisma.InvoiceVoidUncheckedUpdateManyWithoutActorNestedInput
+}
+
+export type UserCreateWithoutCorrectionReceiptsInput = {
+  id?: string
+  loginIdentifier: string
+  passwordHash: string
+  displayName: string
+  status?: $Enums.UserStatus
+  passwordChangeRequired?: boolean
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementCreateNestedManyWithoutActorInput
+  transferReviewRequests?: Prisma.TransferFinanceReviewCreateNestedManyWithoutRequesterInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionCreateNestedManyWithoutActorInput
+  correctionsRequested?: Prisma.CorrectionProposalCreateNestedManyWithoutRequesterInput
+  correctionsDecided?: Prisma.CorrectionProposalCreateNestedManyWithoutDeciderInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutResolverInput
+  transfers?: Prisma.TransferCreateNestedManyWithoutActorInput
+  memberships?: Prisma.MembershipCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
+  enquiryFollowUps?: Prisma.EnquiryFollowUpCreateNestedManyWithoutUserInput
+  paymentReversals?: Prisma.PaymentReversalCreateNestedManyWithoutActorInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentCreateNestedManyWithoutActorInput
+  invoiceVoids?: Prisma.InvoiceVoidCreateNestedManyWithoutActorInput
+}
+
+export type UserUncheckedCreateWithoutCorrectionReceiptsInput = {
+  id?: string
+  loginIdentifier: string
+  passwordHash: string
+  displayName: string
+  status?: $Enums.UserStatus
+  passwordChangeRequired?: boolean
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedCreateNestedManyWithoutActorInput
+  transferReviewRequests?: Prisma.TransferFinanceReviewUncheckedCreateNestedManyWithoutRequesterInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionUncheckedCreateNestedManyWithoutActorInput
+  correctionsRequested?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutRequesterInput
+  correctionsDecided?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutDeciderInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutResolverInput
+  transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutActorInput
+  memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
+  enquiryFollowUps?: Prisma.EnquiryFollowUpUncheckedCreateNestedManyWithoutUserInput
+  paymentReversals?: Prisma.PaymentReversalUncheckedCreateNestedManyWithoutActorInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedCreateNestedManyWithoutActorInput
+  invoiceVoids?: Prisma.InvoiceVoidUncheckedCreateNestedManyWithoutActorInput
+}
+
+export type UserCreateOrConnectWithoutCorrectionReceiptsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCorrectionReceiptsInput, Prisma.UserUncheckedCreateWithoutCorrectionReceiptsInput>
+}
+
+export type UserUpsertWithoutCorrectionReceiptsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCorrectionReceiptsInput, Prisma.UserUncheckedUpdateWithoutCorrectionReceiptsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCorrectionReceiptsInput, Prisma.UserUncheckedCreateWithoutCorrectionReceiptsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCorrectionReceiptsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCorrectionReceiptsInput, Prisma.UserUncheckedUpdateWithoutCorrectionReceiptsInput>
+}
+
+export type UserUpdateWithoutCorrectionReceiptsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  loginIdentifier?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  passwordChangeRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUpdateManyWithoutActorNestedInput
+  transferReviewRequests?: Prisma.TransferFinanceReviewUpdateManyWithoutRequesterNestedInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionUpdateManyWithoutActorNestedInput
+  correctionsRequested?: Prisma.CorrectionProposalUpdateManyWithoutRequesterNestedInput
+  correctionsDecided?: Prisma.CorrectionProposalUpdateManyWithoutDeciderNestedInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkUpdateManyWithoutResolverNestedInput
+  transfers?: Prisma.TransferUpdateManyWithoutActorNestedInput
+  memberships?: Prisma.MembershipUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
+  enquiryFollowUps?: Prisma.EnquiryFollowUpUpdateManyWithoutUserNestedInput
+  paymentReversals?: Prisma.PaymentReversalUpdateManyWithoutActorNestedInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUpdateManyWithoutActorNestedInput
+  invoiceVoids?: Prisma.InvoiceVoidUpdateManyWithoutActorNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCorrectionReceiptsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  loginIdentifier?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  passwordChangeRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedUpdateManyWithoutActorNestedInput
+  transferReviewRequests?: Prisma.TransferFinanceReviewUncheckedUpdateManyWithoutRequesterNestedInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionUncheckedUpdateManyWithoutActorNestedInput
+  correctionsRequested?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutRequesterNestedInput
+  correctionsDecided?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutDeciderNestedInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutResolverNestedInput
+  transfers?: Prisma.TransferUncheckedUpdateManyWithoutActorNestedInput
+  memberships?: Prisma.MembershipUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
+  enquiryFollowUps?: Prisma.EnquiryFollowUpUncheckedUpdateManyWithoutUserNestedInput
+  paymentReversals?: Prisma.PaymentReversalUncheckedUpdateManyWithoutActorNestedInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedUpdateManyWithoutActorNestedInput
+  invoiceVoids?: Prisma.InvoiceVoidUncheckedUpdateManyWithoutActorNestedInput
+}
+
+export type UserCreateWithoutCorrectionLinksResolvedInput = {
+  id?: string
+  loginIdentifier: string
+  passwordHash: string
+  displayName: string
+  status?: $Enums.UserStatus
+  passwordChangeRequired?: boolean
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementCreateNestedManyWithoutActorInput
+  transferReviewRequests?: Prisma.TransferFinanceReviewCreateNestedManyWithoutRequesterInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionCreateNestedManyWithoutActorInput
+  correctionsRequested?: Prisma.CorrectionProposalCreateNestedManyWithoutRequesterInput
+  correctionsDecided?: Prisma.CorrectionProposalCreateNestedManyWithoutDeciderInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptCreateNestedManyWithoutActorInput
+  transfers?: Prisma.TransferCreateNestedManyWithoutActorInput
+  memberships?: Prisma.MembershipCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
+  enquiryFollowUps?: Prisma.EnquiryFollowUpCreateNestedManyWithoutUserInput
+  paymentReversals?: Prisma.PaymentReversalCreateNestedManyWithoutActorInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentCreateNestedManyWithoutActorInput
+  invoiceVoids?: Prisma.InvoiceVoidCreateNestedManyWithoutActorInput
+}
+
+export type UserUncheckedCreateWithoutCorrectionLinksResolvedInput = {
+  id?: string
+  loginIdentifier: string
+  passwordHash: string
+  displayName: string
+  status?: $Enums.UserStatus
+  passwordChangeRequired?: boolean
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedCreateNestedManyWithoutActorInput
+  transferReviewRequests?: Prisma.TransferFinanceReviewUncheckedCreateNestedManyWithoutRequesterInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionUncheckedCreateNestedManyWithoutActorInput
+  correctionsRequested?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutRequesterInput
+  correctionsDecided?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutDeciderInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedCreateNestedManyWithoutActorInput
+  transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutActorInput
+  memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
+  enquiryFollowUps?: Prisma.EnquiryFollowUpUncheckedCreateNestedManyWithoutUserInput
+  paymentReversals?: Prisma.PaymentReversalUncheckedCreateNestedManyWithoutActorInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedCreateNestedManyWithoutActorInput
+  invoiceVoids?: Prisma.InvoiceVoidUncheckedCreateNestedManyWithoutActorInput
+}
+
+export type UserCreateOrConnectWithoutCorrectionLinksResolvedInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCorrectionLinksResolvedInput, Prisma.UserUncheckedCreateWithoutCorrectionLinksResolvedInput>
+}
+
+export type UserUpsertWithoutCorrectionLinksResolvedInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCorrectionLinksResolvedInput, Prisma.UserUncheckedUpdateWithoutCorrectionLinksResolvedInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCorrectionLinksResolvedInput, Prisma.UserUncheckedCreateWithoutCorrectionLinksResolvedInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCorrectionLinksResolvedInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCorrectionLinksResolvedInput, Prisma.UserUncheckedUpdateWithoutCorrectionLinksResolvedInput>
+}
+
+export type UserUpdateWithoutCorrectionLinksResolvedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  loginIdentifier?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  passwordChangeRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUpdateManyWithoutActorNestedInput
+  transferReviewRequests?: Prisma.TransferFinanceReviewUpdateManyWithoutRequesterNestedInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionUpdateManyWithoutActorNestedInput
+  correctionsRequested?: Prisma.CorrectionProposalUpdateManyWithoutRequesterNestedInput
+  correctionsDecided?: Prisma.CorrectionProposalUpdateManyWithoutDeciderNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUpdateManyWithoutActorNestedInput
+  transfers?: Prisma.TransferUpdateManyWithoutActorNestedInput
+  memberships?: Prisma.MembershipUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
+  enquiryFollowUps?: Prisma.EnquiryFollowUpUpdateManyWithoutUserNestedInput
+  paymentReversals?: Prisma.PaymentReversalUpdateManyWithoutActorNestedInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUpdateManyWithoutActorNestedInput
+  invoiceVoids?: Prisma.InvoiceVoidUpdateManyWithoutActorNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCorrectionLinksResolvedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  loginIdentifier?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  passwordChangeRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedUpdateManyWithoutActorNestedInput
+  transferReviewRequests?: Prisma.TransferFinanceReviewUncheckedUpdateManyWithoutRequesterNestedInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionUncheckedUpdateManyWithoutActorNestedInput
+  correctionsRequested?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutRequesterNestedInput
+  correctionsDecided?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutDeciderNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedUpdateManyWithoutActorNestedInput
+  transfers?: Prisma.TransferUncheckedUpdateManyWithoutActorNestedInput
+  memberships?: Prisma.MembershipUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
+  enquiryFollowUps?: Prisma.EnquiryFollowUpUncheckedUpdateManyWithoutUserNestedInput
+  paymentReversals?: Prisma.PaymentReversalUncheckedUpdateManyWithoutActorNestedInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedUpdateManyWithoutActorNestedInput
+  invoiceVoids?: Prisma.InvoiceVoidUncheckedUpdateManyWithoutActorNestedInput
+}
+
+export type UserCreateWithoutTransfersInput = {
+  id?: string
+  loginIdentifier: string
+  passwordHash: string
+  displayName: string
+  status?: $Enums.UserStatus
+  passwordChangeRequired?: boolean
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementCreateNestedManyWithoutActorInput
+  transferReviewRequests?: Prisma.TransferFinanceReviewCreateNestedManyWithoutRequesterInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionCreateNestedManyWithoutActorInput
+  correctionsRequested?: Prisma.CorrectionProposalCreateNestedManyWithoutRequesterInput
+  correctionsDecided?: Prisma.CorrectionProposalCreateNestedManyWithoutDeciderInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptCreateNestedManyWithoutActorInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutResolverInput
+  memberships?: Prisma.MembershipCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
+  enquiryFollowUps?: Prisma.EnquiryFollowUpCreateNestedManyWithoutUserInput
+  paymentReversals?: Prisma.PaymentReversalCreateNestedManyWithoutActorInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentCreateNestedManyWithoutActorInput
+  invoiceVoids?: Prisma.InvoiceVoidCreateNestedManyWithoutActorInput
+}
+
+export type UserUncheckedCreateWithoutTransfersInput = {
+  id?: string
+  loginIdentifier: string
+  passwordHash: string
+  displayName: string
+  status?: $Enums.UserStatus
+  passwordChangeRequired?: boolean
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedCreateNestedManyWithoutActorInput
+  transferReviewRequests?: Prisma.TransferFinanceReviewUncheckedCreateNestedManyWithoutRequesterInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionUncheckedCreateNestedManyWithoutActorInput
+  correctionsRequested?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutRequesterInput
+  correctionsDecided?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutDeciderInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedCreateNestedManyWithoutActorInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutResolverInput
+  memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
+  enquiryFollowUps?: Prisma.EnquiryFollowUpUncheckedCreateNestedManyWithoutUserInput
+  paymentReversals?: Prisma.PaymentReversalUncheckedCreateNestedManyWithoutActorInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedCreateNestedManyWithoutActorInput
+  invoiceVoids?: Prisma.InvoiceVoidUncheckedCreateNestedManyWithoutActorInput
+}
+
+export type UserCreateOrConnectWithoutTransfersInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutTransfersInput, Prisma.UserUncheckedCreateWithoutTransfersInput>
+}
+
+export type UserUpsertWithoutTransfersInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutTransfersInput, Prisma.UserUncheckedUpdateWithoutTransfersInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutTransfersInput, Prisma.UserUncheckedCreateWithoutTransfersInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutTransfersInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutTransfersInput, Prisma.UserUncheckedUpdateWithoutTransfersInput>
+}
+
+export type UserUpdateWithoutTransfersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  loginIdentifier?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  passwordChangeRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUpdateManyWithoutActorNestedInput
+  transferReviewRequests?: Prisma.TransferFinanceReviewUpdateManyWithoutRequesterNestedInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionUpdateManyWithoutActorNestedInput
+  correctionsRequested?: Prisma.CorrectionProposalUpdateManyWithoutRequesterNestedInput
+  correctionsDecided?: Prisma.CorrectionProposalUpdateManyWithoutDeciderNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUpdateManyWithoutActorNestedInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkUpdateManyWithoutResolverNestedInput
+  memberships?: Prisma.MembershipUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
+  enquiryFollowUps?: Prisma.EnquiryFollowUpUpdateManyWithoutUserNestedInput
+  paymentReversals?: Prisma.PaymentReversalUpdateManyWithoutActorNestedInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUpdateManyWithoutActorNestedInput
+  invoiceVoids?: Prisma.InvoiceVoidUpdateManyWithoutActorNestedInput
+}
+
+export type UserUncheckedUpdateWithoutTransfersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  loginIdentifier?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  passwordChangeRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedUpdateManyWithoutActorNestedInput
+  transferReviewRequests?: Prisma.TransferFinanceReviewUncheckedUpdateManyWithoutRequesterNestedInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionUncheckedUpdateManyWithoutActorNestedInput
+  correctionsRequested?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutRequesterNestedInput
+  correctionsDecided?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutDeciderNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedUpdateManyWithoutActorNestedInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutResolverNestedInput
+  memberships?: Prisma.MembershipUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
+  enquiryFollowUps?: Prisma.EnquiryFollowUpUncheckedUpdateManyWithoutUserNestedInput
+  paymentReversals?: Prisma.PaymentReversalUncheckedUpdateManyWithoutActorNestedInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedUpdateManyWithoutActorNestedInput
+  invoiceVoids?: Prisma.InvoiceVoidUncheckedUpdateManyWithoutActorNestedInput
+}
+
+export type UserCreateWithoutAssignmentReplacementsInput = {
+  id?: string
+  loginIdentifier: string
+  passwordHash: string
+  displayName: string
+  status?: $Enums.UserStatus
+  passwordChangeRequired?: boolean
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  transferReviewRequests?: Prisma.TransferFinanceReviewCreateNestedManyWithoutRequesterInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionCreateNestedManyWithoutActorInput
+  correctionsRequested?: Prisma.CorrectionProposalCreateNestedManyWithoutRequesterInput
+  correctionsDecided?: Prisma.CorrectionProposalCreateNestedManyWithoutDeciderInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptCreateNestedManyWithoutActorInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutResolverInput
+  transfers?: Prisma.TransferCreateNestedManyWithoutActorInput
+  memberships?: Prisma.MembershipCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
+  enquiryFollowUps?: Prisma.EnquiryFollowUpCreateNestedManyWithoutUserInput
+  paymentReversals?: Prisma.PaymentReversalCreateNestedManyWithoutActorInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentCreateNestedManyWithoutActorInput
+  invoiceVoids?: Prisma.InvoiceVoidCreateNestedManyWithoutActorInput
+}
+
+export type UserUncheckedCreateWithoutAssignmentReplacementsInput = {
+  id?: string
+  loginIdentifier: string
+  passwordHash: string
+  displayName: string
+  status?: $Enums.UserStatus
+  passwordChangeRequired?: boolean
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  transferReviewRequests?: Prisma.TransferFinanceReviewUncheckedCreateNestedManyWithoutRequesterInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionUncheckedCreateNestedManyWithoutActorInput
+  correctionsRequested?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutRequesterInput
+  correctionsDecided?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutDeciderInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedCreateNestedManyWithoutActorInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutResolverInput
+  transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutActorInput
+  memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
+  enquiryFollowUps?: Prisma.EnquiryFollowUpUncheckedCreateNestedManyWithoutUserInput
+  paymentReversals?: Prisma.PaymentReversalUncheckedCreateNestedManyWithoutActorInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedCreateNestedManyWithoutActorInput
+  invoiceVoids?: Prisma.InvoiceVoidUncheckedCreateNestedManyWithoutActorInput
+}
+
+export type UserCreateOrConnectWithoutAssignmentReplacementsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutAssignmentReplacementsInput, Prisma.UserUncheckedCreateWithoutAssignmentReplacementsInput>
+}
+
+export type UserUpsertWithoutAssignmentReplacementsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutAssignmentReplacementsInput, Prisma.UserUncheckedUpdateWithoutAssignmentReplacementsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutAssignmentReplacementsInput, Prisma.UserUncheckedCreateWithoutAssignmentReplacementsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutAssignmentReplacementsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutAssignmentReplacementsInput, Prisma.UserUncheckedUpdateWithoutAssignmentReplacementsInput>
+}
+
+export type UserUpdateWithoutAssignmentReplacementsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  loginIdentifier?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  passwordChangeRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  transferReviewRequests?: Prisma.TransferFinanceReviewUpdateManyWithoutRequesterNestedInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionUpdateManyWithoutActorNestedInput
+  correctionsRequested?: Prisma.CorrectionProposalUpdateManyWithoutRequesterNestedInput
+  correctionsDecided?: Prisma.CorrectionProposalUpdateManyWithoutDeciderNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUpdateManyWithoutActorNestedInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkUpdateManyWithoutResolverNestedInput
+  transfers?: Prisma.TransferUpdateManyWithoutActorNestedInput
+  memberships?: Prisma.MembershipUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
+  enquiryFollowUps?: Prisma.EnquiryFollowUpUpdateManyWithoutUserNestedInput
+  paymentReversals?: Prisma.PaymentReversalUpdateManyWithoutActorNestedInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUpdateManyWithoutActorNestedInput
+  invoiceVoids?: Prisma.InvoiceVoidUpdateManyWithoutActorNestedInput
+}
+
+export type UserUncheckedUpdateWithoutAssignmentReplacementsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  loginIdentifier?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  passwordChangeRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  transferReviewRequests?: Prisma.TransferFinanceReviewUncheckedUpdateManyWithoutRequesterNestedInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionUncheckedUpdateManyWithoutActorNestedInput
+  correctionsRequested?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutRequesterNestedInput
+  correctionsDecided?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutDeciderNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedUpdateManyWithoutActorNestedInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutResolverNestedInput
+  transfers?: Prisma.TransferUncheckedUpdateManyWithoutActorNestedInput
+  memberships?: Prisma.MembershipUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
+  enquiryFollowUps?: Prisma.EnquiryFollowUpUncheckedUpdateManyWithoutUserNestedInput
+  paymentReversals?: Prisma.PaymentReversalUncheckedUpdateManyWithoutActorNestedInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedUpdateManyWithoutActorNestedInput
+  invoiceVoids?: Prisma.InvoiceVoidUncheckedUpdateManyWithoutActorNestedInput
+}
+
+export type UserCreateWithoutTransferReviewRequestsInput = {
+  id?: string
+  loginIdentifier: string
+  passwordHash: string
+  displayName: string
+  status?: $Enums.UserStatus
+  passwordChangeRequired?: boolean
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementCreateNestedManyWithoutActorInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionCreateNestedManyWithoutActorInput
+  correctionsRequested?: Prisma.CorrectionProposalCreateNestedManyWithoutRequesterInput
+  correctionsDecided?: Prisma.CorrectionProposalCreateNestedManyWithoutDeciderInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptCreateNestedManyWithoutActorInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutResolverInput
+  transfers?: Prisma.TransferCreateNestedManyWithoutActorInput
+  memberships?: Prisma.MembershipCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
+  enquiryFollowUps?: Prisma.EnquiryFollowUpCreateNestedManyWithoutUserInput
+  paymentReversals?: Prisma.PaymentReversalCreateNestedManyWithoutActorInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentCreateNestedManyWithoutActorInput
+  invoiceVoids?: Prisma.InvoiceVoidCreateNestedManyWithoutActorInput
+}
+
+export type UserUncheckedCreateWithoutTransferReviewRequestsInput = {
+  id?: string
+  loginIdentifier: string
+  passwordHash: string
+  displayName: string
+  status?: $Enums.UserStatus
+  passwordChangeRequired?: boolean
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedCreateNestedManyWithoutActorInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionUncheckedCreateNestedManyWithoutActorInput
+  correctionsRequested?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutRequesterInput
+  correctionsDecided?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutDeciderInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedCreateNestedManyWithoutActorInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutResolverInput
+  transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutActorInput
+  memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
+  enquiryFollowUps?: Prisma.EnquiryFollowUpUncheckedCreateNestedManyWithoutUserInput
+  paymentReversals?: Prisma.PaymentReversalUncheckedCreateNestedManyWithoutActorInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedCreateNestedManyWithoutActorInput
+  invoiceVoids?: Prisma.InvoiceVoidUncheckedCreateNestedManyWithoutActorInput
+}
+
+export type UserCreateOrConnectWithoutTransferReviewRequestsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutTransferReviewRequestsInput, Prisma.UserUncheckedCreateWithoutTransferReviewRequestsInput>
+}
+
+export type UserUpsertWithoutTransferReviewRequestsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutTransferReviewRequestsInput, Prisma.UserUncheckedUpdateWithoutTransferReviewRequestsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutTransferReviewRequestsInput, Prisma.UserUncheckedCreateWithoutTransferReviewRequestsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutTransferReviewRequestsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutTransferReviewRequestsInput, Prisma.UserUncheckedUpdateWithoutTransferReviewRequestsInput>
+}
+
+export type UserUpdateWithoutTransferReviewRequestsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  loginIdentifier?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  passwordChangeRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUpdateManyWithoutActorNestedInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionUpdateManyWithoutActorNestedInput
+  correctionsRequested?: Prisma.CorrectionProposalUpdateManyWithoutRequesterNestedInput
+  correctionsDecided?: Prisma.CorrectionProposalUpdateManyWithoutDeciderNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUpdateManyWithoutActorNestedInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkUpdateManyWithoutResolverNestedInput
+  transfers?: Prisma.TransferUpdateManyWithoutActorNestedInput
+  memberships?: Prisma.MembershipUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
+  enquiryFollowUps?: Prisma.EnquiryFollowUpUpdateManyWithoutUserNestedInput
+  paymentReversals?: Prisma.PaymentReversalUpdateManyWithoutActorNestedInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUpdateManyWithoutActorNestedInput
+  invoiceVoids?: Prisma.InvoiceVoidUpdateManyWithoutActorNestedInput
+}
+
+export type UserUncheckedUpdateWithoutTransferReviewRequestsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  loginIdentifier?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  passwordChangeRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedUpdateManyWithoutActorNestedInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionUncheckedUpdateManyWithoutActorNestedInput
+  correctionsRequested?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutRequesterNestedInput
+  correctionsDecided?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutDeciderNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedUpdateManyWithoutActorNestedInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutResolverNestedInput
+  transfers?: Prisma.TransferUncheckedUpdateManyWithoutActorNestedInput
+  memberships?: Prisma.MembershipUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
+  enquiryFollowUps?: Prisma.EnquiryFollowUpUncheckedUpdateManyWithoutUserNestedInput
+  paymentReversals?: Prisma.PaymentReversalUncheckedUpdateManyWithoutActorNestedInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedUpdateManyWithoutActorNestedInput
+  invoiceVoids?: Prisma.InvoiceVoidUncheckedUpdateManyWithoutActorNestedInput
+}
+
+export type UserCreateWithoutTransferReviewResolutionsInput = {
+  id?: string
+  loginIdentifier: string
+  passwordHash: string
+  displayName: string
+  status?: $Enums.UserStatus
+  passwordChangeRequired?: boolean
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementCreateNestedManyWithoutActorInput
+  transferReviewRequests?: Prisma.TransferFinanceReviewCreateNestedManyWithoutRequesterInput
+  correctionsRequested?: Prisma.CorrectionProposalCreateNestedManyWithoutRequesterInput
+  correctionsDecided?: Prisma.CorrectionProposalCreateNestedManyWithoutDeciderInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptCreateNestedManyWithoutActorInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutResolverInput
+  transfers?: Prisma.TransferCreateNestedManyWithoutActorInput
+  memberships?: Prisma.MembershipCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
+  enquiryFollowUps?: Prisma.EnquiryFollowUpCreateNestedManyWithoutUserInput
+  paymentReversals?: Prisma.PaymentReversalCreateNestedManyWithoutActorInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentCreateNestedManyWithoutActorInput
+  invoiceVoids?: Prisma.InvoiceVoidCreateNestedManyWithoutActorInput
+}
+
+export type UserUncheckedCreateWithoutTransferReviewResolutionsInput = {
+  id?: string
+  loginIdentifier: string
+  passwordHash: string
+  displayName: string
+  status?: $Enums.UserStatus
+  passwordChangeRequired?: boolean
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedCreateNestedManyWithoutActorInput
+  transferReviewRequests?: Prisma.TransferFinanceReviewUncheckedCreateNestedManyWithoutRequesterInput
+  correctionsRequested?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutRequesterInput
+  correctionsDecided?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutDeciderInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedCreateNestedManyWithoutActorInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutResolverInput
+  transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutActorInput
+  memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
+  enquiryFollowUps?: Prisma.EnquiryFollowUpUncheckedCreateNestedManyWithoutUserInput
+  paymentReversals?: Prisma.PaymentReversalUncheckedCreateNestedManyWithoutActorInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedCreateNestedManyWithoutActorInput
+  invoiceVoids?: Prisma.InvoiceVoidUncheckedCreateNestedManyWithoutActorInput
+}
+
+export type UserCreateOrConnectWithoutTransferReviewResolutionsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutTransferReviewResolutionsInput, Prisma.UserUncheckedCreateWithoutTransferReviewResolutionsInput>
+}
+
+export type UserUpsertWithoutTransferReviewResolutionsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutTransferReviewResolutionsInput, Prisma.UserUncheckedUpdateWithoutTransferReviewResolutionsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutTransferReviewResolutionsInput, Prisma.UserUncheckedCreateWithoutTransferReviewResolutionsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutTransferReviewResolutionsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutTransferReviewResolutionsInput, Prisma.UserUncheckedUpdateWithoutTransferReviewResolutionsInput>
+}
+
+export type UserUpdateWithoutTransferReviewResolutionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  loginIdentifier?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  passwordChangeRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUpdateManyWithoutActorNestedInput
+  transferReviewRequests?: Prisma.TransferFinanceReviewUpdateManyWithoutRequesterNestedInput
+  correctionsRequested?: Prisma.CorrectionProposalUpdateManyWithoutRequesterNestedInput
+  correctionsDecided?: Prisma.CorrectionProposalUpdateManyWithoutDeciderNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUpdateManyWithoutActorNestedInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkUpdateManyWithoutResolverNestedInput
+  transfers?: Prisma.TransferUpdateManyWithoutActorNestedInput
+  memberships?: Prisma.MembershipUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
+  enquiryFollowUps?: Prisma.EnquiryFollowUpUpdateManyWithoutUserNestedInput
+  paymentReversals?: Prisma.PaymentReversalUpdateManyWithoutActorNestedInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUpdateManyWithoutActorNestedInput
+  invoiceVoids?: Prisma.InvoiceVoidUpdateManyWithoutActorNestedInput
+}
+
+export type UserUncheckedUpdateWithoutTransferReviewResolutionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  loginIdentifier?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  passwordChangeRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedUpdateManyWithoutActorNestedInput
+  transferReviewRequests?: Prisma.TransferFinanceReviewUncheckedUpdateManyWithoutRequesterNestedInput
+  correctionsRequested?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutRequesterNestedInput
+  correctionsDecided?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutDeciderNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedUpdateManyWithoutActorNestedInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutResolverNestedInput
+  transfers?: Prisma.TransferUncheckedUpdateManyWithoutActorNestedInput
+  memberships?: Prisma.MembershipUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
+  enquiryFollowUps?: Prisma.EnquiryFollowUpUncheckedUpdateManyWithoutUserNestedInput
+  paymentReversals?: Prisma.PaymentReversalUncheckedUpdateManyWithoutActorNestedInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedUpdateManyWithoutActorNestedInput
+  invoiceVoids?: Prisma.InvoiceVoidUncheckedUpdateManyWithoutActorNestedInput
+}
+
 
 /**
  * Count Type UserCountOutputType
  */
 
 export type UserCountOutputType = {
+  assignmentReplacements: number
+  transferReviewRequests: number
+  transferReviewResolutions: number
+  correctionsRequested: number
+  correctionsDecided: number
+  correctionReceipts: number
+  correctionLinksResolved: number
+  transfers: number
   memberships: number
   sessions: number
   auditEvents: number
@@ -1196,6 +2560,14 @@ export type UserCountOutputType = {
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  assignmentReplacements?: boolean | UserCountOutputTypeCountAssignmentReplacementsArgs
+  transferReviewRequests?: boolean | UserCountOutputTypeCountTransferReviewRequestsArgs
+  transferReviewResolutions?: boolean | UserCountOutputTypeCountTransferReviewResolutionsArgs
+  correctionsRequested?: boolean | UserCountOutputTypeCountCorrectionsRequestedArgs
+  correctionsDecided?: boolean | UserCountOutputTypeCountCorrectionsDecidedArgs
+  correctionReceipts?: boolean | UserCountOutputTypeCountCorrectionReceiptsArgs
+  correctionLinksResolved?: boolean | UserCountOutputTypeCountCorrectionLinksResolvedArgs
+  transfers?: boolean | UserCountOutputTypeCountTransfersArgs
   memberships?: boolean | UserCountOutputTypeCountMembershipsArgs
   sessions?: boolean | UserCountOutputTypeCountSessionsArgs
   auditEvents?: boolean | UserCountOutputTypeCountAuditEventsArgs
@@ -1213,6 +2585,62 @@ export type UserCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensi
    * Select specific fields to fetch from the UserCountOutputType
    */
   select?: Prisma.UserCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountAssignmentReplacementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.StayAssignmentReplacementWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountTransferReviewRequestsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TransferFinanceReviewWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountTransferReviewResolutionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TransferFinanceResolutionWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountCorrectionsRequestedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CorrectionProposalWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountCorrectionsDecidedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CorrectionProposalWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountCorrectionReceiptsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CorrectionCommandReceiptWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountCorrectionLinksResolvedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CorrectionFinanceLinkWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountTransfersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TransferWhereInput
 }
 
 /**
@@ -1275,6 +2703,14 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   lastLoginAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  assignmentReplacements?: boolean | Prisma.User$assignmentReplacementsArgs<ExtArgs>
+  transferReviewRequests?: boolean | Prisma.User$transferReviewRequestsArgs<ExtArgs>
+  transferReviewResolutions?: boolean | Prisma.User$transferReviewResolutionsArgs<ExtArgs>
+  correctionsRequested?: boolean | Prisma.User$correctionsRequestedArgs<ExtArgs>
+  correctionsDecided?: boolean | Prisma.User$correctionsDecidedArgs<ExtArgs>
+  correctionReceipts?: boolean | Prisma.User$correctionReceiptsArgs<ExtArgs>
+  correctionLinksResolved?: boolean | Prisma.User$correctionLinksResolvedArgs<ExtArgs>
+  transfers?: boolean | Prisma.User$transfersArgs<ExtArgs>
   memberships?: boolean | Prisma.User$membershipsArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   auditEvents?: boolean | Prisma.User$auditEventsArgs<ExtArgs>
@@ -1323,6 +2759,14 @@ export type UserSelectScalar = {
 
 export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "loginIdentifier" | "passwordHash" | "displayName" | "status" | "passwordChangeRequired" | "lastLoginAt" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  assignmentReplacements?: boolean | Prisma.User$assignmentReplacementsArgs<ExtArgs>
+  transferReviewRequests?: boolean | Prisma.User$transferReviewRequestsArgs<ExtArgs>
+  transferReviewResolutions?: boolean | Prisma.User$transferReviewResolutionsArgs<ExtArgs>
+  correctionsRequested?: boolean | Prisma.User$correctionsRequestedArgs<ExtArgs>
+  correctionsDecided?: boolean | Prisma.User$correctionsDecidedArgs<ExtArgs>
+  correctionReceipts?: boolean | Prisma.User$correctionReceiptsArgs<ExtArgs>
+  correctionLinksResolved?: boolean | Prisma.User$correctionLinksResolvedArgs<ExtArgs>
+  transfers?: boolean | Prisma.User$transfersArgs<ExtArgs>
   memberships?: boolean | Prisma.User$membershipsArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   auditEvents?: boolean | Prisma.User$auditEventsArgs<ExtArgs>
@@ -1338,6 +2782,14 @@ export type UserIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
 export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "User"
   objects: {
+    assignmentReplacements: Prisma.$StayAssignmentReplacementPayload<ExtArgs>[]
+    transferReviewRequests: Prisma.$TransferFinanceReviewPayload<ExtArgs>[]
+    transferReviewResolutions: Prisma.$TransferFinanceResolutionPayload<ExtArgs>[]
+    correctionsRequested: Prisma.$CorrectionProposalPayload<ExtArgs>[]
+    correctionsDecided: Prisma.$CorrectionProposalPayload<ExtArgs>[]
+    correctionReceipts: Prisma.$CorrectionCommandReceiptPayload<ExtArgs>[]
+    correctionLinksResolved: Prisma.$CorrectionFinanceLinkPayload<ExtArgs>[]
+    transfers: Prisma.$TransferPayload<ExtArgs>[]
     memberships: Prisma.$MembershipPayload<ExtArgs>[]
     sessions: Prisma.$SessionPayload<ExtArgs>[]
     auditEvents: Prisma.$AuditEventPayload<ExtArgs>[]
@@ -1753,6 +3205,14 @@ readonly fields: UserFieldRefs;
  */
 export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  assignmentReplacements<T extends Prisma.User$assignmentReplacementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$assignmentReplacementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StayAssignmentReplacementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  transferReviewRequests<T extends Prisma.User$transferReviewRequestsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$transferReviewRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TransferFinanceReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  transferReviewResolutions<T extends Prisma.User$transferReviewResolutionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$transferReviewResolutionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TransferFinanceResolutionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  correctionsRequested<T extends Prisma.User$correctionsRequestedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$correctionsRequestedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CorrectionProposalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  correctionsDecided<T extends Prisma.User$correctionsDecidedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$correctionsDecidedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CorrectionProposalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  correctionReceipts<T extends Prisma.User$correctionReceiptsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$correctionReceiptsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CorrectionCommandReceiptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  correctionLinksResolved<T extends Prisma.User$correctionLinksResolvedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$correctionLinksResolvedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CorrectionFinanceLinkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  transfers<T extends Prisma.User$transfersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$transfersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TransferPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   memberships<T extends Prisma.User$membershipsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$membershipsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MembershipPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sessions<T extends Prisma.User$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   auditEvents<T extends Prisma.User$auditEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$auditEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuditEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -2188,6 +3648,198 @@ export type UserDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * Limit how many Users to delete.
    */
   limit?: number
+}
+
+/**
+ * User.assignmentReplacements
+ */
+export type User$assignmentReplacementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the StayAssignmentReplacement
+   */
+  select?: Prisma.StayAssignmentReplacementSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the StayAssignmentReplacement
+   */
+  omit?: Prisma.StayAssignmentReplacementOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.StayAssignmentReplacementInclude<ExtArgs> | null
+  where?: Prisma.StayAssignmentReplacementWhereInput
+  orderBy?: Prisma.StayAssignmentReplacementOrderByWithRelationInput | Prisma.StayAssignmentReplacementOrderByWithRelationInput[]
+  cursor?: Prisma.StayAssignmentReplacementWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.StayAssignmentReplacementScalarFieldEnum | Prisma.StayAssignmentReplacementScalarFieldEnum[]
+}
+
+/**
+ * User.transferReviewRequests
+ */
+export type User$transferReviewRequestsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TransferFinanceReview
+   */
+  select?: Prisma.TransferFinanceReviewSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the TransferFinanceReview
+   */
+  omit?: Prisma.TransferFinanceReviewOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TransferFinanceReviewInclude<ExtArgs> | null
+  where?: Prisma.TransferFinanceReviewWhereInput
+  orderBy?: Prisma.TransferFinanceReviewOrderByWithRelationInput | Prisma.TransferFinanceReviewOrderByWithRelationInput[]
+  cursor?: Prisma.TransferFinanceReviewWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TransferFinanceReviewScalarFieldEnum | Prisma.TransferFinanceReviewScalarFieldEnum[]
+}
+
+/**
+ * User.transferReviewResolutions
+ */
+export type User$transferReviewResolutionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TransferFinanceResolution
+   */
+  select?: Prisma.TransferFinanceResolutionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the TransferFinanceResolution
+   */
+  omit?: Prisma.TransferFinanceResolutionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TransferFinanceResolutionInclude<ExtArgs> | null
+  where?: Prisma.TransferFinanceResolutionWhereInput
+  orderBy?: Prisma.TransferFinanceResolutionOrderByWithRelationInput | Prisma.TransferFinanceResolutionOrderByWithRelationInput[]
+  cursor?: Prisma.TransferFinanceResolutionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TransferFinanceResolutionScalarFieldEnum | Prisma.TransferFinanceResolutionScalarFieldEnum[]
+}
+
+/**
+ * User.correctionsRequested
+ */
+export type User$correctionsRequestedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CorrectionProposal
+   */
+  select?: Prisma.CorrectionProposalSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CorrectionProposal
+   */
+  omit?: Prisma.CorrectionProposalOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CorrectionProposalInclude<ExtArgs> | null
+  where?: Prisma.CorrectionProposalWhereInput
+  orderBy?: Prisma.CorrectionProposalOrderByWithRelationInput | Prisma.CorrectionProposalOrderByWithRelationInput[]
+  cursor?: Prisma.CorrectionProposalWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CorrectionProposalScalarFieldEnum | Prisma.CorrectionProposalScalarFieldEnum[]
+}
+
+/**
+ * User.correctionsDecided
+ */
+export type User$correctionsDecidedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CorrectionProposal
+   */
+  select?: Prisma.CorrectionProposalSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CorrectionProposal
+   */
+  omit?: Prisma.CorrectionProposalOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CorrectionProposalInclude<ExtArgs> | null
+  where?: Prisma.CorrectionProposalWhereInput
+  orderBy?: Prisma.CorrectionProposalOrderByWithRelationInput | Prisma.CorrectionProposalOrderByWithRelationInput[]
+  cursor?: Prisma.CorrectionProposalWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CorrectionProposalScalarFieldEnum | Prisma.CorrectionProposalScalarFieldEnum[]
+}
+
+/**
+ * User.correctionReceipts
+ */
+export type User$correctionReceiptsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CorrectionCommandReceipt
+   */
+  select?: Prisma.CorrectionCommandReceiptSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CorrectionCommandReceipt
+   */
+  omit?: Prisma.CorrectionCommandReceiptOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CorrectionCommandReceiptInclude<ExtArgs> | null
+  where?: Prisma.CorrectionCommandReceiptWhereInput
+  orderBy?: Prisma.CorrectionCommandReceiptOrderByWithRelationInput | Prisma.CorrectionCommandReceiptOrderByWithRelationInput[]
+  cursor?: Prisma.CorrectionCommandReceiptWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CorrectionCommandReceiptScalarFieldEnum | Prisma.CorrectionCommandReceiptScalarFieldEnum[]
+}
+
+/**
+ * User.correctionLinksResolved
+ */
+export type User$correctionLinksResolvedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CorrectionFinanceLink
+   */
+  select?: Prisma.CorrectionFinanceLinkSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CorrectionFinanceLink
+   */
+  omit?: Prisma.CorrectionFinanceLinkOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CorrectionFinanceLinkInclude<ExtArgs> | null
+  where?: Prisma.CorrectionFinanceLinkWhereInput
+  orderBy?: Prisma.CorrectionFinanceLinkOrderByWithRelationInput | Prisma.CorrectionFinanceLinkOrderByWithRelationInput[]
+  cursor?: Prisma.CorrectionFinanceLinkWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CorrectionFinanceLinkScalarFieldEnum | Prisma.CorrectionFinanceLinkScalarFieldEnum[]
+}
+
+/**
+ * User.transfers
+ */
+export type User$transfersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Transfer
+   */
+  select?: Prisma.TransferSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Transfer
+   */
+  omit?: Prisma.TransferOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TransferInclude<ExtArgs> | null
+  where?: Prisma.TransferWhereInput
+  orderBy?: Prisma.TransferOrderByWithRelationInput | Prisma.TransferOrderByWithRelationInput[]
+  cursor?: Prisma.TransferWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TransferScalarFieldEnum | Prisma.TransferScalarFieldEnum[]
 }
 
 /**

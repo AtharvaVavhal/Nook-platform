@@ -2,6 +2,7 @@ import { useState, type FormEvent } from 'react';
 import { EmptyState, ErrorState, LoadingState, Pager, useAsync } from '../finance/shared';
 import { Field, FormError, PageHead, Tag, useGuardedAction } from './ui';
 import { opsApi, type CheckIn } from './opsApi';
+import { readAllPages } from '../pagination';
 import { opsLinks } from './opsRoute';
 import {
   bedLabel,
@@ -37,6 +38,7 @@ export function CheckInList() {
   return (
     <section aria-labelledby="ci-title">
       <PageHead
+        id="ci-title"
         title="Check-ins"
         action={
           <a className="primary-button" href={opsLinks.checkInNew}>
@@ -50,6 +52,7 @@ export function CheckInList() {
           counted from active check-ins.
         </p>
       ) : null}
+      {occupancy.error ? <ErrorState message={occupancy.error} onRetry={occupancy.reload} /> : null}
       {occupancy.data && occupancy.data.overstayCount > 0 ? (
         <div className="fin-warning" role="alert">
           <strong>
@@ -133,7 +136,7 @@ export function CheckInList() {
                   <td>
                     <a href={opsLinks.checkIn(c.id)}>{personName(c.resident)}</a>
                   </td>
-                  <td>{bedLabel(c.bed)}</td>
+                  <td>{bedLabel(c.physicalBed ?? c.bed)}</td>
                   <td>{dateTimeIst(c.checkInAt)}</td>
                   <td>{c.checkOut ? dateTimeIst(c.checkOut.checkOutAt) : '—'}</td>
                   <td>
@@ -156,14 +159,14 @@ export function CheckInList() {
 }
 
 export function CheckInNew() {
-  // Admitted admissions that have not been checked in yet (the pilot's volume fits one page of 100).
+  // Admitted admissions that have not been checked in yet, across all pages.
   const eligible = useAsync(async () => {
     const [admissions, stays] = await Promise.all([
-      opsApi.admissions.list({ status: 'ADMITTED', limit: 100 }),
-      opsApi.checkIns.list({ limit: 100 }),
+      readAllPages((page) => opsApi.admissions.list({ status: 'ADMITTED', limit: 100, page })),
+      readAllPages((page) => opsApi.checkIns.list({ limit: 100, page })),
     ]);
-    const used = new Set(stays.items.map((c) => c.admissionId));
-    return admissions.items.filter((a) => !used.has(a.id));
+    const used = new Set(stays.map((c) => c.admissionId));
+    return admissions.filter((a) => !used.has(a.id));
   }, []);
   const [admissionId, setAdmissionId] = useState('');
   const [checkInAt, setCheckInAt] = useState(nowIst);
@@ -193,7 +196,7 @@ export function CheckInNew() {
       <p>
         <a href={opsLinks.checkIns}>← All check-ins</a>
       </p>
-      <PageHead title="New check-in" />
+      <PageHead id="ci-new" title="New check-in" />
       {eligible.loading && !eligible.data ? <LoadingState label="Loading admissions…" /> : null}
       {eligible.error ? <ErrorState message={eligible.error} onRetry={eligible.reload} /> : null}
       {eligible.data && eligible.data.length === 0 ? (
@@ -286,6 +289,7 @@ export function CheckInDetail({ id }: { id: string }) {
         <a href={opsLinks.checkIns}>← All check-ins</a>
       </p>
       <PageHead
+        id="ci-detail"
         title={`Stay of ${personName(c.resident)}`}
         action={<Tag>{c.status === 'ACTIVE' ? 'Checked in' : 'Checked out'}</Tag>}
       />
@@ -298,7 +302,7 @@ export function CheckInDetail({ id }: { id: string }) {
         <dt>Resident</dt>
         <dd>{personName(c.resident)}</dd>
         <dt>Bed</dt>
-        <dd>{bedLabel(c.bed)}</dd>
+        <dd>{bedLabel(c.physicalBed ?? c.bed)}</dd>
         <dt>Admission</dt>
         <dd>
           {c.admission

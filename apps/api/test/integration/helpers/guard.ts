@@ -210,6 +210,9 @@ export const FULL_APPLICATION_TABLES: readonly string[] = [
   'bookings',
   'check_ins',
   'check_outs',
+  'correction_command_receipts',
+  'correction_finance_links',
+  'correction_proposals',
   'enquiries',
   'enquiry_follow_ups',
   'floors',
@@ -226,6 +229,12 @@ export const FULL_APPLICATION_TABLES: readonly string[] = [
   'residents',
   'rooms',
   'sessions',
+  'stay_assignments',
+  'stay_assignment_replacements',
+  'transfer_command_receipts',
+  'transfer_finance_reviews',
+  'transfer_finance_resolutions',
+  'transfers',
   'users',
 ];
 

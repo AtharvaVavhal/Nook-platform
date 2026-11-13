@@ -1,0 +1,2964 @@
+{
+  "phase": "completion",
+  "scope": "real Chrome + Vite + Nest + disposable PostgreSQL; synthetic records only",
+  "results": [
+    {
+      "name": "A01 protected deep link and invalid login",
+      "ok": true,
+      "ms": 1333
+    },
+    {
+      "name": "W01 create property, floor, room and two beds through UI",
+      "ok": true,
+      "ms": 2466
+    },
+    {
+      "name": "W02 enquiry validation, creation, status, follow-up and resident conversion",
+      "ok": true,
+      "ms": 948
+    },
+    {
+      "name": "W03 booking search, availability, create and conflict handling",
+      "ok": true,
+      "ms": 735
+    },
+    {
+      "name": "W04 admission create, admit and check-in updates occupancy",
+      "ok": true,
+      "ms": 1210
+    },
+    {
+      "name": "W05 single draft, issue, partial payment, receipt, dues and reports",
+      "ok": true,
+      "ms": 2048
+    },
+    {
+      "name": "W06 correction submit and requester cannot self-approve",
+      "ok": true,
+      "ms": 611
+    },
+    {
+      "name": "W07 transfer preview respects execution safety gate",
+      "ok": true,
+      "ms": 1011
+    },
+    {
+      "name": "R01 every route at 1440/768/390 with real API data",
+      "ok": true,
+      "ms": 34062
+    },
+    {
+      "name": "X03 navigating to another property discards the prior record editor",
+      "ok": true,
+      "ms": 482
+    },
+    {
+      "name": "W09 invoice credit displayed consistently in resident financial profile",
+      "ok": true,
+      "ms": 1057
+    },
+    {
+      "name": "X01 form failures visibly report errors and allow retry (injected 503)",
+      "ok": true,
+      "ms": 1661
+    },
+    {
+      "name": "X02 payment dialog traps Tab, restores focus and fits mobile",
+      "ok": true,
+      "ms": 414
+    },
+    {
+      "name": "A02 manager review permission and cross-tenant denial",
+      "ok": true,
+      "ms": 1180
+    },
+    {
+      "name": "W08 extension confirmation and completed checkout/history",
+      "ok": true,
+      "ms": 1673
+    },
+    {
+      "name": "W10 register/search resident, edit inventory, stable floor filter and archive confirmation",
+      "ok": true,
+      "ms": 3469
+    },
+    {
+      "name": "W11 monthly invoice generation skips the existing invoice",
+      "ok": null,
+      "skipped": true,
+      "ms": 0
+    },
+    {
+      "name": "W12 reverse and replace payment preserves history and credited balance",
+      "ok": null,
+      "skipped": true,
+      "ms": 0
+    },
+    {
+      "name": "X04 skip link preserves the route; password dialog traps focus; dark screens fit",
+      "ok": true,
+      "ms": 969
+    },
+    {
+      "name": "R02 manager route sweep at all three viewport widths",
+      "ok": true,
+      "ms": 26755
+    },
+    {
+      "name": "P01 role label, navigation and settings pages for OWNER and PROPERTY_MANAGER",
+      "ok": true,
+      "ms": 2524
+    },
+    {
+      "name": "P02 a session revoked mid-use returns to sign-in with a clear notice (real 401)",
+      "ok": true,
+      "ms": 896
+    },
+    {
+      "name": "P03 a deactivated membership loses access on the next request and cannot sign back in",
+      "ok": true,
+      "ms": 772
+    },
+    {
+      "name": "P04 a temporary password enforced mid-session shows the password page (real 403)",
+      "ok": true,
+      "ms": 814
+    },
+    {
+      "name": "S01 settings sections show real data and the account password change works",
+      "ok": true,
+      "ms": 2455
+    },
+    {
+      "name": "S02 resident profile shows the full record, document status and invoice payment history",
+      "ok": true,
+      "ms": 1227
+    },
+    {
+      "name": "A04 forced password change is protected, responsive and saves",
+      "ok": true,
+      "ms": 842
+    },
+    {
+      "name": "A03 logout clears protected UI and returning session",
+      "ok": true,
+      "ms": 716
+    }
+  ],
+  "scans": [
+    {
+      "role": "OWNER",
+      "name": "Workspace demo",
+      "hash": "#overview",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Residents",
+      "hash": "#residents",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Register resident",
+      "hash": "#residents/new",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Resident details",
+      "hash": "#residents/9de9ec26-1463-4c35-a642-bae57c2eb01a",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Resident profile",
+      "hash": "#residents/9de9ec26-1463-4c35-a642-bae57c2eb01a/profile",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Enquiries",
+      "hash": "#enquiries",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "New enquiry",
+      "hash": "#enquiries/new",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Enquiry details",
+      "hash": "#enquiries/79d1383e-4347-4ea6-9287-6caecd7cba1d",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Overdue follow-ups",
+      "hash": "#enquiries/follow-ups/overdue",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Upcoming follow-ups",
+      "hash": "#enquiries/follow-ups/upcoming",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Bookings",
+      "hash": "#bookings",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "New booking",
+      "hash": "#bookings/new",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Booking details",
+      "hash": "#bookings/53f00665-11f6-464a-8224-a4bd72ba6b48",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Admissions",
+      "hash": "#admissions",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Admission details",
+      "hash": "#admissions/98563966-1598-46b9-b79d-f678388b9f43",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Check-ins",
+      "hash": "#check-ins",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "New check-in",
+      "hash": "#check-ins/new",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Check-in details",
+      "hash": "#check-ins/8bb5728f-b21e-4435-aeac-2879487e4537",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Properties",
+      "hash": "#properties",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Add property",
+      "hash": "#properties/new",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Property details",
+      "hash": "#properties/104c0b1b-e69e-40c6-b9e5-81a9842fea0e",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Floors",
+      "hash": "#floors/104c0b1b-e69e-40c6-b9e5-81a9842fea0e",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Add floor",
+      "hash": "#floors/104c0b1b-e69e-40c6-b9e5-81a9842fea0e/new",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Floor details",
+      "hash": "#floors/104c0b1b-e69e-40c6-b9e5-81a9842fea0e/4795c4a6-cf28-4e33-a5e4-0b334a24fa1a",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Rooms",
+      "hash": "#rooms/104c0b1b-e69e-40c6-b9e5-81a9842fea0e",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Add room",
+      "hash": "#rooms/104c0b1b-e69e-40c6-b9e5-81a9842fea0e/new",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Room details",
+      "hash": "#rooms/104c0b1b-e69e-40c6-b9e5-81a9842fea0e/929618fd-6702-4994-bbc2-1fa8a599a18b",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Beds",
+      "hash": "#beds/929618fd-6702-4994-bbc2-1fa8a599a18b",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Add bed",
+      "hash": "#beds/929618fd-6702-4994-bbc2-1fa8a599a18b/new",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Bed details",
+      "hash": "#beds/929618fd-6702-4994-bbc2-1fa8a599a18b/d3ac5c27-3905-4db0-a204-d233cad210c0",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Corrections",
+      "hash": "#corrections",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "New correction",
+      "hash": "#corrections/new",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Correction details",
+      "hash": "#corrections/1a0b6e95-7388-4229-95f4-c1e6783c6d73",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Billing reviews",
+      "hash": "#corrections/finance-reviews",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Finance overview",
+      "hash": "#finance",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Invoices",
+      "hash": "#finance/invoices",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Create invoices",
+      "hash": "#finance/invoices/new",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Invoice details",
+      "hash": "#finance/invoices/19c90e4e-0128-4dab-a86b-73008f01e0c3",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Outstanding",
+      "hash": "#finance/outstanding",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Financial report",
+      "hash": "#finance/reports",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Finance correction history",
+      "hash": "#finance/corrections",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Receipt",
+      "hash": "#finance/receipt/19c90e4e-0128-4dab-a86b-73008f01e0c3",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Settings",
+      "hash": "#settings",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Staff accounts",
+      "hash": "#staff",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Notifications",
+      "hash": "#notifications",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Transfer requests",
+      "hash": "#transfers",
+      "width": 1440,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 1440,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Workspace demo",
+      "hash": "#overview",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Residents",
+      "hash": "#residents",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Register resident",
+      "hash": "#residents/new",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Resident details",
+      "hash": "#residents/9de9ec26-1463-4c35-a642-bae57c2eb01a",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Resident profile",
+      "hash": "#residents/9de9ec26-1463-4c35-a642-bae57c2eb01a/profile",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Enquiries",
+      "hash": "#enquiries",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "New enquiry",
+      "hash": "#enquiries/new",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Enquiry details",
+      "hash": "#enquiries/79d1383e-4347-4ea6-9287-6caecd7cba1d",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Overdue follow-ups",
+      "hash": "#enquiries/follow-ups/overdue",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Upcoming follow-ups",
+      "hash": "#enquiries/follow-ups/upcoming",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Bookings",
+      "hash": "#bookings",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "New booking",
+      "hash": "#bookings/new",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Booking details",
+      "hash": "#bookings/53f00665-11f6-464a-8224-a4bd72ba6b48",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Admissions",
+      "hash": "#admissions",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Admission details",
+      "hash": "#admissions/98563966-1598-46b9-b79d-f678388b9f43",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Check-ins",
+      "hash": "#check-ins",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "New check-in",
+      "hash": "#check-ins/new",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Check-in details",
+      "hash": "#check-ins/8bb5728f-b21e-4435-aeac-2879487e4537",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Properties",
+      "hash": "#properties",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Add property",
+      "hash": "#properties/new",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Property details",
+      "hash": "#properties/104c0b1b-e69e-40c6-b9e5-81a9842fea0e",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Floors",
+      "hash": "#floors/104c0b1b-e69e-40c6-b9e5-81a9842fea0e",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Add floor",
+      "hash": "#floors/104c0b1b-e69e-40c6-b9e5-81a9842fea0e/new",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Floor details",
+      "hash": "#floors/104c0b1b-e69e-40c6-b9e5-81a9842fea0e/4795c4a6-cf28-4e33-a5e4-0b334a24fa1a",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Rooms",
+      "hash": "#rooms/104c0b1b-e69e-40c6-b9e5-81a9842fea0e",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Add room",
+      "hash": "#rooms/104c0b1b-e69e-40c6-b9e5-81a9842fea0e/new",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Room details",
+      "hash": "#rooms/104c0b1b-e69e-40c6-b9e5-81a9842fea0e/929618fd-6702-4994-bbc2-1fa8a599a18b",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Beds",
+      "hash": "#beds/929618fd-6702-4994-bbc2-1fa8a599a18b",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Add bed",
+      "hash": "#beds/929618fd-6702-4994-bbc2-1fa8a599a18b/new",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Bed details",
+      "hash": "#beds/929618fd-6702-4994-bbc2-1fa8a599a18b/d3ac5c27-3905-4db0-a204-d233cad210c0",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Corrections",
+      "hash": "#corrections",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "New correction",
+      "hash": "#corrections/new",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Correction details",
+      "hash": "#corrections/1a0b6e95-7388-4229-95f4-c1e6783c6d73",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Billing reviews",
+      "hash": "#corrections/finance-reviews",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Finance overview",
+      "hash": "#finance",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Invoices",
+      "hash": "#finance/invoices",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Create invoices",
+      "hash": "#finance/invoices/new",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Invoice details",
+      "hash": "#finance/invoices/19c90e4e-0128-4dab-a86b-73008f01e0c3",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Outstanding",
+      "hash": "#finance/outstanding",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Financial report",
+      "hash": "#finance/reports",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Finance correction history",
+      "hash": "#finance/corrections",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Receipt",
+      "hash": "#finance/receipt/19c90e4e-0128-4dab-a86b-73008f01e0c3",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Settings",
+      "hash": "#settings",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Staff accounts",
+      "hash": "#staff",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Notifications",
+      "hash": "#notifications",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Transfer requests",
+      "hash": "#transfers",
+      "width": 768,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 768,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Workspace demo",
+      "hash": "#overview",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [],
+      "overflow": [
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "role": "OWNER",
+      "name": "Residents",
+      "hash": "#residents",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Register resident",
+      "hash": "#residents/new",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Resident details",
+      "hash": "#residents/9de9ec26-1463-4c35-a642-bae57c2eb01a",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Resident profile",
+      "hash": "#residents/9de9ec26-1463-4c35-a642-bae57c2eb01a/profile",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Enquiries",
+      "hash": "#enquiries",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "New enquiry",
+      "hash": "#enquiries/new",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Enquiry details",
+      "hash": "#enquiries/79d1383e-4347-4ea6-9287-6caecd7cba1d",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Overdue follow-ups",
+      "hash": "#enquiries/follow-ups/overdue",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Upcoming follow-ups",
+      "hash": "#enquiries/follow-ups/upcoming",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Bookings",
+      "hash": "#bookings",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "New booking",
+      "hash": "#bookings/new",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Booking details",
+      "hash": "#bookings/53f00665-11f6-464a-8224-a4bd72ba6b48",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Admissions",
+      "hash": "#admissions",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Admission details",
+      "hash": "#admissions/98563966-1598-46b9-b79d-f678388b9f43",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Check-ins",
+      "hash": "#check-ins",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "New check-in",
+      "hash": "#check-ins/new",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Check-in details",
+      "hash": "#check-ins/8bb5728f-b21e-4435-aeac-2879487e4537",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Properties",
+      "hash": "#properties",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Add property",
+      "hash": "#properties/new",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Property details",
+      "hash": "#properties/104c0b1b-e69e-40c6-b9e5-81a9842fea0e",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Floors",
+      "hash": "#floors/104c0b1b-e69e-40c6-b9e5-81a9842fea0e",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Add floor",
+      "hash": "#floors/104c0b1b-e69e-40c6-b9e5-81a9842fea0e/new",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Floor details",
+      "hash": "#floors/104c0b1b-e69e-40c6-b9e5-81a9842fea0e/4795c4a6-cf28-4e33-a5e4-0b334a24fa1a",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Rooms",
+      "hash": "#rooms/104c0b1b-e69e-40c6-b9e5-81a9842fea0e",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Add room",
+      "hash": "#rooms/104c0b1b-e69e-40c6-b9e5-81a9842fea0e/new",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Room details",
+      "hash": "#rooms/104c0b1b-e69e-40c6-b9e5-81a9842fea0e/929618fd-6702-4994-bbc2-1fa8a599a18b",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Beds",
+      "hash": "#beds/929618fd-6702-4994-bbc2-1fa8a599a18b",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Add bed",
+      "hash": "#beds/929618fd-6702-4994-bbc2-1fa8a599a18b/new",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Bed details",
+      "hash": "#beds/929618fd-6702-4994-bbc2-1fa8a599a18b/d3ac5c27-3905-4db0-a204-d233cad210c0",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Corrections",
+      "hash": "#corrections",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "New correction",
+      "hash": "#corrections/new",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Correction details",
+      "hash": "#corrections/1a0b6e95-7388-4229-95f4-c1e6783c6d73",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Billing reviews",
+      "hash": "#corrections/finance-reviews",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Finance overview",
+      "hash": "#finance",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Invoices",
+      "hash": "#finance/invoices",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Create invoices",
+      "hash": "#finance/invoices/new",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Invoice details",
+      "hash": "#finance/invoices/19c90e4e-0128-4dab-a86b-73008f01e0c3",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Outstanding",
+      "hash": "#finance/outstanding",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Financial report",
+      "hash": "#finance/reports",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Finance correction history",
+      "hash": "#finance/corrections",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Receipt",
+      "hash": "#finance/receipt/19c90e4e-0128-4dab-a86b-73008f01e0c3",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Settings",
+      "hash": "#settings",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Staff accounts",
+      "hash": "#staff",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Notifications",
+      "hash": "#notifications",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "OWNER",
+      "name": "Transfer requests",
+      "hash": "#transfers",
+      "width": 390,
+      "expectedContent": true,
+      "errorState": false,
+      "pageErrors": [],
+      "scrollWidth": 390,
+      "brokenLabels": [],
+      "overflow": []
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Workspace demo",
+      "hash": "#overview",
+      "width": 1440,
+      "expectedContent": true,
+      "scrollWidth": 1440
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Residents",
+      "hash": "#residents",
+      "width": 1440,
+      "expectedContent": true,
+      "scrollWidth": 1440
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Register resident",
+      "hash": "#residents/new",
+      "width": 1440,
+      "expectedContent": true,
+      "scrollWidth": 1440
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Resident details",
+      "hash": "#residents/9de9ec26-1463-4c35-a642-bae57c2eb01a",
+      "width": 1440,
+      "expectedContent": true,
+      "scrollWidth": 1440
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Resident profile",
+      "hash": "#residents/9de9ec26-1463-4c35-a642-bae57c2eb01a/profile",
+      "width": 1440,
+      "expectedContent": true,
+      "scrollWidth": 1440
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Enquiries",
+      "hash": "#enquiries",
+      "width": 1440,
+      "expectedContent": true,
+      "scrollWidth": 1440
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "New enquiry",
+      "hash": "#enquiries/new",
+      "width": 1440,
+      "expectedContent": true,
+      "scrollWidth": 1440
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Enquiry details",
+      "hash": "#enquiries/79d1383e-4347-4ea6-9287-6caecd7cba1d",
+      "width": 1440,
+      "expectedContent": true,
+      "scrollWidth": 1440
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Overdue follow-ups",
+      "hash": "#enquiries/follow-ups/overdue",
+      "width": 1440,
+      "expectedContent": true,
+      "scrollWidth": 1440
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Upcoming follow-ups",
+      "hash": "#enquiries/follow-ups/upcoming",
+      "width": 1440,
+      "expectedContent": true,
+      "scrollWidth": 1440
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Bookings",
+      "hash": "#bookings",
+      "width": 1440,
+      "expectedContent": true,
+      "scrollWidth": 1440
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "New booking",
+      "hash": "#bookings/new",
+      "width": 1440,
+      "expectedContent": true,
+      "scrollWidth": 1440
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Booking details",
+      "hash": "#bookings/53f00665-11f6-464a-8224-a4bd72ba6b48",
+      "width": 1440,
+      "expectedContent": true,
+      "scrollWidth": 1440
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Admissions",
+      "hash": "#admissions",
+      "width": 1440,
+      "expectedContent": true,
+      "scrollWidth": 1440
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Admission details",
+      "hash": "#admissions/98563966-1598-46b9-b79d-f678388b9f43",
+      "width": 1440,
+      "expectedContent": true,
+      "scrollWidth": 1440
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Check-ins",
+      "hash": "#check-ins",
+      "width": 1440,
+      "expectedContent": true,
+      "scrollWidth": 1440
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "New check-in",
+      "hash": "#check-ins/new",
+      "width": 1440,
+      "expectedContent": true,
+      "scrollWidth": 1440
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Check-in details",
+      "hash": "#check-ins/8bb5728f-b21e-4435-aeac-2879487e4537",
+      "width": 1440,
+      "expectedContent": true,
+      "scrollWidth": 1440
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Properties",
+      "hash": "#properties",
+      "width": 1440,
+      "expectedContent": true,
+      "scrollWidth": 1440
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Add property",
+      "hash": "#properties/new",
+      "width": 1440,
+      "expectedContent": true,
+      "scrollWidth": 1440
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Property details",
+      "hash": "#properties/104c0b1b-e69e-40c6-b9e5-81a9842fea0e",
+      "width": 1440,
+      "expectedContent": true,
+      "scrollWidth": 1440
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Floors",
+      "hash": "#floors/104c0b1b-e69e-40c6-b9e5-81a9842fea0e",
+      "width": 1440,
+      "expectedContent": true,
+      "scrollWidth": 1440
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Add floor",
+      "hash": "#floors/104c0b1b-e69e-40c6-b9e5-81a9842fea0e/new",
+      "width": 1440,
+      "expectedContent": true,
+      "scrollWidth": 1440
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Floor details",
+      "hash": "#floors/104c0b1b-e69e-40c6-b9e5-81a9842fea0e/4795c4a6-cf28-4e33-a5e4-0b334a24fa1a",
+      "width": 1440,
+      "expectedContent": true,
+      "scrollWidth": 1440
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Rooms",
+      "hash": "#rooms/104c0b1b-e69e-40c6-b9e5-81a9842fea0e",
+      "width": 1440,
+      "expectedContent": true,
+      "scrollWidth": 1440
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Add room",
+      "hash": "#rooms/104c0b1b-e69e-40c6-b9e5-81a9842fea0e/new",
+      "width": 1440,
+      "expectedContent": true,
+      "scrollWidth": 1440
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Room details",
+      "hash": "#rooms/104c0b1b-e69e-40c6-b9e5-81a9842fea0e/929618fd-6702-4994-bbc2-1fa8a599a18b",
+      "width": 1440,
+      "expectedContent": true,
+      "scrollWidth": 1440
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Beds",
+      "hash": "#beds/929618fd-6702-4994-bbc2-1fa8a599a18b",
+      "width": 1440,
+      "expectedContent": true,
+      "scrollWidth": 1440
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Add bed",
+      "hash": "#beds/929618fd-6702-4994-bbc2-1fa8a599a18b/new",
+      "width": 1440,
+      "expectedContent": true,
+      "scrollWidth": 1440
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Bed details",
+      "hash": "#beds/929618fd-6702-4994-bbc2-1fa8a599a18b/d3ac5c27-3905-4db0-a204-d233cad210c0",
+      "width": 1440,
+      "expectedContent": true,
+      "scrollWidth": 1440
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Corrections",
+      "hash": "#corrections",
+      "width": 1440,
+      "expectedContent": true,
+      "scrollWidth": 1440
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "New correction",
+      "hash": "#corrections/new",
+      "width": 1440,
+      "expectedContent": true,
+      "scrollWidth": 1440
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Correction details",
+      "hash": "#corrections/1a0b6e95-7388-4229-95f4-c1e6783c6d73",
+      "width": 1440,
+      "expectedContent": true,
+      "scrollWidth": 1440
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Billing reviews",
+      "hash": "#corrections/finance-reviews",
+      "width": 1440,
+      "expectedContent": true,
+      "scrollWidth": 1440
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Finance overview",
+      "hash": "#finance",
+      "width": 1440,
+      "expectedContent": true,
+      "scrollWidth": 1440
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Invoices",
+      "hash": "#finance/invoices",
+      "width": 1440,
+      "expectedContent": true,
+      "scrollWidth": 1440
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Create invoices",
+      "hash": "#finance/invoices/new",
+      "width": 1440,
+      "expectedContent": true,
+      "scrollWidth": 1440
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Invoice details",
+      "hash": "#finance/invoices/19c90e4e-0128-4dab-a86b-73008f01e0c3",
+      "width": 1440,
+      "expectedContent": true,
+      "scrollWidth": 1440
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Outstanding",
+      "hash": "#finance/outstanding",
+      "width": 1440,
+      "expectedContent": true,
+      "scrollWidth": 1440
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Financial report",
+      "hash": "#finance/reports",
+      "width": 1440,
+      "expectedContent": true,
+      "scrollWidth": 1440
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Finance correction history",
+      "hash": "#finance/corrections",
+      "width": 1440,
+      "expectedContent": true,
+      "scrollWidth": 1440
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Receipt",
+      "hash": "#finance/receipt/19c90e4e-0128-4dab-a86b-73008f01e0c3",
+      "width": 1440,
+      "expectedContent": true,
+      "scrollWidth": 1440
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Settings",
+      "hash": "#settings",
+      "width": 1440,
+      "expectedContent": true,
+      "scrollWidth": 1440
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Staff accounts",
+      "hash": "#staff",
+      "width": 1440,
+      "expectedContent": true,
+      "scrollWidth": 1440
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Notifications",
+      "hash": "#notifications",
+      "width": 1440,
+      "expectedContent": true,
+      "scrollWidth": 1440
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Transfer requests",
+      "hash": "#transfers",
+      "width": 1440,
+      "expectedContent": true,
+      "scrollWidth": 1440
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Workspace demo",
+      "hash": "#overview",
+      "width": 768,
+      "expectedContent": true,
+      "scrollWidth": 768
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Residents",
+      "hash": "#residents",
+      "width": 768,
+      "expectedContent": true,
+      "scrollWidth": 768
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Register resident",
+      "hash": "#residents/new",
+      "width": 768,
+      "expectedContent": true,
+      "scrollWidth": 768
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Resident details",
+      "hash": "#residents/9de9ec26-1463-4c35-a642-bae57c2eb01a",
+      "width": 768,
+      "expectedContent": true,
+      "scrollWidth": 768
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Resident profile",
+      "hash": "#residents/9de9ec26-1463-4c35-a642-bae57c2eb01a/profile",
+      "width": 768,
+      "expectedContent": true,
+      "scrollWidth": 768
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Enquiries",
+      "hash": "#enquiries",
+      "width": 768,
+      "expectedContent": true,
+      "scrollWidth": 768
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "New enquiry",
+      "hash": "#enquiries/new",
+      "width": 768,
+      "expectedContent": true,
+      "scrollWidth": 768
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Enquiry details",
+      "hash": "#enquiries/79d1383e-4347-4ea6-9287-6caecd7cba1d",
+      "width": 768,
+      "expectedContent": true,
+      "scrollWidth": 768
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Overdue follow-ups",
+      "hash": "#enquiries/follow-ups/overdue",
+      "width": 768,
+      "expectedContent": true,
+      "scrollWidth": 768
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Upcoming follow-ups",
+      "hash": "#enquiries/follow-ups/upcoming",
+      "width": 768,
+      "expectedContent": true,
+      "scrollWidth": 768
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Bookings",
+      "hash": "#bookings",
+      "width": 768,
+      "expectedContent": true,
+      "scrollWidth": 768
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "New booking",
+      "hash": "#bookings/new",
+      "width": 768,
+      "expectedContent": true,
+      "scrollWidth": 768
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Booking details",
+      "hash": "#bookings/53f00665-11f6-464a-8224-a4bd72ba6b48",
+      "width": 768,
+      "expectedContent": true,
+      "scrollWidth": 768
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Admissions",
+      "hash": "#admissions",
+      "width": 768,
+      "expectedContent": true,
+      "scrollWidth": 768
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Admission details",
+      "hash": "#admissions/98563966-1598-46b9-b79d-f678388b9f43",
+      "width": 768,
+      "expectedContent": true,
+      "scrollWidth": 768
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Check-ins",
+      "hash": "#check-ins",
+      "width": 768,
+      "expectedContent": true,
+      "scrollWidth": 768
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "New check-in",
+      "hash": "#check-ins/new",
+      "width": 768,
+      "expectedContent": true,
+      "scrollWidth": 768
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Check-in details",
+      "hash": "#check-ins/8bb5728f-b21e-4435-aeac-2879487e4537",
+      "width": 768,
+      "expectedContent": true,
+      "scrollWidth": 768
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Properties",
+      "hash": "#properties",
+      "width": 768,
+      "expectedContent": true,
+      "scrollWidth": 768
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Add property",
+      "hash": "#properties/new",
+      "width": 768,
+      "expectedContent": true,
+      "scrollWidth": 768
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Property details",
+      "hash": "#properties/104c0b1b-e69e-40c6-b9e5-81a9842fea0e",
+      "width": 768,
+      "expectedContent": true,
+      "scrollWidth": 768
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Floors",
+      "hash": "#floors/104c0b1b-e69e-40c6-b9e5-81a9842fea0e",
+      "width": 768,
+      "expectedContent": true,
+      "scrollWidth": 768
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Add floor",
+      "hash": "#floors/104c0b1b-e69e-40c6-b9e5-81a9842fea0e/new",
+      "width": 768,
+      "expectedContent": true,
+      "scrollWidth": 768
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Floor details",
+      "hash": "#floors/104c0b1b-e69e-40c6-b9e5-81a9842fea0e/4795c4a6-cf28-4e33-a5e4-0b334a24fa1a",
+      "width": 768,
+      "expectedContent": true,
+      "scrollWidth": 768
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Rooms",
+      "hash": "#rooms/104c0b1b-e69e-40c6-b9e5-81a9842fea0e",
+      "width": 768,
+      "expectedContent": true,
+      "scrollWidth": 768
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Add room",
+      "hash": "#rooms/104c0b1b-e69e-40c6-b9e5-81a9842fea0e/new",
+      "width": 768,
+      "expectedContent": true,
+      "scrollWidth": 768
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Room details",
+      "hash": "#rooms/104c0b1b-e69e-40c6-b9e5-81a9842fea0e/929618fd-6702-4994-bbc2-1fa8a599a18b",
+      "width": 768,
+      "expectedContent": true,
+      "scrollWidth": 768
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Beds",
+      "hash": "#beds/929618fd-6702-4994-bbc2-1fa8a599a18b",
+      "width": 768,
+      "expectedContent": true,
+      "scrollWidth": 768
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Add bed",
+      "hash": "#beds/929618fd-6702-4994-bbc2-1fa8a599a18b/new",
+      "width": 768,
+      "expectedContent": true,
+      "scrollWidth": 768
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Bed details",
+      "hash": "#beds/929618fd-6702-4994-bbc2-1fa8a599a18b/d3ac5c27-3905-4db0-a204-d233cad210c0",
+      "width": 768,
+      "expectedContent": true,
+      "scrollWidth": 768
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Corrections",
+      "hash": "#corrections",
+      "width": 768,
+      "expectedContent": true,
+      "scrollWidth": 768
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "New correction",
+      "hash": "#corrections/new",
+      "width": 768,
+      "expectedContent": true,
+      "scrollWidth": 768
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Correction details",
+      "hash": "#corrections/1a0b6e95-7388-4229-95f4-c1e6783c6d73",
+      "width": 768,
+      "expectedContent": true,
+      "scrollWidth": 768
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Billing reviews",
+      "hash": "#corrections/finance-reviews",
+      "width": 768,
+      "expectedContent": true,
+      "scrollWidth": 768
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Finance overview",
+      "hash": "#finance",
+      "width": 768,
+      "expectedContent": true,
+      "scrollWidth": 768
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Invoices",
+      "hash": "#finance/invoices",
+      "width": 768,
+      "expectedContent": true,
+      "scrollWidth": 768
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Create invoices",
+      "hash": "#finance/invoices/new",
+      "width": 768,
+      "expectedContent": true,
+      "scrollWidth": 768
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Invoice details",
+      "hash": "#finance/invoices/19c90e4e-0128-4dab-a86b-73008f01e0c3",
+      "width": 768,
+      "expectedContent": true,
+      "scrollWidth": 768
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Outstanding",
+      "hash": "#finance/outstanding",
+      "width": 768,
+      "expectedContent": true,
+      "scrollWidth": 768
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Financial report",
+      "hash": "#finance/reports",
+      "width": 768,
+      "expectedContent": true,
+      "scrollWidth": 768
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Finance correction history",
+      "hash": "#finance/corrections",
+      "width": 768,
+      "expectedContent": true,
+      "scrollWidth": 768
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Receipt",
+      "hash": "#finance/receipt/19c90e4e-0128-4dab-a86b-73008f01e0c3",
+      "width": 768,
+      "expectedContent": true,
+      "scrollWidth": 768
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Settings",
+      "hash": "#settings",
+      "width": 768,
+      "expectedContent": true,
+      "scrollWidth": 768
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Staff accounts",
+      "hash": "#staff",
+      "width": 768,
+      "expectedContent": true,
+      "scrollWidth": 768
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Notifications",
+      "hash": "#notifications",
+      "width": 768,
+      "expectedContent": true,
+      "scrollWidth": 768
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Transfer requests",
+      "hash": "#transfers",
+      "width": 768,
+      "expectedContent": true,
+      "scrollWidth": 768
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Workspace demo",
+      "hash": "#overview",
+      "width": 390,
+      "expectedContent": true,
+      "scrollWidth": 390
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Residents",
+      "hash": "#residents",
+      "width": 390,
+      "expectedContent": true,
+      "scrollWidth": 390
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Register resident",
+      "hash": "#residents/new",
+      "width": 390,
+      "expectedContent": true,
+      "scrollWidth": 390
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Resident details",
+      "hash": "#residents/9de9ec26-1463-4c35-a642-bae57c2eb01a",
+      "width": 390,
+      "expectedContent": true,
+      "scrollWidth": 390
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Resident profile",
+      "hash": "#residents/9de9ec26-1463-4c35-a642-bae57c2eb01a/profile",
+      "width": 390,
+      "expectedContent": true,
+      "scrollWidth": 390
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Enquiries",
+      "hash": "#enquiries",
+      "width": 390,
+      "expectedContent": true,
+      "scrollWidth": 390
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "New enquiry",
+      "hash": "#enquiries/new",
+      "width": 390,
+      "expectedContent": true,
+      "scrollWidth": 390
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Enquiry details",
+      "hash": "#enquiries/79d1383e-4347-4ea6-9287-6caecd7cba1d",
+      "width": 390,
+      "expectedContent": true,
+      "scrollWidth": 390
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Overdue follow-ups",
+      "hash": "#enquiries/follow-ups/overdue",
+      "width": 390,
+      "expectedContent": true,
+      "scrollWidth": 390
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Upcoming follow-ups",
+      "hash": "#enquiries/follow-ups/upcoming",
+      "width": 390,
+      "expectedContent": true,
+      "scrollWidth": 390
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Bookings",
+      "hash": "#bookings",
+      "width": 390,
+      "expectedContent": true,
+      "scrollWidth": 390
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "New booking",
+      "hash": "#bookings/new",
+      "width": 390,
+      "expectedContent": true,
+      "scrollWidth": 390
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Booking details",
+      "hash": "#bookings/53f00665-11f6-464a-8224-a4bd72ba6b48",
+      "width": 390,
+      "expectedContent": true,
+      "scrollWidth": 390
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Admissions",
+      "hash": "#admissions",
+      "width": 390,
+      "expectedContent": true,
+      "scrollWidth": 390
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Admission details",
+      "hash": "#admissions/98563966-1598-46b9-b79d-f678388b9f43",
+      "width": 390,
+      "expectedContent": true,
+      "scrollWidth": 390
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Check-ins",
+      "hash": "#check-ins",
+      "width": 390,
+      "expectedContent": true,
+      "scrollWidth": 390
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "New check-in",
+      "hash": "#check-ins/new",
+      "width": 390,
+      "expectedContent": true,
+      "scrollWidth": 390
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Check-in details",
+      "hash": "#check-ins/8bb5728f-b21e-4435-aeac-2879487e4537",
+      "width": 390,
+      "expectedContent": true,
+      "scrollWidth": 390
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Properties",
+      "hash": "#properties",
+      "width": 390,
+      "expectedContent": true,
+      "scrollWidth": 390
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Add property",
+      "hash": "#properties/new",
+      "width": 390,
+      "expectedContent": true,
+      "scrollWidth": 390
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Property details",
+      "hash": "#properties/104c0b1b-e69e-40c6-b9e5-81a9842fea0e",
+      "width": 390,
+      "expectedContent": true,
+      "scrollWidth": 390
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Floors",
+      "hash": "#floors/104c0b1b-e69e-40c6-b9e5-81a9842fea0e",
+      "width": 390,
+      "expectedContent": true,
+      "scrollWidth": 390
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Add floor",
+      "hash": "#floors/104c0b1b-e69e-40c6-b9e5-81a9842fea0e/new",
+      "width": 390,
+      "expectedContent": true,
+      "scrollWidth": 390
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Floor details",
+      "hash": "#floors/104c0b1b-e69e-40c6-b9e5-81a9842fea0e/4795c4a6-cf28-4e33-a5e4-0b334a24fa1a",
+      "width": 390,
+      "expectedContent": true,
+      "scrollWidth": 390
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Rooms",
+      "hash": "#rooms/104c0b1b-e69e-40c6-b9e5-81a9842fea0e",
+      "width": 390,
+      "expectedContent": true,
+      "scrollWidth": 390
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Add room",
+      "hash": "#rooms/104c0b1b-e69e-40c6-b9e5-81a9842fea0e/new",
+      "width": 390,
+      "expectedContent": true,
+      "scrollWidth": 390
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Room details",
+      "hash": "#rooms/104c0b1b-e69e-40c6-b9e5-81a9842fea0e/929618fd-6702-4994-bbc2-1fa8a599a18b",
+      "width": 390,
+      "expectedContent": true,
+      "scrollWidth": 390
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Beds",
+      "hash": "#beds/929618fd-6702-4994-bbc2-1fa8a599a18b",
+      "width": 390,
+      "expectedContent": true,
+      "scrollWidth": 390
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Add bed",
+      "hash": "#beds/929618fd-6702-4994-bbc2-1fa8a599a18b/new",
+      "width": 390,
+      "expectedContent": true,
+      "scrollWidth": 390
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Bed details",
+      "hash": "#beds/929618fd-6702-4994-bbc2-1fa8a599a18b/d3ac5c27-3905-4db0-a204-d233cad210c0",
+      "width": 390,
+      "expectedContent": true,
+      "scrollWidth": 390
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Corrections",
+      "hash": "#corrections",
+      "width": 390,
+      "expectedContent": true,
+      "scrollWidth": 390
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "New correction",
+      "hash": "#corrections/new",
+      "width": 390,
+      "expectedContent": true,
+      "scrollWidth": 390
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Correction details",
+      "hash": "#corrections/1a0b6e95-7388-4229-95f4-c1e6783c6d73",
+      "width": 390,
+      "expectedContent": true,
+      "scrollWidth": 390
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Billing reviews",
+      "hash": "#corrections/finance-reviews",
+      "width": 390,
+      "expectedContent": true,
+      "scrollWidth": 390
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Finance overview",
+      "hash": "#finance",
+      "width": 390,
+      "expectedContent": true,
+      "scrollWidth": 390
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Invoices",
+      "hash": "#finance/invoices",
+      "width": 390,
+      "expectedContent": true,
+      "scrollWidth": 390
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Create invoices",
+      "hash": "#finance/invoices/new",
+      "width": 390,
+      "expectedContent": true,
+      "scrollWidth": 390
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Invoice details",
+      "hash": "#finance/invoices/19c90e4e-0128-4dab-a86b-73008f01e0c3",
+      "width": 390,
+      "expectedContent": true,
+      "scrollWidth": 390
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Outstanding",
+      "hash": "#finance/outstanding",
+      "width": 390,
+      "expectedContent": true,
+      "scrollWidth": 390
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Financial report",
+      "hash": "#finance/reports",
+      "width": 390,
+      "expectedContent": true,
+      "scrollWidth": 390
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Finance correction history",
+      "hash": "#finance/corrections",
+      "width": 390,
+      "expectedContent": true,
+      "scrollWidth": 390
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Receipt",
+      "hash": "#finance/receipt/19c90e4e-0128-4dab-a86b-73008f01e0c3",
+      "width": 390,
+      "expectedContent": true,
+      "scrollWidth": 390
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Settings",
+      "hash": "#settings",
+      "width": 390,
+      "expectedContent": true,
+      "scrollWidth": 390
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Staff accounts",
+      "hash": "#staff",
+      "width": 390,
+      "expectedContent": true,
+      "scrollWidth": 390
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Notifications",
+      "hash": "#notifications",
+      "width": 390,
+      "expectedContent": true,
+      "scrollWidth": 390
+    },
+    {
+      "role": "PROPERTY_MANAGER",
+      "name": "Transfer requests",
+      "hash": "#transfers",
+      "width": 390,
+      "expectedContent": true,
+      "scrollWidth": 390
+    }
+  ],
+  "probes": [
+    {
+      "name": "Transfer workflow",
+      "scope": "real API; new check-in has no active assignment; preview refused, execution unavailable",
+      "available": false
+    },
+    {
+      "name": "Record editor identity",
+      "retained": []
+    },
+    {
+      "name": "Credit balance",
+      "scope": "real API credit",
+      "cells": [
+        "INV-2026-0001",
+        "1 Nov 2026 – 30 Nov 2026",
+        "₹5,000.00",
+        "₹1,000.00",
+        "₹3,500.00",
+        "Partially paid",
+        "13 Nov 2026",
+        "INV-2026-0001",
+        "1 Nov 2026 – 30 Nov 2026",
+        "₹5,000.00",
+        "₹3,500.00",
+        "Partially paid",
+        "13 Nov 2026",
+        "View payments"
+      ]
+    },
+    {
+      "name": "503 handling",
+      "hash": "#rooms/104c0b1b-e69e-40c6-b9e5-81a9842fea0e/new",
+      "path": "/properties/104c0b1b-e69e-40c6-b9e5-81a9842fea0e/floors",
+      "visibleError": true
+    },
+    {
+      "name": "503 handling",
+      "hash": "#admissions",
+      "path": "/bookings",
+      "visibleError": true
+    },
+    {
+      "name": "503 handling",
+      "hash": "#finance/invoices/new",
+      "path": "/residents",
+      "visibleError": true
+    }
+  ],
+  "pageErrors": []
+}

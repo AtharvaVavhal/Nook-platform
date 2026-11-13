@@ -8,9 +8,12 @@ const TYPE_LABEL = {
   INVOICE_CREDIT: 'Credit applied',
 } as const;
 
+/** The API returns at most this many entries (it has no paging); older ones are not reachable from here. */
+const CORRECTION_LIMIT = 200;
+
 export function CorrectionHistory() {
   const { data, loading, error, reload } = useAsync(
-    () => financeApi.corrections({ limit: 100 }),
+    () => financeApi.corrections({ limit: CORRECTION_LIMIT }),
     [],
   );
 
@@ -28,6 +31,12 @@ export function CorrectionHistory() {
           title="No corrections yet"
           hint="Reversed payments and invoice credits will be listed here."
         />
+      ) : null}
+      {data && data.items.length >= CORRECTION_LIMIT ? (
+        <p className="fin-note" role="status">
+          Showing the latest {CORRECTION_LIMIT} entries. Older corrections exist but cannot be
+          listed here yet, because the API has no paging for this list.
+        </p>
       ) : null}
       {data && data.items.length > 0 ? (
         <div className="fin-table-wrap">

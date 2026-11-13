@@ -26,7 +26,8 @@
     "scripts/verify_phase_scope.py",
     "scripts/phase_scope.json",
     "scripts/test_phase_scope.py",
-    "docs/nook-phase-3/PHASE_3_SCOPE_REGISTER.md"
+    "docs/nook-phase-3/PHASE_3_SCOPE_REGISTER.md",
+    "docs/phase-4/IMPLEMENTATION_AUTHORIZATION.md"
   ],
   "scopeDocPhrases": [
     "real resident data",
@@ -365,6 +366,108 @@
       "extensions": [],
       "routes": [],
       "allowsVocabulary": []
+    },
+    "4.1": {
+      "status": "approved",
+      "approver": "Repository user via explicit Phase 4 implementation mission",
+      "date": "2026-11-09",
+      "ref": "docs/phase-4/IMPLEMENTATION_AUTHORIZATION.md#current-mission-authorization",
+      "description": "Implementation/test scope only; not acceptance or financial-application authorization. Existing resident history and gated corrections.",
+      "models": [
+        "CorrectionProposal",
+        "CorrectionCommandReceipt",
+        "CorrectionFinanceLink"
+      ],
+      "enums": [
+        "CorrectionTargetType",
+        "CorrectionFieldKey",
+        "CorrectionStatus",
+        "CorrectionRelationKind",
+        "CorrectionCommandAction",
+        "CorrectionFinanceLinkKind",
+        "CorrectionFinanceOutcome"
+      ],
+      "tables": [
+        "correction_proposals",
+        "correction_command_receipts",
+        "correction_finance_links"
+      ],
+      "functions": [
+        "correction_proposals_guard",
+        "correction_append_only",
+        "correction_proposals_immutable_trigger",
+        "correction_command_receipts_immutable_trigger",
+        "correction_finance_links_immutable_trigger"
+      ],
+      "extensions": [],
+      "routes": [
+        "GET /api/v1/residents/:residentId/history",
+        "GET /api/v1/residents/:residentId/stay-summary",
+        "GET /api/v1/corrections",
+        "GET /api/v1/corrections/:id",
+        "GET /api/v1/corrections/finance-reviews",
+        "GET /api/v1/corrections/history",
+        "POST /api/v1/corrections",
+        "POST /api/v1/corrections/:id/approve",
+        "POST /api/v1/corrections/:id/reject",
+        "POST /api/v1/corrections/:id/withdraw",
+        "POST /api/v1/corrections/finance-reviews/:linkId/resolve"
+      ],
+      "allowsVocabulary": [],
+      "allowsTypes": []
+    },
+    "4.3": {
+      "status": "approved",
+      "approver": "workspace-user implementation instruction",
+      "date": "2026-11-11",
+      "ref": "docs/phase-4/IMPLEMENTATION_AUTHORIZATION.md#completion-sprint-implementation-scope",
+      "description": "Implementation/test scope for existing transfers, backfill and coordinated consumers only. No business-policy, acceptance, finance activation or rollout approval.",
+      "models": [
+        "StayAssignment",
+        "Transfer",
+        "TransferCommandReceipt",
+        "StayAssignmentReplacement",
+        "EffectiveStayAssignment",
+        "TransferFinanceReview",
+        "TransferFinanceResolution"
+      ],
+      "enums": [
+        "StayAssignmentKind",
+        "StayAssignmentStatus",
+        "TransferType"
+      ],
+      "tables": [
+        "stay_assignments",
+        "transfers",
+        "transfer_command_receipts",
+        "stay_assignment_replacements",
+        "transfer_finance_reviews",
+        "transfer_finance_resolutions"
+      ],
+      "functions": [
+        "transfers_immutable_trigger",
+        "stay_assignments_immutable_trigger",
+        "transfer_command_receipts_immutable",
+        "phase4_append_only",
+        "assignment_replacement_applied",
+        "transfer_finance_resolution_authority",
+        "assignment_replacement_chain"
+      ],
+      "extensions": [
+        "btree_gist"
+      ],
+      "routes": [
+        "GET /api/v1/transfers/preview",
+        "GET /api/v1/transfers/history",
+        "POST /api/v1/transfers",
+        "GET /api/v1/transfers/finance-reviews",
+        "POST /api/v1/transfers/finance-reviews/:reviewId/resolve"
+      ],
+      "allowsVocabulary": [],
+      "allowsTypes": [],
+      "views": [
+        "effective_stay_assignments"
+      ]
     }
   },
   "baselineRoutes": [
@@ -456,6 +559,12 @@
       "name": "@sentry/node",
       "version": "10.76.2",
       "ref": "docs/nook-phase-3/PHASE_3_SCOPE_REGISTER.md#dependency-additions-since-phase-2"
+    },
+    {
+      "file": "package.json",
+      "name": "puppeteer-core",
+      "version": "25.16.0",
+      "ref": "docs/phase-4/IMPLEMENTATION_AUTHORIZATION.md#current-mission-authorization"
     }
   ],
   "forbiddenWords": [
@@ -507,7 +616,18 @@
     "apps/api/src/finance/finance.service.ts",
     "apps/api/src/auth/throttle.service.ts",
     "apps/api/src/admission/admission.service.ts",
-    "apps/api/src/checkin/checkin.service.ts"
+    "apps/api/src/checkin/checkin.service.ts",
+    "apps/api/src/common/org-gate.ts",
+    "apps/api/src/corrections/corrections.apply.ts",
+    "apps/api/src/corrections/corrections.facts.ts",
+    "apps/api/src/corrections/corrections.service.ts",
+    "apps/api/src/transfer/transfer.service.ts",
+    "apps/api/src/inventory/inventory.repository.ts",
+    "apps/api/src/common/correction-deadline.ts",
+    "apps/api/src/transfer/transfer.execution.ts",
+    "apps/api/src/common/assignment-reconciliation.ts",
+    "apps/api/src/transfer/transfer-finance.service.ts",
+    "apps/api/src/common/assignment-adoption.ts"
   ],
   "migrationSlices": {
     "20261101093228_add_resident_model": "3.1",
@@ -526,6 +646,10 @@
     "20261103100000_invoice_void_record": "3.7",
     "20261103110000_invoice_guard_hardening": "3.7",
     "20261103120000_invoice_status_consistency": "3.7",
-    "20261103130000_invoice_active_uniqueness": "3.8"
+    "20261103130000_invoice_active_uniqueness": "3.8",
+    "20261110110000_p4_3_transfers": "4.3",
+    "20261110120000_transfer_command_receipts": "4.3",
+    "20261108120000_p4_2_corrections": "4.1",
+    "20261110100000_p4_2_correction_guards": "4.1"
   }
 }

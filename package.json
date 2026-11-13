@@ -36,6 +36,7 @@
     "node-pty": "1.1.0",
     "prettier": "3.6.2",
     "prisma": "7.10.1",
+    "puppeteer-core": "25.16.0",
     "tsx": "4.20.6",
     "typescript": "5.9.3",
     "typescript-eslint": "8.46.2"

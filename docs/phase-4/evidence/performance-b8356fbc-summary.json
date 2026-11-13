@@ -1,0 +1,4354 @@
+[
+  {
+    "probe": "loaded-http-timeouts",
+    "configuredLockTimeoutMs": 3000,
+    "concurrency": 10,
+    "http": [
+      {
+        "timestamp": "2026-11-10T05:37:50.710Z",
+        "startedMs": 3226.971458,
+        "completedMs": 6292.193625,
+        "wallMs": 3065.222417,
+        "status": 409,
+        "code": "RETRY_REQUIRED"
+      },
+      {
+        "timestamp": "2026-11-10T05:37:50.710Z",
+        "startedMs": 3227.083292,
+        "completedMs": 6291.81375,
+        "wallMs": 3064.732375,
+        "status": 409,
+        "code": "RETRY_REQUIRED"
+      },
+      {
+        "timestamp": "2026-11-10T05:37:50.710Z",
+        "startedMs": 3227.110667,
+        "completedMs": 6292.33675,
+        "wallMs": 3065.2263330000005,
+        "status": 409,
+        "code": "RETRY_REQUIRED"
+      },
+      {
+        "timestamp": "2026-11-10T05:37:50.710Z",
+        "startedMs": 3227.127542,
+        "completedMs": 6292.027833,
+        "wallMs": 3064.9004999999997,
+        "status": 409,
+        "code": "RETRY_REQUIRED"
+      },
+      {
+        "timestamp": "2026-11-10T05:37:50.710Z",
+        "startedMs": 3227.140333,
+        "completedMs": 6292.729292,
+        "wallMs": 3065.5891670000005,
+        "status": 409,
+        "code": "RETRY_REQUIRED"
+      },
+      {
+        "timestamp": "2026-11-10T05:37:50.710Z",
+        "startedMs": 3227.156833,
+        "completedMs": 6292.672625,
+        "wallMs": 3065.5159999999996,
+        "status": 409,
+        "code": "RETRY_REQUIRED"
+      },
+      {
+        "timestamp": "2026-11-10T05:37:50.710Z",
+        "startedMs": 3227.192333,
+        "completedMs": 6292.098917,
+        "wallMs": 3064.9067919999998,
+        "status": 409,
+        "code": "RETRY_REQUIRED"
+      },
+      {
+        "timestamp": "2026-11-10T05:37:50.710Z",
+        "startedMs": 3227.205875,
+        "completedMs": 6292.600792,
+        "wallMs": 3065.3951249999996,
+        "status": 409,
+        "code": "RETRY_REQUIRED"
+      },
+      {
+        "timestamp": "2026-11-10T05:37:50.710Z",
+        "startedMs": 3227.216375,
+        "completedMs": 6291.93625,
+        "wallMs": 3064.724042,
+        "status": 409,
+        "code": "RETRY_REQUIRED"
+      },
+      {
+        "timestamp": "2026-11-10T05:37:50.710Z",
+        "startedMs": 3227.227792,
+        "completedMs": 6292.792333,
+        "wallMs": 3065.564916,
+        "status": 409,
+        "code": "RETRY_REQUIRED"
+      }
+    ],
+    "bookingCount": 100,
+    "bookingCreatedAudits": 0
+  },
+  {
+    "probe": "concurrent-correction-outcomes",
+    "concurrency": 20,
+    "outcomes": [
+      {
+        "status": 200,
+        "code": null
+      },
+      {
+        "status": 200,
+        "code": null
+      },
+      {
+        "status": 200,
+        "code": null
+      },
+      {
+        "status": 200,
+        "code": null
+      },
+      {
+        "status": 200,
+        "code": null
+      },
+      {
+        "status": 200,
+        "code": null
+      },
+      {
+        "status": 200,
+        "code": null
+      },
+      {
+        "status": 200,
+        "code": null
+      },
+      {
+        "status": 200,
+        "code": null
+      },
+      {
+        "status": 200,
+        "code": null
+      },
+      {
+        "status": 200,
+        "code": null
+      },
+      {
+        "status": 200,
+        "code": null
+      },
+      {
+        "status": 200,
+        "code": null
+      },
+      {
+        "status": 200,
+        "code": null
+      },
+      {
+        "status": 200,
+        "code": null
+      },
+      {
+        "status": 200,
+        "code": null
+      },
+      {
+        "status": 200,
+        "code": null
+      },
+      {
+        "status": 200,
+        "code": null
+      },
+      {
+        "status": 200,
+        "code": null
+      },
+      {
+        "status": 200,
+        "code": null
+      }
+    ]
+  },
+  {
+    "probe": "real-retry-http",
+    "status": 200,
+    "replay": true,
+    "approvalReceipts": 1,
+    "applicationAudits": 1,
+    "finalFirstName": "Aarav"
+  },
+  {
+    "probe": "performance-gate-holds",
+    "timestamp": "2026-11-10T05:37:56.467Z",
+    "hardware": {
+      "platform": "darwin",
+      "arch": "arm64",
+      "cpu": "Apple M4",
+      "cpus": 10,
+      "memoryBytes": 17179869184,
+      "node": "v24.22.1"
+    },
+    "fixture": {
+      "beds": 100,
+      "residents": 100,
+      "bookings": 100,
+      "activeStays": 100,
+      "historicalInvoices": 1200
+    },
+    "profile": {
+      "correctionSamples": 20,
+      "generationSamples": 5,
+      "concurrency": 1
+    },
+    "attempts": [
+      {
+        "workload": "loaded-http-timeout",
+        "timeoutMs": 15000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 3250.186208,
+            "endedMs": 6286.742333,
+            "succeeded": false,
+            "durationMs": 3036.559542,
+            "remainingAtStartMs": 14998.784167
+          }
+        ],
+        "error": {
+          "name": "PrismaClientKnownRequestError",
+          "code": "P2010",
+          "sqlStates": [
+            "55P03",
+            "55P03"
+          ],
+          "classification": "LOCK_TIMEOUT"
+        },
+        "attemptMs": 3043.1379999999995
+      },
+      {
+        "workload": "loaded-http-timeout",
+        "timeoutMs": 15000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 3251.204042,
+            "endedMs": 6288.057625,
+            "succeeded": false,
+            "durationMs": 3036.853708,
+            "remainingAtStartMs": 14998.655375
+          }
+        ],
+        "error": {
+          "name": "PrismaClientKnownRequestError",
+          "code": "P2010",
+          "sqlStates": [
+            "55P03",
+            "55P03"
+          ],
+          "classification": "LOCK_TIMEOUT"
+        },
+        "attemptMs": 3041.36875
+      },
+      {
+        "workload": "loaded-http-timeout",
+        "timeoutMs": 15000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 3252.484125,
+            "endedMs": 6287.693542,
+            "succeeded": false,
+            "durationMs": 3035.2102919999998,
+            "remainingAtStartMs": 14998.889333
+          }
+        ],
+        "error": {
+          "name": "PrismaClientKnownRequestError",
+          "code": "P2010",
+          "sqlStates": [
+            "55P03",
+            "55P03"
+          ],
+          "classification": "LOCK_TIMEOUT"
+        },
+        "attemptMs": 3040.8196249999996
+      },
+      {
+        "workload": "loaded-http-timeout",
+        "timeoutMs": 15000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 3257.245958,
+            "endedMs": 6288.374083,
+            "succeeded": false,
+            "durationMs": 3031.12825,
+            "remainingAtStartMs": 14999.383042
+          }
+        ],
+        "error": {
+          "name": "PrismaClientKnownRequestError",
+          "code": "P2010",
+          "sqlStates": [
+            "55P03",
+            "55P03"
+          ],
+          "classification": "LOCK_TIMEOUT"
+        },
+        "attemptMs": 3034.867584
+      },
+      {
+        "workload": "loaded-http-timeout",
+        "timeoutMs": 15000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 3260.079875,
+            "endedMs": 6288.655375,
+            "succeeded": false,
+            "durationMs": 3028.575708,
+            "remainingAtStartMs": 14999.27125
+          }
+        ],
+        "error": {
+          "name": "PrismaClientKnownRequestError",
+          "code": "P2010",
+          "sqlStates": [
+            "55P03",
+            "55P03"
+          ],
+          "classification": "LOCK_TIMEOUT"
+        },
+        "attemptMs": 3032.2824170000004
+      },
+      {
+        "workload": "loaded-http-timeout",
+        "timeoutMs": 15000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 3260.360125,
+            "endedMs": 6289.51,
+            "succeeded": false,
+            "durationMs": 3029.1499999999996,
+            "remainingAtStartMs": 14999.279125000001
+          }
+        ],
+        "error": {
+          "name": "PrismaClientKnownRequestError",
+          "code": "P2010",
+          "sqlStates": [
+            "55P03",
+            "55P03"
+          ],
+          "classification": "LOCK_TIMEOUT"
+        },
+        "attemptMs": 3032.741584
+      },
+      {
+        "workload": "loaded-http-timeout",
+        "timeoutMs": 15000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 3260.513625,
+            "endedMs": 6289.101542,
+            "succeeded": false,
+            "durationMs": 3028.588,
+            "remainingAtStartMs": 14999.481917000001
+          }
+        ],
+        "error": {
+          "name": "PrismaClientKnownRequestError",
+          "code": "P2010",
+          "sqlStates": [
+            "55P03",
+            "55P03"
+          ],
+          "classification": "LOCK_TIMEOUT"
+        },
+        "attemptMs": 3032.1248330000003
+      },
+      {
+        "workload": "loaded-http-timeout",
+        "timeoutMs": 15000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 3260.299125,
+            "endedMs": 6288.882833,
+            "succeeded": false,
+            "durationMs": 3028.583875,
+            "remainingAtStartMs": 14999.453625
+          }
+        ],
+        "error": {
+          "name": "PrismaClientKnownRequestError",
+          "code": "P2010",
+          "sqlStates": [
+            "55P03",
+            "55P03"
+          ],
+          "classification": "LOCK_TIMEOUT"
+        },
+        "attemptMs": 3031.4880410000005
+      },
+      {
+        "workload": "loaded-http-timeout",
+        "timeoutMs": 15000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 3260.576375,
+            "endedMs": 6289.295917,
+            "succeeded": false,
+            "durationMs": 3028.719708,
+            "remainingAtStartMs": 14999.649125
+          }
+        ],
+        "error": {
+          "name": "PrismaClientKnownRequestError",
+          "code": "P2010",
+          "sqlStates": [
+            "55P03",
+            "55P03"
+          ],
+          "classification": "LOCK_TIMEOUT"
+        },
+        "attemptMs": 3031.7380410000005
+      },
+      {
+        "workload": "loaded-http-timeout",
+        "timeoutMs": 15000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 3260.756583,
+            "endedMs": 6289.720583,
+            "succeeded": false,
+            "durationMs": 3028.964125,
+            "remainingAtStartMs": 14999.68675
+          }
+        ],
+        "error": {
+          "name": "PrismaClientKnownRequestError",
+          "code": "P2010",
+          "sqlStates": [
+            "55P03",
+            "55P03"
+          ],
+          "classification": "LOCK_TIMEOUT"
+        },
+        "attemptMs": 3031.5590420000003
+      },
+      {
+        "workload": "correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 6327.239167,
+            "endedMs": 6327.776792,
+            "succeeded": true,
+            "durationMs": 0.537916000000223,
+            "remainingAtStartMs": 29999.217333
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 6333.386125,
+            "endedMs": 6333.943333,
+            "succeeded": true,
+            "durationMs": 0.5575419999995574,
+            "remainingAtStartMs": 29993.070375
+          }
+        ],
+        "committed": true,
+        "attemptMs": 34.06091600000036,
+        "gateHoldMs": 25.95179199999984
+      },
+      {
+        "workload": "correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 6365.943917,
+            "endedMs": 6366.316,
+            "succeeded": true,
+            "durationMs": 0.3722910000005868,
+            "remainingAtStartMs": 29999.530040999998
+          },
+          {
+            "kind": "row",
+            "startedMs": 6370.610125,
+            "endedMs": 6371.112625,
+            "succeeded": true,
+            "durationMs": 0.5027499999996508,
+            "remainingAtStartMs": 29994.863833
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 6372.685458,
+            "endedMs": 6373.079375,
+            "succeeded": true,
+            "durationMs": 0.3940840000004755,
+            "remainingAtStartMs": 29992.7885
+          },
+          {
+            "kind": "row",
+            "startedMs": 6376.488833,
+            "endedMs": 6377.261042,
+            "succeeded": true,
+            "durationMs": 0.7723749999995562,
+            "remainingAtStartMs": 29988.985125
+          },
+          {
+            "kind": "row",
+            "startedMs": 6377.272167,
+            "endedMs": 6377.643042,
+            "succeeded": true,
+            "durationMs": 0.37150000000019645,
+            "remainingAtStartMs": 29988.201791
+          },
+          {
+            "kind": "row",
+            "startedMs": 6377.661083,
+            "endedMs": 6378.028083,
+            "succeeded": true,
+            "durationMs": 0.367167000000336,
+            "remainingAtStartMs": 29987.812875
+          },
+          {
+            "kind": "row",
+            "startedMs": 6378.037792,
+            "endedMs": 6378.386917,
+            "succeeded": true,
+            "durationMs": 0.34929099999953905,
+            "remainingAtStartMs": 29987.436166
+          }
+        ],
+        "committed": true,
+        "attemptMs": 43.32945899999959,
+        "gateHoldMs": 35.312042000000474
+      },
+      {
+        "workload": "correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 6412.390375,
+            "endedMs": 6412.702167,
+            "succeeded": true,
+            "durationMs": 0.3118750000003274,
+            "remainingAtStartMs": 29999.657
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 6414.276083,
+            "endedMs": 6414.549958,
+            "succeeded": true,
+            "durationMs": 0.27391700000043784,
+            "remainingAtStartMs": 29997.771292
+          }
+        ],
+        "committed": true,
+        "attemptMs": 8.718541999999616,
+        "gateHoldMs": 5.897832999999991
+      },
+      {
+        "workload": "correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 6424.65775,
+            "endedMs": 6424.949375,
+            "succeeded": true,
+            "durationMs": 0.29174999999941065,
+            "remainingAtStartMs": 29999.676333
+          },
+          {
+            "kind": "row",
+            "startedMs": 6426.836542,
+            "endedMs": 6427.832875,
+            "succeeded": true,
+            "durationMs": 0.9967079999996713,
+            "remainingAtStartMs": 29997.497541
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 6429.54025,
+            "endedMs": 6429.874083,
+            "succeeded": true,
+            "durationMs": 0.3339169999999285,
+            "remainingAtStartMs": 29994.793833
+          },
+          {
+            "kind": "row",
+            "startedMs": 6430.869833,
+            "endedMs": 6431.239875,
+            "succeeded": true,
+            "durationMs": 0.37016700000003766,
+            "remainingAtStartMs": 29993.46425
+          },
+          {
+            "kind": "row",
+            "startedMs": 6431.248792,
+            "endedMs": 6431.546542,
+            "succeeded": true,
+            "durationMs": 0.29787499999929423,
+            "remainingAtStartMs": 29993.085291
+          },
+          {
+            "kind": "row",
+            "startedMs": 6431.555958,
+            "endedMs": 6431.90575,
+            "succeeded": true,
+            "durationMs": 0.3498749999998836,
+            "remainingAtStartMs": 29992.778125
+          },
+          {
+            "kind": "row",
+            "startedMs": 6431.912917,
+            "endedMs": 6432.212875,
+            "succeeded": true,
+            "durationMs": 0.30004100000041944,
+            "remainingAtStartMs": 29992.421166
+          }
+        ],
+        "committed": true,
+        "attemptMs": 34.10266700000011,
+        "gateHoldMs": 28.265292000000045
+      },
+      {
+        "workload": "correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 6462.198375,
+            "endedMs": 6462.489542,
+            "succeeded": true,
+            "durationMs": 0.29129199999988487,
+            "remainingAtStartMs": 29999.691875
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 6463.889542,
+            "endedMs": 6464.134417,
+            "succeeded": true,
+            "durationMs": 0.24495800000022427,
+            "remainingAtStartMs": 29998.000708
+          }
+        ],
+        "committed": true,
+        "attemptMs": 7.768374999999651,
+        "gateHoldMs": 5.245375000000422
+      },
+      {
+        "workload": "correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 6472.518833,
+            "endedMs": 6472.760792,
+            "succeeded": true,
+            "durationMs": 0.24208399999952235,
+            "remainingAtStartMs": 29999.726084
+          },
+          {
+            "kind": "row",
+            "startedMs": 6474.149042,
+            "endedMs": 6474.447958,
+            "succeeded": true,
+            "durationMs": 0.2990410000002157,
+            "remainingAtStartMs": 29998.095875
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 6475.08425,
+            "endedMs": 6475.30725,
+            "succeeded": true,
+            "durationMs": 0.22308299999986048,
+            "remainingAtStartMs": 29997.160667
+          },
+          {
+            "kind": "row",
+            "startedMs": 6476.16,
+            "endedMs": 6476.466583,
+            "succeeded": true,
+            "durationMs": 0.30662500000016735,
+            "remainingAtStartMs": 29996.084917
+          },
+          {
+            "kind": "row",
+            "startedMs": 6476.475583,
+            "endedMs": 6476.748542,
+            "succeeded": true,
+            "durationMs": 0.27299999999922875,
+            "remainingAtStartMs": 29995.769334
+          },
+          {
+            "kind": "row",
+            "startedMs": 6476.75475,
+            "endedMs": 6477.018333,
+            "succeeded": true,
+            "durationMs": 0.26358299999992596,
+            "remainingAtStartMs": 29995.490167
+          },
+          {
+            "kind": "row",
+            "startedMs": 6477.0255,
+            "endedMs": 6477.291833,
+            "succeeded": true,
+            "durationMs": 0.2663750000001528,
+            "remainingAtStartMs": 29995.219417
+          }
+        ],
+        "committed": true,
+        "attemptMs": 20.74604199999976,
+        "gateHoldMs": 17.41583300000002
+      },
+      {
+        "workload": "correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 6496.5935,
+            "endedMs": 6496.880542,
+            "succeeded": true,
+            "durationMs": 0.28716700000040873,
+            "remainingAtStartMs": 29999.678708
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 6498.283833,
+            "endedMs": 6498.536417,
+            "succeeded": true,
+            "durationMs": 0.25274999999965075,
+            "remainingAtStartMs": 29997.988375
+          }
+        ],
+        "committed": true,
+        "attemptMs": 7.648250000000189,
+        "gateHoldMs": 5.108666999999514
+      },
+      {
+        "workload": "correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 6507.584167,
+            "endedMs": 6507.845208,
+            "succeeded": true,
+            "durationMs": 0.26116600000023027,
+            "remainingAtStartMs": 29999.689625
+          },
+          {
+            "kind": "row",
+            "startedMs": 6509.37925,
+            "endedMs": 6509.684375,
+            "succeeded": true,
+            "durationMs": 0.3052079999997659,
+            "remainingAtStartMs": 29997.894542000002
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 6510.38275,
+            "endedMs": 6510.679083,
+            "succeeded": true,
+            "durationMs": 0.29650000000037835,
+            "remainingAtStartMs": 29996.891042
+          },
+          {
+            "kind": "row",
+            "startedMs": 6511.525667,
+            "endedMs": 6511.857125,
+            "succeeded": true,
+            "durationMs": 0.33150000000023283,
+            "remainingAtStartMs": 29995.748125
+          },
+          {
+            "kind": "row",
+            "startedMs": 6511.861167,
+            "endedMs": 6512.156708,
+            "succeeded": true,
+            "durationMs": 0.29558300000007875,
+            "remainingAtStartMs": 29995.412625
+          },
+          {
+            "kind": "row",
+            "startedMs": 6512.163667,
+            "endedMs": 6512.460083,
+            "succeeded": true,
+            "durationMs": 0.29650000000037835,
+            "remainingAtStartMs": 29995.110125
+          },
+          {
+            "kind": "row",
+            "startedMs": 6512.46625,
+            "endedMs": 6512.761208,
+            "succeeded": true,
+            "durationMs": 0.2950829999999769,
+            "remainingAtStartMs": 29994.807542
+          }
+        ],
+        "committed": true,
+        "attemptMs": 21.034625000000233,
+        "gateHoldMs": 17.331584000000475
+      },
+      {
+        "workload": "correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 6531.713,
+            "endedMs": 6531.983542,
+            "succeeded": true,
+            "durationMs": 0.2706670000006852,
+            "remainingAtStartMs": 29999.723542
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 6533.378375,
+            "endedMs": 6533.63525,
+            "succeeded": true,
+            "durationMs": 0.25691699999970297,
+            "remainingAtStartMs": 29998.058167
+          }
+        ],
+        "committed": true,
+        "attemptMs": 7.571249999999964,
+        "gateHoldMs": 5.106541000000107
+      },
+      {
+        "workload": "correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 6542.209125,
+            "endedMs": 6542.486792,
+            "succeeded": true,
+            "durationMs": 0.27770799999962037,
+            "remainingAtStartMs": 29999.703875
+          },
+          {
+            "kind": "row",
+            "startedMs": 6543.947958,
+            "endedMs": 6544.250958,
+            "succeeded": true,
+            "durationMs": 0.30304200000045967,
+            "remainingAtStartMs": 29997.965042
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 6544.940333,
+            "endedMs": 6545.219292,
+            "succeeded": true,
+            "durationMs": 0.2790420000001177,
+            "remainingAtStartMs": 29996.972667000002
+          },
+          {
+            "kind": "row",
+            "startedMs": 6546.105917,
+            "endedMs": 6546.41925,
+            "succeeded": true,
+            "durationMs": 0.31345800000053714,
+            "remainingAtStartMs": 29995.807083
+          },
+          {
+            "kind": "row",
+            "startedMs": 6546.425792,
+            "endedMs": 6546.688292,
+            "succeeded": true,
+            "durationMs": 0.2626250000002983,
+            "remainingAtStartMs": 29995.487208
+          },
+          {
+            "kind": "row",
+            "startedMs": 6546.696333,
+            "endedMs": 6546.968542,
+            "succeeded": true,
+            "durationMs": 0.27224999999998545,
+            "remainingAtStartMs": 29995.216667
+          },
+          {
+            "kind": "row",
+            "startedMs": 6546.9735,
+            "endedMs": 6547.25025,
+            "succeeded": true,
+            "durationMs": 0.2767919999996593,
+            "remainingAtStartMs": 29994.9395
+          }
+        ],
+        "committed": true,
+        "attemptMs": 20.403667000000496,
+        "gateHoldMs": 16.83037499999955
+      },
+      {
+        "workload": "correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 6565.268833,
+            "endedMs": 6565.529125,
+            "succeeded": true,
+            "durationMs": 0.2604590000000826,
+            "remainingAtStartMs": 29999.724167
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 6567.019542,
+            "endedMs": 6567.276542,
+            "succeeded": true,
+            "durationMs": 0.2571250000000873,
+            "remainingAtStartMs": 29997.973458
+          }
+        ],
+        "committed": true,
+        "attemptMs": 7.519290999999612,
+        "gateHoldMs": 4.943333000000166
+      },
+      {
+        "workload": "correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 6575.621292,
+            "endedMs": 6575.900917,
+            "succeeded": true,
+            "durationMs": 0.27966600000036124,
+            "remainingAtStartMs": 29999.7005
+          },
+          {
+            "kind": "row",
+            "startedMs": 6577.345958,
+            "endedMs": 6577.656042,
+            "succeeded": true,
+            "durationMs": 0.3101249999999709,
+            "remainingAtStartMs": 29997.975834
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 6578.328542,
+            "endedMs": 6578.583875,
+            "succeeded": true,
+            "durationMs": 0.2553749999997308,
+            "remainingAtStartMs": 29996.99325
+          },
+          {
+            "kind": "row",
+            "startedMs": 6579.415958,
+            "endedMs": 6579.716167,
+            "succeeded": true,
+            "durationMs": 0.3002920000008089,
+            "remainingAtStartMs": 29995.905834
+          },
+          {
+            "kind": "row",
+            "startedMs": 6579.721,
+            "endedMs": 6579.999875,
+            "succeeded": true,
+            "durationMs": 0.278917000000547,
+            "remainingAtStartMs": 29995.600792
+          },
+          {
+            "kind": "row",
+            "startedMs": 6580.005417,
+            "endedMs": 6580.298167,
+            "succeeded": true,
+            "durationMs": 0.2927909999998519,
+            "remainingAtStartMs": 29995.316375
+          },
+          {
+            "kind": "row",
+            "startedMs": 6580.301958,
+            "endedMs": 6580.581417,
+            "succeeded": true,
+            "durationMs": 0.2794999999996435,
+            "remainingAtStartMs": 29995.019834
+          }
+        ],
+        "committed": true,
+        "attemptMs": 20.073083000000224,
+        "gateHoldMs": 16.524207999999817
+      },
+      {
+        "workload": "correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 6598.612458,
+            "endedMs": 6598.891583,
+            "succeeded": true,
+            "durationMs": 0.27925000000050204,
+            "remainingAtStartMs": 29999.705875
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 6600.295375,
+            "endedMs": 6600.547875,
+            "succeeded": true,
+            "durationMs": 0.25262500000008004,
+            "remainingAtStartMs": 29998.022958
+          }
+        ],
+        "committed": true,
+        "attemptMs": 7.371374999999716,
+        "gateHoldMs": 4.85412499999984
+      },
+      {
+        "workload": "correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 6611.881833,
+            "endedMs": 6612.174833,
+            "succeeded": true,
+            "durationMs": 0.293083999999908,
+            "remainingAtStartMs": 29999.69025
+          },
+          {
+            "kind": "row",
+            "startedMs": 6613.668333,
+            "endedMs": 6613.96675,
+            "succeeded": true,
+            "durationMs": 0.2984169999999722,
+            "remainingAtStartMs": 29997.90375
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 6614.641542,
+            "endedMs": 6614.920375,
+            "succeeded": true,
+            "durationMs": 0.2788749999999709,
+            "remainingAtStartMs": 29996.930541
+          },
+          {
+            "kind": "row",
+            "startedMs": 6615.79325,
+            "endedMs": 6616.091792,
+            "succeeded": true,
+            "durationMs": 0.2986250000003565,
+            "remainingAtStartMs": 29995.778833
+          },
+          {
+            "kind": "row",
+            "startedMs": 6616.097833,
+            "endedMs": 6616.369333,
+            "succeeded": true,
+            "durationMs": 0.27162500000031287,
+            "remainingAtStartMs": 29995.47425
+          },
+          {
+            "kind": "row",
+            "startedMs": 6616.37675,
+            "endedMs": 6616.657875,
+            "succeeded": true,
+            "durationMs": 0.2812079999994239,
+            "remainingAtStartMs": 29995.195333
+          },
+          {
+            "kind": "row",
+            "startedMs": 6616.663542,
+            "endedMs": 6616.941,
+            "succeeded": true,
+            "durationMs": 0.2775000000001455,
+            "remainingAtStartMs": 29994.908541
+          }
+        ],
+        "committed": true,
+        "attemptMs": 20.889374999999745,
+        "gateHoldMs": 17.254958000000443
+      },
+      {
+        "workload": "correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 6636.027667,
+            "endedMs": 6636.27875,
+            "succeeded": true,
+            "durationMs": 0.251166000000012,
+            "remainingAtStartMs": 29999.678916
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 6637.778875,
+            "endedMs": 6638.046208,
+            "succeeded": true,
+            "durationMs": 0.26749999999992724,
+            "remainingAtStartMs": 29997.927708
+          }
+        ],
+        "committed": true,
+        "attemptMs": 7.931790999999976,
+        "gateHoldMs": 5.280625000000327
+      },
+      {
+        "workload": "correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 6646.574208,
+            "endedMs": 6646.896333,
+            "succeeded": true,
+            "durationMs": 0.3221670000002632,
+            "remainingAtStartMs": 29999.71975
+          },
+          {
+            "kind": "row",
+            "startedMs": 6648.412458,
+            "endedMs": 6648.730833,
+            "succeeded": true,
+            "durationMs": 0.31841700000040873,
+            "remainingAtStartMs": 29997.8815
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 6649.389792,
+            "endedMs": 6649.619708,
+            "succeeded": true,
+            "durationMs": 0.23000000000047294,
+            "remainingAtStartMs": 29996.904166
+          },
+          {
+            "kind": "row",
+            "startedMs": 6650.513542,
+            "endedMs": 6650.853875,
+            "succeeded": true,
+            "durationMs": 0.3403330000001006,
+            "remainingAtStartMs": 29995.780416
+          },
+          {
+            "kind": "row",
+            "startedMs": 6650.85825,
+            "endedMs": 6651.120583,
+            "succeeded": true,
+            "durationMs": 0.2623749999993379,
+            "remainingAtStartMs": 29995.435708
+          },
+          {
+            "kind": "row",
+            "startedMs": 6651.12625,
+            "endedMs": 6651.387,
+            "succeeded": true,
+            "durationMs": 0.2608749999999418,
+            "remainingAtStartMs": 29995.167708
+          },
+          {
+            "kind": "row",
+            "startedMs": 6651.394417,
+            "endedMs": 6651.67825,
+            "succeeded": true,
+            "durationMs": 0.28387499999917054,
+            "remainingAtStartMs": 29994.899541
+          }
+        ],
+        "committed": true,
+        "attemptMs": 21.005458999999973,
+        "gateHoldMs": 17.402124999999614
+      },
+      {
+        "workload": "correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 6670.783125,
+            "endedMs": 6671.076458,
+            "succeeded": true,
+            "durationMs": 0.29341699999986304,
+            "remainingAtStartMs": 29999.703458
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 6672.488042,
+            "endedMs": 6672.776083,
+            "succeeded": true,
+            "durationMs": 0.2880830000003698,
+            "remainingAtStartMs": 29997.998541
+          }
+        ],
+        "committed": true,
+        "attemptMs": 7.646582999999737,
+        "gateHoldMs": 5.0763749999996435
+      },
+      {
+        "workload": "correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 6681.2955,
+            "endedMs": 6681.549208,
+            "succeeded": true,
+            "durationMs": 0.2537499999998545,
+            "remainingAtStartMs": 29999.625125
+          },
+          {
+            "kind": "row",
+            "startedMs": 6683.086042,
+            "endedMs": 6683.3775,
+            "succeeded": true,
+            "durationMs": 0.29154100000050676,
+            "remainingAtStartMs": 29997.834583
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 6684.050417,
+            "endedMs": 6684.321417,
+            "succeeded": true,
+            "durationMs": 0.27104099999996834,
+            "remainingAtStartMs": 29996.870208
+          },
+          {
+            "kind": "row",
+            "startedMs": 6685.109542,
+            "endedMs": 6685.409292,
+            "succeeded": true,
+            "durationMs": 0.2998330000000351,
+            "remainingAtStartMs": 29995.811083
+          },
+          {
+            "kind": "row",
+            "startedMs": 6685.414417,
+            "endedMs": 6685.6865,
+            "succeeded": true,
+            "durationMs": 0.2721659999997428,
+            "remainingAtStartMs": 29995.506208
+          },
+          {
+            "kind": "row",
+            "startedMs": 6685.693958,
+            "endedMs": 6686.003583,
+            "succeeded": true,
+            "durationMs": 0.3097090000001117,
+            "remainingAtStartMs": 29995.226667
+          },
+          {
+            "kind": "row",
+            "startedMs": 6686.010375,
+            "endedMs": 6686.288083,
+            "succeeded": true,
+            "durationMs": 0.27770800000052986,
+            "remainingAtStartMs": 29994.91025
+          }
+        ],
+        "committed": true,
+        "attemptMs": 20.204999999999927,
+        "gateHoldMs": 16.494458000000122
+      },
+      {
+        "workload": "correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 6704.306542,
+            "endedMs": 6704.59025,
+            "succeeded": true,
+            "durationMs": 0.2837499999995998,
+            "remainingAtStartMs": 29999.713625
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 6706.055625,
+            "endedMs": 6706.291708,
+            "succeeded": true,
+            "durationMs": 0.23612500000035652,
+            "remainingAtStartMs": 29997.964542
+          }
+        ],
+        "committed": true,
+        "attemptMs": 13.64574999999968,
+        "gateHoldMs": 11.095666000000165
+      },
+      {
+        "workload": "correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 6721.009042,
+            "endedMs": 6721.270208,
+            "succeeded": true,
+            "durationMs": 0.26125000000047294,
+            "remainingAtStartMs": 29999.679416
+          },
+          {
+            "kind": "row",
+            "startedMs": 6722.817917,
+            "endedMs": 6723.115208,
+            "succeeded": true,
+            "durationMs": 0.2973329999995258,
+            "remainingAtStartMs": 29997.870541
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 6723.800292,
+            "endedMs": 6724.056667,
+            "succeeded": true,
+            "durationMs": 0.25650000000041473,
+            "remainingAtStartMs": 29996.888166
+          },
+          {
+            "kind": "row",
+            "startedMs": 6724.897083,
+            "endedMs": 6725.264167,
+            "succeeded": true,
+            "durationMs": 0.367167000000336,
+            "remainingAtStartMs": 29995.791375
+          },
+          {
+            "kind": "row",
+            "startedMs": 6725.270792,
+            "endedMs": 6725.561083,
+            "succeeded": true,
+            "durationMs": 0.2903329999999187,
+            "remainingAtStartMs": 29995.417666
+          },
+          {
+            "kind": "row",
+            "startedMs": 6725.566667,
+            "endedMs": 6725.900375,
+            "succeeded": true,
+            "durationMs": 0.3337499999997817,
+            "remainingAtStartMs": 29995.121790999998
+          },
+          {
+            "kind": "row",
+            "startedMs": 6725.905708,
+            "endedMs": 6726.17875,
+            "succeeded": true,
+            "durationMs": 0.2730839999994714,
+            "remainingAtStartMs": 29994.78275
+          }
+        ],
+        "committed": true,
+        "attemptMs": 20.978665999999976,
+        "gateHoldMs": 17.322165999999925
+      },
+      {
+        "workload": "correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 6745.192,
+            "endedMs": 6745.506125,
+            "succeeded": true,
+            "durationMs": 0.3142500000003565,
+            "remainingAtStartMs": 29999.705083
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 6746.902667,
+            "endedMs": 6747.170875,
+            "succeeded": true,
+            "durationMs": 0.26833299999998417,
+            "remainingAtStartMs": 29997.994416
+          }
+        ],
+        "committed": true,
+        "attemptMs": 7.863999999999578,
+        "gateHoldMs": 5.3003749999998035
+      },
+      {
+        "workload": "correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 6755.953083,
+            "endedMs": 6756.269625,
+            "succeeded": true,
+            "durationMs": 0.3165839999992386,
+            "remainingAtStartMs": 29999.705416999997
+          },
+          {
+            "kind": "row",
+            "startedMs": 6757.789625,
+            "endedMs": 6758.090417,
+            "succeeded": true,
+            "durationMs": 0.3008749999999054,
+            "remainingAtStartMs": 29997.868875
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 6763.143625,
+            "endedMs": 6763.717875,
+            "succeeded": true,
+            "durationMs": 0.5743330000004789,
+            "remainingAtStartMs": 29992.514875
+          },
+          {
+            "kind": "row",
+            "startedMs": 6765.744792,
+            "endedMs": 6766.507417,
+            "succeeded": true,
+            "durationMs": 0.7626659999996264,
+            "remainingAtStartMs": 29989.913708
+          },
+          {
+            "kind": "row",
+            "startedMs": 6766.513375,
+            "endedMs": 6767.143,
+            "succeeded": true,
+            "durationMs": 0.6297079999994821,
+            "remainingAtStartMs": 29989.145125
+          },
+          {
+            "kind": "row",
+            "startedMs": 6767.148417,
+            "endedMs": 6767.679333,
+            "succeeded": true,
+            "durationMs": 0.530957999999373,
+            "remainingAtStartMs": 29988.510083
+          },
+          {
+            "kind": "row",
+            "startedMs": 6767.684417,
+            "endedMs": 6768.292958,
+            "succeeded": true,
+            "durationMs": 0.6086249999998472,
+            "remainingAtStartMs": 29987.974083
+          }
+        ],
+        "committed": true,
+        "attemptMs": 30.548541000000114,
+        "gateHoldMs": 22.220916999999645
+      },
+      {
+        "workload": "correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 6790.008875,
+            "endedMs": 6790.295917,
+            "succeeded": true,
+            "durationMs": 0.28716699999949924,
+            "remainingAtStartMs": 29999.68875
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 6791.755167,
+            "endedMs": 6792.044708,
+            "succeeded": true,
+            "durationMs": 0.2895829999997659,
+            "remainingAtStartMs": 29997.942457999998
+          }
+        ],
+        "committed": true,
+        "attemptMs": 7.436791000000085,
+        "gateHoldMs": 4.776166999999987
+      },
+      {
+        "workload": "correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 6799.959792,
+            "endedMs": 6800.226583,
+            "succeeded": true,
+            "durationMs": 0.26687500000025466,
+            "remainingAtStartMs": 29999.729833
+          },
+          {
+            "kind": "row",
+            "startedMs": 6801.624875,
+            "endedMs": 6801.93,
+            "succeeded": true,
+            "durationMs": 0.3052499999994325,
+            "remainingAtStartMs": 29998.064749999998
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 6802.571792,
+            "endedMs": 6802.828917,
+            "succeeded": true,
+            "durationMs": 0.25716600000032486,
+            "remainingAtStartMs": 29997.117833
+          },
+          {
+            "kind": "row",
+            "startedMs": 6803.625,
+            "endedMs": 6803.934958,
+            "succeeded": true,
+            "durationMs": 0.3100830000003043,
+            "remainingAtStartMs": 29996.064625
+          },
+          {
+            "kind": "row",
+            "startedMs": 6803.941042,
+            "endedMs": 6804.196167,
+            "succeeded": true,
+            "durationMs": 0.2551659999999174,
+            "remainingAtStartMs": 29995.748583
+          },
+          {
+            "kind": "row",
+            "startedMs": 6804.202958,
+            "endedMs": 6804.486083,
+            "succeeded": true,
+            "durationMs": 0.28325000000040745,
+            "remainingAtStartMs": 29995.486667
+          },
+          {
+            "kind": "row",
+            "startedMs": 6804.492125,
+            "endedMs": 6804.758208,
+            "succeeded": true,
+            "durationMs": 0.26612500000010186,
+            "remainingAtStartMs": 29995.197500000002
+          }
+        ],
+        "committed": true,
+        "attemptMs": 19.488542000000052,
+        "gateHoldMs": 16.08349999999973
+      },
+      {
+        "workload": "correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 6822.390542,
+            "endedMs": 6822.659458,
+            "succeeded": true,
+            "durationMs": 0.26895799999965675,
+            "remainingAtStartMs": 29999.730166
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 6824.088083,
+            "endedMs": 6824.316667,
+            "succeeded": true,
+            "durationMs": 0.22862500000064756,
+            "remainingAtStartMs": 29998.032625
+          }
+        ],
+        "committed": true,
+        "attemptMs": 7.238374999999905,
+        "gateHoldMs": 4.7673750000003565
+      },
+      {
+        "workload": "correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 6832.334292,
+            "endedMs": 6832.572208,
+            "succeeded": true,
+            "durationMs": 0.23800000000028376,
+            "remainingAtStartMs": 29999.73575
+          },
+          {
+            "kind": "row",
+            "startedMs": 6833.965708,
+            "endedMs": 6834.267458,
+            "succeeded": true,
+            "durationMs": 0.301792000000205,
+            "remainingAtStartMs": 29998.104334
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 6834.898875,
+            "endedMs": 6835.167042,
+            "succeeded": true,
+            "durationMs": 0.2681670000001759,
+            "remainingAtStartMs": 29997.171167
+          },
+          {
+            "kind": "row",
+            "startedMs": 6836.057417,
+            "endedMs": 6836.370333,
+            "succeeded": true,
+            "durationMs": 0.3129580000004353,
+            "remainingAtStartMs": 29996.012625
+          },
+          {
+            "kind": "row",
+            "startedMs": 6836.374667,
+            "endedMs": 6836.645917,
+            "succeeded": true,
+            "durationMs": 0.27129100000001927,
+            "remainingAtStartMs": 29995.695375
+          },
+          {
+            "kind": "row",
+            "startedMs": 6836.649833,
+            "endedMs": 6836.922583,
+            "succeeded": true,
+            "durationMs": 0.2727919999997539,
+            "remainingAtStartMs": 29995.420209
+          },
+          {
+            "kind": "row",
+            "startedMs": 6836.9265,
+            "endedMs": 6837.196208,
+            "succeeded": true,
+            "durationMs": 0.2697500000003856,
+            "remainingAtStartMs": 29995.143542
+          }
+        ],
+        "committed": true,
+        "attemptMs": 19.623082999999497,
+        "gateHoldMs": 16.258583000000726
+      },
+      {
+        "workload": "correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 6855.102375,
+            "endedMs": 6855.352875,
+            "succeeded": true,
+            "durationMs": 0.25054199999976845,
+            "remainingAtStartMs": 29999.729792
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 6856.6795,
+            "endedMs": 6856.940542,
+            "succeeded": true,
+            "durationMs": 0.2611249999999927,
+            "remainingAtStartMs": 29998.152667
+          }
+        ],
+        "committed": true,
+        "attemptMs": 7.3512919999993755,
+        "gateHoldMs": 4.96258300000045
+      },
+      {
+        "workload": "correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 6865.326292,
+            "endedMs": 6865.588708,
+            "succeeded": true,
+            "durationMs": 0.2624580000001515,
+            "remainingAtStartMs": 29999.735958
+          },
+          {
+            "kind": "row",
+            "startedMs": 6866.976917,
+            "endedMs": 6867.271333,
+            "succeeded": true,
+            "durationMs": 0.2944999999999709,
+            "remainingAtStartMs": 29998.085333
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 6867.897875,
+            "endedMs": 6868.1585,
+            "succeeded": true,
+            "durationMs": 0.2607080000007045,
+            "remainingAtStartMs": 29997.164375
+          },
+          {
+            "kind": "row",
+            "startedMs": 6868.940917,
+            "endedMs": 6869.241167,
+            "succeeded": true,
+            "durationMs": 0.3002910000004704,
+            "remainingAtStartMs": 29996.121333
+          },
+          {
+            "kind": "row",
+            "startedMs": 6869.244833,
+            "endedMs": 6869.531375,
+            "succeeded": true,
+            "durationMs": 0.28658400000040274,
+            "remainingAtStartMs": 29995.817417
+          },
+          {
+            "kind": "row",
+            "startedMs": 6869.535208,
+            "endedMs": 6869.788875,
+            "succeeded": true,
+            "durationMs": 0.25370899999961694,
+            "remainingAtStartMs": 29995.527042
+          },
+          {
+            "kind": "row",
+            "startedMs": 6869.793875,
+            "endedMs": 6870.054125,
+            "succeeded": true,
+            "durationMs": 0.2604169999995065,
+            "remainingAtStartMs": 29995.268375
+          }
+        ],
+        "committed": true,
+        "attemptMs": 19.38324999999986,
+        "gateHoldMs": 16.035125000000335
+      },
+      {
+        "workload": "correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 6888.019208,
+            "endedMs": 6888.305875,
+            "succeeded": true,
+            "durationMs": 0.286750000000211,
+            "remainingAtStartMs": 29999.715834000002
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 6889.76875,
+            "endedMs": 6890.041667,
+            "succeeded": true,
+            "durationMs": 0.27295799999956216,
+            "remainingAtStartMs": 29997.966292
+          }
+        ],
+        "committed": true,
+        "attemptMs": 7.400125000000116,
+        "gateHoldMs": 4.808834000000388
+      },
+      {
+        "workload": "correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 6898.176917,
+            "endedMs": 6898.415042,
+            "succeeded": true,
+            "durationMs": 0.23816600000009203,
+            "remainingAtStartMs": 29999.737958
+          },
+          {
+            "kind": "row",
+            "startedMs": 6899.753542,
+            "endedMs": 6900.085333,
+            "succeeded": true,
+            "durationMs": 0.33191599999918253,
+            "remainingAtStartMs": 29998.161333
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 6900.715875,
+            "endedMs": 6901.053583,
+            "succeeded": true,
+            "durationMs": 0.33783300000050076,
+            "remainingAtStartMs": 29997.199
+          },
+          {
+            "kind": "row",
+            "startedMs": 6901.795417,
+            "endedMs": 6902.098167,
+            "succeeded": true,
+            "durationMs": 0.3027910000000702,
+            "remainingAtStartMs": 29996.119458
+          },
+          {
+            "kind": "row",
+            "startedMs": 6902.10225,
+            "endedMs": 6902.361083,
+            "succeeded": true,
+            "durationMs": 0.25883299999986775,
+            "remainingAtStartMs": 29995.812625
+          },
+          {
+            "kind": "row",
+            "startedMs": 6902.365958,
+            "endedMs": 6902.615042,
+            "succeeded": true,
+            "durationMs": 0.24916699999994307,
+            "remainingAtStartMs": 29995.548917
+          },
+          {
+            "kind": "row",
+            "startedMs": 6902.619792,
+            "endedMs": 6902.86675,
+            "succeeded": true,
+            "durationMs": 0.24699999999938882,
+            "remainingAtStartMs": 29995.295083
+          }
+        ],
+        "committed": true,
+        "attemptMs": 19.501540999999634,
+        "gateHoldMs": 16.129625000000487
+      },
+      {
+        "workload": "correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 6920.794708,
+            "endedMs": 6921.081083,
+            "succeeded": true,
+            "durationMs": 0.2864589999999225,
+            "remainingAtStartMs": 29999.725
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 6922.479458,
+            "endedMs": 6922.746208,
+            "succeeded": true,
+            "durationMs": 0.2667920000003505,
+            "remainingAtStartMs": 29998.04025
+          }
+        ],
+        "committed": true,
+        "attemptMs": 7.352708000000348,
+        "gateHoldMs": 4.861374999999498
+      },
+      {
+        "workload": "correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 6931.1195,
+            "endedMs": 6931.367042,
+            "succeeded": true,
+            "durationMs": 0.2476249999999709,
+            "remainingAtStartMs": 29999.738667
+          },
+          {
+            "kind": "row",
+            "startedMs": 6932.847542,
+            "endedMs": 6933.138792,
+            "succeeded": true,
+            "durationMs": 0.291374999999789,
+            "remainingAtStartMs": 29998.010625
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 6933.775667,
+            "endedMs": 6934.046875,
+            "succeeded": true,
+            "durationMs": 0.27129100000001927,
+            "remainingAtStartMs": 29997.0825
+          },
+          {
+            "kind": "row",
+            "startedMs": 6934.825458,
+            "endedMs": 6935.153625,
+            "succeeded": true,
+            "durationMs": 0.3282499999995707,
+            "remainingAtStartMs": 29996.032709
+          },
+          {
+            "kind": "row",
+            "startedMs": 6935.162333,
+            "endedMs": 6935.454792,
+            "succeeded": true,
+            "durationMs": 0.2925420000001395,
+            "remainingAtStartMs": 29995.695834
+          },
+          {
+            "kind": "row",
+            "startedMs": 6935.459917,
+            "endedMs": 6935.710125,
+            "succeeded": true,
+            "durationMs": 0.25025000000005093,
+            "remainingAtStartMs": 29995.39825
+          },
+          {
+            "kind": "row",
+            "startedMs": 6935.714833,
+            "endedMs": 6935.971667,
+            "succeeded": true,
+            "durationMs": 0.25812500000029104,
+            "remainingAtStartMs": 29995.143334
+          }
+        ],
+        "committed": true,
+        "attemptMs": 19.95349999999962,
+        "gateHoldMs": 16.491667000000234
+      },
+      {
+        "workload": "correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 6954.286292,
+            "endedMs": 6954.559417,
+            "succeeded": true,
+            "durationMs": 0.2731659999999465,
+            "remainingAtStartMs": 29999.727458
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 6955.997667,
+            "endedMs": 6956.265833,
+            "succeeded": true,
+            "durationMs": 0.2682910000003176,
+            "remainingAtStartMs": 29998.016083000002
+          }
+        ],
+        "committed": true,
+        "attemptMs": 7.413916999999856,
+        "gateHoldMs": 4.891332999999577
+      },
+      {
+        "workload": "correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 6964.949958,
+            "endedMs": 6965.213833,
+            "succeeded": true,
+            "durationMs": 0.2640000000001237,
+            "remainingAtStartMs": 29999.714625
+          },
+          {
+            "kind": "row",
+            "startedMs": 6966.645875,
+            "endedMs": 6966.967375,
+            "succeeded": true,
+            "durationMs": 0.32154199999968114,
+            "remainingAtStartMs": 29998.018708
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 6967.6255,
+            "endedMs": 6967.92475,
+            "succeeded": true,
+            "durationMs": 0.29933299999993324,
+            "remainingAtStartMs": 29997.039083
+          },
+          {
+            "kind": "row",
+            "startedMs": 6968.74025,
+            "endedMs": 6969.042792,
+            "succeeded": true,
+            "durationMs": 0.3026669999999285,
+            "remainingAtStartMs": 29995.924333
+          },
+          {
+            "kind": "row",
+            "startedMs": 6969.049833,
+            "endedMs": 6969.306875,
+            "succeeded": true,
+            "durationMs": 0.2571250000000873,
+            "remainingAtStartMs": 29995.61475
+          },
+          {
+            "kind": "row",
+            "startedMs": 6969.311917,
+            "endedMs": 6969.577,
+            "succeeded": true,
+            "durationMs": 0.26512499999989814,
+            "remainingAtStartMs": 29995.352666
+          },
+          {
+            "kind": "row",
+            "startedMs": 6969.581125,
+            "endedMs": 6969.852875,
+            "succeeded": true,
+            "durationMs": 0.2718750000003638,
+            "remainingAtStartMs": 29995.083458
+          }
+        ],
+        "committed": true,
+        "attemptMs": 19.723457999999482,
+        "gateHoldMs": 16.175500000000284
+      },
+      {
+        "workload": "correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 6988.094,
+            "endedMs": 6988.343875,
+            "succeeded": true,
+            "durationMs": 0.25,
+            "remainingAtStartMs": 29999.721542
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 6989.762958,
+            "endedMs": 6990.04675,
+            "succeeded": true,
+            "durationMs": 0.2838339999998425,
+            "remainingAtStartMs": 29998.052584
+          }
+        ],
+        "committed": true,
+        "attemptMs": 7.551000000000386,
+        "gateHoldMs": 5.0109999999995125
+      },
+      {
+        "workload": "correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 6998.39675,
+            "endedMs": 6998.645083,
+            "succeeded": true,
+            "durationMs": 0.2483750000001237,
+            "remainingAtStartMs": 29999.68
+          },
+          {
+            "kind": "row",
+            "startedMs": 7000.137708,
+            "endedMs": 7000.428542,
+            "succeeded": true,
+            "durationMs": 0.2909169999993537,
+            "remainingAtStartMs": 29997.939041999998
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 7001.09025,
+            "endedMs": 7001.33875,
+            "succeeded": true,
+            "durationMs": 0.24858299999959854,
+            "remainingAtStartMs": 29996.9865
+          },
+          {
+            "kind": "row",
+            "startedMs": 7002.140458,
+            "endedMs": 7002.425,
+            "succeeded": true,
+            "durationMs": 0.28462500000023283,
+            "remainingAtStartMs": 29995.936292
+          },
+          {
+            "kind": "row",
+            "startedMs": 7002.430083,
+            "endedMs": 7002.696042,
+            "succeeded": true,
+            "durationMs": 0.26604200000019773,
+            "remainingAtStartMs": 29995.646667
+          },
+          {
+            "kind": "row",
+            "startedMs": 7002.700875,
+            "endedMs": 7002.992833,
+            "succeeded": true,
+            "durationMs": 0.2920829999993657,
+            "remainingAtStartMs": 29995.375874999998
+          },
+          {
+            "kind": "row",
+            "startedMs": 7003.000917,
+            "endedMs": 7003.263375,
+            "succeeded": true,
+            "durationMs": 0.2624999999998181,
+            "remainingAtStartMs": 29995.075833
+          }
+        ],
+        "committed": true,
+        "attemptMs": 20.102250000000822,
+        "gateHoldMs": 16.5512090000002
+      },
+      {
+        "workload": "correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 7021.69425,
+            "endedMs": 7021.958625,
+            "succeeded": true,
+            "durationMs": 0.26445800000055897,
+            "remainingAtStartMs": 29999.723833
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 7023.37675,
+            "endedMs": 7023.650875,
+            "succeeded": true,
+            "durationMs": 0.2742079999998168,
+            "remainingAtStartMs": 29998.041333
+          }
+        ],
+        "committed": true,
+        "attemptMs": 7.489500000000589,
+        "gateHoldMs": 4.974416000000019
+      },
+      {
+        "workload": "correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 7032.095875,
+            "endedMs": 7032.340375,
+            "succeeded": true,
+            "durationMs": 0.24458299999969313,
+            "remainingAtStartMs": 29999.680125
+          },
+          {
+            "kind": "row",
+            "startedMs": 7033.779167,
+            "endedMs": 7034.099458,
+            "succeeded": true,
+            "durationMs": 0.3203330000005735,
+            "remainingAtStartMs": 29997.996833
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 7034.759958,
+            "endedMs": 7035.032917,
+            "succeeded": true,
+            "durationMs": 0.27312500000061846,
+            "remainingAtStartMs": 29997.016042
+          },
+          {
+            "kind": "row",
+            "startedMs": 7035.838875,
+            "endedMs": 7036.14775,
+            "succeeded": true,
+            "durationMs": 0.3089169999993828,
+            "remainingAtStartMs": 29995.937125
+          },
+          {
+            "kind": "row",
+            "startedMs": 7036.152542,
+            "endedMs": 7036.461458,
+            "succeeded": true,
+            "durationMs": 0.30900000000019645,
+            "remainingAtStartMs": 29995.623458000002
+          },
+          {
+            "kind": "row",
+            "startedMs": 7036.467292,
+            "endedMs": 7036.765125,
+            "succeeded": true,
+            "durationMs": 0.29787499999929423,
+            "remainingAtStartMs": 29995.308708
+          },
+          {
+            "kind": "row",
+            "startedMs": 7036.770208,
+            "endedMs": 7037.078958,
+            "succeeded": true,
+            "durationMs": 0.3089170000002923,
+            "remainingAtStartMs": 29995.005792
+          }
+        ],
+        "committed": true,
+        "attemptMs": 20.71666699999969,
+        "gateHoldMs": 17.18379200000072
+      },
+      {
+        "workload": "correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 7055.699208,
+            "endedMs": 7055.966,
+            "succeeded": true,
+            "durationMs": 0.2668340000000171,
+            "remainingAtStartMs": 29999.69525
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 7057.347125,
+            "endedMs": 7057.651458,
+            "succeeded": true,
+            "durationMs": 0.30437499999970896,
+            "remainingAtStartMs": 29998.047333
+          }
+        ],
+        "committed": true,
+        "attemptMs": 7.557165999999597,
+        "gateHoldMs": 5.01404199999979
+      },
+      {
+        "workload": "correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 7066.055792,
+            "endedMs": 7066.329,
+            "succeeded": true,
+            "durationMs": 0.2732500000001892,
+            "remainingAtStartMs": 29999.707916
+          },
+          {
+            "kind": "row",
+            "startedMs": 7067.716458,
+            "endedMs": 7068.101792,
+            "succeeded": true,
+            "durationMs": 0.385417000000416,
+            "remainingAtStartMs": 29998.04725
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 7068.758458,
+            "endedMs": 7069.030458,
+            "succeeded": true,
+            "durationMs": 0.2720840000001772,
+            "remainingAtStartMs": 29997.005250000002
+          },
+          {
+            "kind": "row",
+            "startedMs": 7069.818458,
+            "endedMs": 7070.127375,
+            "succeeded": true,
+            "durationMs": 0.30900000000019645,
+            "remainingAtStartMs": 29995.94525
+          },
+          {
+            "kind": "row",
+            "startedMs": 7070.1325,
+            "endedMs": 7070.390125,
+            "succeeded": true,
+            "durationMs": 0.2577080000000933,
+            "remainingAtStartMs": 29995.631208
+          },
+          {
+            "kind": "row",
+            "startedMs": 7070.398083,
+            "endedMs": 7070.691208,
+            "succeeded": true,
+            "durationMs": 0.2931669999998121,
+            "remainingAtStartMs": 29995.365625
+          },
+          {
+            "kind": "row",
+            "startedMs": 7070.696125,
+            "endedMs": 7071.000625,
+            "succeeded": true,
+            "durationMs": 0.30454199999985576,
+            "remainingAtStartMs": 29995.067583
+          }
+        ],
+        "committed": true,
+        "attemptMs": 26.80504100000053,
+        "gateHoldMs": 23.262000000000626
+      },
+      {
+        "workload": "concurrent-correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 7111.297625,
+            "endedMs": 7112.183458,
+            "succeeded": true,
+            "durationMs": 0.8859579999998459,
+            "remainingAtStartMs": 29999.344042
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 7117.112667,
+            "endedMs": 7117.508583,
+            "succeeded": true,
+            "durationMs": 0.3959999999997308,
+            "remainingAtStartMs": 29993.529
+          }
+        ],
+        "committed": true,
+        "attemptMs": 18.61633400000028,
+        "gateHoldMs": 11.065375000000131
+      },
+      {
+        "workload": "concurrent-correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 7112.958208,
+            "endedMs": 7114.075542,
+            "succeeded": true,
+            "durationMs": 1.1174590000000535,
+            "remainingAtStartMs": 29998.528917
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 7118.603,
+            "endedMs": 7138.325208,
+            "succeeded": true,
+            "durationMs": 19.722249999999804,
+            "remainingAtStartMs": 29992.884125
+          }
+        ],
+        "committed": true,
+        "attemptMs": 38.083708000000115,
+        "gateHoldMs": 9.875166000000718
+      },
+      {
+        "workload": "concurrent-correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 7112.748333,
+            "endedMs": 7113.330125,
+            "succeeded": true,
+            "durationMs": 0.5818340000005264,
+            "remainingAtStartMs": 29999.332875
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 7117.276167,
+            "endedMs": 7128.733958,
+            "succeeded": true,
+            "durationMs": 11.457916000000296,
+            "remainingAtStartMs": 29994.805041
+          }
+        ],
+        "committed": true,
+        "attemptMs": 27.262541999999485,
+        "gateHoldMs": 9.457292000000052
+      },
+      {
+        "workload": "concurrent-correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 7114.867208,
+            "endedMs": 7115.879542,
+            "succeeded": true,
+            "durationMs": 1.01245900000049,
+            "remainingAtStartMs": 29998.645
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 7119.849167,
+            "endedMs": 7153.620667,
+            "succeeded": true,
+            "durationMs": 33.77154100000007,
+            "remainingAtStartMs": 29993.663041
+          }
+        ],
+        "committed": true,
+        "attemptMs": 51.38745799999924,
+        "gateHoldMs": 9.783625000000029
+      },
+      {
+        "workload": "concurrent-correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 7116.098958,
+            "endedMs": 7117.053042,
+            "succeeded": true,
+            "durationMs": 0.9541250000002037,
+            "remainingAtStartMs": 29998.831834
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 7119.652625,
+            "endedMs": 7148.3355,
+            "succeeded": true,
+            "durationMs": 28.68291700000009,
+            "remainingAtStartMs": 29995.278167
+          }
+        ],
+        "committed": true,
+        "attemptMs": 40.60591699999986,
+        "gateHoldMs": 5.164375000000291
+      },
+      {
+        "workload": "concurrent-correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 7116.0385,
+            "endedMs": 7116.993833,
+            "succeeded": true,
+            "durationMs": 0.955417000000125,
+            "remainingAtStartMs": 29998.967792
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 7119.990125,
+            "endedMs": 7163.528333,
+            "succeeded": true,
+            "durationMs": 43.53829200000018,
+            "remainingAtStartMs": 29995.016167
+          }
+        ],
+        "committed": true,
+        "attemptMs": 60.27479200000016,
+        "gateHoldMs": 9.83141599999999
+      },
+      {
+        "workload": "concurrent-correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 7115.970083,
+            "endedMs": 7116.928125,
+            "succeeded": true,
+            "durationMs": 0.9581250000001091,
+            "remainingAtStartMs": 29998.829125
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 7120.186458,
+            "endedMs": 7173.484083,
+            "succeeded": true,
+            "durationMs": 53.297708999999486,
+            "remainingAtStartMs": 29994.61275
+          }
+        ],
+        "committed": true,
+        "attemptMs": 69.52900000000045,
+        "gateHoldMs": 9.698083000000224
+      },
+      {
+        "workload": "concurrent-correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 7117.351875,
+            "endedMs": 7117.64925,
+            "succeeded": true,
+            "durationMs": 0.297458000000006,
+            "remainingAtStartMs": 29999.477124999998
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 7120.678167,
+            "endedMs": 7183.334292,
+            "succeeded": true,
+            "durationMs": 62.65620800000033,
+            "remainingAtStartMs": 29996.150833
+          }
+        ],
+        "committed": true,
+        "attemptMs": 74.59770799999933,
+        "gateHoldMs": 5.611084000000119
+      },
+      {
+        "workload": "concurrent-correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 7120.2365,
+            "endedMs": 7120.593542,
+            "succeeded": true,
+            "durationMs": 0.3571250000004511,
+            "remainingAtStartMs": 29999.549292
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 7122.585375,
+            "endedMs": 7189.053042,
+            "succeeded": true,
+            "durationMs": 66.46791699999994,
+            "remainingAtStartMs": 29997.200417
+          }
+        ],
+        "committed": true,
+        "attemptMs": 81.9882090000001,
+        "gateHoldMs": 9.435874999999214
+      },
+      {
+        "workload": "concurrent-correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 7120.920375,
+            "endedMs": 7121.222083,
+            "succeeded": true,
+            "durationMs": 0.301792000000205,
+            "remainingAtStartMs": 29999.605042
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 7122.95875,
+            "endedMs": 7198.585458,
+            "succeeded": true,
+            "durationMs": 75.62679200000002,
+            "remainingAtStartMs": 29997.566667
+          }
+        ],
+        "committed": true,
+        "attemptMs": 91.11687499999971,
+        "gateHoldMs": 9.306499999999687
+      },
+      {
+        "workload": "concurrent-correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 7129.890917,
+            "endedMs": 7130.143375,
+            "succeeded": true,
+            "durationMs": 0.2525000000005093,
+            "remainingAtStartMs": 29999.772916
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 7131.461167,
+            "endedMs": 7208.001792,
+            "succeeded": true,
+            "durationMs": 76.54070799999954,
+            "remainingAtStartMs": 29998.202665999997
+          }
+        ],
+        "committed": true,
+        "attemptMs": 95.16133300000001,
+        "gateHoldMs": 5.158582999999453
+      },
+      {
+        "workload": "concurrent-correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 7143.690583,
+            "endedMs": 7143.944917,
+            "succeeded": true,
+            "durationMs": 0.25437500000043656,
+            "remainingAtStartMs": 29999.723167
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 7145.314333,
+            "endedMs": 7213.23675,
+            "succeeded": true,
+            "durationMs": 67.92241699999977,
+            "remainingAtStartMs": 29998.099416999998
+          }
+        ],
+        "committed": true,
+        "attemptMs": 79.01825000000008,
+        "gateHoldMs": 4.947458999999981
+      },
+      {
+        "workload": "concurrent-correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 7149.654583,
+            "endedMs": 7149.896,
+            "succeeded": true,
+            "durationMs": 0.24145900000075926,
+            "remainingAtStartMs": 29999.670792
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 7151.350667,
+            "endedMs": 7218.258458,
+            "succeeded": true,
+            "durationMs": 66.90779100000054,
+            "remainingAtStartMs": 29997.974708
+          }
+        ],
+        "committed": true,
+        "attemptMs": 81.19558400000005,
+        "gateHoldMs": 4.922582999999577
+      },
+      {
+        "workload": "concurrent-correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 7154.598542,
+            "endedMs": 7154.841458,
+            "succeeded": true,
+            "durationMs": 0.24295800000072632,
+            "remainingAtStartMs": 29999.734916
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 7156.1695,
+            "endedMs": 7223.285333,
+            "succeeded": true,
+            "durationMs": 67.11587500000041,
+            "remainingAtStartMs": 29998.163958
+          }
+        ],
+        "committed": true,
+        "attemptMs": 85.14104099999986,
+        "gateHoldMs": 4.822167000000263
+      },
+      {
+        "workload": "concurrent-correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 7164.197958,
+            "endedMs": 7164.446208,
+            "succeeded": true,
+            "durationMs": 0.24829200000021956,
+            "remainingAtStartMs": 29999.75075
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 7165.770917,
+            "endedMs": 7228.168708,
+            "succeeded": true,
+            "durationMs": 62.39783299999999,
+            "remainingAtStartMs": 29998.177791000002
+          }
+        ],
+        "committed": true,
+        "attemptMs": 84.4036670000005,
+        "gateHoldMs": 4.847999999999956
+      },
+      {
+        "workload": "concurrent-correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 7174.7605,
+            "endedMs": 7176.504875,
+            "succeeded": true,
+            "durationMs": 1.7444169999998849,
+            "remainingAtStartMs": 29999.721666999998
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 7179.192958,
+            "endedMs": 7232.945167,
+            "succeeded": true,
+            "durationMs": 53.752292000000125,
+            "remainingAtStartMs": 29995.289209000002
+          }
+        ],
+        "committed": true,
+        "attemptMs": 83.83720799999992,
+        "gateHoldMs": 5.1079170000002705
+      },
+      {
+        "workload": "concurrent-correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 7183.828083,
+            "endedMs": 7184.0705,
+            "succeeded": true,
+            "durationMs": 0.24249999999938154,
+            "remainingAtStartMs": 29999.738708999997
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 7185.547458,
+            "endedMs": 7238.153917,
+            "succeeded": true,
+            "durationMs": 52.60649999999987,
+            "remainingAtStartMs": 29998.019334
+          }
+        ],
+        "committed": true,
+        "attemptMs": 79.20141700000022,
+        "gateHoldMs": 4.847707999999329
+      },
+      {
+        "workload": "concurrent-correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 7189.465875,
+            "endedMs": 7189.742208,
+            "succeeded": true,
+            "durationMs": 0.27641700000003766,
+            "remainingAtStartMs": 29999.729917
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 7191.145875,
+            "endedMs": 7243.119125,
+            "succeeded": true,
+            "durationMs": 51.97333299999991,
+            "remainingAtStartMs": 29998.049917
+          }
+        ],
+        "committed": true,
+        "attemptMs": 74.17987499999981,
+        "gateHoldMs": 4.805584000000636
+      },
+      {
+        "workload": "concurrent-correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 7199.050333,
+            "endedMs": 7199.289792,
+            "succeeded": true,
+            "durationMs": 0.23954200000025594,
+            "remainingAtStartMs": 29999.761749999998
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 7200.629125,
+            "endedMs": 7248.025625,
+            "succeeded": true,
+            "durationMs": 47.3965419999995,
+            "remainingAtStartMs": 29998.182957999998
+          }
+        ],
+        "committed": true,
+        "attemptMs": 79.06445799999983,
+        "gateHoldMs": 5.04175000000032
+      },
+      {
+        "workload": "concurrent-correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 7208.448958,
+            "endedMs": 7208.765958,
+            "succeeded": true,
+            "durationMs": 0.31708400000024994,
+            "remainingAtStartMs": 29999.717167
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 7210.16375,
+            "endedMs": 7253.129708,
+            "succeeded": true,
+            "durationMs": 42.966042000000016,
+            "remainingAtStartMs": 29998.002375
+          }
+        ],
+        "committed": true,
+        "attemptMs": 83.60112500000014,
+        "gateHoldMs": 4.806499999999687
+      },
+      {
+        "workload": "concurrent-correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 7271.267833,
+            "endedMs": 7271.881042,
+            "succeeded": true,
+            "durationMs": 0.6133339999996679,
+            "remainingAtStartMs": 29999.361375
+          },
+          {
+            "kind": "row",
+            "startedMs": 7275.299167,
+            "endedMs": 7276.05525,
+            "succeeded": true,
+            "durationMs": 0.7561660000001211,
+            "remainingAtStartMs": 29995.330041
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 7277.353458,
+            "endedMs": 7277.928083,
+            "succeeded": true,
+            "durationMs": 0.5746670000007725,
+            "remainingAtStartMs": 29993.27575
+          },
+          {
+            "kind": "row",
+            "startedMs": 7280.113583,
+            "endedMs": 7282.189042,
+            "succeeded": true,
+            "durationMs": 2.0755419999995866,
+            "remainingAtStartMs": 29990.515625
+          },
+          {
+            "kind": "row",
+            "startedMs": 7282.195,
+            "endedMs": 7282.786,
+            "succeeded": true,
+            "durationMs": 0.5910420000000158,
+            "remainingAtStartMs": 29988.434208
+          },
+          {
+            "kind": "row",
+            "startedMs": 7282.791708,
+            "endedMs": 7283.442417,
+            "succeeded": true,
+            "durationMs": 0.6507500000006985,
+            "remainingAtStartMs": 29987.8375
+          },
+          {
+            "kind": "row",
+            "startedMs": 7283.446583,
+            "endedMs": 7283.933833,
+            "succeeded": true,
+            "durationMs": 0.48729199999979755,
+            "remainingAtStartMs": 29987.182625
+          }
+        ],
+        "committed": true,
+        "attemptMs": 38.29079199999978,
+        "gateHoldMs": 30.45720800000072
+      },
+      {
+        "workload": "concurrent-correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 7273.390042,
+            "endedMs": 7274.898125,
+            "succeeded": true,
+            "durationMs": 1.508125000000291,
+            "remainingAtStartMs": 29998.917333
+          },
+          {
+            "kind": "row",
+            "startedMs": 7281.849667,
+            "endedMs": 7282.546375,
+            "succeeded": true,
+            "durationMs": 0.696749999999156,
+            "remainingAtStartMs": 29990.457708
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 7284.08525,
+            "endedMs": 7347.80775,
+            "succeeded": true,
+            "durationMs": 63.72254199999952,
+            "remainingAtStartMs": 29988.222125
+          },
+          {
+            "kind": "row",
+            "startedMs": 7348.928167,
+            "endedMs": 7349.577208,
+            "succeeded": true,
+            "durationMs": 0.6491249999999127,
+            "remainingAtStartMs": 29923.379208
+          },
+          {
+            "kind": "row",
+            "startedMs": 7349.582375,
+            "endedMs": 7349.862792,
+            "succeeded": true,
+            "durationMs": 0.2804580000001806,
+            "remainingAtStartMs": 29922.725
+          },
+          {
+            "kind": "row",
+            "startedMs": 7349.867667,
+            "endedMs": 7350.21225,
+            "succeeded": true,
+            "durationMs": 0.3446249999997235,
+            "remainingAtStartMs": 29922.439707999998
+          },
+          {
+            "kind": "row",
+            "startedMs": 7350.217542,
+            "endedMs": 7350.683667,
+            "succeeded": true,
+            "durationMs": 0.46612499999991996,
+            "remainingAtStartMs": 29922.089832999998
+          }
+        ],
+        "committed": true,
+        "attemptMs": 96.70974999999999,
+        "gateHoldMs": 19.824749999999767
+      },
+      {
+        "workload": "concurrent-correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 7274.184917,
+            "endedMs": 7275.689042,
+            "succeeded": true,
+            "durationMs": 1.5042080000002898,
+            "remainingAtStartMs": 29998.648666
+          },
+          {
+            "kind": "row",
+            "startedMs": 7281.56975,
+            "endedMs": 7282.27525,
+            "succeeded": true,
+            "durationMs": 0.7055420000006052,
+            "remainingAtStartMs": 29991.263833
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 7283.869083,
+            "endedMs": 7328.251125,
+            "succeeded": true,
+            "durationMs": 44.38212500000009,
+            "remainingAtStartMs": 29988.964500000002
+          },
+          {
+            "kind": "row",
+            "startedMs": 7329.219917,
+            "endedMs": 7329.873583,
+            "succeeded": true,
+            "durationMs": 0.6537079999998241,
+            "remainingAtStartMs": 29943.613665999997
+          },
+          {
+            "kind": "row",
+            "startedMs": 7329.878125,
+            "endedMs": 7330.170917,
+            "succeeded": true,
+            "durationMs": 0.2928750000000946,
+            "remainingAtStartMs": 29942.955458
+          },
+          {
+            "kind": "row",
+            "startedMs": 7330.176167,
+            "endedMs": 7330.444167,
+            "succeeded": true,
+            "durationMs": 0.26804100000026665,
+            "remainingAtStartMs": 29942.657416000002
+          },
+          {
+            "kind": "row",
+            "startedMs": 7330.448917,
+            "endedMs": 7330.81325,
+            "succeeded": true,
+            "durationMs": 0.3644160000003467,
+            "remainingAtStartMs": 29942.384665999998
+          }
+        ],
+        "committed": true,
+        "attemptMs": 76.19549999999981,
+        "gateHoldMs": 19.425583000000188
+      },
+      {
+        "workload": "concurrent-correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 7273.169417,
+            "endedMs": 7273.864,
+            "succeeded": true,
+            "durationMs": 0.6946660000003249,
+            "remainingAtStartMs": 29999.512
+          },
+          {
+            "kind": "row",
+            "startedMs": 7277.421833,
+            "endedMs": 7278.247333,
+            "succeeded": true,
+            "durationMs": 0.8255839999992531,
+            "remainingAtStartMs": 29995.259584
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 7280.450958,
+            "endedMs": 7308.5165,
+            "succeeded": true,
+            "durationMs": 28.065624999999272,
+            "remainingAtStartMs": 29992.230459
+          },
+          {
+            "kind": "row",
+            "startedMs": 7309.599375,
+            "endedMs": 7310.2575,
+            "succeeded": true,
+            "durationMs": 0.6581670000005033,
+            "remainingAtStartMs": 29963.082042000002
+          },
+          {
+            "kind": "row",
+            "startedMs": 7310.262917,
+            "endedMs": 7310.523833,
+            "succeeded": true,
+            "durationMs": 0.261000000000422,
+            "remainingAtStartMs": 29962.4185
+          },
+          {
+            "kind": "row",
+            "startedMs": 7310.529208,
+            "endedMs": 7310.876208,
+            "succeeded": true,
+            "durationMs": 0.3470420000003287,
+            "remainingAtStartMs": 29962.152209
+          },
+          {
+            "kind": "row",
+            "startedMs": 7310.879792,
+            "endedMs": 7311.216083,
+            "succeeded": true,
+            "durationMs": 0.33633300000019517,
+            "remainingAtStartMs": 29961.801625
+          }
+        ],
+        "committed": true,
+        "attemptMs": 56.49437500000022,
+        "gateHoldMs": 19.603625000000648
+      },
+      {
+        "workload": "concurrent-correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 7275.524542,
+            "endedMs": 7276.909042,
+            "succeeded": true,
+            "durationMs": 1.3845830000000205,
+            "remainingAtStartMs": 29999.135791
+          },
+          {
+            "kind": "row",
+            "startedMs": 7281.718708,
+            "endedMs": 7282.428083,
+            "succeeded": true,
+            "durationMs": 0.709458999999697,
+            "remainingAtStartMs": 29992.941625
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 7284.345125,
+            "endedMs": 7387.356542,
+            "succeeded": true,
+            "durationMs": 103.01150000000052,
+            "remainingAtStartMs": 29990.315208
+          },
+          {
+            "kind": "row",
+            "startedMs": 7388.278333,
+            "endedMs": 7388.831292,
+            "succeeded": true,
+            "durationMs": 0.5529999999998836,
+            "remainingAtStartMs": 29886.381999999998
+          },
+          {
+            "kind": "row",
+            "startedMs": 7388.83625,
+            "endedMs": 7389.1435,
+            "succeeded": true,
+            "durationMs": 0.30733299999974406,
+            "remainingAtStartMs": 29885.824083
+          },
+          {
+            "kind": "row",
+            "startedMs": 7389.148125,
+            "endedMs": 7389.459458,
+            "succeeded": true,
+            "durationMs": 0.31133300000055897,
+            "remainingAtStartMs": 29885.512208
+          },
+          {
+            "kind": "row",
+            "startedMs": 7389.464792,
+            "endedMs": 7389.803042,
+            "succeeded": true,
+            "durationMs": 0.3383330000006026,
+            "remainingAtStartMs": 29885.195541
+          }
+        ],
+        "committed": true,
+        "attemptMs": 133.07983299999978,
+        "gateHoldMs": 19.067291999999725
+      },
+      {
+        "workload": "concurrent-correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 7275.598167,
+            "endedMs": 7276.33475,
+            "succeeded": true,
+            "durationMs": 0.7366659999997864,
+            "remainingAtStartMs": 29999.149708
+          },
+          {
+            "kind": "row",
+            "startedMs": 7281.921125,
+            "endedMs": 7282.666458,
+            "succeeded": true,
+            "durationMs": 0.745375000000422,
+            "remainingAtStartMs": 29992.82675
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 7284.28875,
+            "endedMs": 7367.7665,
+            "succeeded": true,
+            "durationMs": 83.4778750000005,
+            "remainingAtStartMs": 29990.459125
+          },
+          {
+            "kind": "row",
+            "startedMs": 7368.687333,
+            "endedMs": 7369.348083,
+            "succeeded": true,
+            "durationMs": 0.6608340000002499,
+            "remainingAtStartMs": 29906.060542
+          },
+          {
+            "kind": "row",
+            "startedMs": 7369.353458,
+            "endedMs": 7369.620042,
+            "succeeded": true,
+            "durationMs": 0.2666670000007798,
+            "remainingAtStartMs": 29905.394417
+          },
+          {
+            "kind": "row",
+            "startedMs": 7369.625083,
+            "endedMs": 7369.980125,
+            "succeeded": true,
+            "durationMs": 0.35512500000004366,
+            "remainingAtStartMs": 29905.122792000002
+          },
+          {
+            "kind": "row",
+            "startedMs": 7369.985375,
+            "endedMs": 7370.304542,
+            "succeeded": true,
+            "durationMs": 0.3193329999994603,
+            "remainingAtStartMs": 29904.7625
+          }
+        ],
+        "committed": true,
+        "attemptMs": 113.74004199999945,
+        "gateHoldMs": 19.472082999999657
+      },
+      {
+        "workload": "concurrent-correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 7278.669417,
+            "endedMs": 7280.362167,
+            "succeeded": true,
+            "durationMs": 1.6927909999994881,
+            "remainingAtStartMs": 29999.428708
+          },
+          {
+            "kind": "row",
+            "startedMs": 7284.152458,
+            "endedMs": 7284.621083,
+            "succeeded": true,
+            "durationMs": 0.46870900000067195,
+            "remainingAtStartMs": 29993.945667
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 7285.43725,
+            "endedMs": 7406.552625,
+            "succeeded": true,
+            "durationMs": 121.11541699999998,
+            "remainingAtStartMs": 29992.660875
+          },
+          {
+            "kind": "row",
+            "startedMs": 7407.533875,
+            "endedMs": 7407.846667,
+            "succeeded": true,
+            "durationMs": 0.31291700000019773,
+            "remainingAtStartMs": 29870.56425
+          },
+          {
+            "kind": "row",
+            "startedMs": 7407.852208,
+            "endedMs": 7408.131667,
+            "succeeded": true,
+            "durationMs": 0.27954199999931006,
+            "remainingAtStartMs": 29870.245917
+          },
+          {
+            "kind": "row",
+            "startedMs": 7408.137333,
+            "endedMs": 7408.448,
+            "succeeded": true,
+            "durationMs": 0.310750000000553,
+            "remainingAtStartMs": 29869.960792
+          },
+          {
+            "kind": "row",
+            "startedMs": 7408.45275,
+            "endedMs": 7408.833292,
+            "succeeded": true,
+            "durationMs": 0.3806249999997817,
+            "remainingAtStartMs": 29869.645375
+          }
+        ],
+        "committed": true,
+        "attemptMs": 148.63466599999992,
+        "gateHoldMs": 17.129124999999476
+      },
+      {
+        "workload": "concurrent-correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 7278.992083,
+            "endedMs": 7280.520083,
+            "succeeded": true,
+            "durationMs": 1.528041999999914,
+            "remainingAtStartMs": 29999.191917
+          },
+          {
+            "kind": "row",
+            "startedMs": 7284.687708,
+            "endedMs": 7285.323583,
+            "succeeded": true,
+            "durationMs": 0.6359169999996084,
+            "remainingAtStartMs": 29993.496292
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 7293.017375,
+            "endedMs": 7423.597417,
+            "succeeded": true,
+            "durationMs": 130.5801249999995,
+            "remainingAtStartMs": 29985.166624999998
+          },
+          {
+            "kind": "row",
+            "startedMs": 7424.669542,
+            "endedMs": 7425.282417,
+            "succeeded": true,
+            "durationMs": 0.6129580000006172,
+            "remainingAtStartMs": 29853.514458
+          },
+          {
+            "kind": "row",
+            "startedMs": 7425.287333,
+            "endedMs": 7425.59775,
+            "succeeded": true,
+            "durationMs": 0.310458999999355,
+            "remainingAtStartMs": 29852.896667
+          },
+          {
+            "kind": "row",
+            "startedMs": 7425.604167,
+            "endedMs": 7425.914708,
+            "succeeded": true,
+            "durationMs": 0.31062499999916326,
+            "remainingAtStartMs": 29852.579833
+          },
+          {
+            "kind": "row",
+            "startedMs": 7425.919917,
+            "endedMs": 7426.223667,
+            "succeeded": true,
+            "durationMs": 0.3037910000002739,
+            "remainingAtStartMs": 29852.264083000002
+          }
+        ],
+        "committed": true,
+        "attemptMs": 168.07033299999966,
+        "gateHoldMs": 19.95074999999997
+      },
+      {
+        "workload": "concurrent-correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 7284.026375,
+            "endedMs": 7284.458,
+            "succeeded": true,
+            "durationMs": 0.43166699999983393,
+            "remainingAtStartMs": 29999.172583
+          },
+          {
+            "kind": "row",
+            "startedMs": 7293.417625,
+            "endedMs": 7293.985833,
+            "succeeded": true,
+            "durationMs": 0.5682919999999285,
+            "remainingAtStartMs": 29989.781333
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 7294.690917,
+            "endedMs": 7443.657417,
+            "succeeded": true,
+            "durationMs": 148.96658300000036,
+            "remainingAtStartMs": 29988.508041
+          },
+          {
+            "kind": "row",
+            "startedMs": 7444.491667,
+            "endedMs": 7445.109917,
+            "succeeded": true,
+            "durationMs": 0.6183329999994385,
+            "remainingAtStartMs": 29838.707291
+          },
+          {
+            "kind": "row",
+            "startedMs": 7445.114583,
+            "endedMs": 7445.383542,
+            "succeeded": true,
+            "durationMs": 0.2690420000008089,
+            "remainingAtStartMs": 29838.084375
+          },
+          {
+            "kind": "row",
+            "startedMs": 7445.389292,
+            "endedMs": 7445.664375,
+            "succeeded": true,
+            "durationMs": 0.27516600000035396,
+            "remainingAtStartMs": 29837.809666
+          },
+          {
+            "kind": "row",
+            "startedMs": 7445.6695,
+            "endedMs": 7445.91275,
+            "succeeded": true,
+            "durationMs": 0.24333300000034797,
+            "remainingAtStartMs": 29837.529458
+          }
+        ],
+        "committed": true,
+        "attemptMs": 184.7464170000003,
+        "gateHoldMs": 18.72900000000027
+      },
+      {
+        "workload": "concurrent-correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 7293.516542,
+            "endedMs": 7293.900667,
+            "succeeded": true,
+            "durationMs": 0.38412499999958527,
+            "remainingAtStartMs": 29999.688833
+          },
+          {
+            "kind": "row",
+            "startedMs": 7295.580458,
+            "endedMs": 7295.907458,
+            "succeeded": true,
+            "durationMs": 0.3270839999995587,
+            "remainingAtStartMs": 29997.624917
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 7296.550917,
+            "endedMs": 7462.501833,
+            "succeeded": true,
+            "durationMs": 165.95095800000036,
+            "remainingAtStartMs": 29996.654458
+          },
+          {
+            "kind": "row",
+            "startedMs": 7463.46675,
+            "endedMs": 7464.07475,
+            "succeeded": true,
+            "durationMs": 0.6080420000007507,
+            "remainingAtStartMs": 29829.738624999998
+          },
+          {
+            "kind": "row",
+            "startedMs": 7464.080458,
+            "endedMs": 7464.368375,
+            "succeeded": true,
+            "durationMs": 0.28799999999955617,
+            "remainingAtStartMs": 29829.124917
+          },
+          {
+            "kind": "row",
+            "startedMs": 7464.375667,
+            "endedMs": 7464.6485,
+            "succeeded": true,
+            "durationMs": 0.27283299999999144,
+            "remainingAtStartMs": 29828.829707999997
+          },
+          {
+            "kind": "row",
+            "startedMs": 7464.652875,
+            "endedMs": 7464.920167,
+            "succeeded": true,
+            "durationMs": 0.2673750000003565,
+            "remainingAtStartMs": 29828.552499999998
+          }
+        ],
+        "committed": true,
+        "attemptMs": 201.55133399999977,
+        "gateHoldMs": 19.086083999999573
+      },
+      {
+        "workload": "concurrent-correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 7309.759417,
+            "endedMs": 7310.006583,
+            "succeeded": true,
+            "durationMs": 0.24720799999977316,
+            "remainingAtStartMs": 29999.759665999998
+          },
+          {
+            "kind": "row",
+            "startedMs": 7311.444542,
+            "endedMs": 7311.802833,
+            "succeeded": true,
+            "durationMs": 0.3583749999997963,
+            "remainingAtStartMs": 29998.074541
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 7312.59575,
+            "endedMs": 7481.711417,
+            "succeeded": true,
+            "durationMs": 169.11570799999936,
+            "remainingAtStartMs": 29996.923333
+          },
+          {
+            "kind": "row",
+            "startedMs": 7482.764333,
+            "endedMs": 7483.147917,
+            "succeeded": true,
+            "durationMs": 0.3836670000000595,
+            "remainingAtStartMs": 29826.75475
+          },
+          {
+            "kind": "row",
+            "startedMs": 7483.154375,
+            "endedMs": 7483.466458,
+            "succeeded": true,
+            "durationMs": 0.3122080000002825,
+            "remainingAtStartMs": 29826.364708
+          },
+          {
+            "kind": "row",
+            "startedMs": 7483.472458,
+            "endedMs": 7483.780625,
+            "succeeded": true,
+            "durationMs": 0.3082089999998061,
+            "remainingAtStartMs": 29826.046625
+          },
+          {
+            "kind": "row",
+            "startedMs": 7483.785417,
+            "endedMs": 7484.1265,
+            "succeeded": true,
+            "durationMs": 0.34112499999991996,
+            "remainingAtStartMs": 29825.733666
+          }
+        ],
+        "committed": true,
+        "attemptMs": 216.3886249999996,
+        "gateHoldMs": 16.755667000000358
+      },
+      {
+        "workload": "concurrent-correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 7331.058458,
+            "endedMs": 7331.323292,
+            "succeeded": true,
+            "durationMs": 0.2649589999991804,
+            "remainingAtStartMs": 29999.67525
+          },
+          {
+            "kind": "row",
+            "startedMs": 7332.699792,
+            "endedMs": 7332.971125,
+            "succeeded": true,
+            "durationMs": 0.27141599999959,
+            "remainingAtStartMs": 29998.033916
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 7333.609792,
+            "endedMs": 7498.567542,
+            "succeeded": true,
+            "durationMs": 164.95779099999982,
+            "remainingAtStartMs": 29997.123916
+          },
+          {
+            "kind": "row",
+            "startedMs": 7499.38325,
+            "endedMs": 7499.708083,
+            "succeeded": true,
+            "durationMs": 0.3248750000002474,
+            "remainingAtStartMs": 29831.350458
+          },
+          {
+            "kind": "row",
+            "startedMs": 7499.712917,
+            "endedMs": 7499.991333,
+            "succeeded": true,
+            "durationMs": 0.27845799999977316,
+            "remainingAtStartMs": 29831.020791
+          },
+          {
+            "kind": "row",
+            "startedMs": 7499.9955,
+            "endedMs": 7500.237083,
+            "succeeded": true,
+            "durationMs": 0.2416670000002341,
+            "remainingAtStartMs": 29830.738208
+          },
+          {
+            "kind": "row",
+            "startedMs": 7500.242375,
+            "endedMs": 7500.5005,
+            "succeeded": true,
+            "durationMs": 0.2581669999999576,
+            "remainingAtStartMs": 29830.491332999998
+          }
+        ],
+        "committed": true,
+        "attemptMs": 205.85191699999996,
+        "gateHoldMs": 16.18804199999977
+      },
+      {
+        "workload": "concurrent-correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 7349.1155,
+            "endedMs": 7349.376333,
+            "succeeded": true,
+            "durationMs": 0.2609170000005179,
+            "remainingAtStartMs": 29999.724042
+          },
+          {
+            "kind": "row",
+            "startedMs": 7350.770083,
+            "endedMs": 7351.018583,
+            "succeeded": true,
+            "durationMs": 0.248541999999361,
+            "remainingAtStartMs": 29998.069459
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 7351.694667,
+            "endedMs": 7514.890042,
+            "succeeded": true,
+            "durationMs": 163.19545800000014,
+            "remainingAtStartMs": 29997.144874999998
+          },
+          {
+            "kind": "row",
+            "startedMs": 7515.6945,
+            "endedMs": 7516.002667,
+            "succeeded": true,
+            "durationMs": 0.30825000000004366,
+            "remainingAtStartMs": 29833.145042
+          },
+          {
+            "kind": "row",
+            "startedMs": 7516.009208,
+            "endedMs": 7516.274292,
+            "succeeded": true,
+            "durationMs": 0.26512499999989814,
+            "remainingAtStartMs": 29832.830334
+          },
+          {
+            "kind": "row",
+            "startedMs": 7516.279333,
+            "endedMs": 7516.536542,
+            "succeeded": true,
+            "durationMs": 0.25724999999965803,
+            "remainingAtStartMs": 29832.560209
+          },
+          {
+            "kind": "row",
+            "startedMs": 7516.541375,
+            "endedMs": 7516.810958,
+            "succeeded": true,
+            "durationMs": 0.2696670000004815,
+            "remainingAtStartMs": 29832.298167
+          }
+        ],
+        "committed": true,
+        "attemptMs": 201.27450000000044,
+        "gateHoldMs": 15.782250000000204
+      },
+      {
+        "workload": "concurrent-correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 7368.777208,
+            "endedMs": 7369.022292,
+            "succeeded": true,
+            "durationMs": 0.24520899999970425,
+            "remainingAtStartMs": 29999.709334
+          },
+          {
+            "kind": "row",
+            "startedMs": 7370.53325,
+            "endedMs": 7370.896917,
+            "succeeded": true,
+            "durationMs": 0.36374999999952706,
+            "remainingAtStartMs": 29997.953292
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 7371.572958,
+            "endedMs": 7530.782,
+            "succeeded": true,
+            "durationMs": 159.2091250000003,
+            "remainingAtStartMs": 29996.913584
+          },
+          {
+            "kind": "row",
+            "startedMs": 7531.663292,
+            "endedMs": 7531.994167,
+            "succeeded": true,
+            "durationMs": 0.3309159999998883,
+            "remainingAtStartMs": 29836.82325
+          },
+          {
+            "kind": "row",
+            "startedMs": 7531.999083,
+            "endedMs": 7532.279292,
+            "succeeded": true,
+            "durationMs": 0.2802090000004682,
+            "remainingAtStartMs": 29836.487459
+          },
+          {
+            "kind": "row",
+            "startedMs": 7532.28325,
+            "endedMs": 7532.577292,
+            "succeeded": true,
+            "durationMs": 0.29408299999977316,
+            "remainingAtStartMs": 29836.203292
+          },
+          {
+            "kind": "row",
+            "startedMs": 7532.583292,
+            "endedMs": 7532.885625,
+            "succeeded": true,
+            "durationMs": 0.3023749999993015,
+            "remainingAtStartMs": 29835.90325
+          }
+        ],
+        "committed": true,
+        "attemptMs": 216.44987499999934,
+        "gateHoldMs": 16.03137499999957
+      },
+      {
+        "workload": "concurrent-correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 7388.906542,
+            "endedMs": 7389.206417,
+            "succeeded": true,
+            "durationMs": 0.29991599999993923,
+            "remainingAtStartMs": 29999.46025
+          },
+          {
+            "kind": "row",
+            "startedMs": 7390.780875,
+            "endedMs": 7391.269125,
+            "succeeded": true,
+            "durationMs": 0.4882920000000013,
+            "remainingAtStartMs": 29997.585917
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 7391.879167,
+            "endedMs": 7546.934042,
+            "succeeded": true,
+            "durationMs": 155.05491600000005,
+            "remainingAtStartMs": 29996.487625
+          },
+          {
+            "kind": "row",
+            "startedMs": 7547.828,
+            "endedMs": 7548.124167,
+            "succeeded": true,
+            "durationMs": 0.2962499999994179,
+            "remainingAtStartMs": 29840.538792
+          },
+          {
+            "kind": "row",
+            "startedMs": 7548.129458,
+            "endedMs": 7548.393792,
+            "succeeded": true,
+            "durationMs": 0.26437499999974534,
+            "remainingAtStartMs": 29840.237333999998
+          },
+          {
+            "kind": "row",
+            "startedMs": 7548.398375,
+            "endedMs": 7548.6735,
+            "succeeded": true,
+            "durationMs": 0.2751250000001164,
+            "remainingAtStartMs": 29839.968417
+          },
+          {
+            "kind": "row",
+            "startedMs": 7548.678292,
+            "endedMs": 7548.922583,
+            "succeeded": true,
+            "durationMs": 0.2443330000005517,
+            "remainingAtStartMs": 29839.6885
+          }
+        ],
+        "committed": true,
+        "attemptMs": 221.65333399999963,
+        "gateHoldMs": 23.12816699999985
+      },
+      {
+        "workload": "concurrent-correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 7407.595875,
+            "endedMs": 7407.914458,
+            "succeeded": true,
+            "durationMs": 0.318583000000217,
+            "remainingAtStartMs": 29999.691625
+          },
+          {
+            "kind": "row",
+            "startedMs": 7409.436125,
+            "endedMs": 7409.777,
+            "succeeded": true,
+            "durationMs": 0.34104200000001583,
+            "remainingAtStartMs": 29997.851375
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 7410.543583,
+            "endedMs": 7570.181417,
+            "succeeded": true,
+            "durationMs": 159.6379590000006,
+            "remainingAtStartMs": 29996.743917
+          },
+          {
+            "kind": "row",
+            "startedMs": 7570.98525,
+            "endedMs": 7571.266833,
+            "succeeded": true,
+            "durationMs": 0.2817080000004353,
+            "remainingAtStartMs": 29836.30225
+          },
+          {
+            "kind": "row",
+            "startedMs": 7571.272333,
+            "endedMs": 7571.538458,
+            "succeeded": true,
+            "durationMs": 0.26616699999976845,
+            "remainingAtStartMs": 29836.015167
+          },
+          {
+            "kind": "row",
+            "startedMs": 7571.542292,
+            "endedMs": 7571.802208,
+            "succeeded": true,
+            "durationMs": 0.2599579999996422,
+            "remainingAtStartMs": 29835.745208
+          },
+          {
+            "kind": "row",
+            "startedMs": 7571.806542,
+            "endedMs": 7572.078125,
+            "succeeded": true,
+            "durationMs": 0.2716659999996409,
+            "remainingAtStartMs": 29835.480958
+          }
+        ],
+        "committed": true,
+        "attemptMs": 217.3280420000001,
+        "gateHoldMs": 15.515792000000147
+      },
+      {
+        "workload": "concurrent-correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 7424.263,
+            "endedMs": 7424.497667,
+            "succeeded": true,
+            "durationMs": 0.23470799999995506,
+            "remainingAtStartMs": 29999.702875
+          },
+          {
+            "kind": "row",
+            "startedMs": 7426.359125,
+            "endedMs": 7426.816083,
+            "succeeded": true,
+            "durationMs": 0.4570000000003347,
+            "remainingAtStartMs": 29997.60675
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 7427.631667,
+            "endedMs": 7585.809042,
+            "succeeded": true,
+            "durationMs": 158.17741600000045,
+            "remainingAtStartMs": 29996.334208
+          },
+          {
+            "kind": "row",
+            "startedMs": 7586.761417,
+            "endedMs": 7587.142125,
+            "succeeded": true,
+            "durationMs": 0.3807910000004995,
+            "remainingAtStartMs": 29837.204458
+          },
+          {
+            "kind": "row",
+            "startedMs": 7587.146917,
+            "endedMs": 7587.4705,
+            "succeeded": true,
+            "durationMs": 0.323790999999801,
+            "remainingAtStartMs": 29836.818958
+          },
+          {
+            "kind": "row",
+            "startedMs": 7587.478417,
+            "endedMs": 7587.768,
+            "succeeded": true,
+            "durationMs": 0.2897079999993366,
+            "remainingAtStartMs": 29836.487458
+          },
+          {
+            "kind": "row",
+            "startedMs": 7587.773917,
+            "endedMs": 7588.075583,
+            "succeeded": true,
+            "durationMs": 0.30170799999996234,
+            "remainingAtStartMs": 29836.191958
+          }
+        ],
+        "committed": true,
+        "attemptMs": 214.7594170000002,
+        "gateHoldMs": 16.636375000000044
+      },
+      {
+        "workload": "concurrent-correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 7444.05475,
+            "endedMs": 7444.370208,
+            "succeeded": true,
+            "durationMs": 0.3155419999993683,
+            "remainingAtStartMs": 29999.725167
+          },
+          {
+            "kind": "row",
+            "startedMs": 7445.800083,
+            "endedMs": 7446.094667,
+            "succeeded": true,
+            "durationMs": 0.29458400000021356,
+            "remainingAtStartMs": 29997.979833999998
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 7446.822542,
+            "endedMs": 7602.541167,
+            "succeeded": true,
+            "durationMs": 155.71862500000043,
+            "remainingAtStartMs": 29996.957374999998
+          },
+          {
+            "kind": "row",
+            "startedMs": 7603.358417,
+            "endedMs": 7603.666958,
+            "succeeded": true,
+            "durationMs": 0.30854099999942264,
+            "remainingAtStartMs": 29840.4215
+          },
+          {
+            "kind": "row",
+            "startedMs": 7603.671833,
+            "endedMs": 7603.950583,
+            "succeeded": true,
+            "durationMs": 0.27879200000006676,
+            "remainingAtStartMs": 29840.108084
+          },
+          {
+            "kind": "row",
+            "startedMs": 7603.954917,
+            "endedMs": 7604.241583,
+            "succeeded": true,
+            "durationMs": 0.2867079999996349,
+            "remainingAtStartMs": 29839.825
+          },
+          {
+            "kind": "row",
+            "startedMs": 7604.245625,
+            "endedMs": 7604.51775,
+            "succeeded": true,
+            "durationMs": 0.2721670000000813,
+            "remainingAtStartMs": 29839.534292
+          }
+        ],
+        "committed": true,
+        "attemptMs": 230.4639590000006,
+        "gateHoldMs": 15.88287500000024
+      },
+      {
+        "workload": "concurrent-correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 7462.933917,
+            "endedMs": 7463.182958,
+            "succeeded": true,
+            "durationMs": 0.24904100000003382,
+            "remainingAtStartMs": 29999.70375
+          },
+          {
+            "kind": "row",
+            "startedMs": 7464.774375,
+            "endedMs": 7465.101958,
+            "succeeded": true,
+            "durationMs": 0.32762499999989814,
+            "remainingAtStartMs": 29997.863292000002
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 7465.79275,
+            "endedMs": 7618.529042,
+            "succeeded": true,
+            "durationMs": 152.73633300000074,
+            "remainingAtStartMs": 29996.844917000002
+          },
+          {
+            "kind": "row",
+            "startedMs": 7619.448333,
+            "endedMs": 7619.743667,
+            "succeeded": true,
+            "durationMs": 0.2953749999996944,
+            "remainingAtStartMs": 29843.189334
+          },
+          {
+            "kind": "row",
+            "startedMs": 7619.747708,
+            "endedMs": 7620.037958,
+            "succeeded": true,
+            "durationMs": 0.29029199999968114,
+            "remainingAtStartMs": 29842.889959
+          },
+          {
+            "kind": "row",
+            "startedMs": 7620.042625,
+            "endedMs": 7620.301,
+            "succeeded": true,
+            "durationMs": 0.2584580000002461,
+            "remainingAtStartMs": 29842.595042
+          },
+          {
+            "kind": "row",
+            "startedMs": 7620.30525,
+            "endedMs": 7620.569292,
+            "succeeded": true,
+            "durationMs": 0.2640830000000278,
+            "remainingAtStartMs": 29842.332416999998
+          }
+        ],
+        "committed": true,
+        "attemptMs": 227.41033300000072,
+        "gateHoldMs": 15.769709000000148
+      },
+      {
+        "workload": "concurrent-correction",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 7482.157833,
+            "endedMs": 7482.412042,
+            "succeeded": true,
+            "durationMs": 0.25429199999962293,
+            "remainingAtStartMs": 29999.697125
+          },
+          {
+            "kind": "row",
+            "startedMs": 7484.059958,
+            "endedMs": 7484.40575,
+            "succeeded": true,
+            "durationMs": 0.3458339999997406,
+            "remainingAtStartMs": 29997.795
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 7485.0645,
+            "endedMs": 7634.38925,
+            "succeeded": true,
+            "durationMs": 149.32483299999967,
+            "remainingAtStartMs": 29996.790458
+          },
+          {
+            "kind": "row",
+            "startedMs": 7635.218292,
+            "endedMs": 7635.491833,
+            "succeeded": true,
+            "durationMs": 0.27358300000014424,
+            "remainingAtStartMs": 29846.636666
+          },
+          {
+            "kind": "row",
+            "startedMs": 7635.495833,
+            "endedMs": 7635.757792,
+            "succeeded": true,
+            "durationMs": 0.26199999999971624,
+            "remainingAtStartMs": 29846.359125
+          },
+          {
+            "kind": "row",
+            "startedMs": 7635.76375,
+            "endedMs": 7636.043875,
+            "succeeded": true,
+            "durationMs": 0.28016699999989214,
+            "remainingAtStartMs": 29846.091207999998
+          },
+          {
+            "kind": "row",
+            "startedMs": 7636.048417,
+            "endedMs": 7636.288667,
+            "succeeded": true,
+            "durationMs": 0.2402910000000702,
+            "remainingAtStartMs": 29845.806540999998
+          }
+        ],
+        "committed": true,
+        "attemptMs": 242.9581250000001,
+        "gateHoldMs": 15.69195800000034
+      },
+      {
+        "workload": "real-retry",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 7654.089083,
+            "endedMs": 7654.344292,
+            "succeeded": true,
+            "durationMs": 0.25525000000016007,
+            "remainingAtStartMs": 29999.701584000002
+          }
+        ],
+        "committed": true,
+        "attemptMs": 6.712625000000116
+      },
+      {
+        "workload": "real-retry",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 7668.060458,
+            "endedMs": 7668.34175,
+            "succeeded": true,
+            "durationMs": 0.28133400000024267,
+            "remainingAtStartMs": 29999.710917
+          },
+          {
+            "kind": "row",
+            "startedMs": 7669.822917,
+            "endedMs": 7670.121458,
+            "succeeded": true,
+            "durationMs": 0.2986659999996846,
+            "remainingAtStartMs": 29997.948458
+          },
+          {
+            "kind": "row",
+            "startedMs": 7670.560583,
+            "endedMs": 8675.958792,
+            "succeeded": false,
+            "durationMs": 1005.3989999999994,
+            "remainingAtStartMs": 29997.210791999998
+          }
+        ],
+        "error": {
+          "name": "PrismaClientKnownRequestError",
+          "code": "P2010",
+          "sqlStates": [
+            "40P01"
+          ],
+          "classification": "DEADLOCK"
+        },
+        "attemptMs": 1010.2534580000001
+      },
+      {
+        "workload": "real-retry",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 8786.512375,
+            "endedMs": 8787.869458,
+            "succeeded": true,
+            "durationMs": 1.3575829999990674,
+            "remainingAtStartMs": 29998.214167
+          },
+          {
+            "kind": "row",
+            "startedMs": 8795.081458,
+            "endedMs": 8796.294083,
+            "succeeded": true,
+            "durationMs": 1.2130419999994047,
+            "remainingAtStartMs": 29989.645084
+          },
+          {
+            "kind": "row",
+            "startedMs": 8797.709833,
+            "endedMs": 8798.536458,
+            "succeeded": true,
+            "durationMs": 0.8269999999993161,
+            "remainingAtStartMs": 29987.016709
+          }
+        ],
+        "committed": true,
+        "attemptMs": 33.16691600000013
+      },
+      {
+        "workload": "real-retry",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 8826.291875,
+            "endedMs": 8827.020458,
+            "succeeded": true,
+            "durationMs": 0.7290419999990263,
+            "remainingAtStartMs": 29999.06425
+          }
+        ],
+        "committed": true,
+        "attemptMs": 7.969042000000627
+      },
+      {
+        "workload": "monthly-generation",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 8895.552458,
+            "endedMs": 8953.395708,
+            "succeeded": true,
+            "durationMs": 57.843417000000045,
+            "remainingAtStartMs": 29998.721542
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 8953.409958,
+            "endedMs": 8953.892042,
+            "succeeded": true,
+            "durationMs": 0.4822089999997843,
+            "remainingAtStartMs": 29940.864042
+          }
+        ],
+        "committed": true,
+        "attemptMs": 69.67391700000007,
+        "gateHoldMs": 8.646416999999929
+      },
+      {
+        "workload": "monthly-generation",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 8894.643417,
+            "endedMs": 8895.297125,
+            "succeeded": true,
+            "durationMs": 0.6541250000009313,
+            "remainingAtStartMs": 29999.068166
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 8895.379083,
+            "endedMs": 8895.92625,
+            "succeeded": true,
+            "durationMs": 0.5472499999996217,
+            "remainingAtStartMs": 29998.3325
+          }
+        ],
+        "committed": true,
+        "attemptMs": 59.99695900000006,
+        "gateHoldMs": 57.751249999999345
+      },
+      {
+        "workload": "monthly-generation",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 8901.736417,
+            "endedMs": 8962.166208,
+            "succeeded": true,
+            "durationMs": 60.429833000000144,
+            "remainingAtStartMs": 29998.891458
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 8962.175125,
+            "endedMs": 8962.54875,
+            "succeeded": true,
+            "durationMs": 0.3737920000003214,
+            "remainingAtStartMs": 29938.45275
+          }
+        ],
+        "committed": true,
+        "attemptMs": 70.65375000000131,
+        "gateHoldMs": 7.772041000000172
+      },
+      {
+        "workload": "monthly-generation",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 8904.95275,
+            "endedMs": 8970.0675,
+            "succeeded": true,
+            "durationMs": 65.11491699999897,
+            "remainingAtStartMs": 29998.591833
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 8970.076458,
+            "endedMs": 8970.433458,
+            "succeeded": true,
+            "durationMs": 0.3570419999996375,
+            "remainingAtStartMs": 29933.468125
+          }
+        ],
+        "committed": true,
+        "attemptMs": 75.72241700000086,
+        "gateHoldMs": 7.068332999999257
+      },
+      {
+        "workload": "monthly-generation",
+        "timeoutMs": 30000,
+        "locks": [
+          {
+            "kind": "advisory",
+            "startedMs": 8905.218375,
+            "endedMs": 8977.238542,
+            "succeeded": true,
+            "durationMs": 72.02029199999924,
+            "remainingAtStartMs": 29999.042042
+          },
+          {
+            "kind": "advisory",
+            "startedMs": 8977.245667,
+            "endedMs": 8977.646083,
+            "succeeded": true,
+            "durationMs": 0.4004580000000715,
+            "remainingAtStartMs": 29927.014750000002
+          }
+        ],
+        "committed": true,
+        "attemptMs": 81.82874999999876,
+        "gateHoldMs": 6.864125000000058
+      }
+    ],
+    "generation": [
+      {
+        "month": "2026-11",
+        "eligibleBookings": 100,
+        "eligibleResidents": 100,
+        "created": 100,
+        "skippedExisting": 0,
+        "skippedZeroPrice": 0,
+        "skippedPendingReview": 0
+      },
+      {
+        "month": "2026-11",
+        "eligibleBookings": 100,
+        "eligibleResidents": 100,
+        "created": 0,
+        "skippedExisting": 100,
+        "skippedZeroPrice": 0,
+        "skippedPendingReview": 0
+      },
+      {
+        "month": "2026-11",
+        "eligibleBookings": 100,
+        "eligibleResidents": 100,
+        "created": 0,
+        "skippedExisting": 100,
+        "skippedZeroPrice": 0,
+        "skippedPendingReview": 0
+      },
+      {
+        "month": "2026-11",
+        "eligibleBookings": 100,
+        "eligibleResidents": 100,
+        "created": 0,
+        "skippedExisting": 100,
+        "skippedZeroPrice": 0,
+        "skippedPendingReview": 0
+      },
+      {
+        "month": "2026-11",
+        "eligibleBookings": 100,
+        "eligibleResidents": 100,
+        "created": 0,
+        "skippedExisting": 100,
+        "skippedZeroPrice": 0,
+        "skippedPendingReview": 0
+      }
+    ],
+    "correctionHolds": {
+      "count": 40,
+      "p50": 16.035125000000335,
+      "p95": 25.95179199999984,
+      "p99": 35.312042000000474,
+      "max": 35.312042000000474
+    },
+    "generationHolds": {
+      "count": 5,
+      "p50": 7.772041000000172,
+      "p95": 57.751249999999345,
+      "p99": 57.751249999999345,
+      "max": 57.751249999999345
+    },
+    "attemptDurations": {
+      "count": 99,
+      "p50": 56.49437500000022,
+      "p95": 3032.741584,
+      "p99": 3043.1379999999995,
+      "max": 3043.1379999999995
+    },
+    "acquisitionDurations": {
+      "count": 388,
+      "p50": 0.301792000000205,
+      "p95": 155.05491600000005,
+      "p99": 3031.12825,
+      "max": 3036.853708
+    }
+  }
+]

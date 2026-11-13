@@ -1,10 +1,17 @@
 {
   "quality": [
+    "admission.audit",
     "auth",
     "booking.extension",
     "booking.rules",
     "checkin.rules",
     "config",
+    "correction-deadline",
+    "corrections.bypass",
+    "corrections.inventory-boundary",
+    "corrections.rules",
+    "corrections.security",
+    "corrections.service",
     "cors",
     "di",
     "finance.rules",
@@ -16,8 +23,15 @@
     "inventory",
     "invoice-scheduler",
     "observability",
+    "permission-layer",
+    "resident-history.controller",
+    "resident-history.service",
     "sentry-reporter",
-    "suite-lock"
+    "stay-summary.service",
+    "suite-lock",
+    "transfer.preview",
+    "stay-occupancy",
+    "assignment-reconciliation"
   ],
   "initial-migration": ["database-migration"],
   "full": [
@@ -25,6 +39,7 @@
     "auth",
     "booking",
     "checkin",
+    "corrections",
     "cross-origin",
     "finance",
     "inventory",

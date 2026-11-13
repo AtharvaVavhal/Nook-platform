@@ -1,0 +1,12 @@
+✖ runtime cannot update corrected assignment projection (92.6655ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 3
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 529.230584
+✖ failing tests:
+✖ runtime cannot update corrected assignment projection (92.6655ms)
+Exit: 1

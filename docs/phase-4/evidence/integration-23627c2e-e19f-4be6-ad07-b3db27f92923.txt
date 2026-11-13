@@ -1,0 +1,19 @@
+{"probe":"readiness-sql-failure","sqlstate":"23505","table":"beds"}
+✖ physical summary and transfer history retain commercial terms and tenant isolation (82.454916ms)
+✖ extension checks the physical destination and rolls back on its conflicting reservation (1.198375ms)
+✖ checkout rejects historical times without effects, then closes the physical assignment exactly once under contention (0.062209ms)
+✖ blocked execution and advisory finance do not mutate the assignment chain (0.021958ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 0
+ℹ fail 4
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 719.835166
+✖ failing tests:
+✖ physical summary and transfer history retain commercial terms and tenant isolation (82.454916ms)
+✖ extension checks the physical destination and rolls back on its conflicting reservation (1.198375ms)
+✖ checkout rejects historical times without effects, then closes the physical assignment exactly once under contention (0.062209ms)
+✖ blocked execution and advisory finance do not mutate the assignment chain (0.021958ms)
+Exit: 1

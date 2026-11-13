@@ -1,0 +1,29 @@
+# A6 seed=20261109 iterationsPerPair=1000 parallel=4
+# A6 scenario 1: 1000 interleavings in 38905 ms, slowest 155 ms, deadlocks 0, outcomes [["first-won",495],["second-won",505]]
+# A6 scenario 2: 1000 interleavings in 39308 ms, slowest 103 ms, deadlocks 0, outcomes [["both-persisted",1000]]
+# A6 scenario 3: 1000 interleavings in 52747 ms, slowest 65 ms, deadlocks 0, outcomes [["both-applied",1000]]
+# A6 scenario 4: booking correction vs new booking: 1000 interleavings in 64695 ms, slowest 267 ms, deadlocks 0, outcomes [["creation-won",628],["correction-won",372]]
+# A6 scenario 5: booking correction vs admission creation: 1000 interleavings in 61464 ms, slowest 84 ms, deadlocks 0, outcomes [["admission-won",631],["correction-won",369]]
+# A6 scenario 6: admission update vs check-in: 1000 interleavings in 51162 ms, slowest 51 ms, deadlocks 0, outcomes [["checkin-won",510],["cancel-won",490]]
+# A6 scenario 8: check-out correction vs new stay: 1000 interleavings in 79781 ms, slowest 146 ms, deadlocks 0, outcomes [["new-stay-won",600],["correction-won",400]]
+# A6 scenario 7: 1000 interleavings in 56535 ms, slowest 67 ms, deadlocks 0, outcomes [["stale",600],["applied",400]]
+# A6 scenario 9: 1000 interleavings in 59556 ms, slowest 72 ms, deadlocks 0, outcomes [["stale",613],["applied",387]]
+# A6 scenario 10: 1000 interleavings in 60256 ms, slowest 78 ms, deadlocks 0, outcomes [["gap-held",1000]]
+# A6 scenario 11: 1000 interleavings in 72145 ms, slowest 120 ms, deadlocks 0, outcomes [["stale",660],["applied-issued-flagged",340]]
+# A6 scenario 12: 1000 interleavings in 77104 ms, slowest 101 ms, deadlocks 0, outcomes [["applied",1000]]
+# A6 scenario 13: 1000 interleavings in 51564 ms, slowest 59 ms, deadlocks 0, outcomes [["approve-won",522],["reject-won",478]]
+# A6 scenario 14: 1000 interleavings in 50710 ms, slowest 48 ms, deadlocks 0, outcomes [["withdraw-won",495],["approve-won",505]]
+# A6 scenario 15: 1000 interleavings in 54943 ms, slowest 55 ms, deadlocks 0, outcomes [["applied-once",1000]]
+# A6 scenario 12-reversal: 1000 interleavings in 73439 ms, slowest 89 ms, deadlocks 0, outcomes [["applied",1000]]
+# A6 scenario 12-credit: 1000 interleavings in 68617 ms, slowest 85 ms, deadlocks 0, outcomes [["applied",1000]]
+# A6 scenario 12-void: 1000 interleavings in 66319 ms, slowest 95 ms, deadlocks 0, outcomes [["stale",659],["applied",341]]
+# A6 scenario 10-scheduler: 1000 interleavings in 65078 ms, slowest 91 ms, deadlocks 0, outcomes [["gap-suppressed",1000]]
+ℹ tests 19
+ℹ suites 0
+ℹ pass 19
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1145315.095125
+Exit: 0

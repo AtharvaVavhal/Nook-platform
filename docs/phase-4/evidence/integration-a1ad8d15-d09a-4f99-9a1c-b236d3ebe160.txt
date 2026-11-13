@@ -1,0 +1,19 @@
+{"probe":"loaded-http-timeouts","configuredLockTimeoutMs":3000,"concurrency":10,"http":[{"timestamp":"2026-11-10T05:47:57.310Z","startedMs":3100.030625,"completedMs":6174.3425,"wallMs":3074.3120830000003,"status":409,"code":"RETRY_REQUIRED"},{"timestamp":"2026-11-10T05:47:57.310Z","startedMs":3100.167583,"completedMs":6174.418708,"wallMs":3074.251334,"status":409,"code":"RETRY_REQUIRED"},{"timestamp":"2026-11-10T05:47:57.310Z","startedMs":3100.227,"completedMs":6173.895542,"wallMs":3073.67025,"status":409,"code":"RETRY_REQUIRED"},{"timestamp":"2026-11-10T05:47:57.310Z","startedMs":3100.269833,"completedMs":6175.123708,"wallMs":3074.8542920000004,"status":409,"code":"RETRY_REQUIRED"},{"timestamp":"2026-11-10T05:47:57.310Z","startedMs":3100.304292,"completedMs":6174.700667,"wallMs":3074.3965830000006,"status":409,"code":"RETRY_REQUIRED"},{"timestamp":"2026-11-10T05:47:57.310Z","startedMs":3100.347208,"completedMs":6174.984333,"wallMs":3074.6373750000002,"status":409,"code":"RETRY_REQUIRED"},{"timestamp":"2026-11-10T05:47:57.310Z","startedMs":3100.434583,"completedMs":6174.92575,"wallMs":3074.4913749999996,"status":409,"code":"RETRY_REQUIRED"},{"timestamp":"2026-11-10T05:47:57.310Z","startedMs":3100.467417,"completedMs":6175.053375,"wallMs":3074.586166,"status":409,"code":"RETRY_REQUIRED"},{"timestamp":"2026-11-10T05:47:57.310Z","startedMs":3100.494083,"completedMs":6174.25175,"wallMs":3073.7579170000004,"status":409,"code":"RETRY_REQUIRED"},{"timestamp":"2026-11-10T05:47:57.310Z","startedMs":3100.522667,"completedMs":6174.849125,"wallMs":3074.3267079999996,"status":409,"code":"RETRY_REQUIRED"}],"bookingCount":100,"bookingCreatedAudits":0}
+{"probe":"server-lock-timeout","failedAt":"2026-11-10T05:48:03.426655+00:00","sqlState":"55P03","startedAt":"2026-11-10T05:48:00.419924+00:00","unchanged":true,"configured":"3s","serverElapsedMs":3006.731,"exceptionBlockRolledBack":true}
+{"probe":"concurrent-correction-outcomes","concurrency":20,"outcomes":[{"status":200,"code":null},{"status":200,"code":null},{"status":200,"code":null},{"status":200,"code":null},{"status":200,"code":null},{"status":200,"code":null},{"status":200,"code":null},{"status":200,"code":null},{"status":200,"code":null},{"status":200,"code":null},{"status":200,"code":null},{"status":200,"code":null},{"status":200,"code":null},{"status":200,"code":null},{"status":200,"code":null},{"status":200,"code":null},{"status":200,"code":null},{"status":200,"code":null},{"status":200,"code":null},{"status":200,"code":null}]}
+{"probe":"field-submit-failure","field":"endDate","status":409,"code":"LIFECYCLE_CONFLICT","message":"A booking cannot be lengthened by correction; use the extension command"}
+{"probe":"performance-failure","name":"AssertionError","code":"ERR_ASSERTION","message":"Expected values to be strictly equal:"}
+✖ performance evidence: gate holds and explicit lock acquisitions on 100 beds (9880.921625ms)
+{"probe":"field-submit-failure","field":"admissionDate","status":409,"code":"RETRY_REQUIRED","message":"The outcome of this request is uncertain. Send it again with the same Idempotency-Key to learn the result."}
+{"probe":"field-submit-failure","field":"checkOutAt","status":409,"code":"RETRY_REQUIRED","message":"The outcome of this request is uncertain. Send it again with the same Idempotency-Key to learn the result."}
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 10668.375625
+✖ failing tests:
+✖ performance evidence: gate holds and explicit lock acquisitions on 100 beds (9880.921625ms)
+Exit: 1

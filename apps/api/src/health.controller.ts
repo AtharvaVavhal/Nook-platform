@@ -7,18 +7,21 @@ import {
   ServiceUnavailableException,
 } from '@nestjs/common';
 import { DatabaseService } from './database/database.service.js';
+import { Public } from './auth/permissions.js';
 
 @Controller('health')
 export class HealthController {
   // Explicit @Inject: tsx does not emit decorator metadata, so implicit injection yields undefined.
   constructor(@Inject(DatabaseService) private readonly database: DatabaseService) {}
 
+  @Public()
   @Get()
   @HttpCode(HttpStatus.OK)
   getHealth(): { status: 'ok'; service: 'nook-api'; scope: 'milestone-0' } {
     return { status: 'ok', service: 'nook-api', scope: 'milestone-0' };
   }
 
+  @Public()
   @Get('database')
   async getDatabaseHealth(): Promise<{ status: 'ok'; dependency: 'database' }> {
     if (!(await this.database.isAvailable())) {

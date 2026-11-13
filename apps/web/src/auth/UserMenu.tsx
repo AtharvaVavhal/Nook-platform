@@ -1,15 +1,17 @@
 import { useRef, useState } from 'react';
+import { roleLabel } from '../access';
+import { useModalFocus } from '../useModalFocus';
 import './auth.css';
 import { ChangePasswordForm } from './ChangePasswordForm';
 import { useAuth } from './AuthContext';
-
-const ROLE_LABEL: Record<string, string> = { OWNER: 'Owner', PROPERTY_MANAGER: 'Property manager' };
 
 export function UserMenu() {
   const { state, signOut } = useAuth();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [changing, setChanging] = useState(false);
+  const [changingBusy, setChangingBusy] = useState(false);
+  const dialogRef = useModalFocus<HTMLDivElement>(changing);
   const [changed, setChanged] = useState(false);
   const inFlight = useRef(false);
   if (state.status !== 'authenticated') return null;
@@ -34,7 +36,7 @@ export function UserMenu() {
       <div className="user-menu-who">
         <strong>{user.displayName}</strong>
         <small>
-          {user.organization.name} · {ROLE_LABEL[user.role] ?? user.role}
+          {user.organization.name} · {roleLabel(user.role)}
         </small>
       </div>
       <button
@@ -42,6 +44,7 @@ export function UserMenu() {
         className="user-menu-signout"
         onClick={() => {
           setChanged(false);
+          setChangingBusy(false);
           setChanging(true);
         }}
       >
@@ -63,13 +66,23 @@ export function UserMenu() {
       {changing ? (
         <div
           className="auth-modal-backdrop"
-          onMouseDown={(e) => e.target === e.currentTarget && setChanging(false)}
+          onMouseDown={(e) => e.target === e.currentTarget && !changingBusy && setChanging(false)}
         >
-          <div className="auth-modal" role="dialog" aria-modal="true" aria-labelledby="cp-title">
+          <div
+            ref={dialogRef}
+            className="auth-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="cp-title"
+            onKeyDown={(event) => {
+              if (event.key === 'Escape' && !changingBusy) setChanging(false);
+            }}
+          >
             <h2 id="cp-title">Change password</h2>
             <p className="auth-lede">Your other signed-in devices will be signed out.</p>
             <ChangePasswordForm
               forced={false}
+              onBusyChange={setChangingBusy}
               onCancel={() => setChanging(false)}
               onDone={() => {
                 setChanging(false);

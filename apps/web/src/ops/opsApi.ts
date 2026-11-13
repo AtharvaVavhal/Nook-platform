@@ -1,12 +1,15 @@
 // Client for the operational APIs (residents, enquiries, bookings, admissions, check-ins).
 // The organization is never sent from the browser: the server derives it from the session.
-import { API_BASE, csrf, notifyUnauthorized } from '../apiConfig';
+import { API_BASE, csrf, notifyPasswordChangeRequired, notifyUnauthorized } from '../apiConfig';
+import { accessFailureMessage, isPasswordChangeRequired, isSecurityRefusal } from '../accessErrors';
 import { serverFailureMessage } from '../errorReference';
 
 export class OpsApiError extends Error {
   constructor(
     message: string,
     readonly status: number,
+    /** Stable machine-readable code from the server (corrections API), when there is one. */
+    readonly code?: string,
   ) {
     super(message);
   }
@@ -16,6 +19,7 @@ async function request<T>(
   method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE',
   path: string,
   body?: unknown,
+  extraHeaders?: Record<string, string>,
 ): Promise<T> {
   let response: Response;
   try {
@@ -23,6 +27,7 @@ async function request<T>(
       method,
       headers: {
         ...(body !== undefined ? { 'Content-Type': 'application/json' } : {}),
+        ...(extraHeaders ?? {}),
       },
       ...(body !== undefined ? { body: JSON.stringify(body) } : {}),
     });
@@ -36,14 +41,21 @@ async function request<T>(
       code?: string;
     };
     const message = Array.isArray(payload.message) ? payload.message.join(', ') : payload.message;
+    // A 403 from the CSRF/Origin guards is a generic security refusal; a 403 that carries a code (not enough role,
+    // self-review) is a business answer: its message is shown as sent, or, when the server sent none (the global
+    // permission layer answers with a bare code), a plain-language message for that code.
+    const securityRefusal = isSecurityRefusal(response.status, payload.code);
+    if (isPasswordChangeRequired(response.status, payload.code)) notifyPasswordChangeRequired();
     throw new OpsApiError(
       response.status === 401
         ? 'Your session has ended. Please sign in again.'
-        : response.status === 403
+        : securityRefusal
           ? 'This request was refused for security reasons. Refresh the page and try again.'
           : (serverFailureMessage(response.status, response.headers.get('x-request-id')) ??
-            (message || `Request failed (${response.status})`)),
+            (message || accessFailureMessage(response.status, payload.code)) ??
+            `Request failed (${response.status})`),
       response.status,
+      payload.code,
     );
   }
   return (await response.json()) as T;
@@ -73,6 +85,239 @@ export interface Paged<T> {
   limit: number;
   totalPages: number;
 }
+
+// Stay Summary API types (B4)
+export interface StaySummaryResident {
+  id: string;
+  firstName: string;
+  lastName: string;
+  phone: string | null;
+  email: string | null;
+  status: string;
+}
+
+export interface StaySummaryBooking {
+  id: string;
+  bedId: string;
+  bedLabel: string;
+  roomLabel: string;
+  propertyName: string;
+  startDate: string;
+  endDate: string;
+  monthlyPrice: string;
+  status: string;
+  paymentStatus: string;
+  extensions: Array<{
+    id: string;
+    approvedAt: string;
+    approvedByUserId: string | null;
+    approvedBy: string | null;
+    previousEndDate: string | null;
+    newEndDate: string | null;
+    reason: string | null;
+  }>;
+}
+
+export interface StaySummaryAdmission {
+  id: string;
+  admissionDate: string;
+  status: string;
+  propertyName: string | null;
+  roomLabel: string | null;
+}
+
+export interface StaySummaryActiveCheckIn {
+  id: string;
+  checkInAt: string;
+  bedId: string;
+  bedLabel: string;
+  roomLabel: string;
+  isOverstay: boolean;
+  bookingEndDate: string;
+}
+
+export interface StaySummaryCurrentStay {
+  booking: StaySummaryBooking;
+  admission: StaySummaryAdmission | null;
+  activeCheckIn: StaySummaryActiveCheckIn;
+  status: 'ACTIVE';
+}
+
+export type StaySummaryStatus = 'ACTIVE' | 'NO_ACTIVE_STAY' | 'INCONSISTENT_ACTIVE_CHECK_INS';
+
+export interface StaySummaryUpcomingBooking {
+  booking: StaySummaryBooking;
+  admission: StaySummaryAdmission | null;
+  classification:
+    | 'FUTURE_NO_ADMISSION'
+    | 'ADMISSION_PENDING'
+    | 'ADMITTED_AWAITING_CHECKIN'
+    | 'START_DATE_PASSED_NO_CHECKIN'
+    | 'HISTORICAL';
+  note: string | null;
+}
+
+export interface StaySummaryLastCheckOut {
+  id: string;
+  checkOutAt: string;
+  reason: string | null;
+  notes: string | null;
+  bookingId: string;
+  bedId: string;
+}
+
+export interface StaySummaryFinanceBalance {
+  totals: {
+    outstandingAmount: string;
+    outstandingCount: number;
+    overdueAmount: string;
+    overdueCount: number;
+  };
+  items: Array<{
+    id: string;
+    number: string;
+    residentId: string;
+    residentName: string;
+    periodStart: string;
+    periodEnd: string;
+    amount: string;
+    paidAmount: string;
+    adjustmentTotal: string;
+    cashReceived: string;
+    balance: string;
+    status: string;
+    dueDate: string;
+    issuedAt: string | null;
+    bookingId: string | null;
+  }>;
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
+
+export interface StaySummaryResponse {
+  allowedActions?: Array<'transferPreview'>;
+  resident: StaySummaryResident;
+  currentStay: StaySummaryCurrentStay | null;
+  currentStayStatus: StaySummaryStatus;
+  upcomingBookings: StaySummaryUpcomingBooking[];
+  lastCheckOut: StaySummaryLastCheckOut | null;
+  financeBalance: StaySummaryFinanceBalance;
+}
+
+// Resident History API types (B5)
+export interface HistoryEventResponse {
+  id: string;
+  action: string;
+  targetType: string;
+  targetId: string;
+  occurredAt: string;
+  actor: { userId: string; displayName: string } | null;
+  metadata: Record<string, unknown>;
+}
+
+export interface HistoryResponse {
+  items: HistoryEventResponse[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
+
+export type CorrectionStatus = 'PENDING' | 'APPLIED' | 'REJECTED' | 'WITHDRAWN' | 'STALE';
+export type CorrectionTargetType = 'RESIDENT' | 'BOOKING' | 'ADMISSION' | 'CHECK_IN' | 'CHECK_OUT';
+export type CorrectionFieldKey =
+  | 'firstName'
+  | 'lastName'
+  | 'startDate'
+  | 'endDate'
+  | 'monthlyPrice'
+  | 'admissionDate'
+  | 'checkInAt'
+  | 'checkOutAt'
+  | 'reason';
+export interface CorrectionValue {
+  kind: string;
+  value: string | null;
+}
+export interface CorrectionSummary {
+  id: string;
+  targetType: CorrectionTargetType;
+  targetId: string;
+  fieldKey: CorrectionFieldKey;
+  status: CorrectionStatus;
+  financialImpact: boolean;
+  requester: { id: string; displayName: string };
+  recordedAt: string;
+  effectiveAt: string;
+  decidedAt: string | null;
+  exceptionRequired: boolean;
+}
+export interface CorrectionFinanceLink {
+  id: string;
+  kind: 'BILLING_GAP' | 'INVOICE_REVIEW';
+  invoiceId: string | null;
+  bookingId: string | null;
+  period: string | null;
+  resolved: boolean;
+}
+export interface CorrectionDetail {
+  id: string;
+  targetType: CorrectionTargetType;
+  targetId: string;
+  fieldKey: CorrectionFieldKey;
+  status: CorrectionStatus;
+  originalValue: CorrectionValue;
+  proposedValue: CorrectionValue;
+  appliedValue: CorrectionValue | null;
+  effectiveAt: string;
+  recordedAt: string;
+  requester: { id: string; displayName: string };
+  reviewer: { id: string; displayName: string } | null;
+  decidedAt: string | null;
+  appliedAt: string | null;
+  reason: string;
+  decisionReason: string | null;
+  exceptionRationale: string | null;
+  evidenceReference: string | null;
+  staleCause: string | null;
+  financialImpact: boolean;
+  ageDays: number;
+  normalWindowDays: number;
+  exceptionRequired: boolean;
+  relatedProposalId: string | null;
+  relationKind: 'REVERSAL' | 'SUPERSEDES' | null;
+  financeReviewStatus: 'NONE' | 'REVIEW_REQUIRED' | 'RESOLVED';
+  financeReviewLinks: CorrectionFinanceLink[];
+  allowedActions: Array<'approve' | 'reject' | 'withdraw'>;
+}
+export interface CorrectionPage {
+  items: CorrectionSummary[];
+  total: number;
+  page: number;
+  limit: number;
+}
+export interface CorrectionSubmitInput {
+  targetType: CorrectionTargetType;
+  targetId: string;
+  fieldKey: CorrectionFieldKey;
+  proposedValue: string | null;
+  reason: string;
+  effectiveAt: string;
+  evidenceReference?: string;
+}
+export interface FinanceReviewItem {
+  id: string;
+  kind: 'BILLING_GAP' | 'INVOICE_REVIEW';
+  proposalId: string;
+  residentId: string;
+  bookingId: string | null;
+  invoiceId: string | null;
+  periodStart: string | null;
+  createdAt: string;
+}
+
 export interface Resident {
   id: string;
   firstName: string;
@@ -86,6 +331,8 @@ export interface Resident {
   emergencyContactPhone: string | null;
   emergencyContactRelation: string | null;
   documentVerificationStatus: string;
+  /** Returned by the API as part of the resident record. */
+  documentUrl?: string | null;
   status: 'ACTIVE' | 'INACTIVE' | 'ARCHIVED';
 }
 export type ResidentInput = Partial<Omit<Resident, 'id' | 'documentVerificationStatus'>>;
@@ -308,6 +555,8 @@ export interface CheckIn {
   updatedAt: string;
   resident?: { firstName: string; lastName: string; phone?: string | null; email?: string | null };
   bed?: { label: string; room?: { label: string } | null };
+  /** Reconciled current/final physical bed; bedId remains the immutable check-in identity. */
+  physicalBed?: { label: string; room?: { label: string } | null };
   booking?: { id: string; startDate: string; endDate: string; status: string };
   admission?: { id: string; status: string; admissionDate: string };
   /** Present once the resident has checked out; the history of the stay is never overwritten. */
@@ -358,13 +607,96 @@ export interface ExtendBookingInput {
   reason: string;
 }
 
+export interface TransferPreview {
+  advisory: true;
+  executionEnabled: boolean;
+  allowedActions: Array<'preview' | 'execute'>;
+  executionBlockers: string[];
+  effectiveAt: string;
+  available: boolean;
+  transferType: 'ROOM_TRANSFER' | 'BED_TRANSFER';
+  currentAssignment: TransferLocation & {
+    stayAssignmentId: string;
+    startAt: string;
+    endAt: string | null;
+  };
+  destination: TransferLocation & { operationalStatus: string };
+  booking: { id: string; monthlyPrice: string; startDate: string; endDate: string };
+  staleState: string | null;
+  unresolvedDecisions: string[];
+  conflicts: Array<{ bedId: string; checkInAt: string; checkOutAt: string | null }>;
+  finance: {
+    monthlyPrice: string;
+    sourceReferencePrice: string;
+    destinationReferencePrice: string;
+    referencePriceDifference: string;
+    rentUnchanged: true;
+    proration: false;
+    issuedInvoicesUnchanged: true;
+    reviewRequired: boolean;
+    reviewPeriod: string | null;
+    reviewSupported: false;
+    reviewBlocker: string;
+  };
+}
+export interface TransferLocation {
+  bedId: string;
+  bedLabel: string;
+  roomId: string;
+  roomLabel: string;
+  propertyId: string;
+  propertyName: string;
+}
+export interface TransferHistoryItem {
+  financeReviews?: Array<{ id: string; periodStart: string; status: string }>;
+  id: string;
+  type: 'ROOM_TRANSFER' | 'BED_TRANSFER';
+  sourceBedId: string;
+  destinationBedId: string;
+  effectiveAt: string;
+  recordedAt: string;
+  reason: string;
+  actor: { id: string; displayName: string };
+  source: { bedLabel: string; roomLabel: string; propertyName: string };
+  destination: { bedLabel: string; roomLabel: string; propertyName: string };
+}
+export interface TransferInput {
+  residentId: string;
+  destinationBedId: string;
+  reason: string;
+  effectiveAt: string;
+}
+
 export const opsApi = {
+  transfers: {
+    preview: (residentId: string, destinationBedId: string) =>
+      request<TransferPreview>('GET', `/transfers/preview${qs({ residentId, destinationBedId })}`),
+    history: (residentId: string, page = 1) =>
+      request<Paged<TransferHistoryItem>>(
+        'GET',
+        `/transfers/history${qs({ residentId, page, limit: 20 })}`,
+      ),
+    execute: (body: TransferInput, key: string) =>
+      request<{ id: string }>('POST', '/transfers', body, { 'Idempotency-Key': key }),
+  },
   residents: {
     list: (p: { search?: string; status?: string; page?: number; limit?: number }) =>
       request<Paged<Resident>>('GET', `/residents${qs(p)}`),
     get: (id: string) => request<Resident>('GET', `/residents/${id}`),
     create: (body: ResidentInput) => request<Resident>('POST', '/residents', body),
     update: (id: string, body: ResidentInput) => request<Resident>('PUT', `/residents/${id}`, body),
+    staySummary: (residentId: string) =>
+      request<StaySummaryResponse>('GET', `/residents/${residentId}/stay-summary`),
+    history: (
+      residentId: string,
+      params?: {
+        page?: number;
+        limit?: number;
+        action?: string;
+        fromDate?: string;
+        toDate?: string;
+      },
+    ) => request<HistoryResponse>('GET', `/residents/${residentId}/history${qs(params)}`),
   },
   inventory: {
     properties: {
@@ -462,6 +794,46 @@ export const opsApi = {
     /** Approved extension: needs a reason and is recorded with the approving user. */
     extend: (id: string, body: ExtendBookingInput) =>
       request<Booking>('POST', `/bookings/${id}/extend`, body),
+  },
+  corrections: {
+    list: (p: {
+      status?: string;
+      targetType?: string;
+      financialImpact?: string;
+      page?: number;
+      limit?: number;
+    }) => request<CorrectionPage>('GET', `/corrections${qs(p)}`),
+    history: (
+      targetType: CorrectionTargetType,
+      targetId: string,
+      p?: { page?: number; limit?: number },
+    ) =>
+      request<CorrectionPage>('GET', `/corrections/history${qs({ targetType, targetId, ...p })}`),
+    get: (id: string) => request<CorrectionDetail>('GET', `/corrections/${id}`),
+    submit: (key: string, body: CorrectionSubmitInput) =>
+      request<CorrectionDetail>('POST', '/corrections', body, { 'Idempotency-Key': key }),
+    approve: (
+      key: string,
+      id: string,
+      body: { decisionReason: string; exceptionRationale?: string },
+    ) => request<unknown>('POST', `/corrections/${id}/approve`, body, { 'Idempotency-Key': key }),
+    reject: (key: string, id: string, body: { reason: string }) =>
+      request<unknown>('POST', `/corrections/${id}/reject`, body, { 'Idempotency-Key': key }),
+    withdraw: (key: string, id: string, body: { reason: string }) =>
+      request<unknown>('POST', `/corrections/${id}/withdraw`, body, { 'Idempotency-Key': key }),
+    financeReviews: (resolved = false) =>
+      request<{ items: FinanceReviewItem[] }>(
+        'GET',
+        `/corrections/finance-reviews${qs({ resolved: resolved ? 'true' : undefined })}`,
+      ),
+    resolveFinanceReview: (
+      key: string,
+      linkId: string,
+      body: { outcome: 'RELEASED' | 'NO_SUPPORTED_REMEDY'; reason: string },
+    ) =>
+      request<unknown>('POST', `/corrections/finance-reviews/${linkId}/resolve`, body, {
+        'Idempotency-Key': key,
+      }),
   },
   admissions: {
     list: (p: {

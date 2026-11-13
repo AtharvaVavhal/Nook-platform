@@ -1,0 +1,732 @@
+{
+  "time_utc": "2026-11-13T06:00:11.314462+00:00",
+  "merge_ready": false,
+  "runtime_fix": "URL validation now preserves raw URL and operator startup options; restored main behavior",
+  "unit_config": {
+    "passed": 7,
+    "failed": 0
+  },
+  "harness_contract": {
+    "passed": 5,
+    "failed": 0
+  },
+  "api_typecheck": "PASS",
+  "targeted_lint": "PASS",
+  "fresh_compatibility": {
+    "run_id": "b0aa027e-e86c-414f-81e9-2afc806abb15",
+    "passed": 3,
+    "failed": 0,
+    "note": "Invocation was named nonfinancial-regression but selected compatibility tests; counted only as compatibility, never regression"
+  },
+  "upgrade_compatibility": {
+    "run_id": "54c0ec44-b48c-4d0b-ad46-c4cbbc3d92a5",
+    "baseline_migrations": 18,
+    "final_migrations": 24,
+    "legacy_tables_unchanged": 23,
+    "passed": 3,
+    "failed": 0,
+    "six_explicit_transaction_ddl_rollback_probes": "PASS",
+    "synthetic_tenants": 2,
+    "issued_invoices": 2,
+    "payments": 2,
+    "adopted_assignments": 0
+  },
+  "migration_failure": {
+    "run_id": "e3726ec4-a1fa-406c-9aff-9217839ee8a0",
+    "passed": 1,
+    "failed": 0,
+    "prisma_version": "7.10.1",
+    "initial_error": "P3018",
+    "retry_error": "P3009",
+    "partial_ddl_remains": true,
+    "prior_successful_migrations": 24
+  },
+  "integration": {
+    "run_id": "fb803dab-4a6b-4681-af25-2cae8150d4f6",
+    "files": 10,
+    "passed": 161,
+    "failed": 0,
+    "skipped": 0,
+    "excluded_files": [
+      "corrections",
+      "finance",
+      "invoice-scheduler"
+    ],
+    "exclusion_reason": "No financial corrections restriction; synthetic-fixture authorization question still unanswered",
+    "full_ci_certification": false
+  },
+  "acceptance": {
+    "run_id": "ed5b33c6-9f51-4e91-b429-8146c41e8269",
+    "cases": [
+      {
+        "id": "T6-read",
+        "status": "PASS",
+        "startedAt": "2026-11-13T05:51:58.891Z",
+        "finishedAt": "2026-11-13T05:51:59.460Z"
+      },
+      {
+        "id": "T9-read",
+        "status": "PASS",
+        "startedAt": "2026-11-13T05:51:59.460Z",
+        "finishedAt": "2026-11-13T05:51:59.708Z"
+      }
+    ],
+    "requests": [
+      {
+        "path": "/api/v1/auth/me",
+        "status": 401
+      },
+      {
+        "path": "/api/v1/auth/me",
+        "status": 401
+      },
+      {
+        "path": "/api/v1/auth/login",
+        "status": 204
+      },
+      {
+        "path": "/api/v1/auth/login",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/admissions",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/admissions",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/inventory/summary",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/bookings",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/admissions",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/inventory/summary",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/admissions",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/bookings",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/bookings",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/admissions",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/auth/me",
+        "status": 401
+      },
+      {
+        "path": "/api/v1/auth/me",
+        "status": 401
+      },
+      {
+        "path": "/api/v1/auth/login",
+        "status": 204
+      },
+      {
+        "path": "/api/v1/auth/login",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/inventory/summary",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/bookings",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/admissions",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/admissions",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/inventory/summary",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/bookings",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/admissions",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/admissions",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/bookings",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/admissions",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/auth/me",
+        "status": 401
+      },
+      {
+        "path": "/api/v1/auth/me",
+        "status": 401
+      },
+      {
+        "path": "/api/v1/auth/login",
+        "status": 204
+      },
+      {
+        "path": "/api/v1/auth/login",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/inventory/summary",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/admissions",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/bookings",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/admissions",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/inventory/summary",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/admissions",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/bookings",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/admissions",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/bookings",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/admissions",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/auth/me",
+        "status": 401
+      },
+      {
+        "path": "/api/v1/auth/me",
+        "status": 401
+      },
+      {
+        "path": "/api/v1/residents/68b3667e-1a8e-4692-bb15-3506b538d7a4/history",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/residents/68b3667e-1a8e-4692-bb15-3506b538d7a4/history",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/residents/68b3667e-1a8e-4692-bb15-3506b538d7a4/stay-summary",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/residents/68b3667e-1a8e-4692-bb15-3506b538d7a4/stay-summary",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/residents/68b3667e-1a8e-4692-bb15-3506b538d7a4/stay-summary",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/corrections/history",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/corrections/history",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/transfers/history",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/transfers/history",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/transfers/history",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/transfers/history",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/transfers/history",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/transfers/history",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/transfers/history",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/residents/462fb6af-d904-4e23-89a1-ae85d1c66e75/history",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/residents/462fb6af-d904-4e23-89a1-ae85d1c66e75/history",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/residents/462fb6af-d904-4e23-89a1-ae85d1c66e75/stay-summary",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/residents/462fb6af-d904-4e23-89a1-ae85d1c66e75/stay-summary",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/residents/462fb6af-d904-4e23-89a1-ae85d1c66e75/stay-summary",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/corrections/history",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/corrections/history",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/transfers/history",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/transfers/history",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/residents/68b3667e-1a8e-4692-bb15-3506b538d7a4/history",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/residents/68b3667e-1a8e-4692-bb15-3506b538d7a4/history",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/residents/68b3667e-1a8e-4692-bb15-3506b538d7a4/stay-summary",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/residents/68b3667e-1a8e-4692-bb15-3506b538d7a4/stay-summary",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/residents/68b3667e-1a8e-4692-bb15-3506b538d7a4/stay-summary",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/corrections/history",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/corrections/history",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/transfers/history",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/transfers/history",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/transfers/history",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/transfers/history",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/transfers/history",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/transfers/history",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/transfers/history",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/residents/462fb6af-d904-4e23-89a1-ae85d1c66e75/history",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/residents/462fb6af-d904-4e23-89a1-ae85d1c66e75/history",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/residents/462fb6af-d904-4e23-89a1-ae85d1c66e75/stay-summary",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/residents/462fb6af-d904-4e23-89a1-ae85d1c66e75/stay-summary",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/residents/462fb6af-d904-4e23-89a1-ae85d1c66e75/stay-summary",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/corrections/history",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/transfers/history",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/corrections/history",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/transfers/history",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/residents/3a202572-bab2-4684-84f8-370053854eb2/stay-summary",
+        "status": 404
+      },
+      {
+        "path": "/api/v1/residents/3a202572-bab2-4684-84f8-370053854eb2/history",
+        "status": 404
+      },
+      {
+        "path": "/api/v1/transfers/history",
+        "status": 404
+      },
+      {
+        "path": "/api/v1/transfers/preview",
+        "status": 404
+      },
+      {
+        "path": "/api/v1/transfers/preview",
+        "status": 404
+      },
+      {
+        "path": "/api/v1/transfers/history",
+        "status": 400
+      },
+      {
+        "path": "/api/v1/residents/3a202572-bab2-4684-84f8-370053854eb2/history",
+        "status": 404
+      },
+      {
+        "path": "/api/v1/residents/3a202572-bab2-4684-84f8-370053854eb2/stay-summary",
+        "status": 404
+      },
+      {
+        "path": "/api/v1/residents/3a202572-bab2-4684-84f8-370053854eb2/history",
+        "status": 404
+      },
+      {
+        "path": "/api/v1/residents/3a202572-bab2-4684-84f8-370053854eb2/stay-summary",
+        "status": 404
+      },
+      {
+        "path": "/api/v1/transfers/history",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/residents/3a202572-bab2-4684-84f8-370053854eb2/stay-summary",
+        "status": 404
+      },
+      {
+        "path": "/api/v1/residents/3a202572-bab2-4684-84f8-370053854eb2/history",
+        "status": 404
+      },
+      {
+        "path": "/api/v1/transfers/history",
+        "status": 404
+      },
+      {
+        "path": "/api/v1/transfers/preview",
+        "status": 404
+      },
+      {
+        "path": "/api/v1/transfers/preview",
+        "status": 404
+      },
+      {
+        "path": "/api/v1/transfers/history",
+        "status": 400
+      },
+      {
+        "path": "/api/v1/residents/3a202572-bab2-4684-84f8-370053854eb2/history",
+        "status": 404
+      },
+      {
+        "path": "/api/v1/residents/3a202572-bab2-4684-84f8-370053854eb2/stay-summary",
+        "status": 404
+      },
+      {
+        "path": "/api/v1/residents/3a202572-bab2-4684-84f8-370053854eb2/history",
+        "status": 404
+      },
+      {
+        "path": "/api/v1/residents/3a202572-bab2-4684-84f8-370053854eb2/stay-summary",
+        "status": 404
+      },
+      {
+        "path": "/api/v1/transfers/history",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/residents/3a202572-bab2-4684-84f8-370053854eb2/history",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/residents/3a202572-bab2-4684-84f8-370053854eb2/history",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/residents/3a202572-bab2-4684-84f8-370053854eb2/stay-summary",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/residents/3a202572-bab2-4684-84f8-370053854eb2/stay-summary",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/residents/3a202572-bab2-4684-84f8-370053854eb2/stay-summary",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/corrections/history",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/corrections/history",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/transfers/history",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/transfers/history",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/transfers/history",
+        "status": 404
+      },
+      {
+        "path": "/api/v1/transfers/history",
+        "status": 401
+      },
+      {
+        "path": "/api/v1/residents/68b3667e-1a8e-4692-bb15-3506b538d7a4/history",
+        "status": 401
+      },
+      {
+        "path": "/api/v1/residents/68b3667e-1a8e-4692-bb15-3506b538d7a4/stay-summary",
+        "status": 401
+      },
+      {
+        "path": "/api/v1/transfers/preview",
+        "status": 401
+      },
+      {
+        "path": "/api/v1/transfers/finance-reviews",
+        "status": 403
+      },
+      {
+        "path": "/api/v1/transfers/finance-reviews",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/transfers/finance-reviews",
+        "status": 200
+      }
+    ],
+    "businessSnapshotUnchanged": true,
+    "businessTables": {
+      "bookings": {
+        "count": 2,
+        "sha256": "51cb2745a99edad0f527465b37975ee1897ce0dcaf6fa15a2ed07f19499c8566"
+      },
+      "admissions": {
+        "count": 2,
+        "sha256": "bd36e13f7cbd4094b44f5a1dec21254cbbaee2e24025be441b457c2abf9afa37"
+      },
+      "check_ins": {
+        "count": 2,
+        "sha256": "1477f521c2f767bbad94ad00e1a2cd7cc73687210fd0ef417cf2fa5f7670d46a"
+      },
+      "check_outs": {
+        "count": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "stay_assignments": {
+        "count": 24,
+        "sha256": "0d313e4221d5daa759aa8067f6facb922a96aba9349ebe6107a177934ae452e5"
+      },
+      "stay_assignment_replacements": {
+        "count": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "transfers": {
+        "count": 22,
+        "sha256": "121a4d2e93dfd4eebae7d0b65e52f55d02083d99eb87a6199a884612468971db"
+      },
+      "transfer_command_receipts": {
+        "count": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "transfer_finance_reviews": {
+        "count": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "transfer_finance_resolutions": {
+        "count": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "correction_proposals": {
+        "count": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "correction_command_receipts": {
+        "count": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "correction_finance_links": {
+        "count": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "invoices": {
+        "count": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "payments": {
+        "count": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "payment_reversals": {
+        "count": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "invoice_adjustments": {
+        "count": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "invoice_voids": {
+        "count": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    },
+    "api5xx": 0,
+    "pageErrors": 0,
+    "businessWriteRequests": 0,
+    "gates": "unchanged-disabled",
+    "seed": "synthetic historical rows in fresh disposable PostgreSQL; no transfer/adoption execution"
+  },
+  "scope": {
+    "passed": 17,
+    "total": 18,
+    "failure": "S1: no real .env file",
+    "guard_unchanged": true,
+    "env_contents_read": false
+  },
+  "failed_verification_attempts": [
+    {
+      "run_id": "8388c7a6-bc64-44f1-be6b-d36778d18f45",
+      "reason": "2 compatibility tests passed; pool test incorrectly decoded pg_sleep(void); corrected test execution call"
+    },
+    {
+      "run_id": "865da3c9-e890-419e-83c1-0f28e422b030",
+      "reason": "upgrade setup diagnostic withheld"
+    },
+    {
+      "run_id": "554214f0-9753-4ecf-a1c4-67a4c9765cbe",
+      "reason": "42703: new snapshot helper assumed all legacy tables have id; fixed composite-key table ordering"
+    }
+  ],
+  "cleanup": {
+    "all_runs_reported_exact_label_verified_removal": true,
+    "run_ids": [
+      "8388c7a6-bc64-44f1-be6b-d36778d18f45",
+      "865da3c9-e890-419e-83c1-0f28e422b030",
+      "554214f0-9753-4ecf-a1c4-67a4c9765cbe",
+      "54c0ec44-b48c-4d0b-ad46-c4cbbc3d92a5",
+      "b0aa027e-e86c-414f-81e9-2afc806abb15",
+      "fb803dab-4a6b-4681-af25-2cae8150d4f6",
+      "e3726ec4-a1fa-406c-9aff-9217839ee8a0",
+      "ed5b33c6-9f51-4e91-b429-8146c41e8269"
+    ],
+    "shared_volumes_modified": false
+  },
+  "branches": {
+    "source": "feature/phase-4-1-lifecycle-audit",
+    "target": "main",
+    "source_head": "908098acd567c299ad05529b5a533ad17622dceb",
+    "github_main_identical_to_head": true,
+    "local_main_behind": 22
+  },
+  "restrictions": {
+    "production_access": false,
+    "financial_corrections": false,
+    "transfer_execution": false,
+    "assignment_adoption": false,
+    "commits_pushes_merges_deployments": false
+  },
+  "source_sha256": {
+    "apps/api/src/config.ts": "fd0a72e0e586d1f20780d6820b5e729deb8a838f9ded27d28b49991eb5252191",
+    "apps/api/test/config.test.ts": "6e48cda204ae22b89fee96d6be174b68e9de1d891c993267f20fec6cba088d6e",
+    "scripts/qa/phase4-disposable.mjs": "4e1388dc7fd11f7cc24dbe5b94f00fa6505154890e41f3447965f4b654cd8e21",
+    "scripts/qa/phase4-upgrade.mjs": "1744e6d21c211675eae80504d17dfbb1e2f28a4d01f019a42fefd573ba0d1e5e",
+    "scripts/qa/phase4-compatibility.test.ts": "a25b393f5ecff002b72b0a48fc752860513c59108ba20e4a112dfd21a77ad94b",
+    "scripts/qa/phase4-migration-failure.test.ts": "36e2a01078671ebb3e909165c5498f28e81f445ffab607b3a6ca5a31228acf1f",
+    "scripts/e2e/transfers-read.e2e.mjs": "84f2d19f607187bcc4b6997b15a000957514402b4e193d1eff890eb54387d4a8",
+    "scripts/ci/g6b-migrations.json": "f8c835440b65c6ff1fcc00b343c9fd629769a2afd70822104e4882183e6dc80e"
+  }
+}

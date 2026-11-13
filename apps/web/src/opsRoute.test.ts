@@ -21,3 +21,8 @@ test('unrelated operations routes continue to parse', () => {
   assert.deepEqual(parseOpsRoute('#check-ins'), { name: 'check-ins' });
   assert.equal(isOpsHash('#residents'), true);
 });
+
+test('exported follow-up links resolve to the follow-up screens', () => {
+  assert.deepEqual(parseOpsRoute(opsLinks.overdueFollowUps), { name: 'overdue-follow-ups' });
+  assert.deepEqual(parseOpsRoute(opsLinks.upcomingFollowUps), { name: 'upcoming-follow-ups' });
+});

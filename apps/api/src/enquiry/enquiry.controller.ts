@@ -17,6 +17,7 @@ import { CsrfGuard, OriginGuard, SessionGuard } from '../auth/auth.guards.js';
 import type { AuthenticatedRequest } from '../auth/auth.types.js';
 import { EnquiryService } from './enquiry.service.js';
 import { parseUpcomingDays } from './enquiry.input.js';
+import { RequirePermission } from '../auth/permissions.js';
 
 @ApiTags('Enquiries')
 @ApiBearerAuth()
@@ -25,6 +26,7 @@ import { parseUpcomingDays } from './enquiry.input.js';
 export class EnquiryController {
   constructor(@Inject(EnquiryService) private readonly enquiryService: EnquiryService) {}
 
+  @RequirePermission('enquiry.write')
   @Post()
   @UseGuards(OriginGuard, CsrfGuard)
   @ApiOperation({ summary: 'Create a new enquiry' })
@@ -33,6 +35,7 @@ export class EnquiryController {
     return this.enquiryService.create(organizationId, dto);
   }
 
+  @RequirePermission('enquiry.read')
   @Get()
   @ApiOperation({ summary: 'List enquiries with pagination and filters' })
   async findAll(@Req() req: AuthenticatedRequest, @Query() query: unknown) {
@@ -40,6 +43,7 @@ export class EnquiryController {
     return this.enquiryService.findAll(organizationId, query);
   }
 
+  @RequirePermission('enquiry.read')
   @Get(':id')
   @ApiOperation({ summary: 'Get an enquiry by id' })
   async findOne(@Req() req: AuthenticatedRequest, @Param('id', ParseUUIDPipe) id: string) {
@@ -47,6 +51,7 @@ export class EnquiryController {
     return this.enquiryService.findOne(organizationId, id);
   }
 
+  @RequirePermission('enquiry.write')
   @Put(':id')
   @UseGuards(OriginGuard, CsrfGuard)
   @ApiOperation({ summary: 'Update an enquiry' })
@@ -59,6 +64,7 @@ export class EnquiryController {
     return this.enquiryService.update(organizationId, id, dto);
   }
 
+  @RequirePermission('enquiry.delete')
   @Delete(':id')
   @UseGuards(OriginGuard, CsrfGuard)
   @ApiOperation({ summary: 'Archive an enquiry' })
@@ -68,6 +74,7 @@ export class EnquiryController {
   }
 
   // Follow-ups
+  @RequirePermission('enquiry.write')
   @Post(':id/follow-ups')
   @UseGuards(OriginGuard, CsrfGuard)
   @ApiOperation({ summary: 'Add a follow-up to an enquiry' })
@@ -81,6 +88,7 @@ export class EnquiryController {
     return this.enquiryService.addFollowUp(organizationId, id, userId, dto);
   }
 
+  @RequirePermission('enquiry.read')
   @Get(':id/follow-ups')
   @ApiOperation({ summary: 'Get follow-ups for an enquiry' })
   async getFollowUps(@Req() req: AuthenticatedRequest, @Param('id', ParseUUIDPipe) id: string) {
@@ -89,6 +97,7 @@ export class EnquiryController {
   }
 
   // Conversion
+  @RequirePermission('enquiry.convert')
   @Post(':id/convert')
   @UseGuards(OriginGuard, CsrfGuard)
   @ApiOperation({ summary: 'Convert enquiry to resident' })
@@ -102,6 +111,7 @@ export class EnquiryController {
   }
 
   // Follow-up dashboards
+  @RequirePermission('enquiry.read')
   @Get('follow-ups/overdue')
   @ApiOperation({ summary: 'Get overdue follow-ups' })
   async getOverdueFollowUps(@Req() req: AuthenticatedRequest) {
@@ -109,6 +119,7 @@ export class EnquiryController {
     return this.enquiryService.getOverdueFollowUps(organizationId);
   }
 
+  @RequirePermission('enquiry.read')
   @Get('follow-ups/upcoming')
   @ApiOperation({ summary: 'Get upcoming follow-ups' })
   async getUpcomingFollowUps(@Req() req: AuthenticatedRequest, @Query('days') days?: unknown) {

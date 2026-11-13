@@ -29,6 +29,7 @@ import { AuthService } from './auth.service.js';
 import { CsrfService } from './csrf.service.js';
 import { SessionService } from './session.service.js';
 import { loadRuntimeConfig } from '../config.js';
+import { Public, SelfService } from '../auth/permissions.js';
 
 const cookieOptions = (secure: boolean) => ({
   httpOnly: true,
@@ -49,6 +50,7 @@ export class AuthController {
     return loadRuntimeConfig().secureCookies;
   }
 
+  @Public()
   @Post('login')
   @UseGuards(OriginGuard)
   @HttpCode(HttpStatus.OK)
@@ -74,6 +76,7 @@ export class AuthController {
     return { data: { user: publicContext(result.context) } };
   }
 
+  @SelfService()
   @Post('logout')
   @UseGuards(OriginGuard, SessionGuard, CsrfGuard)
   @HttpCode(HttpStatus.OK)
@@ -87,6 +90,7 @@ export class AuthController {
     return { data: { loggedOut: true } };
   }
 
+  @SelfService()
   @Post('password')
   @UseGuards(OriginGuard, SessionGuard, CsrfGuard)
   @HttpCode(HttpStatus.OK)
@@ -100,12 +104,14 @@ export class AuthController {
     return { data: { changed: true, otherSessionsRevoked: result.revokedSessions } };
   }
 
+  @SelfService()
   @Get('me')
   @UseGuards(SessionGuard)
   getMe(@Req() request: AuthenticatedRequest) {
     return { data: { user: publicContext(request.auth!) } };
   }
 
+  @Public()
   @Get('csrf')
   getCsrf(@Req() request: HttpRequest, @Res({ passthrough: true }) response: HttpResponse) {
     const cookies = parseCookies(request.headers.cookie);

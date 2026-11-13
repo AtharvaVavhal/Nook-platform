@@ -1,0 +1,12 @@
+✖ checkout rejects historical times without effects, then closes the physical assignment exactly once under contention (54.468292ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 3
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 814.562916
+✖ failing tests:
+✖ checkout rejects historical times without effects, then closes the physical assignment exactly once under contention (54.468292ms)
+Exit: 1

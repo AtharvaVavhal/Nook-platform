@@ -15,6 +15,7 @@ import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { CsrfGuard, OriginGuard, SessionGuard } from '../auth/auth.guards.js';
 import type { AuthenticatedRequest } from '../auth/auth.types.js';
 import { CheckInService } from './checkin.service.js';
+import { RequirePermission } from '../auth/permissions.js';
 
 @ApiTags('Check-ins')
 @ApiBearerAuth()
@@ -23,14 +24,16 @@ import { CheckInService } from './checkin.service.js';
 export class CheckInController {
   constructor(@Inject(CheckInService) private readonly checkInService: CheckInService) {}
 
+  @RequirePermission('checkin.write')
   @Post()
   @UseGuards(OriginGuard, CsrfGuard)
   @ApiOperation({ summary: 'Create a new check-in from an admitted admission' })
   async create(@Req() req: AuthenticatedRequest, @Body() dto: Record<string, unknown>) {
     const organizationId = req.auth!.organizationId;
-    return this.checkInService.create(organizationId, { ...dto, organizationId });
+    return this.checkInService.create(organizationId, { ...dto, organizationId }, req.auth!.userId);
   }
 
+  @RequirePermission('checkin.read')
   @Get()
   @ApiOperation({ summary: 'List check-ins with pagination and filters' })
   async findAll(@Req() req: AuthenticatedRequest, @Query() query: Record<string, unknown>) {
@@ -38,12 +41,14 @@ export class CheckInController {
     return this.checkInService.findAll(organizationId, query);
   }
 
+  @RequirePermission('checkin.read')
   @Get('occupancy')
   @ApiOperation({ summary: 'Occupancy derived from active check-ins' })
   async occupancy(@Req() req: AuthenticatedRequest) {
     return this.checkInService.occupancy(req.auth!.organizationId);
   }
 
+  @RequirePermission('checkin.read')
   @Get(':id')
   @ApiOperation({ summary: 'Get a check-in by id' })
   async findOne(@Req() req: AuthenticatedRequest, @Param('id', ParseUUIDPipe) id: string) {
@@ -51,6 +56,7 @@ export class CheckInController {
     return this.checkInService.findOne(organizationId, id);
   }
 
+  @RequirePermission('checkin.write')
   @Put(':id')
   @UseGuards(OriginGuard, CsrfGuard)
   @ApiOperation({
@@ -65,6 +71,7 @@ export class CheckInController {
     return this.checkInService.update(organizationId, id, dto);
   }
 
+  @RequirePermission('checkin.write')
   @Post(':id/check-out')
   @UseGuards(OriginGuard, CsrfGuard)
   @ApiOperation({ summary: 'Check out a resident' })
@@ -74,6 +81,6 @@ export class CheckInController {
     @Body() dto: Record<string, unknown>,
   ) {
     const organizationId = req.auth!.organizationId;
-    return this.checkInService.checkOut(organizationId, id, dto);
+    return this.checkInService.checkOut(organizationId, id, dto, req.auth!.userId);
   }
 }

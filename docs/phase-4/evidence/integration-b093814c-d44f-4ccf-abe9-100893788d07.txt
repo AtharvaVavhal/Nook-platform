@@ -1,0 +1,10 @@
+{"probe":"checkout-contention","outcomes":["fulfilled",{"status":409,"code":null,"category":"ConflictException"}]}
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 695.501875
+Exit: 0

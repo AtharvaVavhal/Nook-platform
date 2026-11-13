@@ -112,3 +112,13 @@ test('overstay: a checked-in resident is past the booking from the exclusive end
     false,
   );
 });
+
+test('archived floor/property also prevents check-in', () => {
+  for (const level of ['floor', 'property']) {
+    const floor = {
+      archivedAt: level === 'floor' ? new Date() : null,
+      property: { archivedAt: level === 'property' ? new Date() : null },
+    };
+    refused({ bed: { ...ok().bed, room: { archivedAt: null, floor } } }, /archived/i);
+  }
+});

@@ -1,0 +1,78 @@
+{
+  "phase": "baseline",
+  "scope": "real Chrome + Vite + Nest + disposable PostgreSQL; synthetic records only",
+  "results": [
+    {
+      "name": "A01 protected deep link and invalid login",
+      "ok": true,
+      "ms": 1542
+    },
+    {
+      "name": "W01 create property, floor, room and two beds through UI",
+      "ok": false,
+      "ms": 16472,
+      "error": "Error: timeout waiting for: Audit Bed A\n--- page text ---\nSkip to content\nEA\nE2E a\nOwner\n\nYOUR WORKSPACE\n\nProperty overview\nInteractive floor plan\nInventory overview\nAdmissions\nProperties\nResidents\nEnquiries\nBookings\nCheck-ins\nCorrections\nFinance\n\nON THE HORIZON\n\nBooking\nPlanned\nOperations\nPlanned\nA little space.\nA lot of possibility.\n\nYour property, thoughtfully organised.\n\nWorkspace\nProperty management\nOwner a0\nE2E a · Owner\nChange password\nSign out\n\nOPERATIONS\n\nResidents and stays\n\nEnquiries, residents, bookings, admissions and check-ins for your property.\n\nResidents\nEnquiries\nBookings\nAdmissions\nCheck-ins\nCorrections\n\n← All beds\n\nAdd bed\nLabel\nOperational status\nIn service\nOut of service\nOut of service reason\n\nRequest failed (400)\n\nAdd bed\nCancel\nThoughtfully organised. Simply nook.\nSections marked DEMO DATA are samples. Admissions and finance use your real records.\n    at until (file:///Users/atharva/Downloads/nook-phase4-1/scripts/e2e/ui-readiness.e2e.mjs:183:13)\n    at async file:///Users/atharva/Downloads/nook-phase4-1/scripts/e2e/ui-readiness.e2e.mjs:328:69\n    at async scenario (file:///Users/atharva/Downloads/nook-phase4-1/scripts/e2e/ui-readiness.e2e.mjs:216:5)\n    at async file:///Users/atharva/Downloads/nook-phase4-1/scripts/e2e/ui-readiness.e2e.mjs:313:3"
+    },
+    {
+      "name": "W02 enquiry validation, creation, status, follow-up and resident conversion",
+      "ok": true,
+      "ms": 900
+    },
+    {
+      "name": "W03 booking search, availability, create and conflict handling",
+      "ok": false,
+      "ms": 15600,
+      "error": "Error: timeout waiting for: Audit Bed A\n--- page text ---\nSkip to content\nEA\nE2E a\nOwner\n\nYOUR WORKSPACE\n\nProperty overview\nInteractive floor plan\nInventory overview\nAdmissions\nProperties\nResidents\nEnquiries\nBookings\nCheck-ins\nCorrections\nFinance\n\nON THE HORIZON\n\nBooking\nPlanned\nOperations\nPlanned\nA little space.\nA lot of possibility.\n\nYour property, thoughtfully organised.\n\nWorkspace\nProperty management\nOwner a0\nE2E a · Owner\nChange password\nSign out\n\nOPERATIONS\n\nResidents and stays\n\nEnquiries, residents, bookings, admissions and check-ins for your property.\n\nResidents\nEnquiries\nBookings\nAdmissions\nCheck-ins\nCorrections\n\n← All bookings\n\nNew booking\n1. Resident\n\nSynthetic Audit Change\n\n2. Dates and bed\nStart date\nEnd date\nFind available beds\nAvailable beds (1)\nRoom R · Bed B1\n3. Rent\nMonthly rent (₹)\nNotes (optional)\n\nThe full monthly rent is charged for the first and the final month, whatever the move-in or check-out date.\n\nCreate booking\nCancel\nThoughtfully organised. Simply nook.\nSections marked DEMO DATA are samples. Admissions and finance use your real records.\n    at until (file:///Users/atharva/Downloads/nook-phase4-1/scripts/e2e/ui-readiness.e2e.mjs:183:13)\n    at async file:///Users/atharva/Downloads/nook-phase4-1/scripts/e2e/ui-readiness.e2e.mjs:355:5\n    at async scenario (file:///Users/atharva/Downloads/nook-phase4-1/scripts/e2e/ui-readiness.e2e.mjs:216:5)\n    at async file:///Users/atharva/Downloads/nook-phase4-1/scripts/e2e/ui-readiness.e2e.mjs:350:3"
+    },
+    {
+      "name": "W04 admission create, admit and check-in updates occupancy",
+      "ok": false,
+      "ms": 228,
+      "error": "Error: Values must be strings. Found value \"undefined\" of type \"undefined\"\n    at assert (/Users/atharva/Downloads/nook-phase4-1/node_modules/puppeteer-core/lib/puppeteer/util/assert.js:15:15)\n    at CdpElementHandle.select (/Users/atharva/Downloads/nook-phase4-1/node_modules/puppeteer-core/lib/puppeteer/api/ElementHandle.js:877:17)\n    at CdpElementHandle.<anonymous> (/Users/atharva/Downloads/nook-phase4-1/node_modules/puppeteer-core/lib/puppeteer/api/ElementHandle.js:130:37)\n    at async pick (file:///Users/atharva/Downloads/nook-phase4-1/scripts/e2e/ui-readiness.e2e.mjs:200:3)\n    at async file:///Users/atharva/Downloads/nook-phase4-1/scripts/e2e/ui-readiness.e2e.mjs:365:5\n    at async scenario (file:///Users/atharva/Downloads/nook-phase4-1/scripts/e2e/ui-readiness.e2e.mjs:216:5)\n    at async file:///Users/atharva/Downloads/nook-phase4-1/scripts/e2e/ui-readiness.e2e.mjs:363:3"
+    },
+    {
+      "name": "W05 single draft, issue, partial payment, receipt, dues and reports",
+      "ok": false,
+      "ms": 661,
+      "error": "Error: Values must be strings. Found value \"undefined\" of type \"undefined\"\n    at assert (/Users/atharva/Downloads/nook-phase4-1/node_modules/puppeteer-core/lib/puppeteer/util/assert.js:15:15)\n    at CdpElementHandle.select (/Users/atharva/Downloads/nook-phase4-1/node_modules/puppeteer-core/lib/puppeteer/api/ElementHandle.js:877:17)\n    at CdpElementHandle.<anonymous> (/Users/atharva/Downloads/nook-phase4-1/node_modules/puppeteer-core/lib/puppeteer/api/ElementHandle.js:130:37)\n    at async pick (file:///Users/atharva/Downloads/nook-phase4-1/scripts/e2e/ui-readiness.e2e.mjs:200:3)\n    at async file:///Users/atharva/Downloads/nook-phase4-1/scripts/e2e/ui-readiness.e2e.mjs:377:5\n    at async scenario (file:///Users/atharva/Downloads/nook-phase4-1/scripts/e2e/ui-readiness.e2e.mjs:216:5)\n    at async file:///Users/atharva/Downloads/nook-phase4-1/scripts/e2e/ui-readiness.e2e.mjs:373:3"
+    },
+    {
+      "name": "W06 correction submit and requester cannot self-approve",
+      "ok": false,
+      "ms": 15676,
+      "error": "Error: timeout waiting for: Current value when proposed\n--- page text ---\nSkip to content\nEA\nE2E a\nOwner\n\nYOUR WORKSPACE\n\nProperty overview\nInteractive floor plan\nInventory overview\nAdmissions\nProperties\nResidents\nEnquiries\nBookings\nCheck-ins\nCorrections\nFinance\n\nON THE HORIZON\n\nBooking\nPlanned\nOperations\nPlanned\nA little space.\nA lot of possibility.\n\nYour property, thoughtfully organised.\n\nWorkspace\nProperty management\nOwner a0\nE2E a · Owner\nChange password\nSign out\n\nOPERATIONS\n\nResidents and stays\n\nEnquiries, residents, bookings, admissions and check-ins for your property.\n\nResidents\nEnquiries\nBookings\nAdmissions\nCheck-ins\nCorrections\n\n← All corrections\n\nResident: First name\nPending review\n\nThis is a proposed change. The record still shows the current value until it is approved.\n\n\tVALUE\nCURRENT VALUE WHEN PROPOSED\tSynthetic\nPROPOSED VALUE\tSynthetic Corrected\nWhy\nSynthetic spelling correction\nEvidence\nNone given\nApplies from\n2026-11-13 11:12 IST\nRequested\n2026-11-13 11:12 IST by Owner a0\nAge of the fact\n0 days\nNeeds\nAn owner or a manager other than the requester\nWithdraw this correction\nWhy are you withdrawing it? (required)\nWithdraw\nThoughtfully organised. Simply nook.\nSections marked DEMO DATA are samples. Admissions and finance use your real records.\n    at until (file:///Users/atharva/Downloads/nook-phase4-1/scripts/e2e/ui-readiness.e2e.mjs:183:13)\n    at async file:///Users/atharva/Downloads/nook-phase4-1/scripts/e2e/ui-readiness.e2e.mjs:390:116\n    at async scenario (file:///Users/atharva/Downloads/nook-phase4-1/scripts/e2e/ui-readiness.e2e.mjs:216:5)\n    at async file:///Users/atharva/Downloads/nook-phase4-1/scripts/e2e/ui-readiness.e2e.mjs:387:3"
+    },
+    {
+      "name": "W07 transfer preview respects execution safety gate",
+      "ok": false,
+      "ms": 283,
+      "error": "Error: No visible action: Transfer\n    at click (file:///Users/atharva/Downloads/nook-phase4-1/scripts/e2e/ui-readiness.e2e.mjs:208:9)\n    at async file:///Users/atharva/Downloads/nook-phase4-1/scripts/e2e/ui-readiness.e2e.mjs:395:87\n    at async scenario (file:///Users/atharva/Downloads/nook-phase4-1/scripts/e2e/ui-readiness.e2e.mjs:216:5)\n    at async file:///Users/atharva/Downloads/nook-phase4-1/scripts/e2e/ui-readiness.e2e.mjs:394:3"
+    },
+    {
+      "name": "R01 every route at 1440/768/390 with real API data",
+      "ok": false,
+      "ms": 0,
+      "error": "AssertionError [ERR_ASSERTION]: Workflow setup must supply all identifiers\n\n5 !== 13\n\n    at file:///Users/atharva/Downloads/nook-phase4-1/scripts/e2e/ui-readiness.e2e.mjs:405:12\n    at scenario (file:///Users/atharva/Downloads/nook-phase4-1/scripts/e2e/ui-readiness.e2e.mjs:216:11)\n    at file:///Users/atharva/Downloads/nook-phase4-1/scripts/e2e/ui-readiness.e2e.mjs:404:9"
+    },
+    {
+      "name": "A02 manager review permission and cross-tenant denial",
+      "ok": false,
+      "ms": 15559,
+      "error": "Error: timeout waiting for: Current value when proposed\n--- page text ---\nSkip to content\nEA\nE2E a\nProperty manager\n\nYOUR WORKSPACE\n\nProperty overview\nInteractive floor plan\nInventory overview\nAdmissions\nProperties\nResidents\nEnquiries\nBookings\nCheck-ins\nCorrections\nFinance\n\nON THE HORIZON\n\nBooking\nPlanned\nOperations\nPlanned\nA little space.\nA lot of possibility.\n\nYour property, thoughtfully organised.\n\nWorkspace\nProperty management\nManager a2\nE2E a · Property manager\nChange password\nSign out\n\nOPERATIONS\n\nResidents and stays\n\nEnquiries, residents, bookings, admissions and check-ins for your property.\n\nResidents\nEnquiries\nBookings\nAdmissions\nCheck-ins\nCorrections\nCorrections\nRequest a correction\n\nA correction fixes a recording mistake. It changes nothing until a different person approves it.\n\nStatus\nAll\nPending review\nApplied\nRejected\nWithdrawn\nStale — needs a new proposal\nRecord type\nAll\nResident\nBooking\nAdmission\nCheck-in\nCheck-out\nNeeds owner\nAny\nFinancial only\nNon-financial only\nWHAT\tRECORD\tSTATUS\tREQUESTED BY\tREQUESTED\tREVIEW\nFirst name\tResident\tPending review\tOwner a0\t2026-11-13 11:12 IST\tOwner or manager\n\nBilling reviews\n\nThoughtfully organised. Simply nook.\nSections marked DEMO DATA are samples. Admissions and finance use your real records.\n    at until (file:///Users/atharva/Downloads/nook-phase4-1/scripts/e2e/ui-readiness.e2e.mjs:183:13)\n    at async navigate (file:///Users/atharva/Downloads/nook-phase4-1/scripts/e2e/ui-readiness.e2e.mjs:237:80)\n    at async file:///Users/atharva/Downloads/nook-phase4-1/scripts/e2e/ui-readiness.e2e.mjs:424:5\n    at async scenario (file:///Users/atharva/Downloads/nook-phase4-1/scripts/e2e/ui-readiness.e2e.mjs:216:5)\n    at async file:///Users/atharva/Downloads/nook-phase4-1/scripts/e2e/ui-readiness.e2e.mjs:422:3"
+    },
+    {
+      "name": "W08 extension confirmation and completed checkout/history",
+      "ok": false,
+      "ms": 15202,
+      "error": "Error: timeout waiting for: Approve extension\n--- page text ---\nSkip to content\nEA\nE2E a\nOwner\n\nYOUR WORKSPACE\n\nProperty overview\nInteractive floor plan\nInventory overview\nAdmissions\nProperties\nResidents\nEnquiries\nBookings\nCheck-ins\nCorrections\nFinance\n\nON THE HORIZON\n\nBooking\nPlanned\nOperations\nPlanned\nA little space.\nA lot of possibility.\n\nYour property, thoughtfully organised.\n\nWorkspace\nProperty management\nOwner a0\nE2E a · Owner\nChange password\nSign out\n\nOPERATIONS\n\nResidents and stays\n\nEnquiries, residents, bookings, admissions and check-ins for your property.\n\nResidents\nEnquiries\nBookings\nAdmissions\nCheck-ins\nCorrections\nBookings\nNew booking\nStatus\nAll statuses\nConfirmed\nCancelled\nNo bookings\n\nCreate a booking to reserve a bed for a resident.\n\nThoughtfully organised. Simply nook.\nSections marked DEMO DATA are samples. Admissions and finance use your real records.\n    at until (file:///Users/atharva/Downloads/nook-phase4-1/scripts/e2e/ui-readiness.e2e.mjs:183:13)\n    at async navigate (file:///Users/atharva/Downloads/nook-phase4-1/scripts/e2e/ui-readiness.e2e.mjs:237:80)\n    at async file:///Users/atharva/Downloads/nook-phase4-1/scripts/e2e/ui-readiness.e2e.mjs:434:5\n    at async scenario (file:///Users/atharva/Downloads/nook-phase4-1/scripts/e2e/ui-readiness.e2e.mjs:216:5)\n    at async file:///Users/atharva/Downloads/nook-phase4-1/scripts/e2e/ui-readiness.e2e.mjs:432:3"
+    },
+    {
+      "name": "A03 logout clears protected UI and returning session",
+      "ok": true,
+      "ms": 799
+    }
+  ],
+  "scans": [],
+  "probes": [],
+  "pageErrors": []
+}

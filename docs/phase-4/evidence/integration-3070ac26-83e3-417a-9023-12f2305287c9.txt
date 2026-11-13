@@ -1,0 +1,14 @@
+✖ every registered route is discovered and none is an unsupported method (399.711125ms)
+✖ OWNER and PROPERTY_MANAGER behavior is identical to the pre-permission-layer baseline on every route (727.21675ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 6
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1777.907375
+✖ failing tests:
+✖ every registered route is discovered and none is an unsupported method (399.711125ms)
+✖ OWNER and PROPERTY_MANAGER behavior is identical to the pre-permission-layer baseline on every route (727.21675ms)
+Exit: 1

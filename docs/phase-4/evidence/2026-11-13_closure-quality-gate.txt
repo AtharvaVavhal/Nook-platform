@@ -1,0 +1,49 @@
+# Local CI quality-gate run — closure task, 2026-11-13 (Node 24.22.1; commands mirror .github/workflows/ci.yml 'quality' job)
+# 'secrets-substitute' scans git-visible (non-ignored) files with the repo scanner's own patterns; the repo scanner itself would read the root .env and was NOT run.
+scope-selftests exit=0
+scope exit=1
+api-typecheck exit=0
+api-eslint exit=0
+api-prettier exit=0
+api-unit exit=0
+web-typecheck exit=0
+web-eslint exit=0
+web-prettier exit=1
+web-test exit=0
+ci-static exit=0
+g6a exit=0
+g6b exit=0
+ci-eslint exit=0
+ci-prettier exit=0
+build exit=0
+prisma-validate exit=0
+secrets-substitute exit=0
+audit exit=0
+
+## verify:scope
+PASS	S1	required files exist
+FAIL	S1	no real .env file
+PASS	S1	env example uses local placeholder credentials
+PASS	S1	no obsolete verify:docs reference
+PASS	S1	scope documents keep the resident-data and deployment exclusions
+PASS	S2	schema declares only approved models, enums, views and types
+PASS	S3	migration SQL touches only approved objects and is slice-tagged
+PASS	S4	no destructive migration SQL without an approved reference
+PASS	S5	committed migrations are immutable (only additions)
+PASS	S6	no forbidden domain vocabulary in schema, SQL, files or routes
+PASS	S7	schema uses no Decimal, Float or Money types beyond those an approved slice declares
+PASS	S8	API routes are all in the approved route list
+PASS	S9	no raw SQL calls outside approved files
+PASS	S10	dependencies match the approved baseline, exact pins, no payment or messaging SDKs
+PASS	S11	every approved slice has an approver, date and resolvable reference
+PASS	S12	self-tests exist for every rule S1-S14
+PASS	S13	legacy guard retirement is approved
+PASS	S14	a guard always runs, self-tests first, before model checks
+
+## secrets-substitute
+scanned 636 non-ignored files with 4 patterns; violations: []
+
+## npm audit (exit 0 at --audit-level=high)
+Severity: moderate
+7 moderate severity vulnerabilities
+## web-prettier after one-file formatting fix: re-run clean (apps/web/src/ops/Bookings.tsx)
