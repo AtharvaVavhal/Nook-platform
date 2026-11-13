@@ -108,7 +108,7 @@ Use the drill (section 8). It never touches the source except to read it.
 1. Restore the most suitable backup into a new database (drill script or Railway restore into a new service).
 2. Find the rows in the restored copy (read-only queries).
 3. Apply the correction to production with a **reviewed SQL script** run in a transaction, after a fresh manual backup.
-   Invoices, payments, voids and audit events are append-only/immutable by trigger: do not try to bypass them; correct
+   Invoices, payments, voids and the correction/transfer history tables are immutable by trigger (audit events are append-only by privilege: the runtime role has INSERT and SELECT only): do not try to bypass them; correct
    through the application's own correction paths (reversal, credit, void) wherever one exists.
 4. Record the change (what, why, who approved) in the incident log.
 
@@ -119,8 +119,14 @@ Use the drill (section 8). It never touches the source except to read it.
 2. Create a **new** PostgreSQL service (same major version or newer). Do not delete the old one yet.
 3. Restore into it from the chosen backup (Layer 1 restore or `pg_restore` from the decrypted Layer 2 dump).
 4. Roles: `pg_dump` does not carry roles or passwords. Recreate the migrator and runtime roles and their grants with the
-   reviewed grants script (P1 #5, not yet written), then re-apply ownership/privileges. Confirm the runtime role
-   **cannot** update or delete `audit_events`, `invoice_voids`, `payments` (section 8.3 prints the matrix).
+   reviewed grants script (P1 #5, not yet written), then re-apply ownership/privileges. Confirm the runtime role's
+   privileges equal the CI-tested matrix (section 8.3 prints the matrix for the sensitive tables): the runtime role
+   holds **no UPDATE and no DELETE privilege** on `audit_events` and `invoice_voids` (INSERT and SELECT only) and **no
+   DELETE privilege on any table**. On `payments` (and `payment_reversals`, `invoice_adjustments`,
+   `payment_idempotency_keys`) the CI-tested matrix **does grant UPDATE**, but the table triggers (`payments_immutable`
+   and its counterparts) reject every UPDATE and DELETE and the application never updates those rows, so the grant is
+   unusable. Do not treat the presence of that UPDATE privilege as a restore defect, and do not rely on privileges
+   alone to make payments immutable: the triggers (restored with the schema, section 8.3) are what enforce it.
 5. Check the migration state is what the application expects (`_prisma_migrations` lists every migration as finished)
    **without running any migration** during recovery.
 6. Run the verification (section 9) against the restored database. Stop if anything differs from the backup's source.
