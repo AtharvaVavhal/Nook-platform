@@ -1,0 +1,13 @@
+PASS E1
+PASS E2
+PASS E3
+PASS E4
+PASS E5
+PASS E6
+PASS E7
+PASS E8
+PASS E9
+PASS E10
+E2E scenarios: 10 passed, 0 failed of 10
+API 5xx/ERROR log markers: 0
+Exit: 0

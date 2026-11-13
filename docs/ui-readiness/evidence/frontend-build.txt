@@ -1,0 +1,20 @@
+
+> @nook/web@0.1.0 build
+> vite build
+
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - import "./src/apiBaseCheck" without a file extension (vite.config.ts:3:30). Add the file extension
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+[nook] WARNING: VITE_API_BASE is not set: this build calls the relative path /api/v1 and will not reach the API on a separate host.
+
+vite v8.3.5 building client environment for production...
+transforming...
+✓ 72 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.62 kB │ gzip:   0.37 kB
+dist/assets/index-DpD3TMtJ.css   51.38 kB │ gzip:   9.78 kB
+dist/assets/index-w6Hd0LdF.js   434.73 kB │ gzip: 117.83 kB │ map: 1,713.88 kB
+
+✓ built in 203ms

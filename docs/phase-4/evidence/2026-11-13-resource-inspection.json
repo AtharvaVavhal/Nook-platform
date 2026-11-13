@@ -1,0 +1,61 @@
+{
+  "observed_utc": "2026-11-13T05:04:48.391459+00:00",
+  "free_bytes": 9461760000,
+  "minimum_free_bytes": 8589934592,
+  "candidates": [
+    {
+      "path": "/Users/atharva/Library/Caches/com.microsoft.VSCode.ShipIt",
+      "allocated_KiB": 1644892,
+      "allocated_bytes": 1684369408,
+      "measurement_complete": true
+    },
+    {
+      "path": "/Users/atharva/Library/Caches/com.todesktop.230313mzl4w4u92.ShipIt",
+      "allocated_KiB": 1479412,
+      "allocated_bytes": 1514917888,
+      "measurement_complete": true
+    },
+    {
+      "path": "/Users/atharva/Library/Caches/ms-playwright",
+      "allocated_KiB": 490420,
+      "allocated_bytes": 502190080,
+      "measurement_complete": true
+    },
+    {
+      "path": "/Users/atharva/.npm/_cacache",
+      "allocated_KiB": 59188,
+      "allocated_bytes": 60608512,
+      "measurement_complete": true
+    },
+    {
+      "path": "/Users/atharva/.npm/_logs",
+      "allocated_KiB": 136,
+      "allocated_bytes": 139264,
+      "measurement_complete": true
+    },
+    {
+      "path": "/Users/atharva/Downloads/nook-phase4-1/apps/api/dist",
+      "allocated_KiB": 2284,
+      "allocated_bytes": 2338816,
+      "measurement_complete": true
+    },
+    {
+      "path": "/Users/atharva/Downloads/nook-phase4-1/apps/web/dist",
+      "allocated_KiB": 2120,
+      "allocated_bytes": 2170880,
+      "measurement_complete": true
+    },
+    {
+      "path": "/Users/atharva/Downloads/nook-phase4-1/node_modules/.cache",
+      "allocated_KiB": 4,
+      "allocated_bytes": 4096,
+      "measurement_complete": true
+    }
+  ],
+  "notes": [
+    "Allocated bytes are measured; exact post-deletion APFS free-space gain is not guaranteed.",
+    "No candidate deleted.",
+    "Existing databases and Docker volumes excluded.",
+    "The broad Library/Caches scan was incomplete; only successful individual measurements appear here."
+  ]
+}

@@ -1,0 +1,10 @@
+{"probe":"phase4-catalog-capture","relations":33,"constraints":198,"functions":210}
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 237.4305
+Exit: 0

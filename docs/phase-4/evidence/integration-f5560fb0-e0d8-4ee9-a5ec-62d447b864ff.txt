@@ -1,0 +1,26 @@
+✖ atomic transfer creates one assignment, exactly three audits and exact response receipt; concurrent same-key replay has one effect (107.120292ms)
+✖ a late finance barrier failure rolls back transfer, assignment closure, audits and receipt (25.250541ms)
+✖ independent reviewer and tenant checks cannot be replaced by supplied actor role (18.789916ms)
+✖ two commands for the same source serialize and exactly one can close the approved source (16.928709ms)
+✖ two residents targeting the same bed cannot both allocate it (17.587084ms)
+✖ transfer versus booking creation preserves atomic availability (14.248959ms)
+✖ uncertain commit is resolved by exact same-key receipt replay without a second transfer (15.130042ms)
+✖ actual organization lock timeout returns RETRY_REQUIRED with no effects, then same key succeeds (14.238ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 1
+ℹ fail 8
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 755.799458
+✖ failing tests:
+✖ atomic transfer creates one assignment, exactly three audits and exact response receipt; concurrent same-key replay has one effect (107.120292ms)
+✖ a late finance barrier failure rolls back transfer, assignment closure, audits and receipt (25.250541ms)
+✖ independent reviewer and tenant checks cannot be replaced by supplied actor role (18.789916ms)
+✖ two commands for the same source serialize and exactly one can close the approved source (16.928709ms)
+✖ two residents targeting the same bed cannot both allocate it (17.587084ms)
+✖ transfer versus booking creation preserves atomic availability (14.248959ms)
+✖ uncertain commit is resolved by exact same-key receipt replay without a second transfer (15.130042ms)
+✖ actual organization lock timeout returns RETRY_REQUIRED with no effects, then same key succeeds (14.238ms)
+Exit: 1

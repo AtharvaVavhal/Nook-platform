@@ -1,0 +1,16 @@
+{"probe":"loaded-http-timeouts","configuredLockTimeoutMs":3000,"concurrency":10,"http":[{"timestamp":"2026-11-10T05:47:13.743Z","startedMs":3020.565833,"completedMs":6098.942792,"wallMs":3078.3787500000003,"status":409,"code":"RETRY_REQUIRED"},{"timestamp":"2026-11-10T05:47:13.743Z","startedMs":3020.8965,"completedMs":6099.167875,"wallMs":3078.2716250000003,"status":409,"code":"RETRY_REQUIRED"},{"timestamp":"2026-11-10T05:47:13.743Z","startedMs":3020.971042,"completedMs":6099.078208,"wallMs":3078.1074579999995,"status":409,"code":"RETRY_REQUIRED"},{"timestamp":"2026-11-10T05:47:13.743Z","startedMs":3021.01325,"completedMs":6099.699083,"wallMs":3078.6860420000003,"status":409,"code":"RETRY_REQUIRED"},{"timestamp":"2026-11-10T05:47:13.744Z","startedMs":3021.048292,"completedMs":6099.855875,"wallMs":3078.8077909999997,"status":409,"code":"RETRY_REQUIRED"},{"timestamp":"2026-11-10T05:47:13.744Z","startedMs":3021.094,"completedMs":6099.244958,"wallMs":3078.151167,"status":409,"code":"RETRY_REQUIRED"},{"timestamp":"2026-11-10T05:47:13.744Z","startedMs":3021.183167,"completedMs":6099.780833,"wallMs":3078.5978749999995,"status":409,"code":"RETRY_REQUIRED"},{"timestamp":"2026-11-10T05:47:13.744Z","startedMs":3021.217,"completedMs":6099.914,"wallMs":3078.697208,"status":409,"code":"RETRY_REQUIRED"},{"timestamp":"2026-11-10T05:47:13.744Z","startedMs":3021.244333,"completedMs":6099.355417,"wallMs":3078.111292,"status":409,"code":"RETRY_REQUIRED"},{"timestamp":"2026-11-10T05:47:13.744Z","startedMs":3021.273583,"completedMs":6099.973042,"wallMs":3078.6998750000002,"status":409,"code":"RETRY_REQUIRED"}],"bookingCount":100,"bookingCreatedAudits":0}
+{"probe":"server-lock-timeout","failedAt":"2026-11-10T05:47:19.861816+00:00","sqlState":"55P03","startedAt":"2026-11-10T05:47:16.857608+00:00","unchanged":true,"configured":"3s","serverElapsedMs":3004.208,"exceptionBlockRolledBack":true}
+{"probe":"concurrent-correction-outcomes","concurrency":20,"outcomes":[{"status":200,"code":null},{"status":200,"code":null},{"status":200,"code":null},{"status":200,"code":null},{"status":200,"code":null},{"status":200,"code":null},{"status":200,"code":null},{"status":200,"code":null},{"status":200,"code":null},{"status":200,"code":null},{"status":200,"code":null},{"status":200,"code":null},{"status":200,"code":null},{"status":200,"code":null},{"status":200,"code":null},{"status":200,"code":null},{"status":200,"code":null},{"status":200,"code":null},{"status":200,"code":null},{"status":200,"code":null}]}
+{"probe":"performance-failure","name":"Error","message":"expected 201 \"Created\", got 400 \"Bad Request\""}
+✖ performance evidence: gate holds and explicit lock acquisitions on 100 beds (9789.142ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 20612.248666
+✖ failing tests:
+✖ performance evidence: gate holds and explicit lock acquisitions on 100 beds (9789.142ms)
+Exit: 1

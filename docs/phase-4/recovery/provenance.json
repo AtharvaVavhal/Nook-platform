@@ -1,0 +1,8 @@
+{
+  "purpose": "Diagnostic reconstruction; original migration remains missing",
+  "baselineSchemaSha256": "a1126b6a21001c64830eb469267b42ca3cee6578d75f612b119a579d543740e8",
+  "currentSchemaSha256": "cc13c159999213883fc8f22b3c0648a1586db5ea9ba6193ddd7a09c231d66679",
+  "expectedCatalogSha256": "a4280494aefc6a6ad08d58a84afbc796990f185946bb7df7852d7e6f968d275e",
+  "candidateSha256": "597b182782458bff92475e484134a24399d2c3f05ab6036d48011e983782f822",
+  "originalRecordedSha256": "1b6f49f2d873c61275313e0072d135fffb656df4dfbaa6357d61b41f758009d0"
+}

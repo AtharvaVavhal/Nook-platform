@@ -1,0 +1,21 @@
+{"probe":"advisory-55P03","shape":{"name":"PrismaClientKnownRequestError","code":"P2010","meta":{"driverAdapterError":{"name":"DriverAdapterError","cause":{"code":"55P03","originalCode":"55P03","kind":"postgres"}}}},"sqlStates":["55P03","55P03"],"classification":"LOCK_TIMEOUT"}
+{"probe":"ordinary-advisory-wait","elapsedMs":3106.304083,"configuredLockTimeoutMs":3000}
+{"probe":"row-55P03","shape":{"name":"PrismaClientKnownRequestError","code":"P2010","meta":{"driverAdapterError":{"name":"DriverAdapterError","cause":{"code":"55P03","originalCode":"55P03","kind":"postgres"}}}},"sqlStates":["55P03","55P03"],"classification":"LOCK_TIMEOUT"}
+{"probe":"performance-bounds","timestamp":"2026-11-10T07:45:40.143Z","measurements":[{"label":"remaining-budget-row-timeout","elapsedMs":416.8054579999998,"shape":{"name":"PrismaClientKnownRequestError","code":"P2010","meta":{"driverAdapterError":{"name":"DriverAdapterError","cause":{"code":"55P03","originalCode":"55P03","kind":"postgres"}}}},"sqlStates":["55P03","55P03"],"classification":"LOCK_TIMEOUT"},{"label":"transaction-timeout-rollback","elapsedMs":155.852167,"shape":{"name":"PrismaClientKnownRequestError","code":"P2028","meta":{}},"sqlStates":[],"classification":"UNCERTAIN"},{"label":"explicit-query-cancellation","elapsedMs":67.13008400000035,"shape":{"name":"PrismaClientKnownRequestError","code":"P2010","meta":{"driverAdapterError":{"name":"DriverAdapterError","cause":{"code":"57014","originalCode":"57014","kind":"postgres"}}}},"sqlStates":["57014","57014"],"classification":"UNCERTAIN"},{"label":"serializable-first","elapsedMs":5.2931250000001455,"outcome":"committed"},{"label":"serializable-conflict","elapsedMs":6.875167000000147,"shape":{"name":"PrismaClientKnownRequestError","code":"P2010","meta":{"driverAdapterError":{"name":"DriverAdapterError","cause":{"originalCode":"40001","kind":"TransactionWriteConflict"}}}},"sqlStates":["40001"],"classification":"SERIALIZATION"}],"finalState":"only successful serializable update committed"}
+{"probe":"intentional-40P01","shape":{"name":"PrismaClientKnownRequestError","code":"P2010","meta":{"driverAdapterError":{"name":"DriverAdapterError","cause":{"originalCode":"40P01","kind":"TransactionWriteConflict"}}}},"sqlStates":["40P01"],"classification":"DEADLOCK"}
+{"probe":"partial-index-23505","shape":{"name":"PrismaClientKnownRequestError","code":"P2010","meta":{"driverAdapterError":{"name":"DriverAdapterError","cause":{"originalCode":"23505","kind":"UniqueConstraintViolation","constraint":{"index":"properties_organization_id_code_active_key"}}}}},"sqlStates":["23505"],"classification":"UNIQUE_VIOLATION"}
+{"probe":"partial-index-model-create-23505","shape":{"name":"PrismaClientKnownRequestError","code":"P2002","meta":{"driverAdapterError":{"name":"DriverAdapterError","cause":{"originalCode":"23505","kind":"UniqueConstraintViolation","constraint":{"index":"properties_organization_id_code_active_key"}}},"modelName":"Property"}},"sqlStates":["23505"],"classification":"UNIQUE_VIOLATION"}
+{"probe":"expired-P2028","shape":{"name":"PrismaClientKnownRequestError","code":"P2028","meta":{}},"sqlStates":[],"classification":"UNCERTAIN"}
+{"probe":"queue-and-pool","holderMs":2000,"measuredHolderMs":2003.0901250000006,"firstRequestStartMs":0,"nextRequestStartMs":106.88716600000043,"exclusiveWaitersBeforeNext":1,"waitingRequests":2,"poolMax":10,"firstMs":2003.4407500000007,"nextMs":1898.4196670000001,"unrelatedSqlMs":14.987541999999848}
+✖ correction deadline bounds near-budget advisory and row waits and execution cancellation (2571.042959ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 7
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 10264.054667
+✖ failing tests:
+✖ correction deadline bounds near-budget advisory and row waits and execution cancellation (2571.042959ms)
+Exit: 1

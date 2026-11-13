@@ -1,0 +1,25 @@
+
+> nook-platform@0.1.0 build
+> npm run build --workspaces --if-present
+
+
+> @nook/api@0.1.0 build
+> tsc -p tsconfig.build.json
+
+
+> @nook/web@0.1.0 build
+> vite build
+
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - import "./src/apiBaseCheck" without a file extension (vite.config.ts:3:30). Add the file extension
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+vite v8.3.5 building client environment for production...
+transforming...
+✓ 69 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.62 kB │ gzip:   0.37 kB
+dist/assets/index-BFktjiEQ.css   50.58 kB │ gzip:   9.70 kB
+dist/assets/index-BN_EpKSP.js   418.17 kB │ gzip: 113.75 kB │ map: 1,658.40 kB
+
+✓ built in 148ms

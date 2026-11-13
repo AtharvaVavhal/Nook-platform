@@ -1,0 +1,13 @@
+{"probe":"performance-failure","name":"error","code":"23505","constraint":"beds_room_id_label_active_key","message":"duplicate key value violates unique constraint \"beds_room_id_label_active_key\""}
+✖ performance evidence: gate holds and explicit lock acquisitions on 100 beds (318.651916ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1018.726791
+✖ failing tests:
+✖ performance evidence: gate holds and explicit lock acquisitions on 100 beds (318.651916ms)
+Exit: 1

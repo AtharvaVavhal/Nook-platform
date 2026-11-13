@@ -1,0 +1,20 @@
+{"probe":"readiness-sql-failure","sqlstate":"23001","table":"unknown"}
+{"probe":"readiness-sql-failure","sqlstate":"23001","table":"stay_assignment_replacements"}
+{"probe":"readiness-sql-failure","sqlstate":"23514","table":"stay_assignment_replacements"}
+✖ replacement rows are immutable and cannot cross tenants or commit against a pending proposal (26.193208ms)
+{"probe":"readiness-sql-failure","sqlstate":"23001","table":"unknown"}
+{"probe":"readiness-sql-failure","sqlstate":"23001","table":"transfer_finance_resolutions"}
+{"probe":"readiness-sql-failure","sqlstate":"23514","table":"transfer_finance_resolutions"}
+{"probe":"readiness-sql-failure","sqlstate":"23503","table":"transfer_finance_reviews"}
+{"probe":"readiness-sql-failure","sqlstate":"23001","table":"unknown"}
+ℹ tests 20
+ℹ suites 0
+ℹ pass 19
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3681.384667
+✖ failing tests:
+✖ replacement rows are immutable and cannot cross tenants or commit against a pending proposal (26.193208ms)
+Exit: 1

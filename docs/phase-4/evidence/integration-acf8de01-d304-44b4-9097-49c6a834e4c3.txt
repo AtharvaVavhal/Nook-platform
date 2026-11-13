@@ -1,0 +1,12 @@
+✖ database: a terminal proposal cannot be rewritten or deleted, even by the owner role (68.477333ms)
+ℹ tests 338
+ℹ suites 0
+ℹ pass 318
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 19
+ℹ todo 0
+ℹ duration_ms 66031.156333
+✖ failing tests:
+✖ database: a terminal proposal cannot be rewritten or deleted, even by the owner role (68.477333ms)
+Exit: 1

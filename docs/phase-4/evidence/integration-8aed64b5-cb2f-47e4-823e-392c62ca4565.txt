@@ -1,0 +1,28 @@
+✖ every registered route is discovered and none is an unsupported method (9.375084ms)
+✖ OWNER and PROPERTY_MANAGER behavior is identical to the pre-permission-layer baseline on every route (1.418667ms)
+✖ no authenticated OWNER or PM request ends in a server error (0.064375ms)
+✖ anonymous callers are refused on every route that is not public (0.026167ms)
+✖ cross-organization reads: a foreign identifier is 404, an own identifier is 200 (0.025166ms)
+✖ cross-organization lists never contain the other tenant (0.020709ms)
+✖ cross-organization writes are refused and change nothing (0.026916ms)
+✖ a client-supplied organization id never overrides the session organization (0.024166ms)
+✖ /Users/atharva/Downloads/nook-phase4-1/apps/api/test/integration/permission-layer.integration.test.ts (0.068584ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 0
+ℹ fail 9
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 858.794125
+✖ failing tests:
+✖ every registered route is discovered and none is an unsupported method (9.375084ms)
+✖ OWNER and PROPERTY_MANAGER behavior is identical to the pre-permission-layer baseline on every route (1.418667ms)
+✖ no authenticated OWNER or PM request ends in a server error (0.064375ms)
+✖ anonymous callers are refused on every route that is not public (0.026167ms)
+✖ cross-organization reads: a foreign identifier is 404, an own identifier is 200 (0.025166ms)
+✖ cross-organization lists never contain the other tenant (0.020709ms)
+✖ cross-organization writes are refused and change nothing (0.026916ms)
+✖ a client-supplied organization id never overrides the session organization (0.024166ms)
+✖ /Users/atharva/Downloads/nook-phase4-1/apps/api/test/integration/permission-layer.integration.test.ts (0.068584ms)
+Exit: 1

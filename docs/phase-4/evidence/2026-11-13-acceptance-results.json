@@ -1,0 +1,785 @@
+{
+  "recorded_at": "2026-11-13T05:35:13.464126+00:00",
+  "run_id": "f7e90d93-e391-4edf-84af-f2e5af4e2cf3",
+  "exit": 0,
+  "assessment": "NOT_MERGE_READY",
+  "case_inventory": [
+    {
+      "id": "T1",
+      "scenario": "Submit \u2192 preview \u2192 confirm \u2192 applied",
+      "readiness": "BLOCKED_POLICY_AND_RUNTIME",
+      "dependencies": [
+        "A1",
+        "D1-D8",
+        "F1",
+        "R1"
+      ],
+      "execution_and_evidence": "Two distinct authorized users; real UI submission and independent review; after confirmation one transfer, source close, destination open, three mandatory audits and one receipt; booking/rent/issued invoices unchanged.",
+      "executed": false,
+      "status": "BLOCKED_NOT_RUN"
+    },
+    {
+      "id": "T2",
+      "scenario": "Queue with filters",
+      "readiness": "BLOCKED_MISSING_SPECIFICATION",
+      "dependencies": [
+        "A1"
+      ],
+      "execution_and_evidence": "Specify allowed viewer roles, queue membership, filter fields/semantics, ordering, paging and terminal-item treatment. Then create mixed tenant/status records through the approved proposal API and assert exact rows/counts for every supported filter.",
+      "executed": false,
+      "status": "BLOCKED_NOT_RUN"
+    },
+    {
+      "id": "T3",
+      "scenario": "Protected detail",
+      "readiness": "BLOCKED_MISSING_SPECIFICATION",
+      "dependencies": [
+        "A1"
+      ],
+      "execution_and_evidence": "Specify detail route/schema and requester/reviewer visibility. Then independent eligible reviewer sees approved fields, anonymous user gets no detail, and foreign-tenant identifier reveals no protected data.",
+      "executed": false,
+      "status": "BLOCKED_NOT_RUN"
+    },
+    {
+      "id": "T4",
+      "scenario": "Concurrent destination conflict",
+      "readiness": "BLOCKED_RUNTIME",
+      "dependencies": [
+        "A1",
+        "D policies",
+        "F1",
+        "R1"
+      ],
+      "execution_and_evidence": "Two real browser sessions submit permitted moves competing for one destination; exactly one commits, the other receives the documented conflict; assert no overlapping occupancy and exact audit/receipt counts.",
+      "executed": false,
+      "status": "BLOCKED_NOT_RUN"
+    },
+    {
+      "id": "T5",
+      "scenario": "Self-approval refused",
+      "readiness": "BLOCKED_POLICY_AND_RUNTIME",
+      "dependencies": [
+        "A1"
+      ],
+      "execution_and_evidence": "Requester attempts the real approval action under current authorized role; server returns SELF_REVIEW/403 and no assignment, transfer or receipt effect. Role change must not defeat distinct-user enforcement.",
+      "executed": false,
+      "status": "BLOCKED_NOT_RUN"
+    },
+    {
+      "id": "T6",
+      "scenario": "Resident profile transfer history",
+      "readiness": "POLICY_READY_READ_SCENARIO",
+      "dependencies": [],
+      "execution_and_evidence": "Real Chrome renders seeded historical PostgreSQL transfer records through real authenticated API. Assert source/destination, actor, reason, effective/recorded times, pagination and tenant scoping; do not claim transfer execution or pending-queue acceptance.",
+      "executed": true,
+      "status": "PASS_READ_SCENARIO",
+      "result_id": "T6-read"
+    },
+    {
+      "id": "T7",
+      "scenario": "Mid-month billing-gap review",
+      "readiness": "BLOCKED_CONFLICTING_SPECIFICATION",
+      "dependencies": [
+        "F1",
+        "A1",
+        "R1"
+      ],
+      "execution_and_evidence": "After F1 fixes trigger/timing, exercise real transfer-linked obligation and independent OWNER resolution. Verify suppression, no self-review, supported outcomes, immutable invoice/payment history, replay and no automatic issue.",
+      "executed": false,
+      "status": "BLOCKED_NOT_RUN"
+    },
+    {
+      "id": "T8",
+      "scenario": "Same-key retry after network loss",
+      "readiness": "BLOCKED_RUNTIME",
+      "dependencies": [
+        "A1",
+        "D1",
+        "F1",
+        "R1"
+      ],
+      "execution_and_evidence": "Drop only the response after the real server commits, preserve request payload/key, retry through browser, and compare exact response plus one transfer/receipt/audit set. Request abort before commit is not lost-ack proof.",
+      "executed": false,
+      "status": "BLOCKED_NOT_RUN"
+    },
+    {
+      "id": "T9",
+      "scenario": "Tenant isolation",
+      "readiness": "POLICY_READY_READ_SUBSET",
+      "dependencies": [],
+      "execution_and_evidence": "Real tenant A and B sessions; A cannot obtain B resident summary/history/preview, and B remains able to access its own data. Anonymous requests denied. Full proposal/approval/write-isolation acceptance remains blocked on A1/runtime.",
+      "executed": true,
+      "status": "PARTIAL_READ_SUBSET_PASS",
+      "result_id": "T9-read"
+    },
+    {
+      "id": "T10",
+      "scenario": "Retryable lock timeout",
+      "readiness": "BLOCKED_RUNTIME",
+      "dependencies": [
+        "A1",
+        "F1",
+        "R1"
+      ],
+      "execution_and_evidence": "Use dedicated migrator connection to hold the documented organization gate in the disposable database. Real authorized browser command receives RETRY_REQUIRED/409 with no effects, retains key, then succeeds exactly once after lock release.",
+      "executed": false,
+      "status": "BLOCKED_NOT_RUN"
+    }
+  ],
+  "browser_result": {
+    "cases": [
+      {
+        "id": "T6-read",
+        "status": "PASS",
+        "startedAt": "2026-11-13T05:30:20.123Z",
+        "finishedAt": "2026-11-13T05:30:20.718Z"
+      },
+      {
+        "id": "T9-read",
+        "status": "PASS",
+        "startedAt": "2026-11-13T05:30:20.718Z",
+        "finishedAt": "2026-11-13T05:30:20.976Z"
+      }
+    ],
+    "requests": [
+      {
+        "path": "/api/v1/auth/me",
+        "status": 401
+      },
+      {
+        "path": "/api/v1/auth/me",
+        "status": 401
+      },
+      {
+        "path": "/api/v1/auth/login",
+        "status": 204
+      },
+      {
+        "path": "/api/v1/auth/login",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/admissions",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/admissions",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/inventory/summary",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/bookings",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/admissions",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/inventory/summary",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/admissions",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/bookings",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/admissions",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/bookings",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/auth/me",
+        "status": 401
+      },
+      {
+        "path": "/api/v1/auth/me",
+        "status": 401
+      },
+      {
+        "path": "/api/v1/auth/login",
+        "status": 204
+      },
+      {
+        "path": "/api/v1/auth/login",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/inventory/summary",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/admissions",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/bookings",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/admissions",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/inventory/summary",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/admissions",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/bookings",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/admissions",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/bookings",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/admissions",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/auth/me",
+        "status": 401
+      },
+      {
+        "path": "/api/v1/auth/me",
+        "status": 401
+      },
+      {
+        "path": "/api/v1/auth/login",
+        "status": 204
+      },
+      {
+        "path": "/api/v1/auth/login",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/inventory/summary",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/bookings",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/admissions",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/admissions",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/inventory/summary",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/bookings",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/admissions",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/admissions",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/bookings",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/admissions",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/auth/me",
+        "status": 401
+      },
+      {
+        "path": "/api/v1/auth/me",
+        "status": 401
+      },
+      {
+        "path": "/api/v1/residents/f05f1f84-fedd-47b0-b67f-8781b9f0d043/history",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/residents/f05f1f84-fedd-47b0-b67f-8781b9f0d043/history",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/residents/f05f1f84-fedd-47b0-b67f-8781b9f0d043/stay-summary",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/residents/f05f1f84-fedd-47b0-b67f-8781b9f0d043/stay-summary",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/residents/f05f1f84-fedd-47b0-b67f-8781b9f0d043/stay-summary",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/corrections/history",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/corrections/history",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/transfers/history",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/transfers/history",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/transfers/history",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/transfers/history",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/transfers/history",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/transfers/history",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/transfers/history",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/residents/917d4636-8bcd-420a-a757-1974016fae70/history",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/residents/917d4636-8bcd-420a-a757-1974016fae70/history",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/residents/917d4636-8bcd-420a-a757-1974016fae70/stay-summary",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/residents/917d4636-8bcd-420a-a757-1974016fae70/stay-summary",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/residents/917d4636-8bcd-420a-a757-1974016fae70/stay-summary",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/corrections/history",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/corrections/history",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/transfers/history",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/transfers/history",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/residents/f05f1f84-fedd-47b0-b67f-8781b9f0d043/history",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/residents/f05f1f84-fedd-47b0-b67f-8781b9f0d043/history",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/residents/f05f1f84-fedd-47b0-b67f-8781b9f0d043/stay-summary",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/residents/f05f1f84-fedd-47b0-b67f-8781b9f0d043/stay-summary",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/residents/f05f1f84-fedd-47b0-b67f-8781b9f0d043/stay-summary",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/corrections/history",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/corrections/history",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/transfers/history",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/transfers/history",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/transfers/history",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/transfers/history",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/transfers/history",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/transfers/history",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/transfers/history",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/residents/917d4636-8bcd-420a-a757-1974016fae70/history",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/residents/917d4636-8bcd-420a-a757-1974016fae70/history",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/residents/917d4636-8bcd-420a-a757-1974016fae70/stay-summary",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/residents/917d4636-8bcd-420a-a757-1974016fae70/stay-summary",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/residents/917d4636-8bcd-420a-a757-1974016fae70/stay-summary",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/corrections/history",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/transfers/history",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/corrections/history",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/transfers/history",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/residents/13d29767-6ff7-423f-a9bc-62cdb7dbb530/stay-summary",
+        "status": 404
+      },
+      {
+        "path": "/api/v1/residents/13d29767-6ff7-423f-a9bc-62cdb7dbb530/history",
+        "status": 404
+      },
+      {
+        "path": "/api/v1/transfers/history",
+        "status": 404
+      },
+      {
+        "path": "/api/v1/transfers/preview",
+        "status": 404
+      },
+      {
+        "path": "/api/v1/transfers/preview",
+        "status": 404
+      },
+      {
+        "path": "/api/v1/transfers/history",
+        "status": 400
+      },
+      {
+        "path": "/api/v1/residents/13d29767-6ff7-423f-a9bc-62cdb7dbb530/history",
+        "status": 404
+      },
+      {
+        "path": "/api/v1/residents/13d29767-6ff7-423f-a9bc-62cdb7dbb530/stay-summary",
+        "status": 404
+      },
+      {
+        "path": "/api/v1/residents/13d29767-6ff7-423f-a9bc-62cdb7dbb530/history",
+        "status": 404
+      },
+      {
+        "path": "/api/v1/residents/13d29767-6ff7-423f-a9bc-62cdb7dbb530/stay-summary",
+        "status": 404
+      },
+      {
+        "path": "/api/v1/transfers/history",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/residents/13d29767-6ff7-423f-a9bc-62cdb7dbb530/stay-summary",
+        "status": 404
+      },
+      {
+        "path": "/api/v1/residents/13d29767-6ff7-423f-a9bc-62cdb7dbb530/history",
+        "status": 404
+      },
+      {
+        "path": "/api/v1/transfers/history",
+        "status": 404
+      },
+      {
+        "path": "/api/v1/transfers/preview",
+        "status": 404
+      },
+      {
+        "path": "/api/v1/transfers/preview",
+        "status": 404
+      },
+      {
+        "path": "/api/v1/transfers/history",
+        "status": 400
+      },
+      {
+        "path": "/api/v1/residents/13d29767-6ff7-423f-a9bc-62cdb7dbb530/history",
+        "status": 404
+      },
+      {
+        "path": "/api/v1/residents/13d29767-6ff7-423f-a9bc-62cdb7dbb530/stay-summary",
+        "status": 404
+      },
+      {
+        "path": "/api/v1/residents/13d29767-6ff7-423f-a9bc-62cdb7dbb530/history",
+        "status": 404
+      },
+      {
+        "path": "/api/v1/residents/13d29767-6ff7-423f-a9bc-62cdb7dbb530/stay-summary",
+        "status": 404
+      },
+      {
+        "path": "/api/v1/transfers/history",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/residents/13d29767-6ff7-423f-a9bc-62cdb7dbb530/history",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/residents/13d29767-6ff7-423f-a9bc-62cdb7dbb530/history",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/residents/13d29767-6ff7-423f-a9bc-62cdb7dbb530/stay-summary",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/residents/13d29767-6ff7-423f-a9bc-62cdb7dbb530/stay-summary",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/residents/13d29767-6ff7-423f-a9bc-62cdb7dbb530/stay-summary",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/corrections/history",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/corrections/history",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/transfers/history",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/transfers/history",
+        "status": 304
+      },
+      {
+        "path": "/api/v1/transfers/history",
+        "status": 404
+      },
+      {
+        "path": "/api/v1/transfers/history",
+        "status": 401
+      },
+      {
+        "path": "/api/v1/residents/f05f1f84-fedd-47b0-b67f-8781b9f0d043/history",
+        "status": 401
+      },
+      {
+        "path": "/api/v1/residents/f05f1f84-fedd-47b0-b67f-8781b9f0d043/stay-summary",
+        "status": 401
+      },
+      {
+        "path": "/api/v1/transfers/preview",
+        "status": 401
+      },
+      {
+        "path": "/api/v1/transfers/finance-reviews",
+        "status": 403
+      },
+      {
+        "path": "/api/v1/transfers/finance-reviews",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/transfers/finance-reviews",
+        "status": 200
+      }
+    ],
+    "businessSnapshotUnchanged": true,
+    "businessTables": {
+      "bookings": {
+        "count": 2,
+        "sha256": "be5215524b64456394cdd0524b6b457a613ed1010344d54d7c099140c329e196"
+      },
+      "admissions": {
+        "count": 2,
+        "sha256": "0b2033e2ba1987ae4c10188dbd68d7d47377698b6cbeaa35cb89b2492255d558"
+      },
+      "check_ins": {
+        "count": 2,
+        "sha256": "8efa49834bd168bc9509197f60e839529b78663c0934c4de313a3c1352187802"
+      },
+      "check_outs": {
+        "count": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "stay_assignments": {
+        "count": 24,
+        "sha256": "5a630577a7780db475f5ed4fcd40c3089a3519c53488267374541251b0234b7a"
+      },
+      "stay_assignment_replacements": {
+        "count": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "transfers": {
+        "count": 22,
+        "sha256": "14091cd3e0eedfd86cbc1be8d4e8e572b6fdc8cb8d85d3f65345cb8fe4e8e6d0"
+      },
+      "transfer_command_receipts": {
+        "count": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "transfer_finance_reviews": {
+        "count": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "transfer_finance_resolutions": {
+        "count": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "correction_proposals": {
+        "count": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "correction_command_receipts": {
+        "count": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "correction_finance_links": {
+        "count": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "invoices": {
+        "count": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "payments": {
+        "count": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "payment_reversals": {
+        "count": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "invoice_adjustments": {
+        "count": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "invoice_voids": {
+        "count": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    },
+    "api5xx": 0,
+    "pageErrors": 0,
+    "businessWriteRequests": 0,
+    "gates": "unchanged-disabled",
+    "seed": "synthetic historical rows in fresh disposable PostgreSQL; no transfer/adoption execution"
+  },
+  "source_sha256": {
+    "scripts/e2e/transfers-read.e2e.mjs": "84f2d19f607187bcc4b6997b15a000957514402b4e193d1eff890eb54387d4a8",
+    "scripts/qa/phase4-disposable.mjs": "31cfe642c7ea5c39a755757902bcc71887b92df36b3cce90751813d3242f646d",
+    "prisma/schema.prisma": "4776f7d4fd973e1cfc9fc09c92c289044ed21706ff5ab2ae14b0796f1bec0ed4",
+    "scripts/ci/g6b-migrations.json": "f8c835440b65c6ff1fcc00b343c9fd629769a2afd70822104e4882183e6dc80e",
+    "apps/api/src/transfer/transfer.execution.ts": "e3d8979bbc0035492a179f96f7ee4d4eb7cb078a6d9235c701a7687452639598",
+    "apps/api/src/transfer/transfer-finance.service.ts": "8f6ec7c656fccfe7cc882a236097c644f56f8545cc4fc08734959d908bc0f060",
+    "apps/api/src/common/assignment-adoption.ts": "e9caf3b5d93d4efa0026c4de954d6c09205c8137056842ad92e2ddc9f9dd143d"
+  },
+  "raw_evidence_sha256": "4a33d9a502f51f455265dd962645c219d33edbed32a1c00aaa5eedc886531628",
+  "cleanup": {
+    "harness_verified": true,
+    "independent_exact_label_query_empty": true,
+    "tmpfs_discarded": true,
+    "volumes_created_or_deleted": 0
+  },
+  "attempts": [
+    {
+      "run_id": "90284b4c-001e-4065-ba80-796761284549",
+      "exit": 1,
+      "reason": "login timeout; shell Node 26"
+    },
+    {
+      "run_id": "1bca549a-5552-49d2-aca5-5dc52bbfcb93",
+      "exit": 1,
+      "reason": "login timeout on Node 24"
+    },
+    {
+      "run_id": "2cdb1054-bd90-4108-902d-76a905a9b1fb",
+      "exit": 1,
+      "reason": "diagnostics identified fixture login normalization mismatch"
+    },
+    {
+      "run_id": "e2fb70eb-aaa6-47fe-b1ac-3aa8f8a09991",
+      "exit": 1,
+      "reason": "both cases failed: fixture navigated resident editor instead of profile"
+    }
+  ],
+  "production_access": false,
+  "transfer_execution": false,
+  "assignment_adoption": false,
+  "financial_corrections": false
+}

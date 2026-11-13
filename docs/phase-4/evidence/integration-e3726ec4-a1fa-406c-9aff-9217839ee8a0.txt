@@ -1,0 +1,10 @@
+{"probe":"migration-engine-failure","engine":"7.10.1","error":"P3018","retry":"P3009","partialDdlRemains":true,"priorMigrationsPreserved":24,"cleanup":"exact disposable cluster removed by parent; no ledger repair attempted"}
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 946.756417
+Exit: 0

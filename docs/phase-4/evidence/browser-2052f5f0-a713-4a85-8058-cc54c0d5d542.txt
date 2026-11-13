@@ -1,0 +1,16 @@
+PASS E1
+PASS E2
+PASS E3
+PASS E4
+FAIL E5
+E6 API 5xx 500 /api/v1/residents/6fdcd175-2f48-4465-aa43-fb39efc3e748/stay-summary
+E6 API 5xx 500 /api/v1/residents/6fdcd175-2f48-4465-aa43-fb39efc3e748/stay-summary
+E6 API 5xx 500 /api/v1/residents/6fdcd175-2f48-4465-aa43-fb39efc3e748/stay-summary
+FAIL E6
+PASS E7
+PASS E8
+FAIL E9
+PASS E10
+E2E scenarios: 7 passed, 3 failed of 10
+API 5xx/ERROR log markers: 12
+Exit: 1

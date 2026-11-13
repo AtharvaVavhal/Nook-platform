@@ -1,0 +1,12 @@
+{"probe":"transfer-backfill","dry":{"created":2,"skipped":0,"quarantined":1},"live":{"created":2,"skipped":0,"quarantined":1},"repeat":{"created":0,"skipped":2,"quarantined":1},"legacyOccupancyUnchanged":true,"legacyAvailabilityUnchanged":true}
+{"probe":"transfer-receipts","migrationCount":22,"identitySqlState":"23503","duplicateSqlState":"23505","updateDeleteSqlState":"23001","unchanged":true}
+{"probe":"transfer-http-blocked","requests":2,"status":503,"allDatabaseRowsUnchanged":true,"authorization":"real guards; fixture session authenticator"}
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2337.1145
+Exit: 0

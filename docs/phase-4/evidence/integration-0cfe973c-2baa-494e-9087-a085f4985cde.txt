@@ -1,0 +1,27 @@
+{"probe":"permission-setup-error","message":"expected 200 \"OK\", got 401 \"Unauthorized\"","stack":["    at login (/Users/atharva/Downloads/nook-phase4-1/apps/api/test/integration/permission-layer.integration.test.ts:124:6)","    at setup (/Users/atharva/Downloads/nook-phase4-1/apps/api/test/integration/permission-layer.integration.test.ts:172:77)","    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)"]}
+✖ every registered route is discovered and none is an unsupported method (360.142291ms)
+✖ OWNER and PROPERTY_MANAGER behavior is identical to the pre-permission-layer baseline on every route (0.26ms)
+✖ no authenticated OWNER or PM request ends in a server error (0.06725ms)
+✖ anonymous callers are refused on every route that is not public (0.021583ms)
+✖ cross-organization reads: a foreign identifier is 404, an own identifier is 200 (0.02375ms)
+✖ cross-organization lists never contain the other tenant (0.025833ms)
+✖ cross-organization writes are refused and change nothing (0.025583ms)
+✖ a client-supplied organization id never overrides the session organization (0.021208ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 0
+ℹ fail 8
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 819.421084
+✖ failing tests:
+✖ every registered route is discovered and none is an unsupported method (360.142291ms)
+✖ OWNER and PROPERTY_MANAGER behavior is identical to the pre-permission-layer baseline on every route (0.26ms)
+✖ no authenticated OWNER or PM request ends in a server error (0.06725ms)
+✖ anonymous callers are refused on every route that is not public (0.021583ms)
+✖ cross-organization reads: a foreign identifier is 404, an own identifier is 200 (0.02375ms)
+✖ cross-organization lists never contain the other tenant (0.025833ms)
+✖ cross-organization writes are refused and change nothing (0.025583ms)
+✖ a client-supplied organization id never overrides the session organization (0.021208ms)
+Exit: 1

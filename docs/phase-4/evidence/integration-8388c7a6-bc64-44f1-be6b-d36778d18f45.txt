@@ -1,0 +1,12 @@
+✖ Prisma runtime preserves PostgreSQL startup options across pooled connections and rollback (152.530958ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 2
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 564.151209
+✖ failing tests:
+✖ Prisma runtime preserves PostgreSQL startup options across pooled connections and rollback (152.530958ms)
+Exit: 1

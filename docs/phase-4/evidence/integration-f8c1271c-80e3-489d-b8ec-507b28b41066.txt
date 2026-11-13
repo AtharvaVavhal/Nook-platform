@@ -1,0 +1,13 @@
+{"probe":"performance-failure","name":"error","code":"23514","constraint":"invoices_number_format","message":"new row for relation \"invoices\" violates check constraint \"invoices_number_format\""}
+✖ performance evidence: gate holds and explicit lock acquisitions on 100 beds (2423.992667ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2882.83625
+✖ failing tests:
+✖ performance evidence: gate holds and explicit lock acquisitions on 100 beds (2423.992667ms)
+Exit: 1

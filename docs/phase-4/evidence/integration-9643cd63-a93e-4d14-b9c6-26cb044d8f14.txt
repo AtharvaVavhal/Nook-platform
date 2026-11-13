@@ -1,0 +1,17 @@
+{"probe":"advisory-55P03","shape":{"name":"PrismaClientKnownRequestError","code":"P2010","meta":{"driverAdapterError":{"name":"DriverAdapterError","cause":{"code":"55P03","originalCode":"55P03","kind":"postgres"}}}},"sqlStates":["55P03","55P03"],"classification":"LOCK_TIMEOUT"}
+{"probe":"ordinary-advisory-wait","elapsedMs":3099.073291,"configuredLockTimeoutMs":3000}
+{"probe":"row-55P03","shape":{"name":"PrismaClientKnownRequestError","code":"P2010","meta":{"driverAdapterError":{"name":"DriverAdapterError","cause":{"code":"55P03","originalCode":"55P03","kind":"postgres"}}}},"sqlStates":["55P03","55P03"],"classification":"LOCK_TIMEOUT"}
+{"probe":"intentional-40P01","shape":{"name":"PrismaClientKnownRequestError","code":"P2010","meta":{"driverAdapterError":{"name":"DriverAdapterError","cause":{"originalCode":"40P01","kind":"TransactionWriteConflict"}}}},"sqlStates":["40P01"],"classification":"DEADLOCK"}
+{"probe":"partial-index-23505","shape":{"name":"PrismaClientKnownRequestError","code":"P2010","meta":{"driverAdapterError":{"name":"DriverAdapterError","cause":{"originalCode":"23505","kind":"UniqueConstraintViolation","constraint":{"index":"properties_organization_id_code_active_key"}}}}},"sqlStates":["23505"],"classification":"UNIQUE_VIOLATION"}
+{"probe":"partial-index-model-create-23505","shape":{"name":"PrismaClientKnownRequestError","code":"P2002","meta":{"driverAdapterError":{"name":"DriverAdapterError","cause":{"originalCode":"23505","kind":"UniqueConstraintViolation","constraint":{"index":"properties_organization_id_code_active_key"}}},"modelName":"Property"}},"sqlStates":["23505"],"classification":"UNIQUE_VIOLATION"}
+{"probe":"expired-P2028","shape":{"name":"PrismaClientKnownRequestError","code":"P2028","meta":{}},"sqlStates":[],"classification":"UNCERTAIN"}
+{"probe":"queue-and-pool","holderMs":2000,"waitingRequests":2,"poolMax":10,"firstMs":2000.6291249999995,"nextMs":1899.7534160000005,"unrelatedSqlMs":8.0253330000005}
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 6779.227042
+Exit: 0
