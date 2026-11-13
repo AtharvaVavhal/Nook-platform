@@ -2,7 +2,7 @@ import { useState, type FormEvent } from 'react';
 import { EmptyState, ErrorState, LoadingState, Pager, useAsync } from '../finance/shared';
 import { Field, FormError, PageHead, Tag, useGuardedAction } from './ui';
 import { opsApi, type Resident, type ResidentInput } from './opsApi';
-import { opsLinks } from './opsRoute';
+import { correctionsLinks, opsLinks } from './opsRoute';
 import { dateOnly, label, todayDate } from './opsFormat';
 
 const STATUSES = ['ACTIVE', 'INACTIVE', 'ARCHIVED'] as const;
@@ -19,6 +19,7 @@ export function ResidentList() {
   return (
     <section aria-labelledby="res-title">
       <PageHead
+        id="res-title"
         title="Residents"
         action={
           <a className="primary-button" href={opsLinks.residentNew}>
@@ -171,8 +172,8 @@ export function ResidentForm({
     setErrors(found);
     if (Object.keys(found).length) return;
     const body: ResidentInput = {
-      firstName: v.firstName.trim(),
-      lastName: v.lastName.trim(),
+      // A resident's name changes only through an approved correction, so an edit never sends it.
+      ...(resident ? {} : { firstName: v.firstName.trim(), lastName: v.lastName.trim() }),
       phone: v.phone.trim() || null,
       email: v.email.trim() || null,
       gender: v.gender.trim() || null,
@@ -192,12 +193,26 @@ export function ResidentForm({
   }
   return (
     <form className="ops-form" onSubmit={submit} noValidate>
+      {resident ? (
+        <p className="fin-hint" role="note">
+          A name changes only through an approved correction.{' '}
+          <a
+            href={correctionsLinks.new({
+              targetType: 'RESIDENT',
+              targetId: resident.id,
+              field: 'firstName',
+            })}
+          >
+            Request a correction
+          </a>
+        </p>
+      ) : null}
       <div className="ops-grid">
         <Field label="First name" error={errors.firstName}>
-          <input value={v.firstName} onChange={set('firstName')} />
+          <input value={v.firstName} onChange={set('firstName')} readOnly={Boolean(resident)} />
         </Field>
         <Field label="Last name" error={errors.lastName}>
-          <input value={v.lastName} onChange={set('lastName')} />
+          <input value={v.lastName} onChange={set('lastName')} readOnly={Boolean(resident)} />
         </Field>
         <Field label="Phone" error={errors.phone}>
           <input value={v.phone} inputMode="tel" onChange={set('phone')} />
@@ -249,7 +264,7 @@ export function ResidentNew() {
       <p>
         <a href={opsLinks.residents}>← All residents</a>
       </p>
-      <PageHead title="Register resident" />
+      <PageHead id="res-new" title="Register resident" />
       <ResidentForm
         onSaved={(r) => {
           window.location.hash = opsLinks.resident(r.id);
@@ -282,6 +297,7 @@ export function ResidentDetail({ id }: { id: string }) {
         <a href={opsLinks.residents}>← All residents</a>
       </p>
       <PageHead
+        id="res-detail"
         title={`${data.firstName} ${data.lastName}`}
         action={<Tag>{label(data.status)}</Tag>}
       />
@@ -321,6 +337,9 @@ export function ResidentDetail({ id }: { id: string }) {
             </dd>
           </dl>
           <div className="ops-actions">
+            <a className="outline-button" href={opsLinks.residentProfile(id)}>
+              Stay profile and history
+            </a>
             <button type="button" className="outline-button" onClick={() => setEditing(true)}>
               Edit details
             </button>

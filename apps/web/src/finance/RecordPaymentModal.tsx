@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
+import { useModalFocus } from '../useModalFocus';
 import { financeApi, type Invoice, type Payment, type PaymentMethod } from './financeApi';
 import {
   formatMoney,
@@ -21,6 +22,8 @@ interface Props {
 const todayInput = () => istDate();
 
 export function RecordPaymentModal({ invoice, corrects, onClose, onRecorded }: Props) {
+  const dialogRef = useModalFocus<HTMLFormElement>();
+  const inFlight = useRef(false);
   const [amount, setAmount] = useState('');
   const [method, setMethod] = useState<PaymentMethod>('CASH');
   const [reference, setReference] = useState('');
@@ -45,14 +48,17 @@ export function RecordPaymentModal({ invoice, corrects, onClose, onRecorded }: P
       return 'Enter an amount greater than zero with at most 2 decimals.';
     if (toMinorUnits(amount) > toMinorUnits(invoice.balance))
       return `The amount cannot exceed the remaining balance of ${formatMoney(invoice.balance)}.`;
+    if (!receivedDate) return 'Enter the date the payment was received.';
     if (receivedDate > todayInput()) return 'The received date cannot be in the future.';
     return null;
   }
 
   async function submit(e: FormEvent) {
     e.preventDefault();
+    if (inFlight.current) return;
     const problem = validate();
     if (problem) return setError(problem);
+    inFlight.current = true;
     setSubmitting(true);
     setError(null);
     try {
@@ -82,6 +88,7 @@ export function RecordPaymentModal({ invoice, corrects, onClose, onRecorded }: P
       });
       onRecorded(result.payment);
     } catch (err) {
+      inFlight.current = false;
       setError(err instanceof Error ? err.message : 'Could not record the payment.');
       setSubmitting(false);
     }
@@ -93,6 +100,7 @@ export function RecordPaymentModal({ invoice, corrects, onClose, onRecorded }: P
       onMouseDown={(e) => e.target === e.currentTarget && !submitting && onClose()}
     >
       <form
+        ref={dialogRef}
         className="fin-modal"
         role="dialog"
         aria-modal="true"

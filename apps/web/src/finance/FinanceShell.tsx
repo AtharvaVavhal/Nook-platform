@@ -53,16 +53,18 @@ export function FinanceShell() {
           </a>
         ))}
       </nav>
-      {route.name === 'dashboard' ? <FinanceDashboard /> : null}
-      {route.name === 'invoices' ? <InvoiceList /> : null}
-      {route.name === 'new-invoice' ? <CreateInvoice /> : null}
-      {route.name === 'invoice' ? <InvoiceDetail id={route.id} /> : null}
-      {route.name === 'outstanding' ? <OutstandingPayments /> : null}
-      {route.name === 'reports' ? <MonthlyReports /> : null}
-      {route.name === 'corrections' ? <CorrectionHistory /> : null}
-      {route.name === 'receipt' ? (
-        <ReceiptView invoiceId={route.invoiceId} paymentId={route.paymentId} />
-      ) : null}
+      <div key={window.location.hash}>
+        {route.name === 'dashboard' ? <FinanceDashboard /> : null}
+        {route.name === 'invoices' ? <InvoiceList /> : null}
+        {route.name === 'new-invoice' ? <CreateInvoice /> : null}
+        {route.name === 'invoice' ? <InvoiceDetail id={route.id} /> : null}
+        {route.name === 'outstanding' ? <OutstandingPayments /> : null}
+        {route.name === 'reports' ? <MonthlyReports /> : null}
+        {route.name === 'corrections' ? <CorrectionHistory /> : null}
+        {route.name === 'receipt' ? (
+          <ReceiptView invoiceId={route.invoiceId} paymentId={route.paymentId} />
+        ) : null}
+      </div>
     </div>
   );
 }

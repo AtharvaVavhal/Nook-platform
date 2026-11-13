@@ -17,3 +17,10 @@ export function notifyUnauthorized(): void {
   csrf.clear();
   window.dispatchEvent(new Event(UNAUTHORIZED_EVENT));
 }
+
+/** Fired when a request is refused because a temporary password is still in use (the user must set their own). */
+export const PASSWORD_CHANGE_REQUIRED_EVENT = 'nook:password-change-required';
+
+export function notifyPasswordChangeRequired(): void {
+  window.dispatchEvent(new Event(PASSWORD_CHANGE_REQUIRED_EVENT));
+}

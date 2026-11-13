@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
+import { useModalFocus } from '../useModalFocus';
 import { FinanceApiError, financeApi, type Invoice, type Payment } from './financeApi';
 import { formatMoney, isValidAmountInput, toMinorUnits } from './financeFormat';
 
@@ -13,6 +14,7 @@ interface ReverseProps {
 }
 
 export function ReversePaymentModal({ payment, invoiceNumber, onClose, onDone }: ReverseProps) {
+  const dialogRef = useModalFocus<HTMLFormElement>();
   const [reason, setReason] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -55,6 +57,7 @@ export function ReversePaymentModal({ payment, invoiceNumber, onClose, onDone }:
       onMouseDown={(e) => e.target === e.currentTarget && !submitting && onClose()}
     >
       <form
+        ref={dialogRef}
         className="fin-modal"
         role="dialog"
         aria-modal="true"
@@ -107,6 +110,7 @@ interface VoidProps {
 
 /** Voiding is terminal: the invoice is kept, marked void, and can never be paid, credited or re-issued. */
 export function VoidInvoiceModal({ invoice, onClose, onDone }: VoidProps) {
+  const dialogRef = useModalFocus<HTMLFormElement>();
   const [reason, setReason] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -148,6 +152,7 @@ export function VoidInvoiceModal({ invoice, onClose, onDone }: VoidProps) {
       onMouseDown={(e) => e.target === e.currentTarget && !submitting && onClose()}
     >
       <form
+        ref={dialogRef}
         className="fin-modal"
         role="dialog"
         aria-modal="true"
@@ -200,6 +205,7 @@ interface CreditProps {
 }
 
 export function CreditInvoiceModal({ invoice, onClose, onDone }: CreditProps) {
+  const dialogRef = useModalFocus<HTMLFormElement>();
   const [amount, setAmount] = useState('');
   const [reason, setReason] = useState('');
   const [submitting, setSubmitting] = useState(false);
@@ -246,6 +252,7 @@ export function CreditInvoiceModal({ invoice, onClose, onDone }: CreditProps) {
       onMouseDown={(e) => e.target === e.currentTarget && !submitting && onClose()}
     >
       <form
+        ref={dialogRef}
         className="fin-modal"
         role="dialog"
         aria-modal="true"

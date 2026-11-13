@@ -18,6 +18,7 @@ export function EnquiryList() {
   return (
     <section aria-labelledby="enq-title">
       <PageHead
+        id="enq-title"
         title="Enquiries"
         action={
           <a className="primary-button" href={opsLinks.enquiryNew}>
@@ -25,6 +26,14 @@ export function EnquiryList() {
           </a>
         }
       />
+      <nav className="ops-actions" aria-label="Enquiry follow-ups">
+        <a className="text-link" href={opsLinks.overdueFollowUps}>
+          Overdue follow-ups
+        </a>
+        <a className="text-link" href={opsLinks.upcomingFollowUps}>
+          Upcoming follow-ups
+        </a>
+      </nav>
       <div className="fin-toolbar">
         <Field label="Status">
           <select
@@ -88,6 +97,62 @@ export function EnquiryList() {
   );
 }
 
+export function FollowUpList({ upcoming }: { upcoming: boolean }) {
+  const title = upcoming ? 'Upcoming follow-ups' : 'Overdue follow-ups';
+  const query = useAsync(
+    () => (upcoming ? opsApi.enquiries.upcoming() : opsApi.enquiries.overdue()),
+    [upcoming],
+  );
+  return (
+    <section aria-labelledby="follow-ups-title">
+      <p>
+        <a href={opsLinks.enquiries}>← All enquiries</a>
+      </p>
+      <PageHead id="follow-ups-title" title={title} />
+      <p className="fin-note">
+        {upcoming
+          ? 'Unresolved follow-ups in the next seven days.'
+          : 'Unresolved follow-ups whose scheduled time has passed.'}
+      </p>
+      {query.loading ? <LoadingState label="Loading follow-ups…" /> : null}
+      {query.error ? <ErrorState message={query.error} onRetry={query.reload} /> : null}
+      {query.data?.length === 0 ? <EmptyState title={`No ${title.toLowerCase()}`} /> : null}
+      {query.data && query.data.length > 0 ? (
+        <div className="fin-table-wrap">
+          <table className="fin-table">
+            <thead>
+              <tr>
+                <th>Enquiry</th>
+                <th>When</th>
+                <th>Notes</th>
+                <th>Recorded by</th>
+              </tr>
+            </thead>
+            <tbody>
+              {query.data.map((followUp) => (
+                <tr key={followUp.id}>
+                  <td>
+                    {followUp.enquiry ? (
+                      <a href={opsLinks.enquiry(followUp.enquiry.id)}>
+                        {followUp.enquiry.firstName} {followUp.enquiry.lastName}
+                      </a>
+                    ) : (
+                      '—'
+                    )}
+                  </td>
+                  <td>{dateTime(followUp.followUpAt)}</td>
+                  <td>{followUp.notes}</td>
+                  <td>{followUp.user?.displayName ?? '—'}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : null}
+    </section>
+  );
+}
+
 export function EnquiryNew() {
   const [v, setV] = useState({
     firstName: '',
@@ -130,7 +195,7 @@ export function EnquiryNew() {
       <p>
         <a href={opsLinks.enquiries}>← All enquiries</a>
       </p>
-      <PageHead title="New enquiry" />
+      <PageHead id="enq-new" title="New enquiry" />
       <form className="ops-form" onSubmit={submit} noValidate>
         <div className="ops-grid">
           <Field label="First name" error={errors.firstName}>
@@ -203,6 +268,7 @@ export function EnquiryDetail({ id }: { id: string }) {
     });
   async function addFollowUp(ev: FormEvent) {
     ev.preventDefault();
+    if (!when) return fu.setError('Enter the follow-up time.');
     if (notes.trim().length < 2) return setNoteError('Write what was discussed.');
     setNoteError(null);
     const ok = await fu.run(async () => {
@@ -224,7 +290,11 @@ export function EnquiryDetail({ id }: { id: string }) {
       <p>
         <a href={opsLinks.enquiries}>← All enquiries</a>
       </p>
-      <PageHead title={`${e.firstName} ${e.lastName}`} action={<Tag>{label(e.status)}</Tag>} />
+      <PageHead
+        id="enq-detail"
+        title={`${e.firstName} ${e.lastName}`}
+        action={<Tag>{label(e.status)}</Tag>}
+      />
       {notice ? (
         <p className="fin-success" role="status">
           {notice}

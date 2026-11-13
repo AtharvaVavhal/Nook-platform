@@ -3,6 +3,7 @@ import { EmptyState, ErrorState, LoadingState, Pager, useAsync } from '../financ
 import { Field, FormError, PageHead, Tag, useGuardedAction } from './ui';
 import { opsApi, type Bed, type Resident } from './opsApi';
 import { opsLinks } from './opsRoute';
+import { useAuth } from '../auth/AuthContext';
 import {
   MAX_MONTHLY_PRICE_LABEL,
   bedLabel,
@@ -25,6 +26,7 @@ export function BookingList() {
   return (
     <section aria-labelledby="bk-title">
       <PageHead
+        id="bk-title"
         title="Bookings"
         action={
           <a className="primary-button" href={opsLinks.bookingNew}>
@@ -92,6 +94,7 @@ export function BookingList() {
                     <Tag>{label(b.status)}</Tag>
                   </td>
                   <td>
+                    <a href={opsLinks.booking(b.id)}>View booking</a>{' '}
                     {b.status === 'CONFIRMED' ? (
                       <button
                         type="button"
@@ -117,6 +120,93 @@ export function BookingList() {
         </div>
       ) : null}
       {data ? <Pager page={data.page} totalPages={data.totalPages} onPage={setPage} /> : null}
+    </section>
+  );
+}
+
+export function BookingDetail({ id }: { id: string }) {
+  const { data, loading, error, reload } = useAsync(() => opsApi.bookings.get(id), [id]);
+  const { state } = useAuth();
+  const permitted =
+    state.status === 'authenticated' && ['OWNER', 'PROPERTY_MANAGER'].includes(state.user.role);
+  const [newEndDate, setNewEndDate] = useState('');
+  const [reason, setReason] = useState('');
+  const [notice, setNotice] = useState('');
+  const action = useGuardedAction();
+  if (loading && !data) return <LoadingState label="Loading booking…" />;
+  if (error) return <ErrorState message={error} onRetry={reload} />;
+  if (!data) return null;
+  return (
+    <section>
+      <p>
+        <a href={opsLinks.bookings}>← All bookings</a>
+      </p>
+      <PageHead title="Booking" action={<Tag>{label(data.status)}</Tag>} />
+      <dl className="ops-kv">
+        <dt>Resident</dt>
+        <dd>
+          <a href={opsLinks.residentProfile(data.residentId)}>{personName(data.resident)}</a>
+        </dd>
+        <dt>Bed</dt>
+        <dd>{bedLabel(data.bed)}</dd>
+        <dt>From</dt>
+        <dd>{dateOnly(data.startDate)}</dd>
+        <dt>Exclusive end date</dt>
+        <dd>{dateOnly(data.endDate)}</dd>
+        <dt>Monthly rent</dt>
+        <dd>₹{Number(data.monthlyPrice).toLocaleString('en-IN')}</dd>
+      </dl>
+      {notice ? (
+        <p className="fin-success" role="status">
+          {notice}
+        </p>
+      ) : null}
+      {permitted && data.status === 'CONFIRMED' ? (
+        <form
+          className="fin-form"
+          onSubmit={(event) => {
+            event.preventDefault();
+            if (
+              !window.confirm(
+                `Extend this booking to ${newEndDate}? The monthly rent stays unchanged.`,
+              )
+            )
+              return;
+            void action.run(async () => {
+              await opsApi.bookings.extend(id, { newEndDate, reason: reason.trim() });
+              setNotice(
+                'Booking extended. The reason and approver are recorded in resident history.',
+              );
+              setNewEndDate('');
+              setReason('');
+              reload();
+            });
+          }}
+        >
+          <h2>Extend booking</h2>
+          <p>Availability is checked before the extension is saved. Full-month billing applies.</p>
+          <Field label="New exclusive end date">
+            <input
+              type="date"
+              required
+              value={newEndDate}
+              onChange={(e) => setNewEndDate(e.target.value)}
+            />
+          </Field>
+          <Field label="Reason">
+            <textarea
+              required
+              maxLength={2000}
+              value={reason}
+              onChange={(e) => setReason(e.target.value)}
+            />
+          </Field>
+          <FormError message={action.error} />
+          <button className="primary-button" disabled={action.busy || !reason.trim()}>
+            {action.busy ? 'Saving…' : 'Approve extension'}
+          </button>
+        </form>
+      ) : null}
     </section>
   );
 }
@@ -182,7 +272,7 @@ export function BookingNew() {
       <p>
         <a href={opsLinks.bookings}>← All bookings</a>
       </p>
-      <PageHead title="New booking" />
+      <PageHead id="bk-new" title="New booking" />
       <form className="ops-form" onSubmit={submit} noValidate>
         <h3>1. Resident</h3>
         {resident ? (

@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { EmptyState, ErrorState, LoadingState, Pager, useAsync } from '../finance/shared';
 import { Field, FormError, PageHead, Tag, useGuardedAction } from './ui';
 import { opsApi } from './opsApi';
+import { readAllPages } from '../pagination';
+import { correctionsLinks, opsLinks } from './opsRoute';
 import {
   bedLabel,
   dateOnly,
@@ -15,14 +17,14 @@ export function AdmissionPanel() {
   const [status, setStatus] = useState('');
   const [page, setPage] = useState(1);
   const list = useAsync(() => opsApi.admissions.list({ status, page, limit: 20 }), [status, page]);
-  // Confirmed bookings that have no admission yet (the pilot's volume fits one page of 100)
+  // Read all pages so eligible bookings do not disappear as the property grows.
   const candidates = useAsync(async () => {
     const [bookings, admissions] = await Promise.all([
-      opsApi.bookings.list({ status: 'CONFIRMED', limit: 100 }),
-      opsApi.admissions.list({ limit: 100 }),
+      readAllPages((page) => opsApi.bookings.list({ status: 'CONFIRMED', limit: 100, page })),
+      readAllPages((page) => opsApi.admissions.list({ limit: 100, page })),
     ]);
-    const taken = new Set(admissions.items.map((a) => a.bookingId));
-    return bookings.items.filter((b) => !taken.has(b.id));
+    const taken = new Set(admissions.map((a) => a.bookingId));
+    return bookings.filter((b) => !taken.has(b.id));
   }, [list.data?.total]);
   const [bookingId, setBookingId] = useState('');
   const [date, setDate] = useState(todayDate());
@@ -35,16 +37,21 @@ export function AdmissionPanel() {
   };
   return (
     <section aria-labelledby="adm-title">
-      <PageHead title="Admissions" />
+      <PageHead id="adm-title" title="Admissions" />
       {notice ? (
         <p className="fin-success" role="status">
           {notice}
         </p>
       ) : null}
+      {candidates.loading ? <LoadingState label="Loading confirmed bookings…" /> : null}
+      {candidates.error ? (
+        <ErrorState message={candidates.error} onRetry={candidates.reload} />
+      ) : null}
       <div className="ops-inline-form">
         <Field label="Confirmed booking">
           <select
             value={bookingId}
+            disabled={candidates.loading || Boolean(candidates.error)}
             onChange={(e) => {
               setBookingId(e.target.value);
               const chosen = candidates.data?.find((b) => b.id === e.target.value);
@@ -70,7 +77,9 @@ export function AdmissionPanel() {
         <button
           type="button"
           className="primary-button"
-          disabled={create.busy || !bookingId || !date}
+          disabled={
+            create.busy || candidates.loading || Boolean(candidates.error) || !bookingId || !date
+          }
           onClick={() =>
             void create.run(async () => {
               await opsApi.admissions.create({ bookingId, admissionDate: date });
@@ -123,7 +132,9 @@ export function AdmissionPanel() {
             <tbody>
               {list.data.items.map((a) => (
                 <tr key={a.id}>
-                  <td>{personName(a.resident)}</td>
+                  <td>
+                    <a href={opsLinks.admission(a.id)}>{personName(a.resident)}</a>
+                  </td>
                   <td>{bedLabel(a.bed)}</td>
                   <td>{dateOnly(a.admissionDate)}</td>
                   <td>
@@ -173,6 +184,64 @@ export function AdmissionPanel() {
       {list.data ? (
         <Pager page={list.data.page} totalPages={list.data.totalPages} onPage={setPage} />
       ) : null}
+    </section>
+  );
+}
+
+export function AdmissionDetail({ id }: { id: string }) {
+  const query = useAsync(() => opsApi.admissions.get(id), [id]);
+  if (query.loading) return <LoadingState label="Loading admission…" />;
+  if (query.error) return <ErrorState message={query.error} onRetry={query.reload} />;
+  const admission = query.data;
+  if (!admission) return null;
+  return (
+    <section aria-labelledby="admission-detail">
+      <p>
+        <a href={opsLinks.admissions}>← All admissions</a>
+      </p>
+      <PageHead
+        id="admission-detail"
+        title="Admission details"
+        action={<Tag>{label(admission.status)}</Tag>}
+      />
+      <dl className="ops-kv">
+        <dt>Resident</dt>
+        <dd>
+          <a href={opsLinks.residentProfile(admission.residentId)}>
+            {personName(admission.resident)}
+          </a>
+        </dd>
+        <dt>Bed</dt>
+        <dd>{bedLabel(admission.bed)}</dd>
+        <dt>Admission date</dt>
+        <dd>{dateOnly(admission.admissionDate)}</dd>
+        <dt>Booking</dt>
+        <dd>
+          <a href={opsLinks.booking(admission.bookingId)}>View booking</a>
+        </dd>
+        <dt>Notes</dt>
+        <dd>{admission.notes || '—'}</dd>
+      </dl>
+      <div className="ops-actions">
+        <a className="outline-button" href={opsLinks.admissions}>
+          Manage admission status
+        </a>
+        <a
+          className="outline-button"
+          href={correctionsLinks.new({
+            targetType: 'ADMISSION',
+            targetId: id,
+            field: 'admissionDate',
+          })}
+        >
+          Request a correction
+        </a>
+        {admission.status === 'ADMITTED' ? (
+          <a className="primary-button" href={opsLinks.checkInNew}>
+            New check-in
+          </a>
+        ) : null}
+      </div>
     </section>
   );
 }

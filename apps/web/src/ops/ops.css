@@ -54,6 +54,8 @@
 }
 .ops-kv dd {
   margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 .ops-inline-form {
   display: flex;
@@ -64,4 +66,398 @@
   border: 1px solid var(--color-border-subtle);
   border-radius: 10px;
   background: var(--color-brand-subtle);
+}
+
+/* Resident Profile */
+.profile-tabs {
+  display: flex;
+  gap: 8px;
+  margin: 24px 0 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+.profile-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--color-text-secondary);
+  font-size: 12px;
+  font-weight: 500;
+  min-height: 42px;
+}
+.profile-tab:hover {
+  background: var(--color-background);
+  color: var(--color-text-primary);
+}
+.profile-tab.active {
+  background: var(--color-brand-subtle);
+  border-color: var(--color-border-strong);
+  color: var(--color-accent-text);
+}
+.profile-tab svg {
+  flex-shrink: 0;
+}
+
+.profile-overview,
+.profile-history,
+.profile-finance {
+  display: grid;
+  gap: 24px;
+}
+
+.profile-section-title {
+  margin: 0 0 16px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.profile-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.profile-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 12px;
+  padding: 24px;
+}
+.profile-card:last-child {
+  margin-bottom: 0;
+}
+
+.profile-table-wrap {
+  overflow-x: auto;
+}
+.profile-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+.profile-table th,
+.profile-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--color-border-subtle);
+  text-align: left;
+}
+.profile-table th {
+  font-weight: 550;
+  color: var(--color-text-secondary);
+  font-size: 11px;
+  background: var(--color-background);
+}
+.profile-table tbody tr:hover {
+  background: var(--color-background);
+}
+
+.current-stay-card {
+  background: var(--color-brand-subtle);
+  border: 1px solid var(--color-border-strong);
+  border-radius: 10px;
+  padding: 20px;
+}
+.current-stay-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.current-stay-property {
+  margin: 0 0 4px;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+.current-stay-location {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: 12px;
+}
+.current-stay-details {
+  display: grid;
+  grid-template-columns: minmax(140px, 200px) 1fr;
+  gap: 8px 16px;
+  margin: 0;
+}
+.current-stay-details dt {
+  color: var(--color-text-secondary);
+  font-size: 11px;
+}
+.current-stay-details dd {
+  margin: 0;
+  font-size: 12px;
+}
+
+.profile-section-title {
+  margin: 0 0 16px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.profile-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.profile-table-wrap {
+  overflow-x: auto;
+}
+.profile-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+.profile-table th,
+.profile-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--color-border-subtle);
+  text-align: left;
+}
+.profile-table th {
+  font-weight: 550;
+  color: var(--color-text-secondary);
+  font-size: 11px;
+  background: var(--color-background);
+}
+.profile-table tbody tr:hover {
+  background: var(--color-background);
+}
+
+.history-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: flex-end;
+  margin-bottom: 20px;
+  padding: 16px;
+  background: var(--color-brand-subtle);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 10px;
+}
+.history-filters .fin-field {
+  flex: 1;
+  min-width: 180px;
+}
+.history-filters .fin-field select,
+.history-filters .fin-field input {
+  min-width: 180px;
+}
+.history-filters button {
+  flex-shrink: 0;
+}
+
+.history-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.history-event {
+  display: flex;
+  gap: 16px;
+  padding: 16px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 10px;
+}
+.history-event-marker {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--color-brand-subtle);
+  color: var(--color-accent-text);
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+.history-event-content {
+  flex: 1;
+  min-width: 0;
+}
+.history-event-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+.history-event-title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+.history-event-time {
+  font-size: 11px;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+.history-event-description {
+  margin: 0 0 8px;
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+.history-event-actor {
+  margin: 0;
+  font-size: 11px;
+  color: var(--color-text-secondary);
+}
+.history-event-metadata {
+  margin-top: 8px;
+}
+.history-event-metadata summary {
+  cursor: pointer;
+  font-size: 11px;
+  color: var(--color-accent-text);
+  font-weight: 500;
+}
+.history-event-metadata pre {
+  margin: 8px 0 0;
+  padding: 12px;
+  font-size: 10px;
+  line-height: 1.5;
+  overflow: auto;
+  background: var(--color-background);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 6px;
+  color: var(--color-text-primary);
+  max-height: 200px;
+}
+
+.history-count {
+  margin-top: 12px;
+  font-size: 11px;
+  color: var(--color-text-secondary);
+}
+
+.finance-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.profile-finance .profile-card {
+  margin-top: 0;
+}
+
+@media (max-width: 1100px) {
+  .finance-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 800px) {
+  .profile-tabs {
+    flex-wrap: wrap;
+  }
+  .profile-tab {
+    flex: 1;
+    justify-content: center;
+  }
+  .finance-stats {
+    grid-template-columns: 1fr 1fr;
+  }
+  .profile-card {
+    padding: 16px;
+  }
+  .history-filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .history-filters .fin-field,
+  .history-filters .fin-field select,
+  .history-filters .fin-field input {
+    min-width: 0;
+    width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .finance-stats {
+    grid-template-columns: 1fr;
+  }
+  .current-stay-details {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* P4-2 corrections */
+.fin-hint {
+  margin: 0 0 0.75rem;
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+}
+.fin-btn {
+  display: inline-block;
+  padding: 0.5rem 0.9rem;
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 8px;
+  background: transparent;
+  color: inherit;
+  text-decoration: none;
+  font: inherit;
+  cursor: pointer;
+}
+.fin-btn[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.fin-btn-primary {
+  background: var(--color-brand-accent);
+  border-color: var(--color-brand-accent);
+  color: var(--color-text-on-accent);
+}
+.fin-btn-primary:hover:not(:disabled) {
+  background: var(--color-accent-hover);
+}
+.ops-form textarea,
+.ops-form select,
+.ops-inline-form select {
+  width: 100%;
+  font: inherit;
+}
+@media (max-width: 640px) {
+  .ops-kv {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 4px;
+  }
+  .ops-kv dd {
+    margin-bottom: 10px;
+  }
+  .ops-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .history-event-header {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .profile-card {
+    min-width: 0;
+  }
+  .ops-inline-form > .fin-field {
+    min-width: 0;
+    max-width: 100%;
+  }
+  .ops-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .fin-table-wrap {
+    overflow-x: auto;
+  }
 }

@@ -2,7 +2,8 @@ import { useEffect, useState, type FormEvent } from 'react';
 import { financeApi, type Invoice } from './financeApi';
 import { currentMonth, formatMoney, monthLabel } from './financeFormat';
 import { financeLinks } from './financeRoute';
-import { ErrorState } from './shared';
+import { ErrorState, LoadingState, useAsync } from './shared';
+import { readAllPages } from '../pagination';
 
 type ResidentOption = { id: string; firstName: string; lastName: string };
 type BookingOption = {
@@ -104,9 +105,8 @@ function GenerateMonthly() {
 
 function SingleInvoice() {
   const [query, setQuery] = useState('');
-  const [residents, setResidents] = useState<ResidentOption[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
   const [resident, setResident] = useState<ResidentOption | null>(null);
-  const [bookings, setBookings] = useState<BookingOption[]>([]);
   const [bookingId, setBookingId] = useState('');
   const [month, setMonth] = useState(currentMonth());
   const [dueDate, setDueDate] = useState('');
@@ -114,26 +114,27 @@ function SingleInvoice() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [created, setCreated] = useState<Invoice | null>(null);
+  const search = useAsync<ResidentOption[]>(async () => {
+    if (searchQuery.length < 2 || resident) return [];
+    return (await financeApi.searchResidents(searchQuery)).items;
+  }, [searchQuery, resident]);
+  const bookingQuery = useAsync<BookingOption[]>(
+    () =>
+      resident
+        ? readAllPages((page) => financeApi.residentBookings(resident.id, page))
+        : Promise.resolve([]),
+    [resident],
+  );
+  const residents = search.data ?? [];
+  const bookings = bookingQuery.data ?? [];
 
   useEffect(() => {
-    if (query.trim().length < 2 || resident) return setResidents([]);
-    const handle = setTimeout(() => {
-      financeApi
-        .searchResidents(query.trim())
-        .then((r) => setResidents(r.items))
-        .catch(() => setResidents([]));
-    }, 250);
+    const handle = setTimeout(() => setSearchQuery(query.trim()), 250);
     return () => clearTimeout(handle);
   }, [query, resident]);
 
   useEffect(() => {
-    setBookings([]);
     setBookingId('');
-    if (!resident) return;
-    financeApi
-      .residentBookings(resident.id)
-      .then((r) => setBookings(r.items))
-      .catch(() => setBookings([]));
   }, [resident]);
 
   async function submit(e: FormEvent) {
@@ -234,16 +235,24 @@ function SingleInvoice() {
           />
         )}
       </label>
+      {!resident && search.loading && searchQuery.length >= 2 ? (
+        <LoadingState label="Searching residents…" />
+      ) : null}
+      {!resident && search.error ? (
+        <ErrorState message={search.error} onRetry={search.reload} />
+      ) : null}
+      {!resident &&
+      searchQuery.length >= 2 &&
+      !search.loading &&
+      !search.error &&
+      residents.length === 0 ? (
+        <p className="fin-note">No residents match this search.</p>
+      ) : null}
       {!resident && residents.length > 0 ? (
-        <ul className="fin-suggest" role="listbox" aria-label="Matching residents">
+        <ul className="fin-suggest" aria-label="Matching residents">
           {residents.map((r) => (
             <li key={r.id}>
-              <button
-                type="button"
-                role="option"
-                aria-selected="false"
-                onClick={() => setResident(r)}
-              >
+              <button type="button" onClick={() => setResident(r)}>
                 {r.firstName} {r.lastName}
               </button>
             </li>
@@ -253,9 +262,20 @@ function SingleInvoice() {
       {resident ? (
         <label className="fin-field">
           <span>Booking (its monthly price is the invoice amount)</span>
-          <select value={bookingId} onChange={(e) => setBookingId(e.target.value)} required>
+          <select
+            value={bookingId}
+            onChange={(e) => setBookingId(e.target.value)}
+            required
+            disabled={bookingQuery.loading || Boolean(bookingQuery.error)}
+          >
             <option value="">
-              {bookings.length ? 'Choose a booking' : 'No confirmed bookings found'}
+              {bookingQuery.loading
+                ? 'Loading bookings…'
+                : bookingQuery.error
+                  ? 'Could not load bookings'
+                  : bookings.length
+                    ? 'Choose a booking'
+                    : 'No confirmed bookings found'}
             </option>
             {bookings.map((b) => (
               <option key={b.id} value={b.id}>
@@ -264,6 +284,9 @@ function SingleInvoice() {
             ))}
           </select>
         </label>
+      ) : null}
+      {resident && bookingQuery.error ? (
+        <ErrorState message={bookingQuery.error} onRetry={bookingQuery.reload} />
       ) : null}
       <label className="fin-field">
         <span>Billing month</span>
@@ -293,7 +316,11 @@ function SingleInvoice() {
         />
       </label>
       {error ? <ErrorState message={error} /> : null}
-      <button type="submit" className="primary-button" disabled={busy}>
+      <button
+        type="submit"
+        className="primary-button"
+        disabled={busy || bookingQuery.loading || Boolean(bookingQuery.error)}
+      >
         {busy ? 'Creating…' : 'Create draft'}
       </button>
     </form>

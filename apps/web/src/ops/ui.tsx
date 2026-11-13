@@ -1,4 +1,12 @@
-import { useRef, useState, type ReactNode } from 'react';
+import {
+  cloneElement,
+  isValidElement,
+  useId,
+  useRef,
+  useState,
+  type ReactElement,
+  type ReactNode,
+} from 'react';
 import './ops.css';
 import { OpsApiError } from './opsApi';
 
@@ -11,12 +19,22 @@ export function Field({
   error?: string | undefined;
   children: ReactNode;
 }) {
+  const errorId = useId();
+  const control = isValidElement(children)
+    ? cloneElement(
+        children as ReactElement<{ 'aria-invalid'?: boolean; 'aria-describedby'?: string }>,
+        {
+          'aria-invalid': Boolean(error),
+          ...(error ? { 'aria-describedby': errorId } : {}),
+        },
+      )
+    : children;
   return (
     <label className="fin-field">
       <span>{label}</span>
-      {children}
+      {control}
       {error ? (
-        <small className="fin-form-error" role="alert">
+        <small id={errorId} className="fin-form-error" role="alert">
           {error}
         </small>
       ) : null}
@@ -67,10 +85,18 @@ export function Tag({ children }: { children: ReactNode }) {
   return <span className="fin-tag">{children}</span>;
 }
 
-export function PageHead({ title, action }: { title: string; action?: ReactNode }) {
+export function PageHead({
+  title,
+  action,
+  id,
+}: {
+  title: string;
+  action?: ReactNode;
+  id?: string;
+}) {
   return (
     <div className="fin-card-head">
-      <h2>{title}</h2>
+      <h2 id={id}>{title}</h2>
       {action}
     </div>
   );

@@ -9,6 +9,7 @@ export function InventoryOverview() {
   return (
     <section id="inventory" className="inventory-section" aria-labelledby="inventory-heading">
       <PageHead
+        id="inventory-heading"
         title="Inventory at a glance"
         action={
           <a className="primary-button" href={opsLinks.properties}>
