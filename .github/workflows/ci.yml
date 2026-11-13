@@ -102,3 +102,26 @@ jobs:
         env:
           CI_BOOTSTRAP_PASSWORD: ${{ github.token }}
         run: node --import tsx scripts/ci/integration.js full
+
+  pilot-rehearsals:
+    needs: quality
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24.22.1
+          cache: npm
+      - name: Install locked dependencies
+        run: npm ci
+      - name: Migration failure and forward-repair rehearsal (disposable PostgreSQL in Docker)
+        env:
+          NOOK_ALLOW_DISPOSABLE_INTEGRATION_DB: '1'
+          # The same digest-pinned PostgreSQL build as the full-integration service.
+          NOOK_DISPOSABLE_PG_IMAGE: postgres:17.10-bookworm@sha256:9b18b78397054fce88a9552e9d5a3ad5bb7fd258c5b3cc1c5028e46373d6ea8f
+        run: node --import tsx scripts/qa/pilot-phase1-disposable.mjs migration-recovery

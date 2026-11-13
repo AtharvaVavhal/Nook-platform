@@ -19,7 +19,7 @@ assert.equal(
   g6a.jobs['initial-integration'].steps.at(-1).env.NOOK_CI_G6A_AUTHORIZATION,
   '${{ inputs.authorization }}',
 );
-assert.deepEqual(Object.keys(workflow.jobs), ['quality', 'full-integration']);
+assert.deepEqual(Object.keys(workflow.jobs), ['quality', 'full-integration', 'pilot-rehearsals']);
 assert.equal(workflow.permissions.contents, 'read');
 assert.equal(workflow.jobs.quality.services, undefined);
 assert.equal(
@@ -41,6 +41,32 @@ for (const [job, profile, port] of [
   assert.equal(spec['runs-on'], 'ubuntu-latest');
   assert.deepEqual(spec.services.postgres.ports, [`127.0.0.1:${port}:5432`]);
   assert.equal(spec.steps.at(-1).run, `node --import tsx scripts/ci/integration.js ${profile}`);
+}
+// pilot-rehearsals: disposable Docker PostgreSQL only; no service container, no secrets, same pinned image as full-integration.
+const rehearsals = workflow.jobs['pilot-rehearsals'];
+assert.equal(rehearsals.needs, 'quality');
+assert.equal(rehearsals['runs-on'], 'ubuntu-latest');
+assert.equal(rehearsals.services, undefined);
+assert.ok(rehearsals['timeout-minutes'] <= 20);
+assert.ok(
+  !JSON.stringify(rehearsals).includes('secrets.') &&
+    !JSON.stringify(rehearsals).includes('github.token'),
+);
+const rehearsalStep = rehearsals.steps.at(-1);
+assert.equal(
+  rehearsalStep.run,
+  'node --import tsx scripts/qa/pilot-phase1-disposable.mjs migration-recovery',
+);
+assert.equal(rehearsalStep.env.NOOK_ALLOW_DISPOSABLE_INTEGRATION_DB, '1');
+assert.equal(
+  rehearsalStep.env.NOOK_DISPOSABLE_PG_IMAGE,
+  workflow.jobs['full-integration'].services.postgres.image,
+);
+for (const file of [
+  'scripts/qa/pilot-phase1-disposable.mjs',
+  'scripts/qa/pilot-migration-recovery.test.ts',
+]) {
+  assert.ok(fs.existsSync(file), file);
 }
 assert.ok(fs.existsSync('scripts/ci/prisma.config.ts'));
 assert.ok(fs.existsSync('prisma/schema.prisma'));
