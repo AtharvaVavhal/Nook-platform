@@ -202,30 +202,6 @@ const waitersOn = (pid: number) =>
     ),
   );
 
-/**
- * Backends in this database waiting behind the given backend, directly or through a chain of other waiters.
- * PostgreSQL queues later row-lock waiters behind the first waiter's tuple lock, so only the first waiter names
- * the holder in pg_blocking_pids; the rest name the waiter ahead of them. This follows that chain.
- */
-const queuedBehind = (pid: number) =>
-  withMigratorClient(async (c) =>
-    Number(
-      (
-        await c.query(
-          `WITH RECURSIVE chain(pid) AS (
-             SELECT a.pid FROM pg_stat_activity a
-              WHERE a.datname = current_database() AND $1 = ANY(pg_blocking_pids(a.pid))
-             UNION
-             SELECT a.pid FROM pg_stat_activity a JOIN chain c ON c.pid = ANY(pg_blocking_pids(a.pid))
-              WHERE a.datname = current_database()
-           )
-           SELECT count(*) n FROM chain`,
-          [pid],
-        )
-      ).rows[0].n,
-    ),
-  );
-
 /** Backends in this database waiting on any lock. */
 const blockedBackends = () =>
   withMigratorClient(async (c) =>
@@ -458,20 +434,33 @@ test('extension: concurrent extensions never lose or duplicate history', async (
   }
 });
 
-test('booking update: PUT cannot lengthen a booking; shortening is allowed and audited', async () => {
+test('booking update: dates and price cannot be changed by PUT (correction required); lengthening stays the extension command', async () => {
   const org = await newOrg();
   const created = await book(org).expect(201);
   const put = (body: object) =>
     server.put(`/api/v1/bookings/${created.body.id}`).set(org.headers).send(body);
-  const refused = await put({ endDate: '2027-04-01' }).expect(400);
-  assert.match(refused.body.message, /extend/i);
-  const shortened = await put({ endDate: '2027-02-01' }).expect(200);
-  assert.equal(shortened.body.endDate, '2027-02-01T00:00:00.000Z');
-  const rows = await audits(org.orgId, created.body.id, 'booking.shortened');
-  assert.equal(rows.length, 1);
-  assert.equal(rows[0].actor_user_id, org.userId);
-  // lengthening back past the current end still needs the extend endpoint
-  await put({ endDate: '2027-03-01' }).expect(400);
+  const before = await bookingRow(created.body.id);
+  for (const body of [
+    { endDate: '2027-04-01' }, // would lengthen
+    { endDate: '2027-02-01' }, // would shorten
+    { startDate: '2026-12-15' },
+    { monthlyPrice: '9000' },
+    { status: 'CANCELLED', monthlyPrice: '1.00' }, // a bundled status change must not partially succeed
+  ]) {
+    const res = await put(body);
+    assert.equal(res.status, 409, JSON.stringify(body));
+    assert.equal(res.body.code, 'CORRECTION_REQUIRED');
+  }
+  assert.deepEqual(
+    await bookingRow(created.body.id),
+    before,
+    'nothing changed, including the bundled status',
+  );
+  assert.equal((await audits(org.orgId, created.body.id, 'booking.shortened')).length, 0);
+  // lengthening is still the audited extension command
+  await extend(org, created.body.id, { newEndDate: '2027-04-01', reason: 'real extension' }).expect(
+    201,
+  );
 });
 
 test('booking cancellation: refused once a check-in exists, even after check-out; allowed before any', async () => {
@@ -518,7 +507,7 @@ test('extension audit: the stored event carries every required field', async () 
   const rows = await withMigratorClient((c) =>
     c.query(
       `SELECT organization_id, actor_user_id, action, target_type, target_id, request_id, occurred_at, metadata
-         FROM audit_events WHERE organization_id = $1 AND target_id = $2`,
+         FROM audit_events WHERE organization_id = $1 AND target_id = $2 AND action = 'booking.extended'`,
       [org.orgId, created.body.id],
     ),
   );
@@ -550,9 +539,10 @@ test('extension audit: the runtime role can read and add audit rows but never ch
   await withRuntimeClient(async (c) => {
     const who = (await c.query('SELECT current_user u, current_database() d')).rows[0];
     assert.notEqual(who.u, migratorRoleName(), 'running as the runtime role, not the owner');
-    const read = await c.query(`SELECT count(*)::int n FROM audit_events WHERE target_id = $1`, [
-      created.body.id,
-    ]);
+    const read = await c.query(
+      `SELECT count(*)::int n FROM audit_events WHERE target_id = $1 AND action = 'booking.extended'`,
+      [created.body.id],
+    );
     assert.equal(read.rows[0].n, 1, 'SELECT is allowed');
     // Privileges are inspected, never exercised destructively: TRUNCATE is never executed, even to see it fail.
     const privileges = (
@@ -590,9 +580,10 @@ test('extension audit: the runtime role can read and add audit rows but never ch
     }
   });
   const intact = await withMigratorClient((c) =>
-    c.query(`SELECT metadata->>'reason' r FROM audit_events WHERE target_id = $1`, [
-      created.body.id,
-    ]),
+    c.query(
+      `SELECT metadata->>'reason' r FROM audit_events WHERE target_id = $1 AND action = 'booking.extended'`,
+      [created.body.id],
+    ),
   );
   assert.deepEqual(
     intact.rows.map((r) => r.r),
@@ -732,9 +723,6 @@ test('booking update: invalid input is a 400, a cancelled booking cannot be re-c
     { startDate: 'abc' },
     { endDate: null },
     { notes: 7 },
-    // the merged period must still be valid: start moved to the (exclusive) end date
-    { startDate: '2027-03-01' },
-    { startDate: '2027-04-01' },
   ]) {
     const res = await putBooking(org, id, body);
     assert.equal(res.status, 400, `${JSON.stringify(body)} answered ${res.status}`);
@@ -745,11 +733,12 @@ test('booking update: invalid input is a 400, a cancelled booking cannot be re-c
 
   // valid edits still work
   const ok = await putBooking(org, id, {
-    monthlyPrice: '5500.50',
     notes: 'revised',
     paymentStatus: 'PAID',
   }).expect(200);
-  assert.equal(ok.body.monthlyPrice, '5500.5');
+  assert.equal(ok.body.paymentStatus, 'PAID');
+  // a price change is a correction, not an ordinary edit
+  assert.equal((await putBooking(org, id, { monthlyPrice: '5500.50' })).status, 409);
   await putBooking(org, id, { status: 'CONFIRMED' }).expect(200); // already confirmed: harmless
 
   await putBooking(org, id, { status: 'CANCELLED' }).expect(200);
@@ -861,61 +850,55 @@ const bookingRow = (id: string) =>
       ).rows[0],
   );
 
-test('race: a date change (PUT) and a new booking (POST) on one bed serialize and never overlap', async () => {
+test('race: an extension and a new booking on one bed serialize behind the gate and never overlap', async () => {
   const org = await newOrg();
   const a = await book(org, { startDate: '2027-01-01', endDate: '2027-02-01' }).expect(201);
-  // Hold booking A's row lock. A request that is allowed to read and decide before it queues on this lock
-  // would let a competing booking slip in between its check and its write, which was the defect.
+  // Hold booking A's row lock. The extension takes the organization gate, then the bed, then waits on this lock; the new
+  // booking must queue behind it instead of deciding on a stale read.
   const holder = await holdRowLock('bookings', a.body.id);
   try {
-    // Moves A's start earlier, into the period the new booking B asks for.
-    const put = fire(putBooking(org, a.body.id, { startDate: '2026-12-15' }));
+    const ext = fire(extend(org, a.body.id, { newEndDate: '2027-03-01', reason: 'race' }));
     await waitFor(
-      'the PUT to be waiting on booking A',
+      'the extension to be waiting on booking A',
       async () => (await waitersOn(holder.pid)) >= 1,
     );
     let postSettled = false;
     const post = fire(
-      book(org, { startDate: '2026-12-01', endDate: '2027-01-01', monthlyPrice: 4100 }),
+      book(org, { startDate: '2027-02-15', endDate: '2027-03-15', monthlyPrice: 4100 }),
     ).then((r) => {
       postSettled = true;
       return r;
     });
-    // Correct code makes B wait behind the PUT (two backends blocked). Defective code lets B finish first.
     await waitFor(
-      'the POST to queue behind the PUT or to finish',
+      'the POST to queue behind the extension or to finish',
       async () => postSettled || (await blockedBackends()) >= 2,
     );
     await holder.release();
-    const [putRes, postRes] = await Promise.all([put, post]);
-    // The PUT held the bed first, so it wins and the booking that would now overlap is refused.
-    assert.equal(putRes.status, 200, JSON.stringify(putRes.body));
+    const [extRes, postRes] = await Promise.all([ext, post]);
+    assert.equal(extRes.status, 201, JSON.stringify(extRes.body));
     assert.equal(postRes.status, 409, JSON.stringify(postRes.body));
   } finally {
     await holder.release();
   }
   assert.equal(await overlapCount(org.orgId), 0, 'no two live bookings overlap on the bed');
   assert.equal(await liveBookingsOn(org.bedId), 1);
-  assert.equal((await bookingRow(a.body.id)).start_date.toISOString(), '2026-12-15T00:00:00.000Z');
+  assert.equal((await bookingRow(a.body.id)).end_date.toISOString(), '2027-03-01T00:00:00.000Z');
 });
 
-test('race: with the bed locked, a PUT and a POST both wait for it, and exactly one wins either way round', async () => {
+test('race: with the bed locked, an extension and a POST both wait, and exactly one wins either way round', async () => {
   for (let round = 0; round < 4; round += 1) {
     const org = await newOrg();
     const a = await book(org, { startDate: '2027-01-01', endDate: '2027-02-01' }).expect(201);
     const holder = await holdRowLock('beds', org.bedId);
     try {
-      const put = fire(putBooking(org, a.body.id, { startDate: '2026-12-15' }));
-      const post = fire(book(org, { startDate: '2026-12-01', endDate: '2027-01-01' }));
-      // Both must queue on the bed lock; a PUT that does not take it would not be waiting here.
-      await waitFor(
-        'both requests to wait for the bed lock',
-        async () => (await queuedBehind(holder.pid)) >= 2,
-      );
+      const ext = fire(extend(org, a.body.id, { newEndDate: '2027-03-01', reason: 'race' }));
+      const post = fire(book(org, { startDate: '2027-02-10', endDate: '2027-03-10' }));
+      // One request holds the organization gate and waits for the bed; the other waits for the gate: two blocked backends.
+      await waitFor('both requests to be waiting', async () => (await blockedBackends()) >= 2);
       await holder.release();
-      const [putRes, postRes] = await Promise.all([put, post]);
-      const outcome = `${putRes.status}/${postRes.status}`;
-      assert.ok(outcome === '200/409' || outcome === '409/201', `unexpected outcome ${outcome}`);
+      const [extRes, postRes] = await Promise.all([ext, post]);
+      const outcome = `${extRes.status}/${postRes.status}`;
+      assert.ok(outcome === '201/409' || outcome === '409/201', `unexpected outcome ${outcome}`);
     } finally {
       await holder.release();
     }
@@ -923,20 +906,9 @@ test('race: with the bed locked, a PUT and a POST both wait for it, and exactly 
   }
 });
 
-test('race: an extension and a PUT start-date change on neighbouring bookings never overlap', async () => {
-  for (let round = 0; round < 3; round += 1) {
-    const org = await newOrg();
-    const first = await book(org, { startDate: '2027-01-01', endDate: '2027-02-01' }).expect(201);
-    const second = await book(org, { startDate: '2027-03-01', endDate: '2027-04-01' }).expect(201);
-    const results = await Promise.all([
-      extend(org, first.body.id, { newEndDate: '2027-03-15', reason: 'race: extend first' }),
-      putBooking(org, second.body.id, { startDate: '2027-02-15' }),
-    ]);
-    const wins = results.filter((r) => r.status < 300).length;
-    assert.equal(wins, 1, JSON.stringify(results.map((r) => r.status)));
-    assert.equal(await overlapCount(org.orgId), 0, 'no two live bookings overlap on the bed');
-  }
-});
+// Removed: "extension vs PUT start-date change" tested a path that no longer exists (booking dates change only through an
+// approved correction). Extension-vs-new-booking races are covered above and at "extension: concurrent extension and a new
+// booking". Correction-vs-booking races are in corrections.concurrency.integration.test.ts.
 
 test('half-open periods: a booking that ends the day another starts is adjacent, not overlapping', async () => {
   const org = await newOrg();
@@ -961,27 +933,38 @@ test('half-open periods: two adjacent bookings requested at the same moment both
   assert.equal(await overlapCount(org.orgId), 0);
 });
 
-test('different beds: a booking on one bed is not held up by a lock on another', async () => {
+test('same organization: bookings queue behind the organization gate even on different beds (documented trade-off)', async () => {
   const org = await newOrg();
   const otherBed = await addBed(org, 'B2');
   const holder = await holdRowLock('beds', org.bedId);
   try {
-    let blockedSettled = false;
-    const blocked = fire(book(org)).then((r) => {
-      blockedSettled = true;
+    let firstSettled = false;
+    const first = fire(book(org)).then((r) => {
+      firstSettled = true;
       return r;
     });
     await waitFor('the first bed request to wait', async () => (await waitersOn(holder.pid)) >= 1);
-    // The other bed's booking completes while the first bed is still locked.
-    const free = await book(org, { bedId: otherBed }).expect(201);
-    assert.equal(free.body.bedId, otherBed);
-    assert.equal(blockedSettled, false, 'the booking on the locked bed is still waiting');
+    // The exclusive gate (specification v1.3 section 10) serializes lifecycle writes of one organization. The booking on
+    // the free bed therefore waits behind the one holding the gate, then completes once the lock is released.
+    let secondSettled = false;
+    const second = fire(book(org, { bedId: otherBed })).then((r) => {
+      secondSettled = true;
+      return r;
+    });
+    await waitFor(
+      'the second request to queue on the gate',
+      async () => (await blockedBackends()) >= 2,
+    );
+    assert.equal(firstSettled, false);
+    assert.equal(secondSettled, false, 'serialization is the price of the exclusive gate');
     await holder.release();
-    assert.equal((await blocked).status, 201);
+    assert.equal((await first).status, 201);
+    const free = await second;
+    assert.equal(free.status, 201);
+    assert.equal(free.body.bedId, otherBed);
   } finally {
     await holder.release();
   }
-  // and the same dates on two different beds are simply two bookings
   assert.equal(await overlapCount(org.orgId), 0);
   assert.equal(await liveBookingsOn(org.bedId), 1);
   assert.equal(await liveBookingsOn(otherBed), 1);
@@ -993,7 +976,7 @@ test('tenant: another organization cannot read, change, cancel or extend a booki
   const b = await book(orgB).expect(201);
   const before = await bookingRow(b.body.id);
   await server.get(`/api/v1/bookings/${b.body.id}`).set(orgA.headers).expect(404);
-  await putBooking(orgA, b.body.id, { startDate: '2026-12-15', notes: 'hijack' }).expect(404);
+  await putBooking(orgA, b.body.id, { notes: 'hijack' }).expect(404);
   await putBooking(orgA, b.body.id, { status: 'CANCELLED' }).expect(404);
   await server.delete(`/api/v1/bookings/${b.body.id}`).set(orgA.headers).expect(404);
   await extend(orgA, b.body.id, { newEndDate: '2027-06-01', reason: 'cross tenant' }).expect(404);
@@ -1065,19 +1048,17 @@ test('bed usability: a bed with an active check-in cannot be booked for a period
   // their booking is deliberately not asserted here either way.
 });
 
-test('rollback: a refused cancel-and-shorten leaves the booking exactly as it was', async () => {
+test('rollback: a refused cancel leaves the booking exactly as it was', async () => {
   const org = await newOrg();
   const staying = await book(org, { startDate: '2027-06-01', endDate: '2027-09-01' }).expect(201);
   await seedStay(org, staying.body.id, { active: false, admissionDate: '2027-06-15' });
   const before = await bookingRow(staying.body.id);
   const refused = await putBooking(org, staying.body.id, {
-    endDate: '2027-08-01',
     notes: 'should not stick',
     status: 'CANCELLED',
   }).expect(409);
   assert.match(refused.body.message, /check-in history/i);
   assert.deepEqual(await bookingRow(staying.body.id), before, 'no partial update remains');
-  assert.equal((await audits(org.orgId, staying.body.id, 'booking.shortened')).length, 0);
   const notes = await withMigratorClient(
     async (c) =>
       (await c.query(`SELECT notes FROM bookings WHERE id = $1`, [staying.body.id])).rows[0].notes,
@@ -1085,30 +1066,14 @@ test('rollback: a refused cancel-and-shorten leaves the booking exactly as it wa
   assert.notEqual(notes, 'should not stick');
 });
 
-test('rollback: a date change that would strand the admission date is refused and writes nothing', async () => {
-  const org = await newOrg();
-  const staying = await book(org, { startDate: '2027-06-01', endDate: '2027-09-01' }).expect(201);
-  await seedStay(org, staying.body.id, { active: false, admissionDate: '2027-06-15' });
-  const before = await bookingRow(staying.body.id);
-  const refused = await putBooking(org, staying.body.id, { startDate: '2027-07-01' }).expect(409);
-  assert.match(refused.body.message, /admission date/i);
-  assert.deepEqual(await bookingRow(staying.body.id), before);
-});
+// Removed: a date change that would strand the admission date is now a correction validator (LIFECYCLE_CONFLICT); it is
+// covered by corrections.service.test.ts rules and the disposable-database correction tests.
 
-test('update keeps its rules: PUT still cannot lengthen, cannot revive a cancelled booking, and ignores itself in the overlap check', async () => {
+test('update keeps its rules: a cancelled booking cannot be revived, and notes/payment edits ignore the booking itself', async () => {
   const org = await newOrg();
   const a = await book(org, { startDate: '2027-01-01', endDate: '2027-02-01' }).expect(201);
-  // changing only the notes or the price never conflicts with the booking's own period
   await putBooking(org, a.body.id, { notes: 'same dates, own period' }).expect(200);
-  await putBooking(org, a.body.id, { startDate: '2027-01-01', endDate: '2027-02-01' }).expect(200);
-  await putBooking(org, a.body.id, { endDate: '2027-03-01' }).expect(400);
-  // shortening frees the tail for another booking
-  await putBooking(org, a.body.id, { endDate: '2027-01-15' }).expect(200);
-  await book(org, { startDate: '2027-01-15', endDate: '2027-02-15' }).expect(201);
-  // the start can move earlier while nothing is there
-  await putBooking(org, a.body.id, { startDate: '2026-12-01' }).expect(200);
-  const neighbour = await book(org, { startDate: '2026-11-01', endDate: '2026-12-01' }).expect(201);
-  await putBooking(org, a.body.id, { startDate: '2026-11-20' }).expect(409);
+  const neighbour = await book(org, { startDate: '2027-02-01', endDate: '2027-03-01' }).expect(201);
   await server.delete(`/api/v1/bookings/${neighbour.body.id}`).set(org.headers).expect(200);
   await putBooking(org, neighbour.body.id, { status: 'CONFIRMED' }).expect(409);
   assert.equal(await overlapCount(org.orgId), 0);

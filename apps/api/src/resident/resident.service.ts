@@ -5,6 +5,7 @@ import { parsePagination } from '../common/ids.js';
 import { asQuery, queryEnum, queryText } from '../common/input.js';
 import { CreateResidentDto, UpdateResidentDto } from './resident.dto.js';
 import type { Prisma } from '../generated/client.js';
+import { CorrectionError } from '../corrections/corrections.rules.js';
 
 const RESIDENT_STATUSES = ['ACTIVE', 'INACTIVE', 'ARCHIVED'] as const;
 const DOCUMENT_STATUSES = ['PENDING', 'VERIFIED', 'REJECTED'] as const;
@@ -70,6 +71,15 @@ export class ResidentService {
     await this.findOne(organizationId, id);
     // Allow-listed fields only: a body can never carry organizationId, id or timestamps into the update.
     const data = pickResidentFields(dto, true);
+    // firstName / lastName change only through an approved correction (specification v1.3 section 4). The whole request is
+    // refused before the archive branch can partially apply it.
+    if (data.firstName !== undefined || data.lastName !== undefined) {
+      throw new CorrectionError(
+        409,
+        'CORRECTION_REQUIRED',
+        'A resident name changes only through an approved correction. Use POST /corrections.',
+      );
+    }
     // Archiving a resident goes through the same guarded path as DELETE, however it is requested.
     if ((data as { status?: string }).status === 'ARCHIVED') {
       return this.archiveGuarded(organizationId, id, data as Record<string, unknown>);

@@ -102,6 +102,7 @@ export function parseDatabaseUrl(raw: string | undefined): string | undefined {
   if (parsed.protocol !== 'postgres:' && parsed.protocol !== 'postgresql:') {
     throw new Error('DATABASE_URL must use the postgres:// or postgresql:// scheme.');
   }
+  // Validate without rewriting operator-supplied startup options or URL encoding.
   return raw;
 }
 

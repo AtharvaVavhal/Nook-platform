@@ -561,7 +561,9 @@ test('resident archival: DELETE and PUT are refused with 409 while the resident 
   assert.notEqual(unchanged.body.firstName, 'ShouldNotApply');
 
   // everything else about the resident is still editable while checked in
-  await send('put', org, `/residents/${s.residentId}`, { firstName: 'Renamed' }).expect(200);
+  await send('put', org, `/residents/${s.residentId}`, { address: 'New address' }).expect(200);
+  // a name is not editable here at all (correction required)
+  await send('put', org, `/residents/${s.residentId}`, { firstName: 'Renamed' }).expect(409);
   await send('put', org, `/residents/${s.residentId}`, { status: 'INACTIVE' }).expect(200);
   await send('put', org, `/residents/${s.residentId}`, { status: 'ACTIVE' }).expect(200);
 
@@ -577,10 +579,10 @@ test('resident archival: PUT archives a resident who is not checked in, and arch
   const s = await stay(org);
   const res = await send('put', org, `/residents/${s.residentId}`, {
     status: 'ARCHIVED',
-    lastName: 'Edited',
+    address: 'Edited address',
   }).expect(200);
   assert.equal(res.body.status, 'ARCHIVED');
-  assert.equal(res.body.lastName, 'Edited', 'other fields in the same request are applied');
+  assert.equal(res.body.address, 'Edited address', 'other fields in the same request are applied');
   await send('delete', org, `/residents/${s.residentId}`).expect(200);
   await send('put', org, `/residents/${s.residentId}`, { status: 'ARCHIVED' }).expect(200);
   // unknown resident and another organization's resident stay 404

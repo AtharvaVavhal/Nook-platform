@@ -34,6 +34,8 @@ export interface OrgMonthResult {
   created?: number;
   skippedExisting?: number;
   skippedZeroPrice?: number;
+  /** Booking-months held back because a correction left an unresolved OWNER review (never auto-issued). */
+  skippedPendingReview?: number;
   error?: { name: string; code?: string | undefined; message: string };
 }
 
@@ -170,6 +172,7 @@ export class InvoiceSchedulerService {
             created: plan.wouldCreate,
             skippedExisting: plan.skippedExisting,
             skippedZeroPrice: plan.skippedZeroPrice,
+            skippedPendingReview: plan.skippedPendingReview,
           });
         }
         const done = await this.finance.generateMonthly(
@@ -183,6 +186,7 @@ export class InvoiceSchedulerService {
           created: done.created,
           skippedExisting: done.skippedExisting,
           skippedZeroPrice: done.skippedZeroPrice,
+          skippedPendingReview: done.skippedPendingReview,
         });
       } catch (error) {
         if (attempts < ctx.maxAttempts && isTransientError(error)) {
@@ -228,7 +232,11 @@ export class InvoiceSchedulerService {
     started: number,
     counts: Pick<
       OrgMonthResult,
-      'eligibleBookings' | 'created' | 'skippedExisting' | 'skippedZeroPrice'
+      | 'eligibleBookings'
+      | 'created'
+      | 'skippedExisting'
+      | 'skippedZeroPrice'
+      | 'skippedPendingReview'
     >,
   ): OrgMonthResult {
     const result: OrgMonthResult = {
@@ -251,6 +259,7 @@ export class InvoiceSchedulerService {
       created: counts.created,
       skippedExisting: counts.skippedExisting,
       skippedZeroPrice: counts.skippedZeroPrice,
+      skippedPendingReview: counts.skippedPendingReview,
       durationMs: result.durationMs,
     });
     return result;

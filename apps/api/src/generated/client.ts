@@ -157,3 +157,57 @@ export type PaymentIdempotencyKey = Prisma.PaymentIdempotencyKeyModel
  * Persistent sign-in throttling. Keys are SHA-256 hashes, so no e-mail address or IP address is stored.
  */
 export type LoginThrottle = Prisma.LoginThrottleModel
+/**
+ * Model CorrectionProposal
+ * One proposed change to one allowlisted field of one record. The payload is immutable once stored; only the single
+ * PENDING -> terminal transition fields may be set (database trigger).
+ */
+export type CorrectionProposal = Prisma.CorrectionProposalModel
+/**
+ * Model CorrectionCommandReceipt
+ * Append-only record that a correction command committed. Created in the same transaction as its effect, so a receipt
+ * exists if and only if the command committed. Holds codes and ids only, never protected values.
+ */
+export type CorrectionCommandReceipt = Prisma.CorrectionCommandReceiptModel
+/**
+ * Model CorrectionFinanceLink
+ * Append-only Finance consequence of a correction: a billing gap awaiting OWNER review, an issued invoice needing review,
+ * or a resolution of either. The scheduler and manual generation skip every booking-month with an unresolved gap.
+ */
+export type CorrectionFinanceLink = Prisma.CorrectionFinanceLinkModel
+/**
+ * Model StayAssignment
+ * 
+ */
+export type StayAssignment = Prisma.StayAssignmentModel
+/**
+ * Model Transfer
+ * 
+ */
+export type Transfer = Prisma.TransferModel
+/**
+ * Model TransferCommandReceipt
+ * Transfer-only immutable response receipt. requestCheck is an HMAC of the canonical request.
+ * Written with the event/effects; replay must reauthorize and compare requestCheck before returning responseBody.
+ */
+export type TransferCommandReceipt = Prisma.TransferCommandReceiptModel
+/**
+ * Model StayAssignmentReplacement
+ * Immutable boundary replacement; original StayAssignment records remain intact.
+ */
+export type StayAssignmentReplacement = Prisma.StayAssignmentReplacementModel
+/**
+ * Model EffectiveStayAssignment
+ * Read-only SQL projection, never a second mutable assignment store.
+ */
+export type EffectiveStayAssignment = Prisma.EffectiveStayAssignmentModel
+/**
+ * Model TransferFinanceReview
+ * 
+ */
+export type TransferFinanceReview = Prisma.TransferFinanceReviewModel
+/**
+ * Model TransferFinanceResolution
+ * 
+ */
+export type TransferFinanceResolution = Prisma.TransferFinanceResolutionModel

@@ -1,5 +1,8 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { activeBedOccupancyWhere } from '../common/stay-occupancy.js';
+import { Inject, Injectable, ConflictException } from '@nestjs/common';
 import { PrismaService } from '../database/prisma.service.js';
+import { Prisma } from '../generated/client.js';
+import { acquireOrgGate, ORDINARY_TX_OPTIONS } from '../common/org-gate.js';
 import type { InventoryRepository } from './inventory.types.js';
 
 export const INVENTORY_REPOSITORY = Symbol('INVENTORY_REPOSITORY');
@@ -46,17 +49,15 @@ export class PrismaInventoryRepository implements InventoryRepository {
   }
 
   archiveProperty(organizationId: string, propertyId: string) {
-    return this.updateScoped(
-      () =>
-        this.prisma.db.property.updateMany({
-          where: { id: propertyId, organizationId, archivedAt: null },
-          data: { archivedAt: new Date() },
-        }),
-      () =>
-        this.prisma.db.property.findFirst({
-          where: { id: propertyId, organizationId },
-        }),
-    );
+    return this.changeAvailability(organizationId, { propertyId }, true, async (tx) => {
+      const changed = await tx.property.updateMany({
+        where: { id: propertyId, organizationId, archivedAt: null },
+        data: { archivedAt: new Date() },
+      });
+      return changed.count
+        ? tx.property.findFirst({ where: { id: propertyId, organizationId } })
+        : null;
+    });
   }
 
   async listFloors(organizationId: string, propertyId: string) {
@@ -97,17 +98,13 @@ export class PrismaInventoryRepository implements InventoryRepository {
   }
 
   archiveFloor(organizationId: string, floorId: string) {
-    return this.updateScoped(
-      () =>
-        this.prisma.db.floor.updateMany({
-          where: { id: floorId, organizationId, archivedAt: null },
-          data: { archivedAt: new Date() },
-        }),
-      () =>
-        this.prisma.db.floor.findFirst({
-          where: { id: floorId, organizationId },
-        }),
-    );
+    return this.changeAvailability(organizationId, { room: { floorId } }, true, async (tx) => {
+      const changed = await tx.floor.updateMany({
+        where: { id: floorId, organizationId, archivedAt: null },
+        data: { archivedAt: new Date() },
+      });
+      return changed.count ? tx.floor.findFirst({ where: { id: floorId, organizationId } }) : null;
+    });
   }
 
   async listRooms(
@@ -163,17 +160,13 @@ export class PrismaInventoryRepository implements InventoryRepository {
   }
 
   archiveRoom(organizationId: string, roomId: string) {
-    return this.updateScoped(
-      () =>
-        this.prisma.db.room.updateMany({
-          where: { id: roomId, organizationId, archivedAt: null },
-          data: { archivedAt: new Date() },
-        }),
-      () =>
-        this.prisma.db.room.findFirst({
-          where: { id: roomId, organizationId },
-        }),
-    );
+    return this.changeAvailability(organizationId, { roomId }, true, async (tx) => {
+      const changed = await tx.room.updateMany({
+        where: { id: roomId, organizationId, archivedAt: null },
+        data: { archivedAt: new Date() },
+      });
+      return changed.count ? tx.room.findFirst({ where: { id: roomId, organizationId } }) : null;
+    });
   }
 
   async listBeds(organizationId: string, roomId: string) {
@@ -219,6 +212,17 @@ export class PrismaInventoryRepository implements InventoryRepository {
       outOfServiceReason?: string | null;
     },
   ) {
+    if (input.operationalStatus !== undefined) {
+      return this.changeAvailability(organizationId, { id: bedId }, false, async (tx) => {
+        const changed = await tx.bed.updateMany({
+          where: { id: bedId, organizationId, archivedAt: null },
+          data: input,
+        });
+        return changed.count
+          ? tx.bed.findFirst({ where: { id: bedId, organizationId, archivedAt: null } })
+          : null;
+      });
+    }
     return this.updateScoped(
       () =>
         this.prisma.db.bed.updateMany({
@@ -233,51 +237,57 @@ export class PrismaInventoryRepository implements InventoryRepository {
   }
 
   async archiveBed(organizationId: string, bedId: string) {
-    const now = new Date();
-
-    const activeBooking = await this.prisma.db.booking.findFirst({
-      where: {
-        bedId,
-        organizationId,
-        status: 'CONFIRMED',
-        endDate: { gte: now },
-      },
-      select: { id: true },
+    return this.changeAvailability(organizationId, { id: bedId }, true, async (tx) => {
+      const changed = await tx.bed.updateMany({
+        where: { id: bedId, organizationId, archivedAt: null },
+        data: { archivedAt: new Date() },
+      });
+      return changed.count ? tx.bed.findFirst({ where: { id: bedId, organizationId } }) : null;
     });
+  }
 
-    const activeAdmission = await this.prisma.db.admission.findFirst({
-      where: {
-        bedId,
-        organizationId,
-        status: { in: ['PENDING', 'ADMITTED'] },
-      },
-      select: { id: true },
-    });
-
-    const activeCheckIn = await this.prisma.db.checkIn.findFirst({
-      where: {
-        bedId,
-        organizationId,
-        status: 'ACTIVE',
-      },
-      select: { id: true },
-    });
-
-    if (activeBooking || activeAdmission || activeCheckIn) {
-      throw new Error('BED_OCCUPIED');
-    }
-
-    return this.updateScoped(
-      () =>
-        this.prisma.db.bed.updateMany({
-          where: { id: bedId, organizationId, archivedAt: null },
-          data: { archivedAt: new Date() },
-        }),
-      () =>
-        this.prisma.db.bed.findFirst({
-          where: { id: bedId, organizationId },
-        }),
-    );
+  /** Availability-changing inventory writers join the lifecycle gate, then lock beds in UUID order. */
+  private async changeAvailability<T>(
+    organizationId: string,
+    scope: Prisma.BedWhereInput,
+    archive: boolean,
+    change: (tx: Prisma.TransactionClient) => Promise<T>,
+  ): Promise<T> {
+    return this.prisma.db.$transaction(async (tx) => {
+      await acquireOrgGate(tx, organizationId);
+      const beds = await tx.bed.findMany({
+        where: { AND: [{ organizationId }, scope] },
+        select: { id: true },
+        orderBy: { id: 'asc' },
+      });
+      if (beds.length) {
+        await tx.$queryRaw(Prisma.sql`SELECT id FROM beds WHERE organization_id = ${organizationId}::uuid
+          AND id IN (${Prisma.join(beds.map((bed) => Prisma.sql`${bed.id}::uuid`))}) ORDER BY id FOR UPDATE`);
+      }
+      if (archive && beds.length) {
+        const bedId = { in: beds.map((bed) => bed.id) };
+        const [assignment, legacyStay, booking, admission] = await Promise.all([
+          tx.effectiveStayAssignment.count({
+            where: { organizationId, bedId, status: 'ACTIVE', endAt: null },
+          }),
+          tx.checkIn.count({
+            where: activeBedOccupancyWhere(
+              organizationId,
+              beds.map((bed) => bed.id),
+            ),
+          }),
+          tx.booking.count({
+            where: { organizationId, bedId, status: 'CONFIRMED', endDate: { gte: new Date() } },
+          }),
+          tx.admission.count({
+            where: { organizationId, bedId, status: { in: ['PENDING', 'ADMITTED'] } },
+          }),
+        ]);
+        if (assignment || legacyStay || booking || admission)
+          throw new ConflictException({ code: 'BED_OCCUPIED' });
+      }
+      return change(tx);
+    }, ORDINARY_TX_OPTIONS);
   }
 
   private async propertyExists(organizationId: string, propertyId: string) {

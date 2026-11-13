@@ -272,6 +272,13 @@ export type BookingWhereInput = {
   notes?: Prisma.StringNullableFilter<"Booking"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Booking"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Booking"> | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementListRelationFilter
+  effectiveAssignments?: Prisma.EffectiveStayAssignmentListRelationFilter
+  transferFinanceReviews?: Prisma.TransferFinanceReviewListRelationFilter
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkListRelationFilter
+  correctionProposals?: Prisma.CorrectionProposalListRelationFilter
+  stayAssignments?: Prisma.StayAssignmentListRelationFilter
+  transfers?: Prisma.TransferListRelationFilter
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
   resident?: Prisma.XOR<Prisma.ResidentScalarRelationFilter, Prisma.ResidentWhereInput>
   bed?: Prisma.XOR<Prisma.BedScalarRelationFilter, Prisma.BedWhereInput>
@@ -294,6 +301,13 @@ export type BookingOrderByWithRelationInput = {
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  assignmentReplacements?: Prisma.StayAssignmentReplacementOrderByRelationAggregateInput
+  effectiveAssignments?: Prisma.EffectiveStayAssignmentOrderByRelationAggregateInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewOrderByRelationAggregateInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkOrderByRelationAggregateInput
+  correctionProposals?: Prisma.CorrectionProposalOrderByRelationAggregateInput
+  stayAssignments?: Prisma.StayAssignmentOrderByRelationAggregateInput
+  transfers?: Prisma.TransferOrderByRelationAggregateInput
   organization?: Prisma.OrganizationOrderByWithRelationInput
   resident?: Prisma.ResidentOrderByWithRelationInput
   bed?: Prisma.BedOrderByWithRelationInput
@@ -320,6 +334,13 @@ export type BookingWhereUniqueInput = Prisma.AtLeast<{
   notes?: Prisma.StringNullableFilter<"Booking"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Booking"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Booking"> | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementListRelationFilter
+  effectiveAssignments?: Prisma.EffectiveStayAssignmentListRelationFilter
+  transferFinanceReviews?: Prisma.TransferFinanceReviewListRelationFilter
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkListRelationFilter
+  correctionProposals?: Prisma.CorrectionProposalListRelationFilter
+  stayAssignments?: Prisma.StayAssignmentListRelationFilter
+  transfers?: Prisma.TransferListRelationFilter
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
   resident?: Prisma.XOR<Prisma.ResidentScalarRelationFilter, Prisma.ResidentWhereInput>
   bed?: Prisma.XOR<Prisma.BedScalarRelationFilter, Prisma.BedWhereInput>
@@ -377,6 +398,13 @@ export type BookingCreateInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementCreateNestedManyWithoutBookingInput
+  effectiveAssignments?: Prisma.EffectiveStayAssignmentCreateNestedManyWithoutBookingInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewCreateNestedManyWithoutBookingInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutBookingInput
+  correctionProposals?: Prisma.CorrectionProposalCreateNestedManyWithoutBookingInput
+  stayAssignments?: Prisma.StayAssignmentCreateNestedManyWithoutBookingInput
+  transfers?: Prisma.TransferCreateNestedManyWithoutBookingInput
   organization: Prisma.OrganizationCreateNestedOneWithoutBookingsInput
   resident: Prisma.ResidentCreateNestedOneWithoutBookingsInput
   bed: Prisma.BedCreateNestedOneWithoutBookingsInput
@@ -399,6 +427,13 @@ export type BookingUncheckedCreateInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedCreateNestedManyWithoutBookingInput
+  effectiveAssignments?: Prisma.EffectiveStayAssignmentUncheckedCreateNestedManyWithoutBookingInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedCreateNestedManyWithoutBookingInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutBookingInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutBookingInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedCreateNestedManyWithoutBookingInput
+  transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutBookingInput
   admission?: Prisma.AdmissionUncheckedCreateNestedOneWithoutBookingInput
   checkIns?: Prisma.CheckInUncheckedCreateNestedManyWithoutBookingInput
   checkOuts?: Prisma.CheckOutUncheckedCreateNestedManyWithoutBookingInput
@@ -415,6 +450,13 @@ export type BookingUpdateInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUpdateManyWithoutBookingNestedInput
+  effectiveAssignments?: Prisma.EffectiveStayAssignmentUpdateManyWithoutBookingNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUpdateManyWithoutBookingNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUpdateManyWithoutBookingNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUpdateManyWithoutBookingNestedInput
+  stayAssignments?: Prisma.StayAssignmentUpdateManyWithoutBookingNestedInput
+  transfers?: Prisma.TransferUpdateManyWithoutBookingNestedInput
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutBookingsNestedInput
   resident?: Prisma.ResidentUpdateOneRequiredWithoutBookingsNestedInput
   bed?: Prisma.BedUpdateOneRequiredWithoutBookingsNestedInput
@@ -437,6 +479,13 @@ export type BookingUncheckedUpdateInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedUpdateManyWithoutBookingNestedInput
+  effectiveAssignments?: Prisma.EffectiveStayAssignmentUncheckedUpdateManyWithoutBookingNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedUpdateManyWithoutBookingNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutBookingNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutBookingNestedInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedUpdateManyWithoutBookingNestedInput
+  transfers?: Prisma.TransferUncheckedUpdateManyWithoutBookingNestedInput
   admission?: Prisma.AdmissionUncheckedUpdateOneWithoutBookingNestedInput
   checkIns?: Prisma.CheckInUncheckedUpdateManyWithoutBookingNestedInput
   checkOuts?: Prisma.CheckOutUncheckedUpdateManyWithoutBookingNestedInput
@@ -755,6 +804,108 @@ export type BookingUpdateOneWithoutInvoicesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.BookingUpdateToOneWithWhereWithoutInvoicesInput, Prisma.BookingUpdateWithoutInvoicesInput>, Prisma.BookingUncheckedUpdateWithoutInvoicesInput>
 }
 
+export type BookingCreateNestedOneWithoutCorrectionProposalsInput = {
+  create?: Prisma.XOR<Prisma.BookingCreateWithoutCorrectionProposalsInput, Prisma.BookingUncheckedCreateWithoutCorrectionProposalsInput>
+  connectOrCreate?: Prisma.BookingCreateOrConnectWithoutCorrectionProposalsInput
+  connect?: Prisma.BookingWhereUniqueInput
+}
+
+export type BookingUpdateOneWithoutCorrectionProposalsNestedInput = {
+  create?: Prisma.XOR<Prisma.BookingCreateWithoutCorrectionProposalsInput, Prisma.BookingUncheckedCreateWithoutCorrectionProposalsInput>
+  connectOrCreate?: Prisma.BookingCreateOrConnectWithoutCorrectionProposalsInput
+  upsert?: Prisma.BookingUpsertWithoutCorrectionProposalsInput
+  disconnect?: Prisma.BookingWhereInput | boolean
+  delete?: Prisma.BookingWhereInput | boolean
+  connect?: Prisma.BookingWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BookingUpdateToOneWithWhereWithoutCorrectionProposalsInput, Prisma.BookingUpdateWithoutCorrectionProposalsInput>, Prisma.BookingUncheckedUpdateWithoutCorrectionProposalsInput>
+}
+
+export type BookingCreateNestedOneWithoutCorrectionFinanceLinksInput = {
+  create?: Prisma.XOR<Prisma.BookingCreateWithoutCorrectionFinanceLinksInput, Prisma.BookingUncheckedCreateWithoutCorrectionFinanceLinksInput>
+  connectOrCreate?: Prisma.BookingCreateOrConnectWithoutCorrectionFinanceLinksInput
+  connect?: Prisma.BookingWhereUniqueInput
+}
+
+export type BookingUpdateOneWithoutCorrectionFinanceLinksNestedInput = {
+  create?: Prisma.XOR<Prisma.BookingCreateWithoutCorrectionFinanceLinksInput, Prisma.BookingUncheckedCreateWithoutCorrectionFinanceLinksInput>
+  connectOrCreate?: Prisma.BookingCreateOrConnectWithoutCorrectionFinanceLinksInput
+  upsert?: Prisma.BookingUpsertWithoutCorrectionFinanceLinksInput
+  disconnect?: Prisma.BookingWhereInput | boolean
+  delete?: Prisma.BookingWhereInput | boolean
+  connect?: Prisma.BookingWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BookingUpdateToOneWithWhereWithoutCorrectionFinanceLinksInput, Prisma.BookingUpdateWithoutCorrectionFinanceLinksInput>, Prisma.BookingUncheckedUpdateWithoutCorrectionFinanceLinksInput>
+}
+
+export type BookingCreateNestedOneWithoutStayAssignmentsInput = {
+  create?: Prisma.XOR<Prisma.BookingCreateWithoutStayAssignmentsInput, Prisma.BookingUncheckedCreateWithoutStayAssignmentsInput>
+  connectOrCreate?: Prisma.BookingCreateOrConnectWithoutStayAssignmentsInput
+  connect?: Prisma.BookingWhereUniqueInput
+}
+
+export type BookingUpdateOneRequiredWithoutStayAssignmentsNestedInput = {
+  create?: Prisma.XOR<Prisma.BookingCreateWithoutStayAssignmentsInput, Prisma.BookingUncheckedCreateWithoutStayAssignmentsInput>
+  connectOrCreate?: Prisma.BookingCreateOrConnectWithoutStayAssignmentsInput
+  upsert?: Prisma.BookingUpsertWithoutStayAssignmentsInput
+  connect?: Prisma.BookingWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BookingUpdateToOneWithWhereWithoutStayAssignmentsInput, Prisma.BookingUpdateWithoutStayAssignmentsInput>, Prisma.BookingUncheckedUpdateWithoutStayAssignmentsInput>
+}
+
+export type BookingCreateNestedOneWithoutTransfersInput = {
+  create?: Prisma.XOR<Prisma.BookingCreateWithoutTransfersInput, Prisma.BookingUncheckedCreateWithoutTransfersInput>
+  connectOrCreate?: Prisma.BookingCreateOrConnectWithoutTransfersInput
+  connect?: Prisma.BookingWhereUniqueInput
+}
+
+export type BookingUpdateOneRequiredWithoutTransfersNestedInput = {
+  create?: Prisma.XOR<Prisma.BookingCreateWithoutTransfersInput, Prisma.BookingUncheckedCreateWithoutTransfersInput>
+  connectOrCreate?: Prisma.BookingCreateOrConnectWithoutTransfersInput
+  upsert?: Prisma.BookingUpsertWithoutTransfersInput
+  connect?: Prisma.BookingWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BookingUpdateToOneWithWhereWithoutTransfersInput, Prisma.BookingUpdateWithoutTransfersInput>, Prisma.BookingUncheckedUpdateWithoutTransfersInput>
+}
+
+export type BookingCreateNestedOneWithoutAssignmentReplacementsInput = {
+  create?: Prisma.XOR<Prisma.BookingCreateWithoutAssignmentReplacementsInput, Prisma.BookingUncheckedCreateWithoutAssignmentReplacementsInput>
+  connectOrCreate?: Prisma.BookingCreateOrConnectWithoutAssignmentReplacementsInput
+  connect?: Prisma.BookingWhereUniqueInput
+}
+
+export type BookingUpdateOneRequiredWithoutAssignmentReplacementsNestedInput = {
+  create?: Prisma.XOR<Prisma.BookingCreateWithoutAssignmentReplacementsInput, Prisma.BookingUncheckedCreateWithoutAssignmentReplacementsInput>
+  connectOrCreate?: Prisma.BookingCreateOrConnectWithoutAssignmentReplacementsInput
+  upsert?: Prisma.BookingUpsertWithoutAssignmentReplacementsInput
+  connect?: Prisma.BookingWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BookingUpdateToOneWithWhereWithoutAssignmentReplacementsInput, Prisma.BookingUpdateWithoutAssignmentReplacementsInput>, Prisma.BookingUncheckedUpdateWithoutAssignmentReplacementsInput>
+}
+
+export type BookingCreateNestedOneWithoutEffectiveAssignmentsInput = {
+  create?: Prisma.XOR<Prisma.BookingCreateWithoutEffectiveAssignmentsInput, Prisma.BookingUncheckedCreateWithoutEffectiveAssignmentsInput>
+  connectOrCreate?: Prisma.BookingCreateOrConnectWithoutEffectiveAssignmentsInput
+  connect?: Prisma.BookingWhereUniqueInput
+}
+
+export type BookingUpdateOneRequiredWithoutEffectiveAssignmentsNestedInput = {
+  create?: Prisma.XOR<Prisma.BookingCreateWithoutEffectiveAssignmentsInput, Prisma.BookingUncheckedCreateWithoutEffectiveAssignmentsInput>
+  connectOrCreate?: Prisma.BookingCreateOrConnectWithoutEffectiveAssignmentsInput
+  upsert?: Prisma.BookingUpsertWithoutEffectiveAssignmentsInput
+  connect?: Prisma.BookingWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BookingUpdateToOneWithWhereWithoutEffectiveAssignmentsInput, Prisma.BookingUpdateWithoutEffectiveAssignmentsInput>, Prisma.BookingUncheckedUpdateWithoutEffectiveAssignmentsInput>
+}
+
+export type BookingCreateNestedOneWithoutTransferFinanceReviewsInput = {
+  create?: Prisma.XOR<Prisma.BookingCreateWithoutTransferFinanceReviewsInput, Prisma.BookingUncheckedCreateWithoutTransferFinanceReviewsInput>
+  connectOrCreate?: Prisma.BookingCreateOrConnectWithoutTransferFinanceReviewsInput
+  connect?: Prisma.BookingWhereUniqueInput
+}
+
+export type BookingUpdateOneRequiredWithoutTransferFinanceReviewsNestedInput = {
+  create?: Prisma.XOR<Prisma.BookingCreateWithoutTransferFinanceReviewsInput, Prisma.BookingUncheckedCreateWithoutTransferFinanceReviewsInput>
+  connectOrCreate?: Prisma.BookingCreateOrConnectWithoutTransferFinanceReviewsInput
+  upsert?: Prisma.BookingUpsertWithoutTransferFinanceReviewsInput
+  connect?: Prisma.BookingWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BookingUpdateToOneWithWhereWithoutTransferFinanceReviewsInput, Prisma.BookingUpdateWithoutTransferFinanceReviewsInput>, Prisma.BookingUncheckedUpdateWithoutTransferFinanceReviewsInput>
+}
+
 export type BookingCreateWithoutOrganizationInput = {
   id?: string
   startDate: Date | string
@@ -765,6 +916,13 @@ export type BookingCreateWithoutOrganizationInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementCreateNestedManyWithoutBookingInput
+  effectiveAssignments?: Prisma.EffectiveStayAssignmentCreateNestedManyWithoutBookingInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewCreateNestedManyWithoutBookingInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutBookingInput
+  correctionProposals?: Prisma.CorrectionProposalCreateNestedManyWithoutBookingInput
+  stayAssignments?: Prisma.StayAssignmentCreateNestedManyWithoutBookingInput
+  transfers?: Prisma.TransferCreateNestedManyWithoutBookingInput
   resident: Prisma.ResidentCreateNestedOneWithoutBookingsInput
   bed: Prisma.BedCreateNestedOneWithoutBookingsInput
   admission?: Prisma.AdmissionCreateNestedOneWithoutBookingInput
@@ -785,6 +943,13 @@ export type BookingUncheckedCreateWithoutOrganizationInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedCreateNestedManyWithoutBookingInput
+  effectiveAssignments?: Prisma.EffectiveStayAssignmentUncheckedCreateNestedManyWithoutBookingInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedCreateNestedManyWithoutBookingInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutBookingInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutBookingInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedCreateNestedManyWithoutBookingInput
+  transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutBookingInput
   admission?: Prisma.AdmissionUncheckedCreateNestedOneWithoutBookingInput
   checkIns?: Prisma.CheckInUncheckedCreateNestedManyWithoutBookingInput
   checkOuts?: Prisma.CheckOutUncheckedCreateNestedManyWithoutBookingInput
@@ -845,6 +1010,13 @@ export type BookingCreateWithoutBedInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementCreateNestedManyWithoutBookingInput
+  effectiveAssignments?: Prisma.EffectiveStayAssignmentCreateNestedManyWithoutBookingInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewCreateNestedManyWithoutBookingInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutBookingInput
+  correctionProposals?: Prisma.CorrectionProposalCreateNestedManyWithoutBookingInput
+  stayAssignments?: Prisma.StayAssignmentCreateNestedManyWithoutBookingInput
+  transfers?: Prisma.TransferCreateNestedManyWithoutBookingInput
   organization: Prisma.OrganizationCreateNestedOneWithoutBookingsInput
   resident: Prisma.ResidentCreateNestedOneWithoutBookingsInput
   admission?: Prisma.AdmissionCreateNestedOneWithoutBookingInput
@@ -864,6 +1036,13 @@ export type BookingUncheckedCreateWithoutBedInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedCreateNestedManyWithoutBookingInput
+  effectiveAssignments?: Prisma.EffectiveStayAssignmentUncheckedCreateNestedManyWithoutBookingInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedCreateNestedManyWithoutBookingInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutBookingInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutBookingInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedCreateNestedManyWithoutBookingInput
+  transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutBookingInput
   admission?: Prisma.AdmissionUncheckedCreateNestedOneWithoutBookingInput
   checkIns?: Prisma.CheckInUncheckedCreateNestedManyWithoutBookingInput
   checkOuts?: Prisma.CheckOutUncheckedCreateNestedManyWithoutBookingInput
@@ -906,6 +1085,13 @@ export type BookingCreateWithoutResidentInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementCreateNestedManyWithoutBookingInput
+  effectiveAssignments?: Prisma.EffectiveStayAssignmentCreateNestedManyWithoutBookingInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewCreateNestedManyWithoutBookingInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutBookingInput
+  correctionProposals?: Prisma.CorrectionProposalCreateNestedManyWithoutBookingInput
+  stayAssignments?: Prisma.StayAssignmentCreateNestedManyWithoutBookingInput
+  transfers?: Prisma.TransferCreateNestedManyWithoutBookingInput
   organization: Prisma.OrganizationCreateNestedOneWithoutBookingsInput
   bed: Prisma.BedCreateNestedOneWithoutBookingsInput
   admission?: Prisma.AdmissionCreateNestedOneWithoutBookingInput
@@ -925,6 +1111,13 @@ export type BookingUncheckedCreateWithoutResidentInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedCreateNestedManyWithoutBookingInput
+  effectiveAssignments?: Prisma.EffectiveStayAssignmentUncheckedCreateNestedManyWithoutBookingInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedCreateNestedManyWithoutBookingInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutBookingInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutBookingInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedCreateNestedManyWithoutBookingInput
+  transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutBookingInput
   admission?: Prisma.AdmissionUncheckedCreateNestedOneWithoutBookingInput
   checkIns?: Prisma.CheckInUncheckedCreateNestedManyWithoutBookingInput
   checkOuts?: Prisma.CheckOutUncheckedCreateNestedManyWithoutBookingInput
@@ -967,6 +1160,13 @@ export type BookingCreateWithoutAdmissionInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementCreateNestedManyWithoutBookingInput
+  effectiveAssignments?: Prisma.EffectiveStayAssignmentCreateNestedManyWithoutBookingInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewCreateNestedManyWithoutBookingInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutBookingInput
+  correctionProposals?: Prisma.CorrectionProposalCreateNestedManyWithoutBookingInput
+  stayAssignments?: Prisma.StayAssignmentCreateNestedManyWithoutBookingInput
+  transfers?: Prisma.TransferCreateNestedManyWithoutBookingInput
   organization: Prisma.OrganizationCreateNestedOneWithoutBookingsInput
   resident: Prisma.ResidentCreateNestedOneWithoutBookingsInput
   bed: Prisma.BedCreateNestedOneWithoutBookingsInput
@@ -988,6 +1188,13 @@ export type BookingUncheckedCreateWithoutAdmissionInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedCreateNestedManyWithoutBookingInput
+  effectiveAssignments?: Prisma.EffectiveStayAssignmentUncheckedCreateNestedManyWithoutBookingInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedCreateNestedManyWithoutBookingInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutBookingInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutBookingInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedCreateNestedManyWithoutBookingInput
+  transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutBookingInput
   checkIns?: Prisma.CheckInUncheckedCreateNestedManyWithoutBookingInput
   checkOuts?: Prisma.CheckOutUncheckedCreateNestedManyWithoutBookingInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBookingInput
@@ -1019,6 +1226,13 @@ export type BookingUpdateWithoutAdmissionInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUpdateManyWithoutBookingNestedInput
+  effectiveAssignments?: Prisma.EffectiveStayAssignmentUpdateManyWithoutBookingNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUpdateManyWithoutBookingNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUpdateManyWithoutBookingNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUpdateManyWithoutBookingNestedInput
+  stayAssignments?: Prisma.StayAssignmentUpdateManyWithoutBookingNestedInput
+  transfers?: Prisma.TransferUpdateManyWithoutBookingNestedInput
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutBookingsNestedInput
   resident?: Prisma.ResidentUpdateOneRequiredWithoutBookingsNestedInput
   bed?: Prisma.BedUpdateOneRequiredWithoutBookingsNestedInput
@@ -1040,6 +1254,13 @@ export type BookingUncheckedUpdateWithoutAdmissionInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedUpdateManyWithoutBookingNestedInput
+  effectiveAssignments?: Prisma.EffectiveStayAssignmentUncheckedUpdateManyWithoutBookingNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedUpdateManyWithoutBookingNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutBookingNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutBookingNestedInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedUpdateManyWithoutBookingNestedInput
+  transfers?: Prisma.TransferUncheckedUpdateManyWithoutBookingNestedInput
   checkIns?: Prisma.CheckInUncheckedUpdateManyWithoutBookingNestedInput
   checkOuts?: Prisma.CheckOutUncheckedUpdateManyWithoutBookingNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBookingNestedInput
@@ -1055,6 +1276,13 @@ export type BookingCreateWithoutCheckInsInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementCreateNestedManyWithoutBookingInput
+  effectiveAssignments?: Prisma.EffectiveStayAssignmentCreateNestedManyWithoutBookingInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewCreateNestedManyWithoutBookingInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutBookingInput
+  correctionProposals?: Prisma.CorrectionProposalCreateNestedManyWithoutBookingInput
+  stayAssignments?: Prisma.StayAssignmentCreateNestedManyWithoutBookingInput
+  transfers?: Prisma.TransferCreateNestedManyWithoutBookingInput
   organization: Prisma.OrganizationCreateNestedOneWithoutBookingsInput
   resident: Prisma.ResidentCreateNestedOneWithoutBookingsInput
   bed: Prisma.BedCreateNestedOneWithoutBookingsInput
@@ -1076,6 +1304,13 @@ export type BookingUncheckedCreateWithoutCheckInsInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedCreateNestedManyWithoutBookingInput
+  effectiveAssignments?: Prisma.EffectiveStayAssignmentUncheckedCreateNestedManyWithoutBookingInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedCreateNestedManyWithoutBookingInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutBookingInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutBookingInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedCreateNestedManyWithoutBookingInput
+  transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutBookingInput
   admission?: Prisma.AdmissionUncheckedCreateNestedOneWithoutBookingInput
   checkOuts?: Prisma.CheckOutUncheckedCreateNestedManyWithoutBookingInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBookingInput
@@ -1107,6 +1342,13 @@ export type BookingUpdateWithoutCheckInsInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUpdateManyWithoutBookingNestedInput
+  effectiveAssignments?: Prisma.EffectiveStayAssignmentUpdateManyWithoutBookingNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUpdateManyWithoutBookingNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUpdateManyWithoutBookingNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUpdateManyWithoutBookingNestedInput
+  stayAssignments?: Prisma.StayAssignmentUpdateManyWithoutBookingNestedInput
+  transfers?: Prisma.TransferUpdateManyWithoutBookingNestedInput
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutBookingsNestedInput
   resident?: Prisma.ResidentUpdateOneRequiredWithoutBookingsNestedInput
   bed?: Prisma.BedUpdateOneRequiredWithoutBookingsNestedInput
@@ -1128,6 +1370,13 @@ export type BookingUncheckedUpdateWithoutCheckInsInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedUpdateManyWithoutBookingNestedInput
+  effectiveAssignments?: Prisma.EffectiveStayAssignmentUncheckedUpdateManyWithoutBookingNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedUpdateManyWithoutBookingNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutBookingNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutBookingNestedInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedUpdateManyWithoutBookingNestedInput
+  transfers?: Prisma.TransferUncheckedUpdateManyWithoutBookingNestedInput
   admission?: Prisma.AdmissionUncheckedUpdateOneWithoutBookingNestedInput
   checkOuts?: Prisma.CheckOutUncheckedUpdateManyWithoutBookingNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBookingNestedInput
@@ -1143,6 +1392,13 @@ export type BookingCreateWithoutCheckOutsInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementCreateNestedManyWithoutBookingInput
+  effectiveAssignments?: Prisma.EffectiveStayAssignmentCreateNestedManyWithoutBookingInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewCreateNestedManyWithoutBookingInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutBookingInput
+  correctionProposals?: Prisma.CorrectionProposalCreateNestedManyWithoutBookingInput
+  stayAssignments?: Prisma.StayAssignmentCreateNestedManyWithoutBookingInput
+  transfers?: Prisma.TransferCreateNestedManyWithoutBookingInput
   organization: Prisma.OrganizationCreateNestedOneWithoutBookingsInput
   resident: Prisma.ResidentCreateNestedOneWithoutBookingsInput
   bed: Prisma.BedCreateNestedOneWithoutBookingsInput
@@ -1164,6 +1420,13 @@ export type BookingUncheckedCreateWithoutCheckOutsInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedCreateNestedManyWithoutBookingInput
+  effectiveAssignments?: Prisma.EffectiveStayAssignmentUncheckedCreateNestedManyWithoutBookingInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedCreateNestedManyWithoutBookingInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutBookingInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutBookingInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedCreateNestedManyWithoutBookingInput
+  transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutBookingInput
   admission?: Prisma.AdmissionUncheckedCreateNestedOneWithoutBookingInput
   checkIns?: Prisma.CheckInUncheckedCreateNestedManyWithoutBookingInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBookingInput
@@ -1195,6 +1458,13 @@ export type BookingUpdateWithoutCheckOutsInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUpdateManyWithoutBookingNestedInput
+  effectiveAssignments?: Prisma.EffectiveStayAssignmentUpdateManyWithoutBookingNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUpdateManyWithoutBookingNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUpdateManyWithoutBookingNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUpdateManyWithoutBookingNestedInput
+  stayAssignments?: Prisma.StayAssignmentUpdateManyWithoutBookingNestedInput
+  transfers?: Prisma.TransferUpdateManyWithoutBookingNestedInput
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutBookingsNestedInput
   resident?: Prisma.ResidentUpdateOneRequiredWithoutBookingsNestedInput
   bed?: Prisma.BedUpdateOneRequiredWithoutBookingsNestedInput
@@ -1216,6 +1486,13 @@ export type BookingUncheckedUpdateWithoutCheckOutsInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedUpdateManyWithoutBookingNestedInput
+  effectiveAssignments?: Prisma.EffectiveStayAssignmentUncheckedUpdateManyWithoutBookingNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedUpdateManyWithoutBookingNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutBookingNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutBookingNestedInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedUpdateManyWithoutBookingNestedInput
+  transfers?: Prisma.TransferUncheckedUpdateManyWithoutBookingNestedInput
   admission?: Prisma.AdmissionUncheckedUpdateOneWithoutBookingNestedInput
   checkIns?: Prisma.CheckInUncheckedUpdateManyWithoutBookingNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBookingNestedInput
@@ -1231,6 +1508,13 @@ export type BookingCreateWithoutInvoicesInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementCreateNestedManyWithoutBookingInput
+  effectiveAssignments?: Prisma.EffectiveStayAssignmentCreateNestedManyWithoutBookingInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewCreateNestedManyWithoutBookingInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutBookingInput
+  correctionProposals?: Prisma.CorrectionProposalCreateNestedManyWithoutBookingInput
+  stayAssignments?: Prisma.StayAssignmentCreateNestedManyWithoutBookingInput
+  transfers?: Prisma.TransferCreateNestedManyWithoutBookingInput
   organization: Prisma.OrganizationCreateNestedOneWithoutBookingsInput
   resident: Prisma.ResidentCreateNestedOneWithoutBookingsInput
   bed: Prisma.BedCreateNestedOneWithoutBookingsInput
@@ -1252,6 +1536,13 @@ export type BookingUncheckedCreateWithoutInvoicesInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedCreateNestedManyWithoutBookingInput
+  effectiveAssignments?: Prisma.EffectiveStayAssignmentUncheckedCreateNestedManyWithoutBookingInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedCreateNestedManyWithoutBookingInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutBookingInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutBookingInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedCreateNestedManyWithoutBookingInput
+  transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutBookingInput
   admission?: Prisma.AdmissionUncheckedCreateNestedOneWithoutBookingInput
   checkIns?: Prisma.CheckInUncheckedCreateNestedManyWithoutBookingInput
   checkOuts?: Prisma.CheckOutUncheckedCreateNestedManyWithoutBookingInput
@@ -1283,6 +1574,13 @@ export type BookingUpdateWithoutInvoicesInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUpdateManyWithoutBookingNestedInput
+  effectiveAssignments?: Prisma.EffectiveStayAssignmentUpdateManyWithoutBookingNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUpdateManyWithoutBookingNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUpdateManyWithoutBookingNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUpdateManyWithoutBookingNestedInput
+  stayAssignments?: Prisma.StayAssignmentUpdateManyWithoutBookingNestedInput
+  transfers?: Prisma.TransferUpdateManyWithoutBookingNestedInput
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutBookingsNestedInput
   resident?: Prisma.ResidentUpdateOneRequiredWithoutBookingsNestedInput
   bed?: Prisma.BedUpdateOneRequiredWithoutBookingsNestedInput
@@ -1304,9 +1602,828 @@ export type BookingUncheckedUpdateWithoutInvoicesInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedUpdateManyWithoutBookingNestedInput
+  effectiveAssignments?: Prisma.EffectiveStayAssignmentUncheckedUpdateManyWithoutBookingNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedUpdateManyWithoutBookingNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutBookingNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutBookingNestedInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedUpdateManyWithoutBookingNestedInput
+  transfers?: Prisma.TransferUncheckedUpdateManyWithoutBookingNestedInput
   admission?: Prisma.AdmissionUncheckedUpdateOneWithoutBookingNestedInput
   checkIns?: Prisma.CheckInUncheckedUpdateManyWithoutBookingNestedInput
   checkOuts?: Prisma.CheckOutUncheckedUpdateManyWithoutBookingNestedInput
+}
+
+export type BookingCreateWithoutCorrectionProposalsInput = {
+  id?: string
+  startDate: Date | string
+  endDate: Date | string
+  status?: $Enums.BookingStatus
+  paymentStatus?: $Enums.PaymentStatus
+  monthlyPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementCreateNestedManyWithoutBookingInput
+  effectiveAssignments?: Prisma.EffectiveStayAssignmentCreateNestedManyWithoutBookingInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewCreateNestedManyWithoutBookingInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutBookingInput
+  stayAssignments?: Prisma.StayAssignmentCreateNestedManyWithoutBookingInput
+  transfers?: Prisma.TransferCreateNestedManyWithoutBookingInput
+  organization: Prisma.OrganizationCreateNestedOneWithoutBookingsInput
+  resident: Prisma.ResidentCreateNestedOneWithoutBookingsInput
+  bed: Prisma.BedCreateNestedOneWithoutBookingsInput
+  admission?: Prisma.AdmissionCreateNestedOneWithoutBookingInput
+  checkIns?: Prisma.CheckInCreateNestedManyWithoutBookingInput
+  checkOuts?: Prisma.CheckOutCreateNestedManyWithoutBookingInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutBookingInput
+}
+
+export type BookingUncheckedCreateWithoutCorrectionProposalsInput = {
+  id?: string
+  organizationId: string
+  residentId: string
+  bedId: string
+  startDate: Date | string
+  endDate: Date | string
+  status?: $Enums.BookingStatus
+  paymentStatus?: $Enums.PaymentStatus
+  monthlyPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedCreateNestedManyWithoutBookingInput
+  effectiveAssignments?: Prisma.EffectiveStayAssignmentUncheckedCreateNestedManyWithoutBookingInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedCreateNestedManyWithoutBookingInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutBookingInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedCreateNestedManyWithoutBookingInput
+  transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutBookingInput
+  admission?: Prisma.AdmissionUncheckedCreateNestedOneWithoutBookingInput
+  checkIns?: Prisma.CheckInUncheckedCreateNestedManyWithoutBookingInput
+  checkOuts?: Prisma.CheckOutUncheckedCreateNestedManyWithoutBookingInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBookingInput
+}
+
+export type BookingCreateOrConnectWithoutCorrectionProposalsInput = {
+  where: Prisma.BookingWhereUniqueInput
+  create: Prisma.XOR<Prisma.BookingCreateWithoutCorrectionProposalsInput, Prisma.BookingUncheckedCreateWithoutCorrectionProposalsInput>
+}
+
+export type BookingUpsertWithoutCorrectionProposalsInput = {
+  update: Prisma.XOR<Prisma.BookingUpdateWithoutCorrectionProposalsInput, Prisma.BookingUncheckedUpdateWithoutCorrectionProposalsInput>
+  create: Prisma.XOR<Prisma.BookingCreateWithoutCorrectionProposalsInput, Prisma.BookingUncheckedCreateWithoutCorrectionProposalsInput>
+  where?: Prisma.BookingWhereInput
+}
+
+export type BookingUpdateToOneWithWhereWithoutCorrectionProposalsInput = {
+  where?: Prisma.BookingWhereInput
+  data: Prisma.XOR<Prisma.BookingUpdateWithoutCorrectionProposalsInput, Prisma.BookingUncheckedUpdateWithoutCorrectionProposalsInput>
+}
+
+export type BookingUpdateWithoutCorrectionProposalsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
+  paymentStatus?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  monthlyPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUpdateManyWithoutBookingNestedInput
+  effectiveAssignments?: Prisma.EffectiveStayAssignmentUpdateManyWithoutBookingNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUpdateManyWithoutBookingNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUpdateManyWithoutBookingNestedInput
+  stayAssignments?: Prisma.StayAssignmentUpdateManyWithoutBookingNestedInput
+  transfers?: Prisma.TransferUpdateManyWithoutBookingNestedInput
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutBookingsNestedInput
+  resident?: Prisma.ResidentUpdateOneRequiredWithoutBookingsNestedInput
+  bed?: Prisma.BedUpdateOneRequiredWithoutBookingsNestedInput
+  admission?: Prisma.AdmissionUpdateOneWithoutBookingNestedInput
+  checkIns?: Prisma.CheckInUpdateManyWithoutBookingNestedInput
+  checkOuts?: Prisma.CheckOutUpdateManyWithoutBookingNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutBookingNestedInput
+}
+
+export type BookingUncheckedUpdateWithoutCorrectionProposalsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  residentId?: Prisma.StringFieldUpdateOperationsInput | string
+  bedId?: Prisma.StringFieldUpdateOperationsInput | string
+  startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
+  paymentStatus?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  monthlyPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedUpdateManyWithoutBookingNestedInput
+  effectiveAssignments?: Prisma.EffectiveStayAssignmentUncheckedUpdateManyWithoutBookingNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedUpdateManyWithoutBookingNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutBookingNestedInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedUpdateManyWithoutBookingNestedInput
+  transfers?: Prisma.TransferUncheckedUpdateManyWithoutBookingNestedInput
+  admission?: Prisma.AdmissionUncheckedUpdateOneWithoutBookingNestedInput
+  checkIns?: Prisma.CheckInUncheckedUpdateManyWithoutBookingNestedInput
+  checkOuts?: Prisma.CheckOutUncheckedUpdateManyWithoutBookingNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBookingNestedInput
+}
+
+export type BookingCreateWithoutCorrectionFinanceLinksInput = {
+  id?: string
+  startDate: Date | string
+  endDate: Date | string
+  status?: $Enums.BookingStatus
+  paymentStatus?: $Enums.PaymentStatus
+  monthlyPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementCreateNestedManyWithoutBookingInput
+  effectiveAssignments?: Prisma.EffectiveStayAssignmentCreateNestedManyWithoutBookingInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewCreateNestedManyWithoutBookingInput
+  correctionProposals?: Prisma.CorrectionProposalCreateNestedManyWithoutBookingInput
+  stayAssignments?: Prisma.StayAssignmentCreateNestedManyWithoutBookingInput
+  transfers?: Prisma.TransferCreateNestedManyWithoutBookingInput
+  organization: Prisma.OrganizationCreateNestedOneWithoutBookingsInput
+  resident: Prisma.ResidentCreateNestedOneWithoutBookingsInput
+  bed: Prisma.BedCreateNestedOneWithoutBookingsInput
+  admission?: Prisma.AdmissionCreateNestedOneWithoutBookingInput
+  checkIns?: Prisma.CheckInCreateNestedManyWithoutBookingInput
+  checkOuts?: Prisma.CheckOutCreateNestedManyWithoutBookingInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutBookingInput
+}
+
+export type BookingUncheckedCreateWithoutCorrectionFinanceLinksInput = {
+  id?: string
+  organizationId: string
+  residentId: string
+  bedId: string
+  startDate: Date | string
+  endDate: Date | string
+  status?: $Enums.BookingStatus
+  paymentStatus?: $Enums.PaymentStatus
+  monthlyPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedCreateNestedManyWithoutBookingInput
+  effectiveAssignments?: Prisma.EffectiveStayAssignmentUncheckedCreateNestedManyWithoutBookingInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedCreateNestedManyWithoutBookingInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutBookingInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedCreateNestedManyWithoutBookingInput
+  transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutBookingInput
+  admission?: Prisma.AdmissionUncheckedCreateNestedOneWithoutBookingInput
+  checkIns?: Prisma.CheckInUncheckedCreateNestedManyWithoutBookingInput
+  checkOuts?: Prisma.CheckOutUncheckedCreateNestedManyWithoutBookingInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBookingInput
+}
+
+export type BookingCreateOrConnectWithoutCorrectionFinanceLinksInput = {
+  where: Prisma.BookingWhereUniqueInput
+  create: Prisma.XOR<Prisma.BookingCreateWithoutCorrectionFinanceLinksInput, Prisma.BookingUncheckedCreateWithoutCorrectionFinanceLinksInput>
+}
+
+export type BookingUpsertWithoutCorrectionFinanceLinksInput = {
+  update: Prisma.XOR<Prisma.BookingUpdateWithoutCorrectionFinanceLinksInput, Prisma.BookingUncheckedUpdateWithoutCorrectionFinanceLinksInput>
+  create: Prisma.XOR<Prisma.BookingCreateWithoutCorrectionFinanceLinksInput, Prisma.BookingUncheckedCreateWithoutCorrectionFinanceLinksInput>
+  where?: Prisma.BookingWhereInput
+}
+
+export type BookingUpdateToOneWithWhereWithoutCorrectionFinanceLinksInput = {
+  where?: Prisma.BookingWhereInput
+  data: Prisma.XOR<Prisma.BookingUpdateWithoutCorrectionFinanceLinksInput, Prisma.BookingUncheckedUpdateWithoutCorrectionFinanceLinksInput>
+}
+
+export type BookingUpdateWithoutCorrectionFinanceLinksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
+  paymentStatus?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  monthlyPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUpdateManyWithoutBookingNestedInput
+  effectiveAssignments?: Prisma.EffectiveStayAssignmentUpdateManyWithoutBookingNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUpdateManyWithoutBookingNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUpdateManyWithoutBookingNestedInput
+  stayAssignments?: Prisma.StayAssignmentUpdateManyWithoutBookingNestedInput
+  transfers?: Prisma.TransferUpdateManyWithoutBookingNestedInput
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutBookingsNestedInput
+  resident?: Prisma.ResidentUpdateOneRequiredWithoutBookingsNestedInput
+  bed?: Prisma.BedUpdateOneRequiredWithoutBookingsNestedInput
+  admission?: Prisma.AdmissionUpdateOneWithoutBookingNestedInput
+  checkIns?: Prisma.CheckInUpdateManyWithoutBookingNestedInput
+  checkOuts?: Prisma.CheckOutUpdateManyWithoutBookingNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutBookingNestedInput
+}
+
+export type BookingUncheckedUpdateWithoutCorrectionFinanceLinksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  residentId?: Prisma.StringFieldUpdateOperationsInput | string
+  bedId?: Prisma.StringFieldUpdateOperationsInput | string
+  startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
+  paymentStatus?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  monthlyPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedUpdateManyWithoutBookingNestedInput
+  effectiveAssignments?: Prisma.EffectiveStayAssignmentUncheckedUpdateManyWithoutBookingNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedUpdateManyWithoutBookingNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutBookingNestedInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedUpdateManyWithoutBookingNestedInput
+  transfers?: Prisma.TransferUncheckedUpdateManyWithoutBookingNestedInput
+  admission?: Prisma.AdmissionUncheckedUpdateOneWithoutBookingNestedInput
+  checkIns?: Prisma.CheckInUncheckedUpdateManyWithoutBookingNestedInput
+  checkOuts?: Prisma.CheckOutUncheckedUpdateManyWithoutBookingNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBookingNestedInput
+}
+
+export type BookingCreateWithoutStayAssignmentsInput = {
+  id?: string
+  startDate: Date | string
+  endDate: Date | string
+  status?: $Enums.BookingStatus
+  paymentStatus?: $Enums.PaymentStatus
+  monthlyPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementCreateNestedManyWithoutBookingInput
+  effectiveAssignments?: Prisma.EffectiveStayAssignmentCreateNestedManyWithoutBookingInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewCreateNestedManyWithoutBookingInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutBookingInput
+  correctionProposals?: Prisma.CorrectionProposalCreateNestedManyWithoutBookingInput
+  transfers?: Prisma.TransferCreateNestedManyWithoutBookingInput
+  organization: Prisma.OrganizationCreateNestedOneWithoutBookingsInput
+  resident: Prisma.ResidentCreateNestedOneWithoutBookingsInput
+  bed: Prisma.BedCreateNestedOneWithoutBookingsInput
+  admission?: Prisma.AdmissionCreateNestedOneWithoutBookingInput
+  checkIns?: Prisma.CheckInCreateNestedManyWithoutBookingInput
+  checkOuts?: Prisma.CheckOutCreateNestedManyWithoutBookingInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutBookingInput
+}
+
+export type BookingUncheckedCreateWithoutStayAssignmentsInput = {
+  id?: string
+  organizationId: string
+  residentId: string
+  bedId: string
+  startDate: Date | string
+  endDate: Date | string
+  status?: $Enums.BookingStatus
+  paymentStatus?: $Enums.PaymentStatus
+  monthlyPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedCreateNestedManyWithoutBookingInput
+  effectiveAssignments?: Prisma.EffectiveStayAssignmentUncheckedCreateNestedManyWithoutBookingInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedCreateNestedManyWithoutBookingInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutBookingInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutBookingInput
+  transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutBookingInput
+  admission?: Prisma.AdmissionUncheckedCreateNestedOneWithoutBookingInput
+  checkIns?: Prisma.CheckInUncheckedCreateNestedManyWithoutBookingInput
+  checkOuts?: Prisma.CheckOutUncheckedCreateNestedManyWithoutBookingInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBookingInput
+}
+
+export type BookingCreateOrConnectWithoutStayAssignmentsInput = {
+  where: Prisma.BookingWhereUniqueInput
+  create: Prisma.XOR<Prisma.BookingCreateWithoutStayAssignmentsInput, Prisma.BookingUncheckedCreateWithoutStayAssignmentsInput>
+}
+
+export type BookingUpsertWithoutStayAssignmentsInput = {
+  update: Prisma.XOR<Prisma.BookingUpdateWithoutStayAssignmentsInput, Prisma.BookingUncheckedUpdateWithoutStayAssignmentsInput>
+  create: Prisma.XOR<Prisma.BookingCreateWithoutStayAssignmentsInput, Prisma.BookingUncheckedCreateWithoutStayAssignmentsInput>
+  where?: Prisma.BookingWhereInput
+}
+
+export type BookingUpdateToOneWithWhereWithoutStayAssignmentsInput = {
+  where?: Prisma.BookingWhereInput
+  data: Prisma.XOR<Prisma.BookingUpdateWithoutStayAssignmentsInput, Prisma.BookingUncheckedUpdateWithoutStayAssignmentsInput>
+}
+
+export type BookingUpdateWithoutStayAssignmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
+  paymentStatus?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  monthlyPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUpdateManyWithoutBookingNestedInput
+  effectiveAssignments?: Prisma.EffectiveStayAssignmentUpdateManyWithoutBookingNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUpdateManyWithoutBookingNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUpdateManyWithoutBookingNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUpdateManyWithoutBookingNestedInput
+  transfers?: Prisma.TransferUpdateManyWithoutBookingNestedInput
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutBookingsNestedInput
+  resident?: Prisma.ResidentUpdateOneRequiredWithoutBookingsNestedInput
+  bed?: Prisma.BedUpdateOneRequiredWithoutBookingsNestedInput
+  admission?: Prisma.AdmissionUpdateOneWithoutBookingNestedInput
+  checkIns?: Prisma.CheckInUpdateManyWithoutBookingNestedInput
+  checkOuts?: Prisma.CheckOutUpdateManyWithoutBookingNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutBookingNestedInput
+}
+
+export type BookingUncheckedUpdateWithoutStayAssignmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  residentId?: Prisma.StringFieldUpdateOperationsInput | string
+  bedId?: Prisma.StringFieldUpdateOperationsInput | string
+  startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
+  paymentStatus?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  monthlyPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedUpdateManyWithoutBookingNestedInput
+  effectiveAssignments?: Prisma.EffectiveStayAssignmentUncheckedUpdateManyWithoutBookingNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedUpdateManyWithoutBookingNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutBookingNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutBookingNestedInput
+  transfers?: Prisma.TransferUncheckedUpdateManyWithoutBookingNestedInput
+  admission?: Prisma.AdmissionUncheckedUpdateOneWithoutBookingNestedInput
+  checkIns?: Prisma.CheckInUncheckedUpdateManyWithoutBookingNestedInput
+  checkOuts?: Prisma.CheckOutUncheckedUpdateManyWithoutBookingNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBookingNestedInput
+}
+
+export type BookingCreateWithoutTransfersInput = {
+  id?: string
+  startDate: Date | string
+  endDate: Date | string
+  status?: $Enums.BookingStatus
+  paymentStatus?: $Enums.PaymentStatus
+  monthlyPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementCreateNestedManyWithoutBookingInput
+  effectiveAssignments?: Prisma.EffectiveStayAssignmentCreateNestedManyWithoutBookingInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewCreateNestedManyWithoutBookingInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutBookingInput
+  correctionProposals?: Prisma.CorrectionProposalCreateNestedManyWithoutBookingInput
+  stayAssignments?: Prisma.StayAssignmentCreateNestedManyWithoutBookingInput
+  organization: Prisma.OrganizationCreateNestedOneWithoutBookingsInput
+  resident: Prisma.ResidentCreateNestedOneWithoutBookingsInput
+  bed: Prisma.BedCreateNestedOneWithoutBookingsInput
+  admission?: Prisma.AdmissionCreateNestedOneWithoutBookingInput
+  checkIns?: Prisma.CheckInCreateNestedManyWithoutBookingInput
+  checkOuts?: Prisma.CheckOutCreateNestedManyWithoutBookingInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutBookingInput
+}
+
+export type BookingUncheckedCreateWithoutTransfersInput = {
+  id?: string
+  organizationId: string
+  residentId: string
+  bedId: string
+  startDate: Date | string
+  endDate: Date | string
+  status?: $Enums.BookingStatus
+  paymentStatus?: $Enums.PaymentStatus
+  monthlyPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedCreateNestedManyWithoutBookingInput
+  effectiveAssignments?: Prisma.EffectiveStayAssignmentUncheckedCreateNestedManyWithoutBookingInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedCreateNestedManyWithoutBookingInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutBookingInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutBookingInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedCreateNestedManyWithoutBookingInput
+  admission?: Prisma.AdmissionUncheckedCreateNestedOneWithoutBookingInput
+  checkIns?: Prisma.CheckInUncheckedCreateNestedManyWithoutBookingInput
+  checkOuts?: Prisma.CheckOutUncheckedCreateNestedManyWithoutBookingInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBookingInput
+}
+
+export type BookingCreateOrConnectWithoutTransfersInput = {
+  where: Prisma.BookingWhereUniqueInput
+  create: Prisma.XOR<Prisma.BookingCreateWithoutTransfersInput, Prisma.BookingUncheckedCreateWithoutTransfersInput>
+}
+
+export type BookingUpsertWithoutTransfersInput = {
+  update: Prisma.XOR<Prisma.BookingUpdateWithoutTransfersInput, Prisma.BookingUncheckedUpdateWithoutTransfersInput>
+  create: Prisma.XOR<Prisma.BookingCreateWithoutTransfersInput, Prisma.BookingUncheckedCreateWithoutTransfersInput>
+  where?: Prisma.BookingWhereInput
+}
+
+export type BookingUpdateToOneWithWhereWithoutTransfersInput = {
+  where?: Prisma.BookingWhereInput
+  data: Prisma.XOR<Prisma.BookingUpdateWithoutTransfersInput, Prisma.BookingUncheckedUpdateWithoutTransfersInput>
+}
+
+export type BookingUpdateWithoutTransfersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
+  paymentStatus?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  monthlyPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUpdateManyWithoutBookingNestedInput
+  effectiveAssignments?: Prisma.EffectiveStayAssignmentUpdateManyWithoutBookingNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUpdateManyWithoutBookingNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUpdateManyWithoutBookingNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUpdateManyWithoutBookingNestedInput
+  stayAssignments?: Prisma.StayAssignmentUpdateManyWithoutBookingNestedInput
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutBookingsNestedInput
+  resident?: Prisma.ResidentUpdateOneRequiredWithoutBookingsNestedInput
+  bed?: Prisma.BedUpdateOneRequiredWithoutBookingsNestedInput
+  admission?: Prisma.AdmissionUpdateOneWithoutBookingNestedInput
+  checkIns?: Prisma.CheckInUpdateManyWithoutBookingNestedInput
+  checkOuts?: Prisma.CheckOutUpdateManyWithoutBookingNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutBookingNestedInput
+}
+
+export type BookingUncheckedUpdateWithoutTransfersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  residentId?: Prisma.StringFieldUpdateOperationsInput | string
+  bedId?: Prisma.StringFieldUpdateOperationsInput | string
+  startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
+  paymentStatus?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  monthlyPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedUpdateManyWithoutBookingNestedInput
+  effectiveAssignments?: Prisma.EffectiveStayAssignmentUncheckedUpdateManyWithoutBookingNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedUpdateManyWithoutBookingNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutBookingNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutBookingNestedInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedUpdateManyWithoutBookingNestedInput
+  admission?: Prisma.AdmissionUncheckedUpdateOneWithoutBookingNestedInput
+  checkIns?: Prisma.CheckInUncheckedUpdateManyWithoutBookingNestedInput
+  checkOuts?: Prisma.CheckOutUncheckedUpdateManyWithoutBookingNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBookingNestedInput
+}
+
+export type BookingCreateWithoutAssignmentReplacementsInput = {
+  id?: string
+  startDate: Date | string
+  endDate: Date | string
+  status?: $Enums.BookingStatus
+  paymentStatus?: $Enums.PaymentStatus
+  monthlyPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  effectiveAssignments?: Prisma.EffectiveStayAssignmentCreateNestedManyWithoutBookingInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewCreateNestedManyWithoutBookingInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutBookingInput
+  correctionProposals?: Prisma.CorrectionProposalCreateNestedManyWithoutBookingInput
+  stayAssignments?: Prisma.StayAssignmentCreateNestedManyWithoutBookingInput
+  transfers?: Prisma.TransferCreateNestedManyWithoutBookingInput
+  organization: Prisma.OrganizationCreateNestedOneWithoutBookingsInput
+  resident: Prisma.ResidentCreateNestedOneWithoutBookingsInput
+  bed: Prisma.BedCreateNestedOneWithoutBookingsInput
+  admission?: Prisma.AdmissionCreateNestedOneWithoutBookingInput
+  checkIns?: Prisma.CheckInCreateNestedManyWithoutBookingInput
+  checkOuts?: Prisma.CheckOutCreateNestedManyWithoutBookingInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutBookingInput
+}
+
+export type BookingUncheckedCreateWithoutAssignmentReplacementsInput = {
+  id?: string
+  organizationId: string
+  residentId: string
+  bedId: string
+  startDate: Date | string
+  endDate: Date | string
+  status?: $Enums.BookingStatus
+  paymentStatus?: $Enums.PaymentStatus
+  monthlyPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  effectiveAssignments?: Prisma.EffectiveStayAssignmentUncheckedCreateNestedManyWithoutBookingInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedCreateNestedManyWithoutBookingInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutBookingInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutBookingInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedCreateNestedManyWithoutBookingInput
+  transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutBookingInput
+  admission?: Prisma.AdmissionUncheckedCreateNestedOneWithoutBookingInput
+  checkIns?: Prisma.CheckInUncheckedCreateNestedManyWithoutBookingInput
+  checkOuts?: Prisma.CheckOutUncheckedCreateNestedManyWithoutBookingInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBookingInput
+}
+
+export type BookingCreateOrConnectWithoutAssignmentReplacementsInput = {
+  where: Prisma.BookingWhereUniqueInput
+  create: Prisma.XOR<Prisma.BookingCreateWithoutAssignmentReplacementsInput, Prisma.BookingUncheckedCreateWithoutAssignmentReplacementsInput>
+}
+
+export type BookingUpsertWithoutAssignmentReplacementsInput = {
+  update: Prisma.XOR<Prisma.BookingUpdateWithoutAssignmentReplacementsInput, Prisma.BookingUncheckedUpdateWithoutAssignmentReplacementsInput>
+  create: Prisma.XOR<Prisma.BookingCreateWithoutAssignmentReplacementsInput, Prisma.BookingUncheckedCreateWithoutAssignmentReplacementsInput>
+  where?: Prisma.BookingWhereInput
+}
+
+export type BookingUpdateToOneWithWhereWithoutAssignmentReplacementsInput = {
+  where?: Prisma.BookingWhereInput
+  data: Prisma.XOR<Prisma.BookingUpdateWithoutAssignmentReplacementsInput, Prisma.BookingUncheckedUpdateWithoutAssignmentReplacementsInput>
+}
+
+export type BookingUpdateWithoutAssignmentReplacementsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
+  paymentStatus?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  monthlyPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  effectiveAssignments?: Prisma.EffectiveStayAssignmentUpdateManyWithoutBookingNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUpdateManyWithoutBookingNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUpdateManyWithoutBookingNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUpdateManyWithoutBookingNestedInput
+  stayAssignments?: Prisma.StayAssignmentUpdateManyWithoutBookingNestedInput
+  transfers?: Prisma.TransferUpdateManyWithoutBookingNestedInput
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutBookingsNestedInput
+  resident?: Prisma.ResidentUpdateOneRequiredWithoutBookingsNestedInput
+  bed?: Prisma.BedUpdateOneRequiredWithoutBookingsNestedInput
+  admission?: Prisma.AdmissionUpdateOneWithoutBookingNestedInput
+  checkIns?: Prisma.CheckInUpdateManyWithoutBookingNestedInput
+  checkOuts?: Prisma.CheckOutUpdateManyWithoutBookingNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutBookingNestedInput
+}
+
+export type BookingUncheckedUpdateWithoutAssignmentReplacementsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  residentId?: Prisma.StringFieldUpdateOperationsInput | string
+  bedId?: Prisma.StringFieldUpdateOperationsInput | string
+  startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
+  paymentStatus?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  monthlyPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  effectiveAssignments?: Prisma.EffectiveStayAssignmentUncheckedUpdateManyWithoutBookingNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedUpdateManyWithoutBookingNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutBookingNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutBookingNestedInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedUpdateManyWithoutBookingNestedInput
+  transfers?: Prisma.TransferUncheckedUpdateManyWithoutBookingNestedInput
+  admission?: Prisma.AdmissionUncheckedUpdateOneWithoutBookingNestedInput
+  checkIns?: Prisma.CheckInUncheckedUpdateManyWithoutBookingNestedInput
+  checkOuts?: Prisma.CheckOutUncheckedUpdateManyWithoutBookingNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBookingNestedInput
+}
+
+export type BookingCreateWithoutEffectiveAssignmentsInput = {
+  id?: string
+  startDate: Date | string
+  endDate: Date | string
+  status?: $Enums.BookingStatus
+  paymentStatus?: $Enums.PaymentStatus
+  monthlyPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementCreateNestedManyWithoutBookingInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewCreateNestedManyWithoutBookingInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutBookingInput
+  correctionProposals?: Prisma.CorrectionProposalCreateNestedManyWithoutBookingInput
+  stayAssignments?: Prisma.StayAssignmentCreateNestedManyWithoutBookingInput
+  transfers?: Prisma.TransferCreateNestedManyWithoutBookingInput
+  organization: Prisma.OrganizationCreateNestedOneWithoutBookingsInput
+  resident: Prisma.ResidentCreateNestedOneWithoutBookingsInput
+  bed: Prisma.BedCreateNestedOneWithoutBookingsInput
+  admission?: Prisma.AdmissionCreateNestedOneWithoutBookingInput
+  checkIns?: Prisma.CheckInCreateNestedManyWithoutBookingInput
+  checkOuts?: Prisma.CheckOutCreateNestedManyWithoutBookingInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutBookingInput
+}
+
+export type BookingUncheckedCreateWithoutEffectiveAssignmentsInput = {
+  id?: string
+  organizationId: string
+  residentId: string
+  bedId: string
+  startDate: Date | string
+  endDate: Date | string
+  status?: $Enums.BookingStatus
+  paymentStatus?: $Enums.PaymentStatus
+  monthlyPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedCreateNestedManyWithoutBookingInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedCreateNestedManyWithoutBookingInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutBookingInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutBookingInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedCreateNestedManyWithoutBookingInput
+  transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutBookingInput
+  admission?: Prisma.AdmissionUncheckedCreateNestedOneWithoutBookingInput
+  checkIns?: Prisma.CheckInUncheckedCreateNestedManyWithoutBookingInput
+  checkOuts?: Prisma.CheckOutUncheckedCreateNestedManyWithoutBookingInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBookingInput
+}
+
+export type BookingCreateOrConnectWithoutEffectiveAssignmentsInput = {
+  where: Prisma.BookingWhereUniqueInput
+  create: Prisma.XOR<Prisma.BookingCreateWithoutEffectiveAssignmentsInput, Prisma.BookingUncheckedCreateWithoutEffectiveAssignmentsInput>
+}
+
+export type BookingUpsertWithoutEffectiveAssignmentsInput = {
+  update: Prisma.XOR<Prisma.BookingUpdateWithoutEffectiveAssignmentsInput, Prisma.BookingUncheckedUpdateWithoutEffectiveAssignmentsInput>
+  create: Prisma.XOR<Prisma.BookingCreateWithoutEffectiveAssignmentsInput, Prisma.BookingUncheckedCreateWithoutEffectiveAssignmentsInput>
+  where?: Prisma.BookingWhereInput
+}
+
+export type BookingUpdateToOneWithWhereWithoutEffectiveAssignmentsInput = {
+  where?: Prisma.BookingWhereInput
+  data: Prisma.XOR<Prisma.BookingUpdateWithoutEffectiveAssignmentsInput, Prisma.BookingUncheckedUpdateWithoutEffectiveAssignmentsInput>
+}
+
+export type BookingUpdateWithoutEffectiveAssignmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
+  paymentStatus?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  monthlyPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUpdateManyWithoutBookingNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUpdateManyWithoutBookingNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUpdateManyWithoutBookingNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUpdateManyWithoutBookingNestedInput
+  stayAssignments?: Prisma.StayAssignmentUpdateManyWithoutBookingNestedInput
+  transfers?: Prisma.TransferUpdateManyWithoutBookingNestedInput
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutBookingsNestedInput
+  resident?: Prisma.ResidentUpdateOneRequiredWithoutBookingsNestedInput
+  bed?: Prisma.BedUpdateOneRequiredWithoutBookingsNestedInput
+  admission?: Prisma.AdmissionUpdateOneWithoutBookingNestedInput
+  checkIns?: Prisma.CheckInUpdateManyWithoutBookingNestedInput
+  checkOuts?: Prisma.CheckOutUpdateManyWithoutBookingNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutBookingNestedInput
+}
+
+export type BookingUncheckedUpdateWithoutEffectiveAssignmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  residentId?: Prisma.StringFieldUpdateOperationsInput | string
+  bedId?: Prisma.StringFieldUpdateOperationsInput | string
+  startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
+  paymentStatus?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  monthlyPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedUpdateManyWithoutBookingNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedUpdateManyWithoutBookingNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutBookingNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutBookingNestedInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedUpdateManyWithoutBookingNestedInput
+  transfers?: Prisma.TransferUncheckedUpdateManyWithoutBookingNestedInput
+  admission?: Prisma.AdmissionUncheckedUpdateOneWithoutBookingNestedInput
+  checkIns?: Prisma.CheckInUncheckedUpdateManyWithoutBookingNestedInput
+  checkOuts?: Prisma.CheckOutUncheckedUpdateManyWithoutBookingNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBookingNestedInput
+}
+
+export type BookingCreateWithoutTransferFinanceReviewsInput = {
+  id?: string
+  startDate: Date | string
+  endDate: Date | string
+  status?: $Enums.BookingStatus
+  paymentStatus?: $Enums.PaymentStatus
+  monthlyPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementCreateNestedManyWithoutBookingInput
+  effectiveAssignments?: Prisma.EffectiveStayAssignmentCreateNestedManyWithoutBookingInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutBookingInput
+  correctionProposals?: Prisma.CorrectionProposalCreateNestedManyWithoutBookingInput
+  stayAssignments?: Prisma.StayAssignmentCreateNestedManyWithoutBookingInput
+  transfers?: Prisma.TransferCreateNestedManyWithoutBookingInput
+  organization: Prisma.OrganizationCreateNestedOneWithoutBookingsInput
+  resident: Prisma.ResidentCreateNestedOneWithoutBookingsInput
+  bed: Prisma.BedCreateNestedOneWithoutBookingsInput
+  admission?: Prisma.AdmissionCreateNestedOneWithoutBookingInput
+  checkIns?: Prisma.CheckInCreateNestedManyWithoutBookingInput
+  checkOuts?: Prisma.CheckOutCreateNestedManyWithoutBookingInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutBookingInput
+}
+
+export type BookingUncheckedCreateWithoutTransferFinanceReviewsInput = {
+  id?: string
+  organizationId: string
+  residentId: string
+  bedId: string
+  startDate: Date | string
+  endDate: Date | string
+  status?: $Enums.BookingStatus
+  paymentStatus?: $Enums.PaymentStatus
+  monthlyPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedCreateNestedManyWithoutBookingInput
+  effectiveAssignments?: Prisma.EffectiveStayAssignmentUncheckedCreateNestedManyWithoutBookingInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutBookingInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutBookingInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedCreateNestedManyWithoutBookingInput
+  transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutBookingInput
+  admission?: Prisma.AdmissionUncheckedCreateNestedOneWithoutBookingInput
+  checkIns?: Prisma.CheckInUncheckedCreateNestedManyWithoutBookingInput
+  checkOuts?: Prisma.CheckOutUncheckedCreateNestedManyWithoutBookingInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBookingInput
+}
+
+export type BookingCreateOrConnectWithoutTransferFinanceReviewsInput = {
+  where: Prisma.BookingWhereUniqueInput
+  create: Prisma.XOR<Prisma.BookingCreateWithoutTransferFinanceReviewsInput, Prisma.BookingUncheckedCreateWithoutTransferFinanceReviewsInput>
+}
+
+export type BookingUpsertWithoutTransferFinanceReviewsInput = {
+  update: Prisma.XOR<Prisma.BookingUpdateWithoutTransferFinanceReviewsInput, Prisma.BookingUncheckedUpdateWithoutTransferFinanceReviewsInput>
+  create: Prisma.XOR<Prisma.BookingCreateWithoutTransferFinanceReviewsInput, Prisma.BookingUncheckedCreateWithoutTransferFinanceReviewsInput>
+  where?: Prisma.BookingWhereInput
+}
+
+export type BookingUpdateToOneWithWhereWithoutTransferFinanceReviewsInput = {
+  where?: Prisma.BookingWhereInput
+  data: Prisma.XOR<Prisma.BookingUpdateWithoutTransferFinanceReviewsInput, Prisma.BookingUncheckedUpdateWithoutTransferFinanceReviewsInput>
+}
+
+export type BookingUpdateWithoutTransferFinanceReviewsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
+  paymentStatus?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  monthlyPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUpdateManyWithoutBookingNestedInput
+  effectiveAssignments?: Prisma.EffectiveStayAssignmentUpdateManyWithoutBookingNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUpdateManyWithoutBookingNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUpdateManyWithoutBookingNestedInput
+  stayAssignments?: Prisma.StayAssignmentUpdateManyWithoutBookingNestedInput
+  transfers?: Prisma.TransferUpdateManyWithoutBookingNestedInput
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutBookingsNestedInput
+  resident?: Prisma.ResidentUpdateOneRequiredWithoutBookingsNestedInput
+  bed?: Prisma.BedUpdateOneRequiredWithoutBookingsNestedInput
+  admission?: Prisma.AdmissionUpdateOneWithoutBookingNestedInput
+  checkIns?: Prisma.CheckInUpdateManyWithoutBookingNestedInput
+  checkOuts?: Prisma.CheckOutUpdateManyWithoutBookingNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutBookingNestedInput
+}
+
+export type BookingUncheckedUpdateWithoutTransferFinanceReviewsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  residentId?: Prisma.StringFieldUpdateOperationsInput | string
+  bedId?: Prisma.StringFieldUpdateOperationsInput | string
+  startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
+  paymentStatus?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  monthlyPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedUpdateManyWithoutBookingNestedInput
+  effectiveAssignments?: Prisma.EffectiveStayAssignmentUncheckedUpdateManyWithoutBookingNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutBookingNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutBookingNestedInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedUpdateManyWithoutBookingNestedInput
+  transfers?: Prisma.TransferUncheckedUpdateManyWithoutBookingNestedInput
+  admission?: Prisma.AdmissionUncheckedUpdateOneWithoutBookingNestedInput
+  checkIns?: Prisma.CheckInUncheckedUpdateManyWithoutBookingNestedInput
+  checkOuts?: Prisma.CheckOutUncheckedUpdateManyWithoutBookingNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBookingNestedInput
 }
 
 export type BookingCreateManyOrganizationInput = {
@@ -1333,6 +2450,13 @@ export type BookingUpdateWithoutOrganizationInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUpdateManyWithoutBookingNestedInput
+  effectiveAssignments?: Prisma.EffectiveStayAssignmentUpdateManyWithoutBookingNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUpdateManyWithoutBookingNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUpdateManyWithoutBookingNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUpdateManyWithoutBookingNestedInput
+  stayAssignments?: Prisma.StayAssignmentUpdateManyWithoutBookingNestedInput
+  transfers?: Prisma.TransferUpdateManyWithoutBookingNestedInput
   resident?: Prisma.ResidentUpdateOneRequiredWithoutBookingsNestedInput
   bed?: Prisma.BedUpdateOneRequiredWithoutBookingsNestedInput
   admission?: Prisma.AdmissionUpdateOneWithoutBookingNestedInput
@@ -1353,6 +2477,13 @@ export type BookingUncheckedUpdateWithoutOrganizationInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedUpdateManyWithoutBookingNestedInput
+  effectiveAssignments?: Prisma.EffectiveStayAssignmentUncheckedUpdateManyWithoutBookingNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedUpdateManyWithoutBookingNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutBookingNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutBookingNestedInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedUpdateManyWithoutBookingNestedInput
+  transfers?: Prisma.TransferUncheckedUpdateManyWithoutBookingNestedInput
   admission?: Prisma.AdmissionUncheckedUpdateOneWithoutBookingNestedInput
   checkIns?: Prisma.CheckInUncheckedUpdateManyWithoutBookingNestedInput
   checkOuts?: Prisma.CheckOutUncheckedUpdateManyWithoutBookingNestedInput
@@ -1396,6 +2527,13 @@ export type BookingUpdateWithoutBedInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUpdateManyWithoutBookingNestedInput
+  effectiveAssignments?: Prisma.EffectiveStayAssignmentUpdateManyWithoutBookingNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUpdateManyWithoutBookingNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUpdateManyWithoutBookingNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUpdateManyWithoutBookingNestedInput
+  stayAssignments?: Prisma.StayAssignmentUpdateManyWithoutBookingNestedInput
+  transfers?: Prisma.TransferUpdateManyWithoutBookingNestedInput
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutBookingsNestedInput
   resident?: Prisma.ResidentUpdateOneRequiredWithoutBookingsNestedInput
   admission?: Prisma.AdmissionUpdateOneWithoutBookingNestedInput
@@ -1415,6 +2553,13 @@ export type BookingUncheckedUpdateWithoutBedInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedUpdateManyWithoutBookingNestedInput
+  effectiveAssignments?: Prisma.EffectiveStayAssignmentUncheckedUpdateManyWithoutBookingNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedUpdateManyWithoutBookingNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutBookingNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutBookingNestedInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedUpdateManyWithoutBookingNestedInput
+  transfers?: Prisma.TransferUncheckedUpdateManyWithoutBookingNestedInput
   admission?: Prisma.AdmissionUncheckedUpdateOneWithoutBookingNestedInput
   checkIns?: Prisma.CheckInUncheckedUpdateManyWithoutBookingNestedInput
   checkOuts?: Prisma.CheckOutUncheckedUpdateManyWithoutBookingNestedInput
@@ -1457,6 +2602,13 @@ export type BookingUpdateWithoutResidentInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUpdateManyWithoutBookingNestedInput
+  effectiveAssignments?: Prisma.EffectiveStayAssignmentUpdateManyWithoutBookingNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUpdateManyWithoutBookingNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUpdateManyWithoutBookingNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUpdateManyWithoutBookingNestedInput
+  stayAssignments?: Prisma.StayAssignmentUpdateManyWithoutBookingNestedInput
+  transfers?: Prisma.TransferUpdateManyWithoutBookingNestedInput
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutBookingsNestedInput
   bed?: Prisma.BedUpdateOneRequiredWithoutBookingsNestedInput
   admission?: Prisma.AdmissionUpdateOneWithoutBookingNestedInput
@@ -1476,6 +2628,13 @@ export type BookingUncheckedUpdateWithoutResidentInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedUpdateManyWithoutBookingNestedInput
+  effectiveAssignments?: Prisma.EffectiveStayAssignmentUncheckedUpdateManyWithoutBookingNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedUpdateManyWithoutBookingNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutBookingNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutBookingNestedInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedUpdateManyWithoutBookingNestedInput
+  transfers?: Prisma.TransferUncheckedUpdateManyWithoutBookingNestedInput
   admission?: Prisma.AdmissionUncheckedUpdateOneWithoutBookingNestedInput
   checkIns?: Prisma.CheckInUncheckedUpdateManyWithoutBookingNestedInput
   checkOuts?: Prisma.CheckOutUncheckedUpdateManyWithoutBookingNestedInput
@@ -1501,12 +2660,26 @@ export type BookingUncheckedUpdateManyWithoutResidentInput = {
  */
 
 export type BookingCountOutputType = {
+  assignmentReplacements: number
+  effectiveAssignments: number
+  transferFinanceReviews: number
+  correctionFinanceLinks: number
+  correctionProposals: number
+  stayAssignments: number
+  transfers: number
   checkIns: number
   checkOuts: number
   invoices: number
 }
 
 export type BookingCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  assignmentReplacements?: boolean | BookingCountOutputTypeCountAssignmentReplacementsArgs
+  effectiveAssignments?: boolean | BookingCountOutputTypeCountEffectiveAssignmentsArgs
+  transferFinanceReviews?: boolean | BookingCountOutputTypeCountTransferFinanceReviewsArgs
+  correctionFinanceLinks?: boolean | BookingCountOutputTypeCountCorrectionFinanceLinksArgs
+  correctionProposals?: boolean | BookingCountOutputTypeCountCorrectionProposalsArgs
+  stayAssignments?: boolean | BookingCountOutputTypeCountStayAssignmentsArgs
+  transfers?: boolean | BookingCountOutputTypeCountTransfersArgs
   checkIns?: boolean | BookingCountOutputTypeCountCheckInsArgs
   checkOuts?: boolean | BookingCountOutputTypeCountCheckOutsArgs
   invoices?: boolean | BookingCountOutputTypeCountInvoicesArgs
@@ -1520,6 +2693,55 @@ export type BookingCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Exte
    * Select specific fields to fetch from the BookingCountOutputType
    */
   select?: Prisma.BookingCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * BookingCountOutputType without action
+ */
+export type BookingCountOutputTypeCountAssignmentReplacementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.StayAssignmentReplacementWhereInput
+}
+
+/**
+ * BookingCountOutputType without action
+ */
+export type BookingCountOutputTypeCountEffectiveAssignmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.EffectiveStayAssignmentWhereInput
+}
+
+/**
+ * BookingCountOutputType without action
+ */
+export type BookingCountOutputTypeCountTransferFinanceReviewsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TransferFinanceReviewWhereInput
+}
+
+/**
+ * BookingCountOutputType without action
+ */
+export type BookingCountOutputTypeCountCorrectionFinanceLinksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CorrectionFinanceLinkWhereInput
+}
+
+/**
+ * BookingCountOutputType without action
+ */
+export type BookingCountOutputTypeCountCorrectionProposalsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CorrectionProposalWhereInput
+}
+
+/**
+ * BookingCountOutputType without action
+ */
+export type BookingCountOutputTypeCountStayAssignmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.StayAssignmentWhereInput
+}
+
+/**
+ * BookingCountOutputType without action
+ */
+export type BookingCountOutputTypeCountTransfersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TransferWhereInput
 }
 
 /**
@@ -1557,6 +2779,13 @@ export type BookingSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   notes?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  assignmentReplacements?: boolean | Prisma.Booking$assignmentReplacementsArgs<ExtArgs>
+  effectiveAssignments?: boolean | Prisma.Booking$effectiveAssignmentsArgs<ExtArgs>
+  transferFinanceReviews?: boolean | Prisma.Booking$transferFinanceReviewsArgs<ExtArgs>
+  correctionFinanceLinks?: boolean | Prisma.Booking$correctionFinanceLinksArgs<ExtArgs>
+  correctionProposals?: boolean | Prisma.Booking$correctionProposalsArgs<ExtArgs>
+  stayAssignments?: boolean | Prisma.Booking$stayAssignmentsArgs<ExtArgs>
+  transfers?: boolean | Prisma.Booking$transfersArgs<ExtArgs>
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   resident?: boolean | Prisma.ResidentDefaultArgs<ExtArgs>
   bed?: boolean | Prisma.BedDefaultArgs<ExtArgs>
@@ -1620,6 +2849,13 @@ export type BookingSelectScalar = {
 
 export type BookingOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organizationId" | "residentId" | "bedId" | "startDate" | "endDate" | "status" | "paymentStatus" | "monthlyPrice" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["booking"]>
 export type BookingInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  assignmentReplacements?: boolean | Prisma.Booking$assignmentReplacementsArgs<ExtArgs>
+  effectiveAssignments?: boolean | Prisma.Booking$effectiveAssignmentsArgs<ExtArgs>
+  transferFinanceReviews?: boolean | Prisma.Booking$transferFinanceReviewsArgs<ExtArgs>
+  correctionFinanceLinks?: boolean | Prisma.Booking$correctionFinanceLinksArgs<ExtArgs>
+  correctionProposals?: boolean | Prisma.Booking$correctionProposalsArgs<ExtArgs>
+  stayAssignments?: boolean | Prisma.Booking$stayAssignmentsArgs<ExtArgs>
+  transfers?: boolean | Prisma.Booking$transfersArgs<ExtArgs>
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   resident?: boolean | Prisma.ResidentDefaultArgs<ExtArgs>
   bed?: boolean | Prisma.BedDefaultArgs<ExtArgs>
@@ -1643,6 +2879,13 @@ export type BookingIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
 export type $BookingPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Booking"
   objects: {
+    assignmentReplacements: Prisma.$StayAssignmentReplacementPayload<ExtArgs>[]
+    effectiveAssignments: Prisma.$EffectiveStayAssignmentPayload<ExtArgs>[]
+    transferFinanceReviews: Prisma.$TransferFinanceReviewPayload<ExtArgs>[]
+    correctionFinanceLinks: Prisma.$CorrectionFinanceLinkPayload<ExtArgs>[]
+    correctionProposals: Prisma.$CorrectionProposalPayload<ExtArgs>[]
+    stayAssignments: Prisma.$StayAssignmentPayload<ExtArgs>[]
+    transfers: Prisma.$TransferPayload<ExtArgs>[]
     organization: Prisma.$OrganizationPayload<ExtArgs>
     resident: Prisma.$ResidentPayload<ExtArgs>
     bed: Prisma.$BedPayload<ExtArgs>
@@ -2058,6 +3301,13 @@ readonly fields: BookingFieldRefs;
  */
 export interface Prisma__BookingClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  assignmentReplacements<T extends Prisma.Booking$assignmentReplacementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Booking$assignmentReplacementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StayAssignmentReplacementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  effectiveAssignments<T extends Prisma.Booking$effectiveAssignmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Booking$effectiveAssignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EffectiveStayAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  transferFinanceReviews<T extends Prisma.Booking$transferFinanceReviewsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Booking$transferFinanceReviewsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TransferFinanceReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  correctionFinanceLinks<T extends Prisma.Booking$correctionFinanceLinksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Booking$correctionFinanceLinksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CorrectionFinanceLinkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  correctionProposals<T extends Prisma.Booking$correctionProposalsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Booking$correctionProposalsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CorrectionProposalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  stayAssignments<T extends Prisma.Booking$stayAssignmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Booking$stayAssignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StayAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  transfers<T extends Prisma.Booking$transfersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Booking$transfersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TransferPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   organization<T extends Prisma.OrganizationDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrganizationDefaultArgs<ExtArgs>>): Prisma.Prisma__OrganizationClient<runtime.Types.Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   resident<T extends Prisma.ResidentDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ResidentDefaultArgs<ExtArgs>>): Prisma.Prisma__ResidentClient<runtime.Types.Result.GetResult<Prisma.$ResidentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   bed<T extends Prisma.BedDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BedDefaultArgs<ExtArgs>>): Prisma.Prisma__BedClient<runtime.Types.Result.GetResult<Prisma.$BedPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
@@ -2504,6 +3754,174 @@ export type BookingDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Limit how many Bookings to delete.
    */
   limit?: number
+}
+
+/**
+ * Booking.assignmentReplacements
+ */
+export type Booking$assignmentReplacementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the StayAssignmentReplacement
+   */
+  select?: Prisma.StayAssignmentReplacementSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the StayAssignmentReplacement
+   */
+  omit?: Prisma.StayAssignmentReplacementOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.StayAssignmentReplacementInclude<ExtArgs> | null
+  where?: Prisma.StayAssignmentReplacementWhereInput
+  orderBy?: Prisma.StayAssignmentReplacementOrderByWithRelationInput | Prisma.StayAssignmentReplacementOrderByWithRelationInput[]
+  cursor?: Prisma.StayAssignmentReplacementWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.StayAssignmentReplacementScalarFieldEnum | Prisma.StayAssignmentReplacementScalarFieldEnum[]
+}
+
+/**
+ * Booking.effectiveAssignments
+ */
+export type Booking$effectiveAssignmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the EffectiveStayAssignment
+   */
+  select?: Prisma.EffectiveStayAssignmentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the EffectiveStayAssignment
+   */
+  omit?: Prisma.EffectiveStayAssignmentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EffectiveStayAssignmentInclude<ExtArgs> | null
+  where?: Prisma.EffectiveStayAssignmentWhereInput
+  orderBy?: Prisma.EffectiveStayAssignmentOrderByWithRelationInput | Prisma.EffectiveStayAssignmentOrderByWithRelationInput[]
+  cursor?: Prisma.EffectiveStayAssignmentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.EffectiveStayAssignmentScalarFieldEnum | Prisma.EffectiveStayAssignmentScalarFieldEnum[]
+}
+
+/**
+ * Booking.transferFinanceReviews
+ */
+export type Booking$transferFinanceReviewsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TransferFinanceReview
+   */
+  select?: Prisma.TransferFinanceReviewSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the TransferFinanceReview
+   */
+  omit?: Prisma.TransferFinanceReviewOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TransferFinanceReviewInclude<ExtArgs> | null
+  where?: Prisma.TransferFinanceReviewWhereInput
+  orderBy?: Prisma.TransferFinanceReviewOrderByWithRelationInput | Prisma.TransferFinanceReviewOrderByWithRelationInput[]
+  cursor?: Prisma.TransferFinanceReviewWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TransferFinanceReviewScalarFieldEnum | Prisma.TransferFinanceReviewScalarFieldEnum[]
+}
+
+/**
+ * Booking.correctionFinanceLinks
+ */
+export type Booking$correctionFinanceLinksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CorrectionFinanceLink
+   */
+  select?: Prisma.CorrectionFinanceLinkSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CorrectionFinanceLink
+   */
+  omit?: Prisma.CorrectionFinanceLinkOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CorrectionFinanceLinkInclude<ExtArgs> | null
+  where?: Prisma.CorrectionFinanceLinkWhereInput
+  orderBy?: Prisma.CorrectionFinanceLinkOrderByWithRelationInput | Prisma.CorrectionFinanceLinkOrderByWithRelationInput[]
+  cursor?: Prisma.CorrectionFinanceLinkWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CorrectionFinanceLinkScalarFieldEnum | Prisma.CorrectionFinanceLinkScalarFieldEnum[]
+}
+
+/**
+ * Booking.correctionProposals
+ */
+export type Booking$correctionProposalsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CorrectionProposal
+   */
+  select?: Prisma.CorrectionProposalSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CorrectionProposal
+   */
+  omit?: Prisma.CorrectionProposalOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CorrectionProposalInclude<ExtArgs> | null
+  where?: Prisma.CorrectionProposalWhereInput
+  orderBy?: Prisma.CorrectionProposalOrderByWithRelationInput | Prisma.CorrectionProposalOrderByWithRelationInput[]
+  cursor?: Prisma.CorrectionProposalWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CorrectionProposalScalarFieldEnum | Prisma.CorrectionProposalScalarFieldEnum[]
+}
+
+/**
+ * Booking.stayAssignments
+ */
+export type Booking$stayAssignmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the StayAssignment
+   */
+  select?: Prisma.StayAssignmentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the StayAssignment
+   */
+  omit?: Prisma.StayAssignmentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.StayAssignmentInclude<ExtArgs> | null
+  where?: Prisma.StayAssignmentWhereInput
+  orderBy?: Prisma.StayAssignmentOrderByWithRelationInput | Prisma.StayAssignmentOrderByWithRelationInput[]
+  cursor?: Prisma.StayAssignmentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.StayAssignmentScalarFieldEnum | Prisma.StayAssignmentScalarFieldEnum[]
+}
+
+/**
+ * Booking.transfers
+ */
+export type Booking$transfersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Transfer
+   */
+  select?: Prisma.TransferSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Transfer
+   */
+  omit?: Prisma.TransferOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TransferInclude<ExtArgs> | null
+  where?: Prisma.TransferWhereInput
+  orderBy?: Prisma.TransferOrderByWithRelationInput | Prisma.TransferOrderByWithRelationInput[]
+  cursor?: Prisma.TransferWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TransferScalarFieldEnum | Prisma.TransferScalarFieldEnum[]
 }
 
 /**

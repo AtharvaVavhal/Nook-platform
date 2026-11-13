@@ -47,6 +47,15 @@ export async function findOverlappingBooking(
       AND id <> ${query.excludeBookingId ?? NO_BOOKING}::uuid
       AND (start_date AT TIME ZONE 'Asia/Kolkata')::date < ${endDay}::date
       AND (end_date AT TIME ZONE 'Asia/Kolkata')::date > ${startDay}::date
+    UNION ALL
+    SELECT b.id FROM bookings b
+    JOIN effective_stay_assignments s ON s.booking_id = b.id AND s.organization_id = b.organization_id
+    WHERE b.organization_id = ${query.organizationId}::uuid
+      AND s.bed_id = ${query.bedId}::uuid
+      AND b.status <> 'CANCELLED' AND s.status = 'ACTIVE' AND s.end_at IS NULL
+      AND b.id <> ${query.excludeBookingId ?? NO_BOOKING}::uuid
+      AND (s.start_at AT TIME ZONE 'Asia/Kolkata')::date < ${endDay}::date
+      AND (b.end_date AT TIME ZONE 'Asia/Kolkata')::date > ${startDay}::date
     LIMIT 1`;
   return rows[0]?.id ?? null;
 }
@@ -54,7 +63,10 @@ export async function findOverlappingBooking(
 export interface BookableBedFacts {
   archivedAt: Date | null;
   operationalStatus: string;
-  room: { archivedAt: Date | null } | null;
+  room: {
+    archivedAt: Date | null;
+    floor?: { archivedAt: Date | null; property: { archivedAt: Date | null } };
+  } | null;
 }
 
 /**
@@ -71,7 +83,12 @@ export function assertBedBookable(
   bed: BookableBedFacts,
   context: { hasActiveCheckIn: boolean; start: Date; end: Date; today: Date },
 ): void {
-  if (bed.archivedAt || bed.room?.archivedAt) {
+  if (
+    bed.archivedAt ||
+    bed.room?.archivedAt ||
+    bed.room?.floor?.archivedAt ||
+    bed.room?.floor?.property.archivedAt
+  ) {
     throw new ConflictException('This bed is archived and cannot be booked');
   }
   if (bed.operationalStatus !== 'IN_SERVICE') {

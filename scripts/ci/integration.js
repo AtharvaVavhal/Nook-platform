@@ -61,17 +61,33 @@ function secret() {
 }
 
 async function grantRuntime(owner, runtime) {
+  // Runtime may only read and append to these tables; UPDATE and DELETE are never granted.
+  // Kept inside the function so the provisioning test can evaluate it in isolation.
+  const appendOnly = [
+    'transfers',
+    'transfer_command_receipts',
+    'stay_assignment_replacements',
+    'transfer_finance_reviews',
+    'transfer_finance_resolutions',
+    'audit_events',
+    'invoice_voids',
+    'correction_command_receipts',
+    'correction_finance_links',
+  ];
   const tables = (
     await owner.query(
       "SELECT tablename FROM pg_tables WHERE schemaname = 'public' AND tablename <> '_prisma_migrations'",
     )
   ).rows;
   for (const { tablename } of tables) {
-    const privileges = ['audit_events', 'invoice_voids'].includes(tablename)
-      ? 'SELECT, INSERT'
-      : 'SELECT, INSERT, UPDATE';
+    const privileges = appendOnly.includes(tablename) ? 'SELECT, INSERT' : 'SELECT, INSERT, UPDATE';
     await owner.query(
       `GRANT ${privileges} ON TABLE public.${quoteIdentifier(tablename)} TO ${quoteIdentifier(runtime)}`,
+    );
+  }
+  if (tables.some((table) => table.tablename === 'stay_assignment_replacements')) {
+    await owner.query(
+      `GRANT SELECT ON TABLE public."effective_stay_assignments" TO ${quoteIdentifier(runtime)}`,
     );
   }
   await owner.query(
@@ -291,7 +307,9 @@ async function main() {
   clients.splice(clients.indexOf(owner), 1);
 
   const files = JSON.parse(readFileSync(new URL('./test-files.json', import.meta.url), 'utf8'));
-  const tests = files['initial-migration'].map((name) => `apps/api/test/${name}.test.ts`);
+  const tests = files['initial-migration'].map(
+    (name) => `apps/api/test/integration/${name}.test.ts`,
+  );
   child(['--test', '--test-concurrency=1', ...tests], env);
 }
 let primaryError;

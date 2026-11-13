@@ -198,6 +198,7 @@ export type PaymentReversalWhereInput = {
   reason?: Prisma.StringFilter<"PaymentReversal"> | string
   reversedBy?: Prisma.UuidFilter<"PaymentReversal"> | string
   createdAt?: Prisma.DateTimeFilter<"PaymentReversal"> | Date | string
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkListRelationFilter
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
   payment?: Prisma.XOR<Prisma.PaymentScalarRelationFilter, Prisma.PaymentWhereInput>
   actor?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -211,6 +212,7 @@ export type PaymentReversalOrderByWithRelationInput = {
   reason?: Prisma.SortOrder
   reversedBy?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkOrderByRelationAggregateInput
   organization?: Prisma.OrganizationOrderByWithRelationInput
   payment?: Prisma.PaymentOrderByWithRelationInput
   actor?: Prisma.UserOrderByWithRelationInput
@@ -219,6 +221,7 @@ export type PaymentReversalOrderByWithRelationInput = {
 export type PaymentReversalWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   paymentId?: string
+  id_invoiceId_organizationId?: Prisma.PaymentReversalIdInvoiceIdOrganizationIdCompoundUniqueInput
   AND?: Prisma.PaymentReversalWhereInput | Prisma.PaymentReversalWhereInput[]
   OR?: Prisma.PaymentReversalWhereInput[]
   NOT?: Prisma.PaymentReversalWhereInput | Prisma.PaymentReversalWhereInput[]
@@ -227,10 +230,11 @@ export type PaymentReversalWhereUniqueInput = Prisma.AtLeast<{
   reason?: Prisma.StringFilter<"PaymentReversal"> | string
   reversedBy?: Prisma.UuidFilter<"PaymentReversal"> | string
   createdAt?: Prisma.DateTimeFilter<"PaymentReversal"> | Date | string
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkListRelationFilter
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
   payment?: Prisma.XOR<Prisma.PaymentScalarRelationFilter, Prisma.PaymentWhereInput>
   actor?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-}, "id" | "paymentId">
+}, "id" | "paymentId" | "id_invoiceId_organizationId">
 
 export type PaymentReversalOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -262,6 +266,7 @@ export type PaymentReversalCreateInput = {
   id?: string
   reason: string
   createdAt?: Date | string
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutReversalInput
   organization: Prisma.OrganizationCreateNestedOneWithoutPaymentReversalsInput
   payment: Prisma.PaymentCreateNestedOneWithoutReversalsInput
   actor: Prisma.UserCreateNestedOneWithoutPaymentReversalsInput
@@ -275,12 +280,14 @@ export type PaymentReversalUncheckedCreateInput = {
   reason: string
   reversedBy: string
   createdAt?: Date | string
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutReversalInput
 }
 
 export type PaymentReversalUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   reason?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUpdateManyWithoutReversalNestedInput
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutPaymentReversalsNestedInput
   payment?: Prisma.PaymentUpdateOneRequiredWithoutReversalsNestedInput
   actor?: Prisma.UserUpdateOneRequiredWithoutPaymentReversalsNestedInput
@@ -294,6 +301,7 @@ export type PaymentReversalUncheckedUpdateInput = {
   reason?: Prisma.StringFieldUpdateOperationsInput | string
   reversedBy?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutReversalNestedInput
 }
 
 export type PaymentReversalCreateManyInput = {
@@ -332,6 +340,12 @@ export type PaymentReversalOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
+export type PaymentReversalIdInvoiceIdOrganizationIdCompoundUniqueInput = {
+  id: string
+  invoiceId: string
+  organizationId: string
+}
+
 export type PaymentReversalCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   organizationId?: Prisma.SortOrder
@@ -360,6 +374,11 @@ export type PaymentReversalMinOrderByAggregateInput = {
   reason?: Prisma.SortOrder
   reversedBy?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+}
+
+export type PaymentReversalNullableScalarRelationFilter = {
+  is?: Prisma.PaymentReversalWhereInput | null
+  isNot?: Prisma.PaymentReversalWhereInput | null
 }
 
 export type PaymentReversalCreateNestedManyWithoutOrganizationInput = {
@@ -488,10 +507,27 @@ export type PaymentReversalUncheckedUpdateManyWithoutPaymentNestedInput = {
   deleteMany?: Prisma.PaymentReversalScalarWhereInput | Prisma.PaymentReversalScalarWhereInput[]
 }
 
+export type PaymentReversalCreateNestedOneWithoutCorrectionFinanceLinksInput = {
+  create?: Prisma.XOR<Prisma.PaymentReversalCreateWithoutCorrectionFinanceLinksInput, Prisma.PaymentReversalUncheckedCreateWithoutCorrectionFinanceLinksInput>
+  connectOrCreate?: Prisma.PaymentReversalCreateOrConnectWithoutCorrectionFinanceLinksInput
+  connect?: Prisma.PaymentReversalWhereUniqueInput
+}
+
+export type PaymentReversalUpdateOneWithoutCorrectionFinanceLinksNestedInput = {
+  create?: Prisma.XOR<Prisma.PaymentReversalCreateWithoutCorrectionFinanceLinksInput, Prisma.PaymentReversalUncheckedCreateWithoutCorrectionFinanceLinksInput>
+  connectOrCreate?: Prisma.PaymentReversalCreateOrConnectWithoutCorrectionFinanceLinksInput
+  upsert?: Prisma.PaymentReversalUpsertWithoutCorrectionFinanceLinksInput
+  disconnect?: Prisma.PaymentReversalWhereInput | boolean
+  delete?: Prisma.PaymentReversalWhereInput | boolean
+  connect?: Prisma.PaymentReversalWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.PaymentReversalUpdateToOneWithWhereWithoutCorrectionFinanceLinksInput, Prisma.PaymentReversalUpdateWithoutCorrectionFinanceLinksInput>, Prisma.PaymentReversalUncheckedUpdateWithoutCorrectionFinanceLinksInput>
+}
+
 export type PaymentReversalCreateWithoutOrganizationInput = {
   id?: string
   reason: string
   createdAt?: Date | string
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutReversalInput
   payment: Prisma.PaymentCreateNestedOneWithoutReversalsInput
   actor: Prisma.UserCreateNestedOneWithoutPaymentReversalsInput
 }
@@ -503,6 +539,7 @@ export type PaymentReversalUncheckedCreateWithoutOrganizationInput = {
   reason: string
   reversedBy: string
   createdAt?: Date | string
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutReversalInput
 }
 
 export type PaymentReversalCreateOrConnectWithoutOrganizationInput = {
@@ -548,6 +585,7 @@ export type PaymentReversalCreateWithoutActorInput = {
   id?: string
   reason: string
   createdAt?: Date | string
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutReversalInput
   organization: Prisma.OrganizationCreateNestedOneWithoutPaymentReversalsInput
   payment: Prisma.PaymentCreateNestedOneWithoutReversalsInput
 }
@@ -559,6 +597,7 @@ export type PaymentReversalUncheckedCreateWithoutActorInput = {
   invoiceId: string
   reason: string
   createdAt?: Date | string
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutReversalInput
 }
 
 export type PaymentReversalCreateOrConnectWithoutActorInput = {
@@ -591,6 +630,7 @@ export type PaymentReversalCreateWithoutPaymentInput = {
   id?: string
   reason: string
   createdAt?: Date | string
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutReversalInput
   organization: Prisma.OrganizationCreateNestedOneWithoutPaymentReversalsInput
   actor: Prisma.UserCreateNestedOneWithoutPaymentReversalsInput
 }
@@ -600,6 +640,7 @@ export type PaymentReversalUncheckedCreateWithoutPaymentInput = {
   reason: string
   reversedBy: string
   createdAt?: Date | string
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutReversalInput
 }
 
 export type PaymentReversalCreateOrConnectWithoutPaymentInput = {
@@ -628,6 +669,60 @@ export type PaymentReversalUpdateManyWithWhereWithoutPaymentInput = {
   data: Prisma.XOR<Prisma.PaymentReversalUpdateManyMutationInput, Prisma.PaymentReversalUncheckedUpdateManyWithoutPaymentInput>
 }
 
+export type PaymentReversalCreateWithoutCorrectionFinanceLinksInput = {
+  id?: string
+  reason: string
+  createdAt?: Date | string
+  organization: Prisma.OrganizationCreateNestedOneWithoutPaymentReversalsInput
+  payment: Prisma.PaymentCreateNestedOneWithoutReversalsInput
+  actor: Prisma.UserCreateNestedOneWithoutPaymentReversalsInput
+}
+
+export type PaymentReversalUncheckedCreateWithoutCorrectionFinanceLinksInput = {
+  id?: string
+  organizationId: string
+  paymentId: string
+  invoiceId: string
+  reason: string
+  reversedBy: string
+  createdAt?: Date | string
+}
+
+export type PaymentReversalCreateOrConnectWithoutCorrectionFinanceLinksInput = {
+  where: Prisma.PaymentReversalWhereUniqueInput
+  create: Prisma.XOR<Prisma.PaymentReversalCreateWithoutCorrectionFinanceLinksInput, Prisma.PaymentReversalUncheckedCreateWithoutCorrectionFinanceLinksInput>
+}
+
+export type PaymentReversalUpsertWithoutCorrectionFinanceLinksInput = {
+  update: Prisma.XOR<Prisma.PaymentReversalUpdateWithoutCorrectionFinanceLinksInput, Prisma.PaymentReversalUncheckedUpdateWithoutCorrectionFinanceLinksInput>
+  create: Prisma.XOR<Prisma.PaymentReversalCreateWithoutCorrectionFinanceLinksInput, Prisma.PaymentReversalUncheckedCreateWithoutCorrectionFinanceLinksInput>
+  where?: Prisma.PaymentReversalWhereInput
+}
+
+export type PaymentReversalUpdateToOneWithWhereWithoutCorrectionFinanceLinksInput = {
+  where?: Prisma.PaymentReversalWhereInput
+  data: Prisma.XOR<Prisma.PaymentReversalUpdateWithoutCorrectionFinanceLinksInput, Prisma.PaymentReversalUncheckedUpdateWithoutCorrectionFinanceLinksInput>
+}
+
+export type PaymentReversalUpdateWithoutCorrectionFinanceLinksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  reason?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutPaymentReversalsNestedInput
+  payment?: Prisma.PaymentUpdateOneRequiredWithoutReversalsNestedInput
+  actor?: Prisma.UserUpdateOneRequiredWithoutPaymentReversalsNestedInput
+}
+
+export type PaymentReversalUncheckedUpdateWithoutCorrectionFinanceLinksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  paymentId?: Prisma.StringFieldUpdateOperationsInput | string
+  invoiceId?: Prisma.StringFieldUpdateOperationsInput | string
+  reason?: Prisma.StringFieldUpdateOperationsInput | string
+  reversedBy?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
 export type PaymentReversalCreateManyOrganizationInput = {
   id?: string
   paymentId: string
@@ -641,6 +736,7 @@ export type PaymentReversalUpdateWithoutOrganizationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   reason?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUpdateManyWithoutReversalNestedInput
   payment?: Prisma.PaymentUpdateOneRequiredWithoutReversalsNestedInput
   actor?: Prisma.UserUpdateOneRequiredWithoutPaymentReversalsNestedInput
 }
@@ -652,6 +748,7 @@ export type PaymentReversalUncheckedUpdateWithoutOrganizationInput = {
   reason?: Prisma.StringFieldUpdateOperationsInput | string
   reversedBy?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutReversalNestedInput
 }
 
 export type PaymentReversalUncheckedUpdateManyWithoutOrganizationInput = {
@@ -676,6 +773,7 @@ export type PaymentReversalUpdateWithoutActorInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   reason?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUpdateManyWithoutReversalNestedInput
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutPaymentReversalsNestedInput
   payment?: Prisma.PaymentUpdateOneRequiredWithoutReversalsNestedInput
 }
@@ -687,6 +785,7 @@ export type PaymentReversalUncheckedUpdateWithoutActorInput = {
   invoiceId?: Prisma.StringFieldUpdateOperationsInput | string
   reason?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutReversalNestedInput
 }
 
 export type PaymentReversalUncheckedUpdateManyWithoutActorInput = {
@@ -709,6 +808,7 @@ export type PaymentReversalUpdateWithoutPaymentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   reason?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUpdateManyWithoutReversalNestedInput
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutPaymentReversalsNestedInput
   actor?: Prisma.UserUpdateOneRequiredWithoutPaymentReversalsNestedInput
 }
@@ -718,6 +818,7 @@ export type PaymentReversalUncheckedUpdateWithoutPaymentInput = {
   reason?: Prisma.StringFieldUpdateOperationsInput | string
   reversedBy?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutReversalNestedInput
 }
 
 export type PaymentReversalUncheckedUpdateManyWithoutPaymentInput = {
@@ -728,6 +829,35 @@ export type PaymentReversalUncheckedUpdateManyWithoutPaymentInput = {
 }
 
 
+/**
+ * Count Type PaymentReversalCountOutputType
+ */
+
+export type PaymentReversalCountOutputType = {
+  correctionFinanceLinks: number
+}
+
+export type PaymentReversalCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  correctionFinanceLinks?: boolean | PaymentReversalCountOutputTypeCountCorrectionFinanceLinksArgs
+}
+
+/**
+ * PaymentReversalCountOutputType without action
+ */
+export type PaymentReversalCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PaymentReversalCountOutputType
+   */
+  select?: Prisma.PaymentReversalCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * PaymentReversalCountOutputType without action
+ */
+export type PaymentReversalCountOutputTypeCountCorrectionFinanceLinksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CorrectionFinanceLinkWhereInput
+}
+
 
 export type PaymentReversalSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -737,9 +867,11 @@ export type PaymentReversalSelect<ExtArgs extends runtime.Types.Extensions.Inter
   reason?: boolean
   reversedBy?: boolean
   createdAt?: boolean
+  correctionFinanceLinks?: boolean | Prisma.PaymentReversal$correctionFinanceLinksArgs<ExtArgs>
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   payment?: boolean | Prisma.PaymentDefaultArgs<ExtArgs>
   actor?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  _count?: boolean | Prisma.PaymentReversalCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["paymentReversal"]>
 
 export type PaymentReversalSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -780,9 +912,11 @@ export type PaymentReversalSelectScalar = {
 
 export type PaymentReversalOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organizationId" | "paymentId" | "invoiceId" | "reason" | "reversedBy" | "createdAt", ExtArgs["result"]["paymentReversal"]>
 export type PaymentReversalInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  correctionFinanceLinks?: boolean | Prisma.PaymentReversal$correctionFinanceLinksArgs<ExtArgs>
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   payment?: boolean | Prisma.PaymentDefaultArgs<ExtArgs>
   actor?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  _count?: boolean | Prisma.PaymentReversalCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type PaymentReversalIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
@@ -798,6 +932,7 @@ export type PaymentReversalIncludeUpdateManyAndReturn<ExtArgs extends runtime.Ty
 export type $PaymentReversalPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "PaymentReversal"
   objects: {
+    correctionFinanceLinks: Prisma.$CorrectionFinanceLinkPayload<ExtArgs>[]
     organization: Prisma.$OrganizationPayload<ExtArgs>
     payment: Prisma.$PaymentPayload<ExtArgs>
     actor: Prisma.$UserPayload<ExtArgs>
@@ -1204,6 +1339,7 @@ readonly fields: PaymentReversalFieldRefs;
  */
 export interface Prisma__PaymentReversalClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  correctionFinanceLinks<T extends Prisma.PaymentReversal$correctionFinanceLinksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PaymentReversal$correctionFinanceLinksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CorrectionFinanceLinkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   organization<T extends Prisma.OrganizationDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrganizationDefaultArgs<ExtArgs>>): Prisma.Prisma__OrganizationClient<runtime.Types.Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   payment<T extends Prisma.PaymentDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PaymentDefaultArgs<ExtArgs>>): Prisma.Prisma__PaymentClient<runtime.Types.Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   actor<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
@@ -1641,6 +1777,30 @@ export type PaymentReversalDeleteManyArgs<ExtArgs extends runtime.Types.Extensio
    * Limit how many PaymentReversals to delete.
    */
   limit?: number
+}
+
+/**
+ * PaymentReversal.correctionFinanceLinks
+ */
+export type PaymentReversal$correctionFinanceLinksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CorrectionFinanceLink
+   */
+  select?: Prisma.CorrectionFinanceLinkSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CorrectionFinanceLink
+   */
+  omit?: Prisma.CorrectionFinanceLinkOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CorrectionFinanceLinkInclude<ExtArgs> | null
+  where?: Prisma.CorrectionFinanceLinkWhereInput
+  orderBy?: Prisma.CorrectionFinanceLinkOrderByWithRelationInput | Prisma.CorrectionFinanceLinkOrderByWithRelationInput[]
+  cursor?: Prisma.CorrectionFinanceLinkWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CorrectionFinanceLinkScalarFieldEnum | Prisma.CorrectionFinanceLinkScalarFieldEnum[]
 }
 
 /**

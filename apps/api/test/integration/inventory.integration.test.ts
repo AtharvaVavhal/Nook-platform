@@ -7,6 +7,7 @@ import type { INestApplication } from '@nestjs/common';
 import { AppModule } from '../../src/app.module.js';
 import request from 'supertest';
 import { requireTestDatabaseUrl } from './helpers/env.js';
+import { withMigratorClient } from './helpers/db.js';
 
 // ---- Test configuration ----
 process.env.APP_ENV = 'test';
@@ -26,6 +27,13 @@ let server: ReturnType<typeof request>;
 let authCookies: { sessionCookie: string; csrfCookie: string; csrfToken: string };
 let orgACookies: { sessionCookie: string; csrfCookie: string; csrfToken: string };
 let orgBCookies: { sessionCookie: string; csrfCookie: string; csrfToken: string };
+
+// Clear login throttle state to ensure test isolation
+test.before(async () => {
+  await withMigratorClient(async (client) => {
+    await client.query('DELETE FROM login_throttles');
+  });
+});
 
 async function loginFixture() {
   const res = await server

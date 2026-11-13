@@ -146,3 +146,102 @@ export const PaymentMethod = {
 } as const
 
 export type PaymentMethod = (typeof PaymentMethod)[keyof typeof PaymentMethod]
+
+
+export const CorrectionTargetType = {
+  RESIDENT: 'RESIDENT',
+  BOOKING: 'BOOKING',
+  ADMISSION: 'ADMISSION',
+  CHECK_IN: 'CHECK_IN',
+  CHECK_OUT: 'CHECK_OUT'
+} as const
+
+export type CorrectionTargetType = (typeof CorrectionTargetType)[keyof typeof CorrectionTargetType]
+
+
+export const CorrectionFieldKey = {
+  firstName: 'firstName',
+  lastName: 'lastName',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  monthlyPrice: 'monthlyPrice',
+  admissionDate: 'admissionDate',
+  checkInAt: 'checkInAt',
+  checkOutAt: 'checkOutAt',
+  reason: 'reason'
+} as const
+
+export type CorrectionFieldKey = (typeof CorrectionFieldKey)[keyof typeof CorrectionFieldKey]
+
+
+export const CorrectionStatus = {
+  PENDING: 'PENDING',
+  APPLIED: 'APPLIED',
+  REJECTED: 'REJECTED',
+  WITHDRAWN: 'WITHDRAWN',
+  STALE: 'STALE'
+} as const
+
+export type CorrectionStatus = (typeof CorrectionStatus)[keyof typeof CorrectionStatus]
+
+
+export const CorrectionRelationKind = {
+  REVERSAL: 'REVERSAL',
+  SUPERSEDES: 'SUPERSEDES'
+} as const
+
+export type CorrectionRelationKind = (typeof CorrectionRelationKind)[keyof typeof CorrectionRelationKind]
+
+
+export const CorrectionCommandAction = {
+  SUBMIT: 'SUBMIT',
+  APPROVE: 'APPROVE',
+  REJECT: 'REJECT',
+  WITHDRAW: 'WITHDRAW',
+  RESOLVE: 'RESOLVE'
+} as const
+
+export type CorrectionCommandAction = (typeof CorrectionCommandAction)[keyof typeof CorrectionCommandAction]
+
+
+export const CorrectionFinanceLinkKind = {
+  BILLING_GAP: 'BILLING_GAP',
+  INVOICE_REVIEW: 'INVOICE_REVIEW',
+  RESOLUTION: 'RESOLUTION'
+} as const
+
+export type CorrectionFinanceLinkKind = (typeof CorrectionFinanceLinkKind)[keyof typeof CorrectionFinanceLinkKind]
+
+
+export const CorrectionFinanceOutcome = {
+  REVIEW_REQUIRED: 'REVIEW_REQUIRED',
+  RELEASED: 'RELEASED',
+  NO_SUPPORTED_REMEDY: 'NO_SUPPORTED_REMEDY',
+  OPERATION_RECORDED: 'OPERATION_RECORDED'
+} as const
+
+export type CorrectionFinanceOutcome = (typeof CorrectionFinanceOutcome)[keyof typeof CorrectionFinanceOutcome]
+
+
+export const StayAssignmentKind = {
+  ORIGINAL: 'ORIGINAL',
+  TRANSFER: 'TRANSFER'
+} as const
+
+export type StayAssignmentKind = (typeof StayAssignmentKind)[keyof typeof StayAssignmentKind]
+
+
+export const StayAssignmentStatus = {
+  ACTIVE: 'ACTIVE',
+  COMPLETED: 'COMPLETED'
+} as const
+
+export type StayAssignmentStatus = (typeof StayAssignmentStatus)[keyof typeof StayAssignmentStatus]
+
+
+export const TransferType = {
+  ROOM_TRANSFER: 'ROOM_TRANSFER',
+  BED_TRANSFER: 'BED_TRANSFER'
+} as const
+
+export type TransferType = (typeof TransferType)[keyof typeof TransferType]

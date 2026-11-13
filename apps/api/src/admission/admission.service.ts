@@ -7,13 +7,18 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from '../database/prisma.service.js';
 import { assertMatchesParent, parsePagination } from '../common/ids.js';
-import type { Prisma } from '../generated/client.js';
+import { Prisma } from '../generated/client.js';
 import { periodContains } from '../booking/booking.input.js';
 import {
   parseAdmissionQuery,
   parseCreateAdmission,
   parseUpdateAdmission,
 } from './admission.input.js';
+import { auditRequestId } from '../observability/request-context.js';
+import { ORDINARY_TX_OPTIONS, acquireOrgGate } from '../common/org-gate.js';
+import { CorrectionError } from '../corrections/corrections.rules.js';
+
+type Tx = Prisma.TransactionClient;
 
 @Injectable()
 export class AdmissionService {
@@ -25,13 +30,14 @@ export class AdmissionService {
    * alone derives its property. Used by create and update so both enforce the same rule.
    */
   private async resolveLocation(
+    db: Pick<Tx, 'room' | 'property'>,
     organizationId: string,
     requestedProperty: string | null,
     requestedRoom: string | null,
   ): Promise<{ propertyId: string | null; roomId: string | null }> {
     let propertyId = requestedProperty;
     if (requestedRoom) {
-      const room = await this.prisma.db.room.findFirst({
+      const room = await db.room.findFirst({
         where: { id: requestedRoom, organizationId },
         select: { id: true, propertyId: true },
       });
@@ -42,7 +48,7 @@ export class AdmissionService {
       propertyId = propertyId ?? room.propertyId;
     }
     if (propertyId) {
-      const property = await this.prisma.db.property.findFirst({
+      const property = await db.property.findFirst({
         where: { id: propertyId, organizationId },
         select: { id: true },
       });
@@ -51,60 +57,104 @@ export class AdmissionService {
     return { propertyId, roomId: requestedRoom };
   }
 
-  async create(organizationId: string, body: unknown) {
+  /**
+   * Creation runs entirely inside one transaction: gate, then Bed -> Resident -> Booking row locks BEFORE the insert (the
+   * insert's foreign-key checks take key-share locks on the same rows, so the order must already be Bed, Resident,
+   * Booking), then every read and rule on the locked rows. Nothing that decides the insert is read outside it.
+   */
+  async create(organizationId: string, body: unknown, actorUserId?: string) {
     const dto = parseCreateAdmission(body);
     const bookingId = dto.bookingId;
-    const requestedProperty = dto.propertyId;
-    const requestedRoom = dto.roomId;
-    // Verify booking exists, is CONFIRMED, belongs to org, and has no admission yet
-    const booking = await this.prisma.db.booking.findFirst({
-      where: { id: bookingId, organizationId, status: 'CONFIRMED' },
-      include: { resident: true, bed: true },
+    // Unlocked probe: only learns which Bed and Resident to lock. Every rule is re-evaluated under the locks.
+    const probe = await this.prisma.db.booking.findFirst({
+      where: { id: bookingId, organizationId },
+      select: { bedId: true, residentId: true },
     });
-    if (!booking) throw new NotFoundException('Confirmed booking not found');
-    const existingAdmission = await this.prisma.db.admission.findFirst({
-      where: { bookingId },
-    });
-    if (existingAdmission) throw new ConflictException('Booking already has an admission');
-    if (booking.status !== 'CONFIRMED')
-      throw new BadRequestException('Only confirmed bookings can be admitted');
-
-    // The admission date must fall inside the booked period (the end is exclusive): an admission outside it would
-    // either precede the reservation or start a stay the booking does not cover.
-    assertWithinBooking(dto.admissionDate, booking);
-
-    // The booking is authoritative for who and which bed; the request may only repeat it.
-    assertMatchesParent(dto.residentId, booking.residentId, 'residentId', 'booking');
-    assertMatchesParent(dto.bedId, booking.bedId, 'bedId', 'booking');
-
-    // Property and room must belong to the caller's organization (never to a client-supplied one),
-    // and the room to the selected property. Unknown and cross-tenant ids are indistinguishable.
-    const { propertyId, roomId: requestedRoomId } = await this.resolveLocation(
-      organizationId,
-      requestedProperty,
-      requestedRoom,
-    );
-
-    const data: Prisma.AdmissionCreateInput = {
-      admissionDate: dto.admissionDate,
-      notes: dto.notes,
-      status: 'PENDING',
-      organization: { connect: { id: organizationId } },
-      booking: { connect: { id: bookingId } },
-      resident: { connect: { id: booking.residentId } },
-      bed: { connect: { id: booking.bedId } },
-    };
-    if (propertyId) {
-      data.property = { connect: { id: propertyId } };
-    }
-    if (requestedRoomId) {
-      data.room = { connect: { id: requestedRoomId } };
-    }
+    if (!probe) throw new NotFoundException('Confirmed booking not found');
 
     return this.prisma.db.$transaction(async (tx) => {
+      await acquireOrgGate(tx, organizationId);
+      await this.lockRows(tx, organizationId, [
+        ['beds', probe.bedId],
+        ['residents', probe.residentId],
+        ['bookings', bookingId],
+      ]);
+      const booking = await tx.booking.findFirst({
+        where: { id: bookingId, organizationId, status: 'CONFIRMED' },
+        include: { resident: true, bed: true },
+      });
+      if (!booking) throw new NotFoundException('Confirmed booking not found');
+      if (booking.bedId !== probe.bedId || booking.residentId !== probe.residentId) {
+        throw new ConflictException(
+          'The booking changed while the admission was being created. Try again.',
+        );
+      }
+      const existingAdmission = await tx.admission.findFirst({ where: { bookingId } });
+      if (existingAdmission) throw new ConflictException('Booking already has an admission');
+
+      // The admission date must fall inside the booked period (the end is exclusive).
+      assertWithinBooking(dto.admissionDate, booking);
+
+      // The booking is authoritative for who and which bed; the request may only repeat it.
+      assertMatchesParent(dto.residentId, booking.residentId, 'residentId', 'booking');
+      assertMatchesParent(dto.bedId, booking.bedId, 'bedId', 'booking');
+
+      const { propertyId, roomId: requestedRoomId } = await this.resolveLocation(
+        tx,
+        organizationId,
+        dto.propertyId,
+        dto.roomId,
+      );
+
+      const data: Prisma.AdmissionCreateInput = {
+        admissionDate: dto.admissionDate,
+        notes: dto.notes,
+        status: 'PENDING',
+        organization: { connect: { id: organizationId } },
+        booking: { connect: { id: bookingId } },
+        resident: { connect: { id: booking.residentId } },
+        bed: { connect: { id: booking.bedId } },
+      };
+      if (propertyId) data.property = { connect: { id: propertyId } };
+      if (requestedRoomId) data.room = { connect: { id: requestedRoomId } };
+
       const admission = await tx.admission.create({ data });
+      await tx.auditEvent.create({
+        data: {
+          organizationId,
+          actorUserId: actorUserId ?? null,
+          action: 'admission.created',
+          targetType: 'admission',
+          targetId: admission.id,
+          requestId: auditRequestId(),
+          metadata: {
+            bookingId,
+            residentId: booking.residentId,
+            bedId: booking.bedId,
+            admissionDate: dto.admissionDate.toISOString(),
+            propertyId: propertyId ?? null,
+            roomId: requestedRoomId ?? null,
+          } as Prisma.InputJsonObject,
+        },
+      });
       return admission;
-    });
+    }, ORDINARY_TX_OPTIONS);
+  }
+
+  /** Row locks in the caller's order (the closed union keeps table names out of reach of input). */
+  private async lockRows(
+    tx: Tx,
+    organizationId: string,
+    rows: ReadonlyArray<readonly ['beds' | 'residents' | 'bookings' | 'admissions', string]>,
+  ): Promise<void> {
+    for (const [table, id] of rows) {
+      const found = await tx.$queryRawUnsafe<{ id: string }[]>(
+        `SELECT id FROM ${table} WHERE id = $1::uuid AND organization_id = $2::uuid FOR UPDATE`,
+        id,
+        organizationId,
+      );
+      if (found.length === 0) throw new NotFoundException('Record not found');
+    }
   }
 
   async findAll(organizationId: string, rawQuery: unknown) {
@@ -163,70 +213,171 @@ export class AdmissionService {
     return admission;
   }
 
-  async update(organizationId: string, id: string, body: unknown) {
+  async update(organizationId: string, id: string, body: unknown, actorUserId?: string) {
     const dto = parseUpdateAdmission(body);
-    const existing = await this.findOne(organizationId, id);
-    // Who and which bed are fixed by the booking: an update may repeat them but never change them.
-    assertMatchesParent(dto.residentId, existing.residentId, 'residentId', 'admission');
-    assertMatchesParent(dto.bedId, existing.bedId, 'bedId', 'admission');
-    assertMatchesParent(dto.bookingId, existing.bookingId, 'bookingId', 'admission');
-
-    const data: Prisma.AdmissionUpdateInput = {};
+    // The admission date changes only through an approved correction (specification v1.3 section 4). The whole request is
+    // refused before a status transition bundled with it can partially succeed.
     if (dto.admissionDate !== undefined) {
-      assertWithinBooking(dto.admissionDate, existing.booking);
-      data.admissionDate = dto.admissionDate;
+      throw new CorrectionError(
+        409,
+        'CORRECTION_REQUIRED',
+        'The admission date changes only through an approved correction. Use POST /corrections.',
+      );
     }
-    if (dto.notes !== undefined) data.notes = dto.notes;
-    if (dto.status !== undefined) data.status = dto.status;
-
-    // Location changes get exactly the validation create gets: same organization, room within property.
-    if (dto.propertyId !== undefined || dto.roomId !== undefined) {
-      const roomTouched = dto.roomId !== undefined;
-      const requestedRoom = roomTouched ? (dto.roomId ?? null) : existing.roomId;
-      const requestedProperty =
-        dto.propertyId !== undefined
-          ? (dto.propertyId ?? null)
-          : roomTouched
-            ? null // a new room decides its own property
-            : existing.propertyId;
-      const location = await this.resolveLocation(organizationId, requestedProperty, requestedRoom);
-      data.property = location.propertyId
-        ? { connect: { id: location.propertyId } }
-        : { disconnect: true };
-      data.room = location.roomId ? { connect: { id: location.roomId } } : { disconnect: true };
-    }
-    if (data.status === undefined || data.status === 'ADMITTED') {
-      return this.prisma.db.admission.update({ where: { id }, data });
-    }
-    // Leaving ADMITTED (cancelling, or back to pending) while the resident is checked in would leave
-    // an active stay on an admission that no longer allows one. The row lock serialises this with a
-    // concurrent check-in (which locks the same row): either the check-in lands first and this is
-    // refused, or this lands first and the check-in is refused.
-    return this.prisma.db.$transaction(async (tx) => {
-      await tx.$queryRaw`SELECT id FROM admissions WHERE id = ${id}::uuid AND organization_id = ${organizationId}::uuid FOR UPDATE`;
-      const stay = await tx.checkIn.findFirst({
-        where: {
-          admissionId: id,
-          organizationId,
-          // Cancelling is refused once any check-in is on record (even after check-out) so occupied
-          // periods stay in billing history; other status moves only matter while a stay is open.
-          ...(data.status === 'CANCELLED' ? {} : { status: 'ACTIVE' as const }),
-        },
-        select: { id: true, status: true },
-      });
-      if (stay) {
-        throw new ConflictException(
-          stay.status === 'ACTIVE'
-            ? 'This admission has an active check-in. Check the resident out before changing its status.'
-            : 'This admission has check-in history and can no longer be cancelled.',
-        );
-      }
-      return tx.admission.update({ where: { id }, data });
+    // Unlocked probe: only learns which rows to lock. Every rule is re-evaluated under the locks.
+    const probe = await this.prisma.db.admission.findFirst({
+      where: { id, organizationId },
+      select: { bedId: true, residentId: true, bookingId: true },
     });
+    if (!probe) throw new NotFoundException('Admission not found');
+
+    return this.prisma.db.$transaction(async (tx) => {
+      await acquireOrgGate(tx, organizationId);
+      await this.lockRows(tx, organizationId, [
+        ['beds', probe.bedId],
+        ['residents', probe.residentId],
+        ['bookings', probe.bookingId],
+        ['admissions', id],
+      ]);
+      const existing = await tx.admission.findFirst({
+        where: { id, organizationId },
+        include: { booking: true },
+      });
+      if (!existing) throw new NotFoundException('Admission not found');
+      // Who and which bed are fixed by the booking: an update may repeat them but never change them.
+      assertMatchesParent(dto.residentId, existing.residentId, 'residentId', 'admission');
+      assertMatchesParent(dto.bedId, existing.bedId, 'bedId', 'admission');
+      assertMatchesParent(dto.bookingId, existing.bookingId, 'bookingId', 'admission');
+
+      const data: Prisma.AdmissionUpdateInput = {};
+      if (dto.notes !== undefined) data.notes = dto.notes;
+      if (dto.status !== undefined) data.status = dto.status;
+
+      // Location changes get exactly the validation create gets: same organization, room within property.
+      if (dto.propertyId !== undefined || dto.roomId !== undefined) {
+        const roomTouched = dto.roomId !== undefined;
+        const requestedRoom = roomTouched ? (dto.roomId ?? null) : existing.roomId;
+        const requestedProperty =
+          dto.propertyId !== undefined
+            ? (dto.propertyId ?? null)
+            : roomTouched
+              ? null // a new room decides its own property
+              : existing.propertyId;
+        const location = await this.resolveLocation(
+          tx,
+          organizationId,
+          requestedProperty,
+          requestedRoom,
+        );
+        data.property = location.propertyId
+          ? { connect: { id: location.propertyId } }
+          : { disconnect: true };
+        data.room = location.roomId ? { connect: { id: location.roomId } } : { disconnect: true };
+      }
+
+      const hasOtherChanges =
+        dto.notes !== undefined || dto.propertyId !== undefined || dto.roomId !== undefined;
+      const isCancellation = data.status === 'CANCELLED';
+      const isApproval = data.status === 'ADMITTED' && existing.status !== 'ADMITTED';
+      const isReopen = data.status === 'PENDING' && existing.status === 'ADMITTED';
+
+      const auditChanges = async (
+        updated:
+          | typeof existing
+          | { notes: string | null; propertyId: string | null; roomId: string | null },
+      ) => {
+        const changedFields = (['notes', 'propertyId', 'roomId'] as const).filter(
+          (field) => updated[field] !== existing[field],
+        );
+        if (!changedFields.length) return;
+        await tx.auditEvent.create({
+          data: {
+            organizationId,
+            actorUserId: actorUserId ?? null,
+            action: 'admission.updated',
+            targetType: 'admission',
+            targetId: id,
+            requestId: auditRequestId(),
+            metadata: {
+              changedFields,
+              previousValues: Object.fromEntries(
+                changedFields.map((field) => [field, existing[field]]),
+              ),
+              newValues: Object.fromEntries(changedFields.map((field) => [field, updated[field]])),
+            } as Prisma.InputJsonObject,
+          },
+        });
+      };
+
+      if (isCancellation || isReopen) {
+        // Leaving ADMITTED while the resident is checked in would leave an active stay on an admission that no longer
+        // allows one. Cancelling is refused once any check-in is on record (even after check-out).
+        const stay = await tx.checkIn.findFirst({
+          where: {
+            admissionId: id,
+            organizationId,
+            ...(isCancellation ? {} : { status: 'ACTIVE' as const }),
+          },
+          select: { id: true, status: true },
+        });
+        if (stay) {
+          throw new ConflictException(
+            stay.status === 'ACTIVE'
+              ? 'This admission has an active check-in. Check the resident out before changing its status.'
+              : 'This admission has check-in history and can no longer be cancelled.',
+          );
+        }
+        const updated = await tx.admission.update({ where: { id }, data });
+        await tx.auditEvent.create({
+          data: {
+            organizationId,
+            actorUserId: actorUserId ?? null,
+            action: isCancellation ? 'admission.cancelled' : 'admission.reopened',
+            targetType: 'admission',
+            targetId: id,
+            requestId: auditRequestId(),
+            metadata: {
+              previousStatus: existing.status,
+              ...(isCancellation
+                ? {}
+                : { reopenedAt: new Date().toISOString(), reopenedByUserId: actorUserId }),
+            } as Prisma.InputJsonObject,
+          },
+        });
+        await auditChanges(updated);
+        return updated;
+      }
+
+      if (isApproval) {
+        const updated = await tx.admission.update({ where: { id }, data });
+        await tx.auditEvent.create({
+          data: {
+            organizationId,
+            actorUserId: actorUserId ?? null,
+            action: 'admission.approved',
+            targetType: 'admission',
+            targetId: id,
+            requestId: auditRequestId(),
+            metadata: {
+              previousStatus: existing.status,
+              approvedByUserId: actorUserId,
+              approvedAt: new Date().toISOString(),
+            } as Prisma.InputJsonObject,
+          },
+        });
+        await auditChanges(updated);
+        return updated;
+      }
+
+      // No status change, or a status that is not a transition: the write and its audit are one transaction.
+      const updated = await tx.admission.update({ where: { id }, data });
+      if (hasOtherChanges) await auditChanges(updated);
+      return updated;
+    }, ORDINARY_TX_OPTIONS);
   }
 
-  async cancel(organizationId: string, id: string) {
-    return this.update(organizationId, id, { status: 'CANCELLED' });
+  async cancel(organizationId: string, id: string, actorUserId?: string) {
+    return this.update(organizationId, id, { status: 'CANCELLED' }, actorUserId);
   }
 }
 

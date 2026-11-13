@@ -24,6 +24,13 @@ test('parseDatabaseUrl accepts postgres URLs and rejects other protocols', () =>
   assert.throws(() => parseDatabaseUrl('https://example.com'), /postgres/);
 });
 
+test('database URL validation preserves startup options, pooling parameters and encoded credentials', () => {
+  const url =
+    'postgresql://test:p%40ss%2Fword@localhost:5545/test?options=-c%20statement_timeout%3D1234%20-c%20timezone%3DAsia%2FKolkata&connection_limit=3&pgbouncer=true&sslmode=require';
+  assert.equal(parseDatabaseUrl(url), url);
+  assert.equal(loadRuntimeConfig({ APP_ENV: 'test', DATABASE_URL: url }).databaseUrl, url);
+});
+
 test('loadRuntimeConfig does not require a database for the API shell', () => {
   const config = loadRuntimeConfig({
     APP_ENV: 'test',

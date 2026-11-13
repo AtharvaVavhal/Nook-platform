@@ -10,7 +10,7 @@
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "test": "node --import tsx --test test/*.test.ts",
     "test:integration": "node --import tsx --test --test-concurrency=1 test/integration/*.test.ts",
-    "test:database": "NOOK_DATABASE_TESTS_REQUIRED=1 NOOK_INTEGRATION_PROFILE=initial-migration node --import tsx --test --test-concurrency=1 test/database-migration.test.ts",
+    "test:database": "NOOK_DATABASE_TESTS_REQUIRED=1 NOOK_INTEGRATION_PROFILE=initial-migration node --import tsx --test --test-concurrency=1 test/integration/database-migration.test.ts",
     "job:invoices": "node dist/jobs/run-invoice-schedule.js"
   },
   "dependencies": {

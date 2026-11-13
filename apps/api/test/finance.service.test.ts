@@ -70,9 +70,18 @@ function makeFake(stays: StayRow[]) {
   const invoices: any[] = [];
   const audits: any[] = [];
   const queries: any[] = [];
+  /** Booking ids with an unresolved correction billing gap (what correction_finance_links would report). */
+  const gaps: string[] = [];
+  /** Every advisory-lock / lock_timeout statement, in order. */
+  const locks: { text: string; value: unknown }[] = [];
   const tx: any = {
-    $executeRaw: async () => 0,
+    $executeRaw: async (strings: TemplateStringsArray, ...values: unknown[]) => {
+      locks.push({ text: strings.join('?'), value: values[0] });
+      return 0;
+    },
     $queryRaw: async (strings: TemplateStringsArray, ...values: unknown[]) => {
+      if (strings.join('?').includes('correction_finance_links'))
+        return gaps.map((booking_id) => ({ booking_id }));
       if (strings.join('?').includes('FOR UPDATE')) {
         const row = invoices.find((i) => i.id === values[0]);
         return row
@@ -93,8 +102,25 @@ function makeFake(stays: StayRow[]) {
     checkIn: {
       findMany: async (args: any) => {
         queries.push(args);
-        return stays;
+        // Single-booking reads (createDraft, issue revalidation) pass a bookingId filter.
+        const only = args.where?.bookingId;
+        return only ? stays.filter((s) => s.booking.id === only) : stays;
       },
+    },
+    booking: {
+      findFirst: async (args: any) => {
+        const found = stays.find((s) => s.booking.id === args.where.id);
+        return found
+          ? {
+              ...found.booking,
+              residentId: found.residentId,
+              organizationId: args.where.organizationId,
+            }
+          : null;
+      },
+    },
+    resident: {
+      findFirst: async (args: any) => ({ id: args.where.id }),
     },
     invoice: {
       findMany: async (args: any) => {
@@ -172,7 +198,16 @@ function makeFake(stays: StayRow[]) {
     resident: { findFirst: async () => ({ id: 'resident' }) },
     booking: { findFirst: async () => null },
   };
-  return { service: new FinanceService({ db } as any), invoices, audits, queries, tx, db };
+  return {
+    service: new FinanceService({ db } as any),
+    invoices,
+    audits,
+    queries,
+    tx,
+    db,
+    gaps,
+    locks,
+  };
 }
 
 const eventsOf = (audits: any[], action: string) => audits.filter((a) => a.action === action);
@@ -419,7 +454,7 @@ test('manual draft: a month outside the booking period or without a stay is refu
     },
   });
   const outside = makeFake([ended]);
-  outside.db.booking.findFirst = async () => ended.booking;
+  outside.tx.booking.findFirst = async () => ended.booking; // reads now happen inside the gated transaction
   await assert.rejects(
     outside.service.createDraft(ORG, ACTOR, {
       residentId: ended.residentId,
@@ -431,7 +466,7 @@ test('manual draft: a month outside the booking period or without a stay is refu
 
   const noStay = stayRow();
   const none = makeFake([]);
-  none.db.booking.findFirst = async () => noStay.booking;
+  none.tx.booking.findFirst = async () => noStay.booking;
   await assert.rejects(
     none.service.createDraft(ORG, ACTOR, {
       residentId: noStay.residentId,
@@ -1096,4 +1131,159 @@ test('FIN-REC-007: paid_amount_drift invariant is zero after test payments', asy
       `drift check failed for invoice ${inv.id}`,
     );
   }
+});
+
+// ------------------------------------------------ P4-2: gate order, in-transaction reads, billing-gap suppression
+
+test('gate: generation, draft creation and issue take the organization gate BEFORE the numbering lock', async () => {
+  const gen = makeFake([stayRow()]);
+  await gen.service.generateMonthly(ORG, ACTOR, { month });
+  const keys = gen.locks
+    .filter((l) => /pg_advisory_xact_lock/.test(l.text))
+    .map((l) => String(l.value));
+  assert.ok(keys[0]!.startsWith('nook:lifecycle-gate:'), 'gate first');
+  assert.ok(keys[1]!.startsWith('invoice-number:'), 'numbering second');
+
+  const stay = stayRow();
+  const draft = makeFake([stay]);
+  await draft.service.createDraft(ORG, ACTOR, {
+    residentId: stay.residentId,
+    bookingId: stay.booking.id,
+    month,
+  });
+  const draftKeys = draft.locks
+    .filter((l) => /pg_advisory_xact_lock/.test(l.text))
+    .map((l) => String(l.value));
+  assert.ok(
+    draftKeys[0]!.startsWith('nook:lifecycle-gate:') && draftKeys[1]!.startsWith('invoice-number:'),
+  );
+
+  const issue = makeFake([stayRow()]);
+  await issue.service.generateMonthly(ORG, ACTOR, { month });
+  issue.locks.length = 0;
+  await issue.service.issue(ORG, ACTOR, issue.invoices[0].id);
+  assert.ok(
+    String(issue.locks.find((l) => /pg_advisory_xact_lock/.test(l.text))?.value).startsWith(
+      'nook:lifecycle-gate:',
+    ),
+  );
+});
+
+test('gate: the advisory-only preview takes no lock at all', async () => {
+  const fake = makeFake([stayRow()]);
+  await fake.service.previewMonthly(ORG, month);
+  assert.equal(fake.locks.length, 0);
+});
+
+test('billing gap: generation (issuing or not) never creates or issues a gap booking-month and reports it', async () => {
+  for (const issue of [false, true]) {
+    const held = stayRow();
+    const free = stayRow();
+    const fake = makeFake([held, free]);
+    fake.gaps.push(held.booking.id);
+    const result = await fake.service.generateMonthly(
+      ORG,
+      null,
+      { month, issue },
+      { source: 'scheduler' },
+    );
+    assert.equal(result.created, 1, `issue=${issue}`);
+    assert.equal(result.skippedPendingReview, 1);
+    assert.deepEqual(
+      fake.invoices.map((i) => i.bookingId),
+      [free.booking.id],
+      'the held booking-month got no invoice',
+    );
+    assert.ok(fake.invoices.every((i) => (issue ? i.status === 'ISSUED' : i.status === 'DRAFT')));
+  }
+});
+
+test('billing gap: the preview reports what an issuing run will skip', async () => {
+  const held = stayRow();
+  const fake = makeFake([held, stayRow()]);
+  fake.gaps.push(held.booking.id);
+  const preview = await fake.service.previewMonthly(ORG, month);
+  assert.equal(preview.wouldCreate, 1);
+  assert.equal(preview.skippedPendingReview, 1);
+});
+
+test('billing gap: a manual draft for a gap booking-month is refused until an OWNER resolves the review', async () => {
+  const stay = stayRow();
+  const fake = makeFake([stay]);
+  fake.gaps.push(stay.booking.id);
+  await assert.rejects(
+    fake.service.createDraft(ORG, ACTOR, {
+      residentId: stay.residentId,
+      bookingId: stay.booking.id,
+      month,
+    }),
+    (e: unknown) => e instanceof ConflictException && /FINANCE_CONFLICT/.test(e.message),
+  );
+  assert.equal(fake.invoices.length, 0);
+});
+
+test('issue: a draft that no longer matches the booking price is not issued (it stays a draft)', async () => {
+  const stay = stayRow();
+  const fake = makeFake([stay]);
+  await fake.service.generateMonthly(ORG, ACTOR, { month });
+  stay.booking.monthlyPrice = new Decimal('6000.00'); // the booking price changed after the draft was created
+  await assert.rejects(
+    fake.service.issue(ORG, ACTOR, fake.invoices[0].id),
+    (e: unknown) => e instanceof ConflictException && /FINANCE_CONFLICT/.test(e.message),
+  );
+  assert.equal(fake.invoices[0].status, 'DRAFT');
+  assert.equal(fake.invoices[0].issuedAt, null);
+});
+
+test('issue: a draft whose stay no longer makes the month billable is not issued; an open gap also blocks issue', async () => {
+  const stay = stayRow();
+  const fake = makeFake([stay]);
+  await fake.service.generateMonthly(ORG, ACTOR, { month });
+  const stays = [stay];
+  stays.length = 0; // the stay is gone from the fake's source
+  const gone = makeFake([]);
+  gone.invoices.push(fake.invoices[0]);
+  gone.tx.booking.findFirst = async () => ({ ...stay.booking, residentId: stay.residentId });
+  await assert.rejects(
+    gone.service.issue(ORG, ACTOR, fake.invoices[0].id),
+    (e: unknown) => e instanceof ConflictException,
+  );
+
+  const gapped = makeFake([stay]);
+  gapped.invoices.push(fake.invoices[0]);
+  gapped.gaps.push(stay.booking.id);
+  await assert.rejects(
+    gapped.service.issue(ORG, ACTOR, fake.invoices[0].id),
+    (e: unknown) => e instanceof ConflictException,
+  );
+  assert.equal(fake.invoices[0].status, 'DRAFT');
+});
+
+test('issue: an unchanged, still-eligible draft issues exactly as before (issued facts come from the draft)', async () => {
+  const stay = stayRow();
+  const fake = makeFake([stay]);
+  await fake.service.generateMonthly(ORG, ACTOR, { month });
+  const issued = await fake.service.issue(ORG, ACTOR, fake.invoices[0].id);
+  assert.equal(issued.status, 'ISSUED');
+  assert.equal(issued.amount, '5000.00');
+});
+
+test('assignment validation refuses billing an inconsistent chain before invoice or audit writes', async () => {
+  const stay = stayRow();
+  (stay.booking as any).stayAssignments = [
+    {
+      bookingId: stay.booking.id,
+      residentId: stay.residentId,
+      kind: 'ORIGINAL',
+      status: 'ACTIVE',
+      startAt: new Date(stay.checkInAt.getTime() + DAY),
+      endAt: null,
+    },
+  ];
+  const f = makeFake([stay]);
+  await assert.rejects(f.service.generateMonthly(ORG, ACTOR, { month, issue: true }), {
+    status: 409,
+  });
+  assert.equal(f.invoices.length, 0);
+  assert.equal(f.audits.length, 0);
 });

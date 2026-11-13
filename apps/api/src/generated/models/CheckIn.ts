@@ -230,6 +230,7 @@ export type CheckInWhereInput = {
   notes?: Prisma.StringNullableFilter<"CheckIn"> | string | null
   createdAt?: Prisma.DateTimeFilter<"CheckIn"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CheckIn"> | Date | string
+  correctionProposals?: Prisma.CorrectionProposalListRelationFilter
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
   admission?: Prisma.XOR<Prisma.AdmissionScalarRelationFilter, Prisma.AdmissionWhereInput>
   resident?: Prisma.XOR<Prisma.ResidentScalarRelationFilter, Prisma.ResidentWhereInput>
@@ -250,6 +251,7 @@ export type CheckInOrderByWithRelationInput = {
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  correctionProposals?: Prisma.CorrectionProposalOrderByRelationAggregateInput
   organization?: Prisma.OrganizationOrderByWithRelationInput
   admission?: Prisma.AdmissionOrderByWithRelationInput
   resident?: Prisma.ResidentOrderByWithRelationInput
@@ -275,6 +277,7 @@ export type CheckInWhereUniqueInput = Prisma.AtLeast<{
   notes?: Prisma.StringNullableFilter<"CheckIn"> | string | null
   createdAt?: Prisma.DateTimeFilter<"CheckIn"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CheckIn"> | Date | string
+  correctionProposals?: Prisma.CorrectionProposalListRelationFilter
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
   admission?: Prisma.XOR<Prisma.AdmissionScalarRelationFilter, Prisma.AdmissionWhereInput>
   resident?: Prisma.XOR<Prisma.ResidentScalarRelationFilter, Prisma.ResidentWhereInput>
@@ -324,6 +327,7 @@ export type CheckInCreateInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  correctionProposals?: Prisma.CorrectionProposalCreateNestedManyWithoutCheckInInput
   organization: Prisma.OrganizationCreateNestedOneWithoutCheckInsInput
   admission: Prisma.AdmissionCreateNestedOneWithoutCheckInInput
   resident: Prisma.ResidentCreateNestedOneWithoutCheckInsInput
@@ -344,6 +348,7 @@ export type CheckInUncheckedCreateInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  correctionProposals?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutCheckInInput
   checkOut?: Prisma.CheckOutUncheckedCreateNestedOneWithoutCheckInInput
 }
 
@@ -354,6 +359,7 @@ export type CheckInUpdateInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  correctionProposals?: Prisma.CorrectionProposalUpdateManyWithoutCheckInNestedInput
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutCheckInsNestedInput
   admission?: Prisma.AdmissionUpdateOneRequiredWithoutCheckInNestedInput
   resident?: Prisma.ResidentUpdateOneRequiredWithoutCheckInsNestedInput
@@ -374,6 +380,7 @@ export type CheckInUncheckedUpdateInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  correctionProposals?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutCheckInNestedInput
   checkOut?: Prisma.CheckOutUncheckedUpdateOneWithoutCheckInNestedInput
 }
 
@@ -704,6 +711,22 @@ export type CheckInUpdateOneRequiredWithoutCheckOutNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.CheckInUpdateToOneWithWhereWithoutCheckOutInput, Prisma.CheckInUpdateWithoutCheckOutInput>, Prisma.CheckInUncheckedUpdateWithoutCheckOutInput>
 }
 
+export type CheckInCreateNestedOneWithoutCorrectionProposalsInput = {
+  create?: Prisma.XOR<Prisma.CheckInCreateWithoutCorrectionProposalsInput, Prisma.CheckInUncheckedCreateWithoutCorrectionProposalsInput>
+  connectOrCreate?: Prisma.CheckInCreateOrConnectWithoutCorrectionProposalsInput
+  connect?: Prisma.CheckInWhereUniqueInput
+}
+
+export type CheckInUpdateOneWithoutCorrectionProposalsNestedInput = {
+  create?: Prisma.XOR<Prisma.CheckInCreateWithoutCorrectionProposalsInput, Prisma.CheckInUncheckedCreateWithoutCorrectionProposalsInput>
+  connectOrCreate?: Prisma.CheckInCreateOrConnectWithoutCorrectionProposalsInput
+  upsert?: Prisma.CheckInUpsertWithoutCorrectionProposalsInput
+  disconnect?: Prisma.CheckInWhereInput | boolean
+  delete?: Prisma.CheckInWhereInput | boolean
+  connect?: Prisma.CheckInWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CheckInUpdateToOneWithWhereWithoutCorrectionProposalsInput, Prisma.CheckInUpdateWithoutCorrectionProposalsInput>, Prisma.CheckInUncheckedUpdateWithoutCorrectionProposalsInput>
+}
+
 export type CheckInCreateWithoutOrganizationInput = {
   id?: string
   checkInAt: Date | string
@@ -711,6 +734,7 @@ export type CheckInCreateWithoutOrganizationInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  correctionProposals?: Prisma.CorrectionProposalCreateNestedManyWithoutCheckInInput
   admission: Prisma.AdmissionCreateNestedOneWithoutCheckInInput
   resident: Prisma.ResidentCreateNestedOneWithoutCheckInsInput
   bed: Prisma.BedCreateNestedOneWithoutCheckInsInput
@@ -729,6 +753,7 @@ export type CheckInUncheckedCreateWithoutOrganizationInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  correctionProposals?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutCheckInInput
   checkOut?: Prisma.CheckOutUncheckedCreateNestedOneWithoutCheckInInput
 }
 
@@ -782,6 +807,7 @@ export type CheckInCreateWithoutBedInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  correctionProposals?: Prisma.CorrectionProposalCreateNestedManyWithoutCheckInInput
   organization: Prisma.OrganizationCreateNestedOneWithoutCheckInsInput
   admission: Prisma.AdmissionCreateNestedOneWithoutCheckInInput
   resident: Prisma.ResidentCreateNestedOneWithoutCheckInsInput
@@ -799,6 +825,7 @@ export type CheckInUncheckedCreateWithoutBedInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  correctionProposals?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutCheckInInput
   checkOut?: Prisma.CheckOutUncheckedCreateNestedOneWithoutCheckInInput
 }
 
@@ -835,6 +862,7 @@ export type CheckInCreateWithoutResidentInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  correctionProposals?: Prisma.CorrectionProposalCreateNestedManyWithoutCheckInInput
   organization: Prisma.OrganizationCreateNestedOneWithoutCheckInsInput
   admission: Prisma.AdmissionCreateNestedOneWithoutCheckInInput
   bed: Prisma.BedCreateNestedOneWithoutCheckInsInput
@@ -852,6 +880,7 @@ export type CheckInUncheckedCreateWithoutResidentInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  correctionProposals?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutCheckInInput
   checkOut?: Prisma.CheckOutUncheckedCreateNestedOneWithoutCheckInInput
 }
 
@@ -888,6 +917,7 @@ export type CheckInCreateWithoutBookingInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  correctionProposals?: Prisma.CorrectionProposalCreateNestedManyWithoutCheckInInput
   organization: Prisma.OrganizationCreateNestedOneWithoutCheckInsInput
   admission: Prisma.AdmissionCreateNestedOneWithoutCheckInInput
   resident: Prisma.ResidentCreateNestedOneWithoutCheckInsInput
@@ -905,6 +935,7 @@ export type CheckInUncheckedCreateWithoutBookingInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  correctionProposals?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutCheckInInput
   checkOut?: Prisma.CheckOutUncheckedCreateNestedOneWithoutCheckInInput
 }
 
@@ -941,6 +972,7 @@ export type CheckInCreateWithoutAdmissionInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  correctionProposals?: Prisma.CorrectionProposalCreateNestedManyWithoutCheckInInput
   organization: Prisma.OrganizationCreateNestedOneWithoutCheckInsInput
   resident: Prisma.ResidentCreateNestedOneWithoutCheckInsInput
   bed: Prisma.BedCreateNestedOneWithoutCheckInsInput
@@ -958,6 +990,7 @@ export type CheckInUncheckedCreateWithoutAdmissionInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  correctionProposals?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutCheckInInput
   checkOut?: Prisma.CheckOutUncheckedCreateNestedOneWithoutCheckInInput
 }
 
@@ -984,6 +1017,7 @@ export type CheckInUpdateWithoutAdmissionInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  correctionProposals?: Prisma.CorrectionProposalUpdateManyWithoutCheckInNestedInput
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutCheckInsNestedInput
   resident?: Prisma.ResidentUpdateOneRequiredWithoutCheckInsNestedInput
   bed?: Prisma.BedUpdateOneRequiredWithoutCheckInsNestedInput
@@ -1001,6 +1035,7 @@ export type CheckInUncheckedUpdateWithoutAdmissionInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  correctionProposals?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutCheckInNestedInput
   checkOut?: Prisma.CheckOutUncheckedUpdateOneWithoutCheckInNestedInput
 }
 
@@ -1011,6 +1046,7 @@ export type CheckInCreateWithoutCheckOutInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  correctionProposals?: Prisma.CorrectionProposalCreateNestedManyWithoutCheckInInput
   organization: Prisma.OrganizationCreateNestedOneWithoutCheckInsInput
   admission: Prisma.AdmissionCreateNestedOneWithoutCheckInInput
   resident: Prisma.ResidentCreateNestedOneWithoutCheckInsInput
@@ -1030,6 +1066,7 @@ export type CheckInUncheckedCreateWithoutCheckOutInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  correctionProposals?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutCheckInInput
 }
 
 export type CheckInCreateOrConnectWithoutCheckOutInput = {
@@ -1055,6 +1092,7 @@ export type CheckInUpdateWithoutCheckOutInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  correctionProposals?: Prisma.CorrectionProposalUpdateManyWithoutCheckInNestedInput
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutCheckInsNestedInput
   admission?: Prisma.AdmissionUpdateOneRequiredWithoutCheckInNestedInput
   resident?: Prisma.ResidentUpdateOneRequiredWithoutCheckInsNestedInput
@@ -1074,6 +1112,83 @@ export type CheckInUncheckedUpdateWithoutCheckOutInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  correctionProposals?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutCheckInNestedInput
+}
+
+export type CheckInCreateWithoutCorrectionProposalsInput = {
+  id?: string
+  checkInAt: Date | string
+  status?: $Enums.CheckInStatus
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  organization: Prisma.OrganizationCreateNestedOneWithoutCheckInsInput
+  admission: Prisma.AdmissionCreateNestedOneWithoutCheckInInput
+  resident: Prisma.ResidentCreateNestedOneWithoutCheckInsInput
+  bed: Prisma.BedCreateNestedOneWithoutCheckInsInput
+  booking: Prisma.BookingCreateNestedOneWithoutCheckInsInput
+  checkOut?: Prisma.CheckOutCreateNestedOneWithoutCheckInInput
+}
+
+export type CheckInUncheckedCreateWithoutCorrectionProposalsInput = {
+  id?: string
+  organizationId: string
+  admissionId: string
+  residentId: string
+  bedId: string
+  bookingId: string
+  checkInAt: Date | string
+  status?: $Enums.CheckInStatus
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  checkOut?: Prisma.CheckOutUncheckedCreateNestedOneWithoutCheckInInput
+}
+
+export type CheckInCreateOrConnectWithoutCorrectionProposalsInput = {
+  where: Prisma.CheckInWhereUniqueInput
+  create: Prisma.XOR<Prisma.CheckInCreateWithoutCorrectionProposalsInput, Prisma.CheckInUncheckedCreateWithoutCorrectionProposalsInput>
+}
+
+export type CheckInUpsertWithoutCorrectionProposalsInput = {
+  update: Prisma.XOR<Prisma.CheckInUpdateWithoutCorrectionProposalsInput, Prisma.CheckInUncheckedUpdateWithoutCorrectionProposalsInput>
+  create: Prisma.XOR<Prisma.CheckInCreateWithoutCorrectionProposalsInput, Prisma.CheckInUncheckedCreateWithoutCorrectionProposalsInput>
+  where?: Prisma.CheckInWhereInput
+}
+
+export type CheckInUpdateToOneWithWhereWithoutCorrectionProposalsInput = {
+  where?: Prisma.CheckInWhereInput
+  data: Prisma.XOR<Prisma.CheckInUpdateWithoutCorrectionProposalsInput, Prisma.CheckInUncheckedUpdateWithoutCorrectionProposalsInput>
+}
+
+export type CheckInUpdateWithoutCorrectionProposalsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  checkInAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumCheckInStatusFieldUpdateOperationsInput | $Enums.CheckInStatus
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutCheckInsNestedInput
+  admission?: Prisma.AdmissionUpdateOneRequiredWithoutCheckInNestedInput
+  resident?: Prisma.ResidentUpdateOneRequiredWithoutCheckInsNestedInput
+  bed?: Prisma.BedUpdateOneRequiredWithoutCheckInsNestedInput
+  booking?: Prisma.BookingUpdateOneRequiredWithoutCheckInsNestedInput
+  checkOut?: Prisma.CheckOutUpdateOneWithoutCheckInNestedInput
+}
+
+export type CheckInUncheckedUpdateWithoutCorrectionProposalsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  admissionId?: Prisma.StringFieldUpdateOperationsInput | string
+  residentId?: Prisma.StringFieldUpdateOperationsInput | string
+  bedId?: Prisma.StringFieldUpdateOperationsInput | string
+  bookingId?: Prisma.StringFieldUpdateOperationsInput | string
+  checkInAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumCheckInStatusFieldUpdateOperationsInput | $Enums.CheckInStatus
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  checkOut?: Prisma.CheckOutUncheckedUpdateOneWithoutCheckInNestedInput
 }
 
 export type CheckInCreateManyOrganizationInput = {
@@ -1096,6 +1211,7 @@ export type CheckInUpdateWithoutOrganizationInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  correctionProposals?: Prisma.CorrectionProposalUpdateManyWithoutCheckInNestedInput
   admission?: Prisma.AdmissionUpdateOneRequiredWithoutCheckInNestedInput
   resident?: Prisma.ResidentUpdateOneRequiredWithoutCheckInsNestedInput
   bed?: Prisma.BedUpdateOneRequiredWithoutCheckInsNestedInput
@@ -1114,6 +1230,7 @@ export type CheckInUncheckedUpdateWithoutOrganizationInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  correctionProposals?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutCheckInNestedInput
   checkOut?: Prisma.CheckOutUncheckedUpdateOneWithoutCheckInNestedInput
 }
 
@@ -1149,6 +1266,7 @@ export type CheckInUpdateWithoutBedInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  correctionProposals?: Prisma.CorrectionProposalUpdateManyWithoutCheckInNestedInput
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutCheckInsNestedInput
   admission?: Prisma.AdmissionUpdateOneRequiredWithoutCheckInNestedInput
   resident?: Prisma.ResidentUpdateOneRequiredWithoutCheckInsNestedInput
@@ -1166,6 +1284,7 @@ export type CheckInUncheckedUpdateWithoutBedInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  correctionProposals?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutCheckInNestedInput
   checkOut?: Prisma.CheckOutUncheckedUpdateOneWithoutCheckInNestedInput
 }
 
@@ -1200,6 +1319,7 @@ export type CheckInUpdateWithoutResidentInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  correctionProposals?: Prisma.CorrectionProposalUpdateManyWithoutCheckInNestedInput
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutCheckInsNestedInput
   admission?: Prisma.AdmissionUpdateOneRequiredWithoutCheckInNestedInput
   bed?: Prisma.BedUpdateOneRequiredWithoutCheckInsNestedInput
@@ -1217,6 +1337,7 @@ export type CheckInUncheckedUpdateWithoutResidentInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  correctionProposals?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutCheckInNestedInput
   checkOut?: Prisma.CheckOutUncheckedUpdateOneWithoutCheckInNestedInput
 }
 
@@ -1251,6 +1372,7 @@ export type CheckInUpdateWithoutBookingInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  correctionProposals?: Prisma.CorrectionProposalUpdateManyWithoutCheckInNestedInput
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutCheckInsNestedInput
   admission?: Prisma.AdmissionUpdateOneRequiredWithoutCheckInNestedInput
   resident?: Prisma.ResidentUpdateOneRequiredWithoutCheckInsNestedInput
@@ -1268,6 +1390,7 @@ export type CheckInUncheckedUpdateWithoutBookingInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  correctionProposals?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutCheckInNestedInput
   checkOut?: Prisma.CheckOutUncheckedUpdateOneWithoutCheckInNestedInput
 }
 
@@ -1284,6 +1407,35 @@ export type CheckInUncheckedUpdateManyWithoutBookingInput = {
 }
 
 
+/**
+ * Count Type CheckInCountOutputType
+ */
+
+export type CheckInCountOutputType = {
+  correctionProposals: number
+}
+
+export type CheckInCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  correctionProposals?: boolean | CheckInCountOutputTypeCountCorrectionProposalsArgs
+}
+
+/**
+ * CheckInCountOutputType without action
+ */
+export type CheckInCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CheckInCountOutputType
+   */
+  select?: Prisma.CheckInCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * CheckInCountOutputType without action
+ */
+export type CheckInCountOutputTypeCountCorrectionProposalsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CorrectionProposalWhereInput
+}
+
 
 export type CheckInSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1297,12 +1449,14 @@ export type CheckInSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   notes?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  correctionProposals?: boolean | Prisma.CheckIn$correctionProposalsArgs<ExtArgs>
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   admission?: boolean | Prisma.AdmissionDefaultArgs<ExtArgs>
   resident?: boolean | Prisma.ResidentDefaultArgs<ExtArgs>
   bed?: boolean | Prisma.BedDefaultArgs<ExtArgs>
   booking?: boolean | Prisma.BookingDefaultArgs<ExtArgs>
   checkOut?: boolean | Prisma.CheckIn$checkOutArgs<ExtArgs>
+  _count?: boolean | Prisma.CheckInCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["checkIn"]>
 
 export type CheckInSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1359,12 +1513,14 @@ export type CheckInSelectScalar = {
 
 export type CheckInOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organizationId" | "admissionId" | "residentId" | "bedId" | "bookingId" | "checkInAt" | "status" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["checkIn"]>
 export type CheckInInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  correctionProposals?: boolean | Prisma.CheckIn$correctionProposalsArgs<ExtArgs>
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   admission?: boolean | Prisma.AdmissionDefaultArgs<ExtArgs>
   resident?: boolean | Prisma.ResidentDefaultArgs<ExtArgs>
   bed?: boolean | Prisma.BedDefaultArgs<ExtArgs>
   booking?: boolean | Prisma.BookingDefaultArgs<ExtArgs>
   checkOut?: boolean | Prisma.CheckIn$checkOutArgs<ExtArgs>
+  _count?: boolean | Prisma.CheckInCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type CheckInIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
@@ -1384,6 +1540,7 @@ export type CheckInIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
 export type $CheckInPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "CheckIn"
   objects: {
+    correctionProposals: Prisma.$CorrectionProposalPayload<ExtArgs>[]
     organization: Prisma.$OrganizationPayload<ExtArgs>
     admission: Prisma.$AdmissionPayload<ExtArgs>
     resident: Prisma.$ResidentPayload<ExtArgs>
@@ -1797,6 +1954,7 @@ readonly fields: CheckInFieldRefs;
  */
 export interface Prisma__CheckInClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  correctionProposals<T extends Prisma.CheckIn$correctionProposalsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CheckIn$correctionProposalsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CorrectionProposalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   organization<T extends Prisma.OrganizationDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrganizationDefaultArgs<ExtArgs>>): Prisma.Prisma__OrganizationClient<runtime.Types.Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   admission<T extends Prisma.AdmissionDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AdmissionDefaultArgs<ExtArgs>>): Prisma.Prisma__AdmissionClient<runtime.Types.Result.GetResult<Prisma.$AdmissionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   resident<T extends Prisma.ResidentDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ResidentDefaultArgs<ExtArgs>>): Prisma.Prisma__ResidentClient<runtime.Types.Result.GetResult<Prisma.$ResidentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
@@ -2241,6 +2399,30 @@ export type CheckInDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Limit how many CheckIns to delete.
    */
   limit?: number
+}
+
+/**
+ * CheckIn.correctionProposals
+ */
+export type CheckIn$correctionProposalsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CorrectionProposal
+   */
+  select?: Prisma.CorrectionProposalSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CorrectionProposal
+   */
+  omit?: Prisma.CorrectionProposalOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CorrectionProposalInclude<ExtArgs> | null
+  where?: Prisma.CorrectionProposalWhereInput
+  orderBy?: Prisma.CorrectionProposalOrderByWithRelationInput | Prisma.CorrectionProposalOrderByWithRelationInput[]
+  cursor?: Prisma.CorrectionProposalWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CorrectionProposalScalarFieldEnum | Prisma.CorrectionProposalScalarFieldEnum[]
 }
 
 /**

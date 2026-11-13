@@ -9,6 +9,10 @@ import { BookingModule } from './booking/booking.module.js';
 import { AdmissionModule } from './admission/admission.module.js';
 import { CheckInModule } from './checkin/checkin.module.js';
 import { FinanceModule } from './finance/finance.module.js';
+import { StaySummaryModule } from './stay-summary/stay-summary.module.js';
+import { ResidentHistoryModule } from './resident-history/resident-history.module.js';
+import { CorrectionsModule } from './corrections/corrections.module.js';
+import { TransferModule } from './transfer/transfer.module.js';
 
 @Module({
   imports: [
@@ -20,6 +24,10 @@ import { FinanceModule } from './finance/finance.module.js';
     AdmissionModule,
     CheckInModule,
     FinanceModule,
+    StaySummaryModule,
+    ResidentHistoryModule,
+    CorrectionsModule,
+    TransferModule,
   ],
   controllers: [HealthController],
   providers: [DatabaseService],

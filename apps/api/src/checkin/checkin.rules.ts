@@ -38,7 +38,10 @@ export interface CheckInFacts {
   bed: {
     archivedAt: Date | null;
     operationalStatus: string;
-    room: { archivedAt: Date | null } | null;
+    room: {
+      archivedAt: Date | null;
+      floor?: { archivedAt: Date | null; property: { archivedAt: Date | null } };
+    } | null;
   };
   /** The check-in already attached to this admission, if any (an admission has at most one, ever). */
   existingForAdmission: { status: string } | null;
@@ -56,7 +59,12 @@ export function assertCanCheckIn(f: CheckInFacts): void {
   if (f.booking.status !== 'CONFIRMED') {
     throw new ConflictException('The booking for this admission is not confirmed');
   }
-  if (f.bed.archivedAt || f.bed.room?.archivedAt) {
+  if (
+    f.bed.archivedAt ||
+    f.bed.room?.archivedAt ||
+    f.bed.room?.floor?.archivedAt ||
+    f.bed.room?.floor?.property.archivedAt
+  ) {
     throw new ConflictException('This bed is archived and cannot be checked into');
   }
   if (f.bed.operationalStatus !== 'IN_SERVICE') {

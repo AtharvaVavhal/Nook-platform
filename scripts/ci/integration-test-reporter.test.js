@@ -6,6 +6,7 @@ const names = [
   'auth',
   'booking',
   'checkin',
+  'corrections',
   'cross-origin',
   'finance',
   'inventory',
@@ -15,9 +16,11 @@ const names = [
   'resident-enquiry',
   'uuid-params',
 ];
+const FILE_COUNT = names.length;
+assert.equal(FILE_COUNT, 13, 'the full integration list is pinned at thirteen files');
 const line = (event, data) => `NOOK_TEST_${event} ${JSON.stringify(data)}\n`;
 const result = { tests: 2, passed: 1, failed: 0, skipped: 1, todo: 0, cancelled: 0 };
-test('twelve independent files retain order and counts', () => {
+test('thirteen independent files retain order and counts', () => {
   const output = [];
   const p = createTestProtocol((s) => output.push(s));
   for (const name of names) {
@@ -28,9 +31,9 @@ test('twelve independent files retain order and counts', () => {
   }
   p.finish();
   const summary = JSON.parse(output.at(-1).split(' ').slice(1).join(' '));
-  assert.equal(summary.tests, 24);
-  assert.equal(summary.passed, 12);
-  assert.equal(summary.files_completed, 12);
+  assert.equal(summary.tests, FILE_COUNT * 2);
+  assert.equal(summary.passed, FILE_COUNT);
+  assert.equal(summary.files_completed, FILE_COUNT);
 });
 for (const [label, record] of [
   ['unknown file', line('FILE_START', { file: 'secret' })],
@@ -121,10 +124,10 @@ test('real Node reporter: nested tests, two files, secrets and nonzero exit', as
     const output = [];
     const protocol = createTestProtocol((s) => output.push(s));
     protocol.push(child.stdout);
-    assert.throws(() => protocol.finish()); // Remaining ten files never started.
+    assert.throws(() => protocol.finish()); // Remaining files never started.
     const summary = JSON.parse(output.at(-1).slice('NOOK_TEST_SUITE_RESULT '.length));
     assert.equal(summary.files_completed, 2);
-    assert.equal(summary.files_not_started, 10);
+    assert.equal(summary.files_not_started, FILE_COUNT - 2);
     assert.equal(summary.tests, 4);
     assert.equal(summary.failed, 1);
     assert.equal(summary.skipped, 1);
@@ -344,7 +347,7 @@ for (const mode of ['empty stream', 'interrupted', 'reporter throws', 'bad summa
     assert.throws(() => p.finish());
     const summary = decode(out.at(-1));
     assert.equal(summary.files_incomplete, mode === 'empty stream' ? 0 : 1);
-    assert.equal(summary.files_not_started, mode === 'empty stream' ? 12 : 11);
+    assert.equal(summary.files_not_started, mode === 'empty stream' ? FILE_COUNT : FILE_COUNT - 1);
     assert.equal(summary.counts_complete, false);
     assertPrivate(out);
   });
@@ -373,7 +376,7 @@ test('fragmented and coalesced records preserve exact final classifications', ()
   for (let i = 0; i < wire.length; i += 3) p.push(wire.slice(i, i + 3));
   assert.throws(() => p.finish());
   const finals = out.filter((s) => s.startsWith('NOOK_TEST_FILE_RESULT ')).map(decode);
-  assert.equal(finals.length, 12);
+  assert.equal(finals.length, FILE_COUNT);
   assert.equal(finals[0].completionConfirmed, true);
   assert.equal(finals[1].status, 'not_started');
 });
@@ -565,7 +568,7 @@ test('actual Node multi-file pass, failure, cancellation, crash and never-starte
     protocol.push(child.stdout);
     assert.throws(() => protocol.finish());
     const finals = out.filter((s) => s.startsWith('NOOK_TEST_FILE_RESULT ')).map(decode);
-    assert.equal(finals.length, 12);
+    assert.equal(finals.length, FILE_COUNT);
     assert.equal(finals[0].passed, 1);
     assert.equal(finals[1].passed, 1);
     assert.equal(finals[2].failed, 2);
@@ -574,7 +577,7 @@ test('actual Node multi-file pass, failure, cancellation, crash and never-starte
     assert.equal(finals[4].countsKnown, false);
     assert.equal(finals[5].status, 'not_started');
     const summary = decode(out.at(-1));
-    assert.equal(summary.files_not_started, 7);
+    assert.equal(summary.files_not_started, FILE_COUNT - 5);
     assert.equal(summary.cancelled, 1);
     assert.equal(summary.passed, 2);
     assertPrivate(child.stdout);
@@ -828,8 +831,8 @@ test('real throwing TODO remains TODO and a complete otherwise green suite is ac
   assert.equal(first.failed, 0);
   assert.equal(first.failures, 0);
   const summary = decode(r.out.at(-1));
-  assert.equal(summary.tests, 13);
-  assert.equal(summary.passed, 12);
+  assert.equal(summary.tests, FILE_COUNT + 1);
+  assert.equal(summary.passed, FILE_COUNT);
   assert.equal(summary.todo, 1);
   assert.equal(summary.todo_failures, 1);
 });
@@ -900,7 +903,7 @@ test('real file launch interrupted during module import is incomplete, never not
     assert.equal(Object.hasOwn(firstResult, 'tests'), false);
     const summary = decode(out.at(-1));
     assert.equal(summary.files_started, 1);
-    assert.equal(summary.files_not_started, 11);
+    assert.equal(summary.files_not_started, FILE_COUNT - 1);
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
@@ -958,11 +961,11 @@ for (const failing of [false, true])
       if (failing) assert.throws(() => protocol.finish());
       else protocol.finish();
       const summary = decode(output.at(-1));
-      assert.equal(summary.files_started, 12);
-      assert.equal(summary.files_completed, 12);
+      assert.equal(summary.files_started, FILE_COUNT);
+      assert.equal(summary.files_completed, FILE_COUNT);
       assert.equal(summary.files_not_started, 0);
-      assert.equal(summary.tests, 12);
-      assert.equal(summary.passed, failing ? 11 : 12);
+      assert.equal(summary.tests, FILE_COUNT);
+      assert.equal(summary.passed, failing ? FILE_COUNT - 1 : FILE_COUNT);
       assert.equal(summary.failed, failing ? 1 : 0);
       const failures = output.filter((s) => s.startsWith('NOOK_TEST_FAILURE ')).map(decode);
       assert.equal(failures.length, failing ? 1 : 0);
@@ -1077,5 +1080,5 @@ for (const [label, name, file, extra] of [
     const protocol = createTestProtocol((s) => parentOutput.push(s));
     assert.throws(() => protocol.finish());
     assert.equal(decode(parentOutput.at(-1)).files_started, 0);
-    assert.equal(decode(parentOutput.at(-1)).files_not_started, 12);
+    assert.equal(decode(parentOutput.at(-1)).files_not_started, FILE_COUNT);
   });

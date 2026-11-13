@@ -8,6 +8,7 @@ import { NestFactory } from '@nestjs/core';
 import request from 'supertest';
 import { AppModule } from '../../src/app.module.js';
 import { configureApp } from '../../src/app.setup.js';
+import { Public } from '../../src/auth/permissions.js';
 import { loadRuntimeConfig } from '../../src/config.js';
 import { setErrorReporter } from '../../src/observability/error-reporter.js';
 import { log } from '../../src/observability/json-logger.js';
@@ -24,9 +25,12 @@ requireTestDatabaseUrl();
 const ORIGIN = 'http://localhost:5173';
 const DB_SECRET = 'dbpassword-that-must-not-leak';
 
+// Test-only fault-injection routes. Every route must declare its access (default-deny permission layer); these are
+// deliberately public so the error and logging behavior under test is reached without a session.
 @Controller('__test')
 class TestFaultsController {
   @Get('boom')
+  @Public()
   boom(): never {
     throw new Error(
       `connection to postgresql://nook_runtime:${DB_SECRET}@db.internal:5432/nook failed for resident asha@example.in phone 9000000001`,
@@ -34,6 +38,7 @@ class TestFaultsController {
   }
 
   @Get('prisma')
+  @Public()
   prisma(): never {
     const error = new Error(
       'Invalid `prisma.resident.create()` invocation:\n\n{ data: { firstName: "Asha", phone: "9000000001" } }\nUnique constraint failed',

@@ -1,8 +1,8 @@
-import './integration/helpers/preflight.js';
+import './helpers/preflight.js';
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import type { Client } from 'pg';
-import { withMigratorClient } from './integration/helpers/db.js';
+import { withMigratorClient } from './helpers/db.js';
 
 // This suite asserts the schema produced by the FIRST migration only (nine tables, ten foreign keys, five
 // active-row indexes), so it must run against a database that has just that migration, selected with

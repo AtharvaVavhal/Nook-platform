@@ -930,9 +930,16 @@ test('admission: invalid input is a 400 with the field named, and nothing is sto
     const res = await send('put', org, `/admissions/${id}`, body);
     assert.equal(res.status, 400, `${JSON.stringify(body)} answered ${res.status}`);
   }
-  await send('put', org, `/admissions/${id}`, { notes: null, admissionDate: '2026-12-05' }).expect(
-    200,
-  );
+  await send('put', org, `/admissions/${id}`, { notes: null }).expect(200);
+  // the date itself changes only through an approved correction, and a bundled status change must not slip through
+  const refused = await send('put', org, `/admissions/${id}`, {
+    admissionDate: '2026-12-05',
+    status: 'ADMITTED',
+  });
+  assert.equal(refused.status, 409);
+  assert.equal(refused.body.code, 'CORRECTION_REQUIRED');
+  const after = await (server as any).get(`/api/v1/admissions/${id}`).set(org.headers).expect(200);
+  assert.equal(after.body.status, 'PENDING');
 });
 
 test('admission queries: bad filters and ids are 400, not 500', async () => {
@@ -984,22 +991,54 @@ test('admission date: must fall inside the booked period, on create, on update, 
   const last = await admit('2027-02-28').expect(201); // the last booked day
   const id = last.body.id as string;
 
-  // update: the same rule
-  await send('put', org, `/admissions/${id}`, { admissionDate: '2027-03-01' }).expect(400);
-  await send('put', org, `/admissions/${id}`, { admissionDate: '2026-11-30' }).expect(400);
-  await send('put', org, `/admissions/${id}`, { admissionDate: '2026-12-01' }).expect(200);
+  // update: the date is no longer editable here (correction required), notes still are
+  for (const date of ['2027-03-01', '2026-11-30', '2026-12-01']) {
+    const res = await send('put', org, `/admissions/${id}`, { admissionDate: date });
+    assert.equal(res.status, 409, date);
+    assert.equal(res.body.code, 'CORRECTION_REQUIRED');
+  }
   await send('put', org, `/admissions/${id}`, { notes: 'unrelated edit' }).expect(200);
 
-  // the booking cannot be changed so that its live admission falls outside it
+  // booking dates are no longer editable here either, so the booking cannot be moved out from under its admission
   const putBooking = (body: object) => send('put', org, `/bookings/${bookingId}`, body);
-  const moved = await putBooking({ startDate: '2026-12-05' });
-  assert.equal(moved.status, 409);
-  assert.match(String(moved.body.message), /admission date outside/i);
-  await putBooking({ endDate: '2026-12-01' }).expect(400); // not even a valid period
-  await putBooking({ startDate: '2026-11-20' }).expect(200); // earlier start still covers it
-  await putBooking({ endDate: '2027-01-15', notes: 'shorter' }).expect(200);
-
-  // a cancelled admission no longer constrains the booking
+  for (const body of [{ startDate: '2026-12-05' }, { endDate: '2027-01-15', notes: 'shorter' }]) {
+    const moved = await putBooking(body);
+    assert.equal(moved.status, 409);
+    assert.equal(moved.body.code, 'CORRECTION_REQUIRED');
+  }
+  // a cancelled admission can still be cancelled through its own command
   await send('put', org, `/admissions/${id}`, { status: 'CANCELLED' }).expect(200);
-  await putBooking({ startDate: '2027-01-01' }).expect(200);
+});
+
+test('admission approval with location edits returns persisted IDs and audits implicit property changes', async () => {
+  const org = await newOrg();
+  const b = await bookingFor(org);
+  const created = await send('post', org, '/admissions', {
+    bookingId: b.bookingId,
+    admissionDate: '2026-12-01',
+  }).expect(201);
+  const updated = await send('put', org, `/admissions/${created.body.id}`, {
+    status: 'ADMITTED',
+    roomId: org.roomId,
+    notes: 'Reviewed metadata',
+  }).expect(200);
+  assert.equal(updated.body.roomId, org.roomId);
+  assert.equal(updated.body.propertyId, org.propertyId);
+  assert.equal(updated.body.status, 'ADMITTED');
+  await withMigratorClient(async (c) => {
+    const events = (
+      await c.query(
+        "SELECT action,metadata FROM audit_events WHERE organization_id=$1 AND target_id=$2 AND action IN ('admission.updated','admission.approved')",
+        [org.orgId, created.body.id],
+      )
+    ).rows;
+    assert.equal(events.length, 2);
+    const change = events.find((e) => e.action === 'admission.updated').metadata;
+    assert.deepEqual(change.changedFields, ['notes', 'propertyId', 'roomId']);
+    assert.deepEqual(change.newValues, {
+      notes: 'Reviewed metadata',
+      propertyId: org.propertyId,
+      roomId: org.roomId,
+    });
+  });
 });

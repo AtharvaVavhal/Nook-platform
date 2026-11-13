@@ -1,3 +1,4 @@
+import { activeBedOccupancyWhere, physicalBedId } from '../common/stay-occupancy.js';
 import {
   Inject,
   Injectable,
@@ -20,15 +21,19 @@ import { parseExtensionRequest, canApproveExtension } from './booking.extension.
 import { assertBedBookable, findOverlappingBooking } from './booking.rules.js';
 import { Prisma } from '../generated/client.js';
 import { auditRequestId } from '../observability/request-context.js';
+import { ORDINARY_TX_OPTIONS, acquireOrgGate } from '../common/org-gate.js';
+import { CorrectionError } from '../corrections/corrections.rules.js';
 
 @Injectable()
 export class BookingService {
   constructor(@Inject(PrismaService) private readonly prisma: PrismaService) {}
 
-  async create(organizationId: string, body: unknown) {
+  async create(organizationId: string, body: unknown, actorUserId?: string) {
     // Validate before touching the database: a malformed request is a 400, never a Prisma 500.
     const dto = parseCreateBooking(body);
     return this.prisma.db.$transaction(async (tx) => {
+      // Organization gate first (specification v1.3 section 10.2), then the existing Bed lock.
+      await acquireOrgGate(tx, organizationId);
       // Lock the bed row (inside the transaction, scoped to the organization) so concurrent
       // bookings for the same bed serialize on the overlap check below.
       const bed = await tx.$queryRaw<{ id: string }[]>`
@@ -48,10 +53,15 @@ export class BookingService {
           select: {
             archivedAt: true,
             operationalStatus: true,
-            room: { select: { archivedAt: true } },
+            room: {
+              select: {
+                archivedAt: true,
+                floor: { select: { archivedAt: true, property: { select: { archivedAt: true } } } },
+              },
+            },
           },
         }),
-        tx.checkIn.count({ where: { organizationId, bedId: dto.bedId, status: 'ACTIVE' } }),
+        tx.checkIn.count({ where: activeBedOccupancyWhere(organizationId, dto.bedId) }),
       ]);
       assertBedBookable(bedFacts, {
         hasActiveCheckIn: activeCheckIns > 0,
@@ -82,8 +92,26 @@ export class BookingService {
         resident: { connect: { id: dto.residentId } },
         bed: { connect: { id: dto.bedId } },
       };
-      return tx.booking.create({ data });
-    });
+      const booking = await tx.booking.create({ data });
+      await tx.auditEvent.create({
+        data: {
+          organizationId,
+          actorUserId: actorUserId ?? null,
+          action: 'booking.created',
+          targetType: 'booking',
+          targetId: booking.id,
+          requestId: auditRequestId(),
+          metadata: {
+            residentId: dto.residentId,
+            bedId: dto.bedId,
+            startDate: dto.startDate.toISOString(),
+            endDate: dto.endDate.toISOString(),
+            monthlyPrice: dto.monthlyPrice.toString(),
+          },
+        },
+      });
+      return booking;
+    }, ORDINARY_TX_OPTIONS);
   }
 
   async findAll(organizationId: string, rawQuery: unknown) {
@@ -201,9 +229,29 @@ export class BookingService {
     if (!probe) throw new NotFoundException('Booking not found');
 
     await this.prisma.db.$transaction(async (tx) => {
-      const bed = await tx.$queryRaw<{ id: string }[]>`
-        SELECT id FROM beds WHERE id = ${probe.bedId}::uuid AND organization_id = ${organizationId}::uuid FOR UPDATE`;
-      if (bed.length === 0) throw new NotFoundException('Bed not found');
+      await acquireOrgGate(tx, organizationId);
+      const segments = await tx.effectiveStayAssignment.findMany({
+        where: { organizationId, bookingId: id },
+      });
+      const activeSegments = segments.filter(
+        (segment) => segment.status === 'ACTIVE' && segment.endAt === null,
+      );
+      if (segments.length) {
+        const activeStays = await tx.checkIn.count({
+          where: { organizationId, bookingId: id, status: 'ACTIVE', checkOut: null },
+        });
+        if (activeStays > 1 || activeSegments.length !== activeStays) {
+          throw new ConflictException('Active stay assignment requires review');
+        }
+      }
+      const bedIds = [
+        ...new Set([probe.bedId, ...activeSegments.map((segment) => segment.bedId)]),
+      ].sort();
+      for (const bedId of bedIds) {
+        const rows = await tx.$queryRaw<{ id: string }[]>`
+          SELECT id FROM beds WHERE id = ${bedId}::uuid AND organization_id = ${organizationId}::uuid FOR UPDATE`;
+        if (!rows.length) throw new NotFoundException('Bed not found');
+      }
       const locked = await tx.$queryRaw<{ id: string }[]>`
         SELECT id FROM bookings WHERE id = ${id}::uuid AND organization_id = ${organizationId}::uuid FOR UPDATE`;
       if (locked.length === 0) throw new NotFoundException('Booking not found');
@@ -217,15 +265,17 @@ export class BookingService {
         throw new BadRequestException('newEndDate must be later than the current end date');
       }
       // Only the added slice [current end, new end) needs checking; the rest was checked when it was booked.
-      const overlap = await findOverlappingBooking(tx, {
-        organizationId,
-        bedId: booking.bedId,
-        start: booking.endDate,
-        end: request.newEndDate,
-        excludeBookingId: id,
-      });
-      if (overlap) {
-        throw new ConflictException('Bed already booked for part of the extended period');
+      for (const bedId of bedIds) {
+        const overlap = await findOverlappingBooking(tx, {
+          organizationId,
+          bedId,
+          start: booking.endDate,
+          end: request.newEndDate,
+          excludeBookingId: id,
+        });
+        if (overlap) {
+          throw new ConflictException('Bed already booked for part of the extended period');
+        }
       }
       const approvedAt = new Date();
       await tx.booking.update({ where: { id }, data: { endDate: request.newEndDate } });
@@ -248,7 +298,7 @@ export class BookingService {
           },
         },
       });
-    });
+    }, ORDINARY_TX_OPTIONS);
     return this.findOne(organizationId, id);
   }
 
@@ -264,6 +314,19 @@ export class BookingService {
    */
   async update(organizationId: string, id: string, body: unknown, actorUserId?: string) {
     const dto = parseUpdateBooking(body);
+    // Candidate fields can only change through an approved correction (specification v1.3 section 4). The whole request is
+    // refused before any branch (status, cancellation, payment status) can partially succeed.
+    if (
+      dto.startDate !== undefined ||
+      dto.endDate !== undefined ||
+      dto.monthlyPrice !== undefined
+    ) {
+      throw new CorrectionError(
+        409,
+        'CORRECTION_REQUIRED',
+        'Booking dates and monthly price change only through an approved correction. Use POST /corrections (or /bookings/:id/extend to lengthen a booking).',
+      );
+    }
     const probe = await this.prisma.db.booking.findFirst({
       where: { id, organizationId },
       select: { bedId: true },
@@ -271,6 +334,7 @@ export class BookingService {
     if (!probe) throw new NotFoundException('Booking not found');
 
     return this.prisma.db.$transaction(async (tx) => {
+      await acquireOrgGate(tx, organizationId);
       const bed = await tx.$queryRaw<{ id: string }[]>`
         SELECT id FROM beds WHERE id = ${probe.bedId}::uuid AND organization_id = ${organizationId}::uuid FOR UPDATE`;
       if (bed.length === 0) throw new NotFoundException('Bed not found');
@@ -353,11 +417,61 @@ export class BookingService {
               : 'This booking has check-in history and can no longer be cancelled.',
           );
         }
-        return tx.booking.update({ where: { id }, data });
+        await tx.booking.update({ where: { id }, data });
+        await tx.auditEvent.create({
+          data: {
+            organizationId,
+            actorUserId: actorUserId ?? null,
+            action: 'booking.cancelled',
+            targetType: 'booking',
+            targetId: id,
+            requestId: auditRequestId(),
+            metadata: {
+              reason: current.notes ?? '',
+            },
+          },
+        });
+        return { ...current, status: 'CANCELLED' };
       }
 
       const updated = await tx.booking.update({ where: { id }, data });
       if (shortenedFrom) {
+        const changedFields: string[] = [];
+        const previousValues: Record<string, unknown> = {};
+        const newValues: Record<string, unknown> = {};
+        if (
+          dto.startDate !== undefined &&
+          dto.startDate.getTime() !== current.startDate.getTime()
+        ) {
+          changedFields.push('startDate');
+          previousValues.startDate = current.startDate.toISOString();
+          newValues.startDate = dto.startDate.toISOString();
+        }
+        if (dto.endDate !== undefined && dto.endDate.getTime() !== current.endDate.getTime()) {
+          changedFields.push('endDate');
+          previousValues.endDate = current.endDate.toISOString();
+          newValues.endDate = dto.endDate.toISOString();
+        }
+        if (
+          dto.monthlyPrice !== undefined &&
+          dto.monthlyPrice !== current.monthlyPrice.toString()
+        ) {
+          changedFields.push('monthlyPrice');
+          previousValues.monthlyPrice = current.monthlyPrice.toString();
+          newValues.monthlyPrice = dto.monthlyPrice.toString();
+        }
+        if (dto.notes !== undefined && dto.notes !== current.notes) {
+          changedFields.push('notes');
+          previousValues.notes = current.notes ?? null;
+          newValues.notes = dto.notes ?? null;
+        }
+        if (dto.paymentStatus !== undefined && dto.paymentStatus !== current.paymentStatus) {
+          changedFields.push('paymentStatus');
+          previousValues.paymentStatus = current.paymentStatus;
+          newValues.paymentStatus = dto.paymentStatus;
+        }
+        const additionalChanges =
+          changedFields.length > 0 ? { changedFields, previousValues, newValues } : undefined;
         await tx.auditEvent.create({
           data: {
             organizationId,
@@ -369,12 +483,62 @@ export class BookingService {
             metadata: {
               previousEndInstant: shortenedFrom.toISOString(),
               newEndInstant: updated.endDate.toISOString(),
-            },
+              ...(additionalChanges ? { additionalChanges } : {}),
+            } as Prisma.InputJsonObject,
           },
         });
+      } else if (Object.keys(data).length > 0) {
+        // Ordinary update (not cancellation, not shortening)
+        const changedFields: string[] = [];
+        const previousValues: Record<string, unknown> = {};
+        const newValues: Record<string, unknown> = {};
+        if (
+          dto.startDate !== undefined &&
+          dto.startDate.getTime() !== current.startDate.getTime()
+        ) {
+          changedFields.push('startDate');
+          previousValues.startDate = current.startDate.toISOString();
+          newValues.startDate = dto.startDate.toISOString();
+        }
+        if (dto.endDate !== undefined && dto.endDate.getTime() !== current.endDate.getTime()) {
+          changedFields.push('endDate');
+          previousValues.endDate = current.endDate.toISOString();
+          newValues.endDate = dto.endDate.toISOString();
+        }
+        if (
+          dto.monthlyPrice !== undefined &&
+          dto.monthlyPrice !== current.monthlyPrice.toString()
+        ) {
+          changedFields.push('monthlyPrice');
+          previousValues.monthlyPrice = current.monthlyPrice.toString();
+          newValues.monthlyPrice = dto.monthlyPrice.toString();
+        }
+        if (dto.notes !== undefined && dto.notes !== current.notes) {
+          changedFields.push('notes');
+          previousValues.notes = current.notes ?? null;
+          newValues.notes = dto.notes ?? null;
+        }
+        if (dto.paymentStatus !== undefined && dto.paymentStatus !== current.paymentStatus) {
+          changedFields.push('paymentStatus');
+          previousValues.paymentStatus = current.paymentStatus;
+          newValues.paymentStatus = dto.paymentStatus;
+        }
+        if (changedFields.length > 0) {
+          await tx.auditEvent.create({
+            data: {
+              organizationId,
+              actorUserId: actorUserId ?? null,
+              action: 'booking.updated',
+              targetType: 'booking',
+              targetId: id,
+              requestId: auditRequestId(),
+              metadata: { changedFields, previousValues, newValues } as Prisma.InputJsonObject,
+            },
+          });
+        }
       }
       return updated;
-    });
+    }, ORDINARY_TX_OPTIONS);
   }
 
   async cancel(organizationId: string, id: string) {
@@ -391,7 +555,7 @@ export class BookingService {
       organizationId,
       operationalStatus: 'IN_SERVICE',
       archivedAt: null,
-      room: { archivedAt: null },
+      room: { archivedAt: null, floor: { archivedAt: null, property: { archivedAt: null } } },
     };
     if (propertyId) whereBed.propertyId = propertyId;
 
@@ -405,9 +569,19 @@ export class BookingService {
       (
         await this.prisma.db.checkIn.findMany({
           where: { organizationId, status: 'ACTIVE' },
-          select: { bedId: true },
+          select: {
+            bedId: true,
+            booking: {
+              select: {
+                effectiveAssignments: {
+                  where: { organizationId },
+                  select: { bedId: true, status: true, endAt: true },
+                },
+              },
+            },
+          },
         })
-      ).map((row) => row.bedId),
+      ).map(physicalBedId),
     );
     const available = [];
     for (const bed of beds) {

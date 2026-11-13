@@ -26,6 +26,7 @@ FILES = [
     "apps/web/src/main.tsx", "apps/web/src/tokens.css", "prisma/schema.prisma",
     "docs/MILESTONE_0_SCOPE.md", "docs/nook-phase-2/PHASE_2_DECISION_LOG.md",
     "docs/nook-phase-3/PHASE_3_SCOPE_REGISTER.md",
+    "docs/phase-4/IMPLEMENTATION_AUTHORIZATION.md",
     "scripts/secret_scan.py", "scripts/verify_m0_scope.py", "scripts/verify_phase_scope.py",
     "scripts/phase_scope.json", "scripts/test_phase_scope.py", "scripts/db_guard.py",
     "package.json", "apps/api/package.json", "apps/web/package.json",

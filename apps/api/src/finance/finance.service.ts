@@ -1,3 +1,4 @@
+import { assertAssignmentTimeline } from '../common/stay-occupancy.js';
 import { createHash } from 'node:crypto';
 import {
   BadRequestException,
@@ -38,6 +39,7 @@ import {
   type PaymentMethodName,
 } from './finance.util.js';
 import { auditRequestId } from '../observability/request-context.js';
+import { acquireOrgGate } from '../common/org-gate.js';
 
 const OPEN_STATUSES = ['ISSUED', 'PARTIALLY_PAID', 'OVERDUE'] as const;
 const BILLABLE_STATUSES = ['ISSUED', 'PARTIALLY_PAID', 'OVERDUE', 'PAID'] as const;
@@ -317,9 +319,28 @@ export class FinanceService {
         checkInAt: true,
         updatedAt: true,
         checkOut: { select: { checkOutAt: true } },
-        booking: { select: { id: true, monthlyPrice: true, startDate: true, endDate: true } },
+        booking: {
+          select: {
+            id: true,
+            monthlyPrice: true,
+            startDate: true,
+            endDate: true,
+            effectiveAssignments: {
+              where: { organizationId },
+              select: {
+                bookingId: true,
+                residentId: true,
+                kind: true,
+                status: true,
+                startAt: true,
+                endAt: true,
+              },
+            },
+          },
+        },
       },
     });
+    for (const row of rows) assertAssignmentTimeline(row);
     return rows.filter((row) =>
       isMonthBillable(
         {
@@ -355,41 +376,51 @@ export class FinanceService {
       this.explicitDueDate(input.dueDate, period.periodStart) ?? defaultDueDate(period.periodStart);
     const notes = optionalText(input.notes, 'notes', 1000);
 
-    const resident = await this.prisma.db.resident.findFirst({
-      where: { id: residentId, organizationId },
-      select: { id: true },
-    });
-    if (!resident) throw new NotFoundException('Resident not found');
-
-    const booking = await this.prisma.db.booking.findFirst({
-      where: { id: bookingId, organizationId, residentId },
-      select: { monthlyPrice: true, startDate: true, endDate: true },
-    });
-    if (!booking) throw new NotFoundException('Booking not found for this resident');
-    if (!bookingCoversMonth(booking, period)) {
-      throw new BadRequestException(
-        'The booking does not cover this billing month (the booking end date is exclusive); ' +
-          'an approved extension is required to bill beyond it',
-      );
-    }
-    const stays = await this.billableStays(this.prisma.db, organizationId, period, {
-      bookingId,
-      residentId,
-    });
-    if (stays.length === 0) {
-      throw new BadRequestException(
-        'There is no recorded stay for this booking in this billing month',
-      );
-    }
-    // Price snapshot: the booking's monthly price, charged in full (no proration).
-    const invoiceAmount = booking.monthlyPrice;
-    if (!invoiceAmount.gt(0)) {
-      throw new BadRequestException('The booking has no positive monthly price to invoice');
-    }
-
     try {
       return await this.prisma.db.$transaction(async (tx) => {
+        // Gate first, then numbering, then every authoritative read that feeds the amount (specification v1.3 10.2).
+        await acquireOrgGate(tx, organizationId);
         await this.lockNumbering(tx, organizationId);
+        const resident = await tx.resident.findFirst({
+          where: { id: residentId, organizationId },
+          select: { id: true },
+        });
+        if (!resident) throw new NotFoundException('Resident not found');
+        const booking = await tx.booking.findFirst({
+          where: { id: bookingId, organizationId, residentId },
+          select: { monthlyPrice: true, startDate: true, endDate: true },
+        });
+        if (!booking) throw new NotFoundException('Booking not found for this resident');
+        if (!bookingCoversMonth(booking, period)) {
+          throw new BadRequestException(
+            'The booking does not cover this billing month (the booking end date is exclusive); ' +
+              'an approved extension is required to bill beyond it',
+          );
+        }
+        const stays = await this.billableStays(tx, organizationId, period, {
+          bookingId,
+          residentId,
+        });
+        if (stays.length === 0) {
+          throw new BadRequestException(
+            'There is no recorded stay for this booking in this billing month',
+          );
+        }
+        // Price snapshot: the booking's monthly price, charged in full (no proration).
+        const invoiceAmount = booking.monthlyPrice;
+        if (!invoiceAmount.gt(0)) {
+          throw new BadRequestException('The booking has no positive monthly price to invoice');
+        }
+        // A booking-month that a correction made newly billable waits for an independent OWNER review.
+        if (
+          (await this.openGapBookingIds(tx, organizationId, period.periodStart, false)).has(
+            bookingId,
+          )
+        ) {
+          throw new ConflictException(
+            'This booking-month is waiting for an OWNER review of a correction (FINANCE_CONFLICT); resolve the review first',
+          );
+        }
         // A legacy invoice (no booking) already bills this resident for the month: do not bill it a second time.
         const legacy = await tx.invoice.findFirst({
           where: {
@@ -450,6 +481,8 @@ export class FinanceService {
 
   async issue(organizationId: string, actorUserId: string, invoiceId: string) {
     return this.prisma.db.$transaction(async (tx) => {
+      // Gate first, then the Invoice lock; the source facts are read after both (specification v1.3 10.2, 13.2).
+      await acquireOrgGate(tx, organizationId);
       const locked = await this.lockInvoice(tx, organizationId, invoiceId);
       if (locked.status !== 'DRAFT') {
         throw new ConflictException(
@@ -458,8 +491,9 @@ export class FinanceService {
       }
       const draft = await tx.invoice.findFirstOrThrow({
         where: { id: invoiceId, organizationId },
-        select: { periodStart: true, dueDate: true },
+        select: { periodStart: true, dueDate: true, bookingId: true, amount: true },
       });
+      await this.assertDraftStillEligible(tx, organizationId, draft);
       // The due date is fixed here, at issue: later of the 5th and the issue date. A draft that
       // carries an explicit later date keeps it.
       const issuedAt = new Date();
@@ -487,6 +521,78 @@ export class FinanceService {
       );
       return this.serializeInvoice(invoice, todayIst());
     }, TX_OPTIONS);
+  }
+
+  /**
+   * An issued invoice is immutable, so a draft is checked against the CURRENT authoritative source facts at the moment it is
+   * issued: the booking must still cover the month, a recorded stay must still make the month billable, the amount must still
+   * equal the booking price, and no correction review may be open for the booking-month. A mismatch fails with a conflict and
+   * the draft stays a draft; it is never issued stale. Legacy drafts without a booking cannot be validated and keep today's
+   * behaviour.
+   */
+  private async assertDraftStillEligible(
+    tx: Tx,
+    organizationId: string,
+    draft: { periodStart: Date; bookingId: string | null; amount: Prisma.Decimal },
+  ): Promise<void> {
+    if (!draft.bookingId) return;
+    const period = parseBillingMonth(draft.periodStart.toISOString().slice(0, 7));
+    const booking = await tx.booking.findFirst({
+      where: { id: draft.bookingId, organizationId },
+      select: { monthlyPrice: true, startDate: true, endDate: true, residentId: true },
+    });
+    const stays = booking
+      ? await this.billableStays(tx, organizationId, period, { bookingId: draft.bookingId })
+      : [];
+    if (
+      !booking ||
+      !bookingCoversMonth(booking, period) ||
+      stays.length === 0 ||
+      !draft.amount.equals(booking.monthlyPrice)
+    ) {
+      throw new ConflictException(
+        'This draft no longer matches the booking and stay records (FINANCE_CONFLICT); void it or recreate it before issuing',
+      );
+    }
+    if (
+      (await this.openGapBookingIds(tx, organizationId, period.periodStart, false)).has(
+        draft.bookingId,
+      )
+    ) {
+      throw new ConflictException(
+        'This booking-month is waiting for an OWNER review of a correction (FINANCE_CONFLICT)',
+      );
+    }
+  }
+
+  /**
+   * Bookings with an unresolved correction billing gap for the month (scheduler, manual generation and draft creation skip
+   * them, so an ordinary run can never bypass REVIEW_REQUIRED). With `includeReleased`, bookings whose gap was RELEASED by an
+   * OWNER are included too: a released gap may be produced by an explicit createDraft + issue, but never auto-issued.
+   */
+  async openGapBookingIds(
+    db: Pick<Tx, '$queryRaw'>,
+    organizationId: string,
+    periodStart: Date,
+    includeReleased: boolean,
+  ): Promise<Set<string>> {
+    const rows = await db.$queryRaw<{ booking_id: string }[]>`
+      SELECT g.booking_id
+      FROM correction_finance_links g
+      WHERE g.organization_id = ${organizationId}::uuid
+        AND g.kind = 'BILLING_GAP' AND g.period_start = ${periodStart}::date
+        AND (
+          NOT EXISTS (SELECT 1 FROM correction_finance_links r WHERE r.resolves_link_id = g.id AND r.kind = 'RESOLUTION')
+          OR (${includeReleased} AND EXISTS (
+            SELECT 1 FROM correction_finance_links r
+            WHERE r.resolves_link_id = g.id AND r.kind = 'RESOLUTION' AND r.outcome = 'RELEASED'))
+        )
+      UNION
+      SELECT g.booking_id FROM transfer_finance_reviews g
+      LEFT JOIN transfer_finance_resolutions r ON r.review_id=g.id AND r.organization_id=g.organization_id
+      WHERE g.organization_id=${organizationId}::uuid AND g.period_start=${periodStart}::date
+        AND (r.id IS NULL OR r.outcome<>'RELEASED' OR ${includeReleased})`;
+    return new Set(rows.map((r) => r.booking_id));
   }
 
   /**
@@ -545,17 +651,26 @@ export class FinanceService {
   async previewMonthly(organizationId: string, month: unknown) {
     const period = parseBillingMonth(month);
     this.assertBillableMonth(period.periodStart);
-    const { byBooking, toCreate, skippedZeroPrice } = await this.planMonthly(
+    const planned = await this.planMonthly(this.prisma.db, organizationId, period);
+    const { byBooking, skippedZeroPrice } = planned;
+    // Advisory only (never approval evidence). An issuing run skips released gaps too, so the preview assumes that.
+    const gapIds = await this.openGapBookingIds(
       this.prisma.db,
       organizationId,
-      period,
+      period.periodStart,
+      true,
     );
+    const skippedPendingReview = planned.toCreate.filter((item) =>
+      gapIds.has(item.bookingId),
+    ).length;
+    const toCreate = planned.toCreate.filter((item) => !gapIds.has(item.bookingId));
     return {
       month: period.month,
       eligibleBookings: byBooking.size,
       wouldCreate: toCreate.length,
-      skippedExisting: byBooking.size - toCreate.length - skippedZeroPrice,
+      skippedExisting: byBooking.size - toCreate.length - skippedZeroPrice - skippedPendingReview,
       skippedZeroPrice,
+      skippedPendingReview,
     };
   }
 
@@ -580,13 +695,19 @@ export class FinanceService {
     const issueNow = input.issue === true;
 
     return this.prisma.db.$transaction(async (tx) => {
+      // Gate (scheduler and controller both come through here), then numbering, then every read of the plan.
+      await acquireOrgGate(tx, organizationId);
       await this.lockNumbering(tx, organizationId);
 
-      const { byBooking, toCreate, skippedZeroPrice } = await this.planMonthly(
-        tx,
-        organizationId,
-        period,
-      );
+      const planned = await this.planMonthly(tx, organizationId, period);
+      const { byBooking, skippedZeroPrice } = planned;
+      // Fail closed: a booking-month with a correction billing gap is skipped, never created or auto-issued. A gap an OWNER
+      // RELEASED may only be produced by an explicit createDraft + issue, so an issuing run skips it too.
+      const gapIds = await this.openGapBookingIds(tx, organizationId, period.periodStart, issueNow);
+      const skippedPendingReview = planned.toCreate.filter((item) =>
+        gapIds.has(item.bookingId),
+      ).length;
+      const toCreate = planned.toCreate.filter((item) => !gapIds.has(item.bookingId));
 
       const year = billingYearIst();
       let sequence = await this.lastSequence(tx, organizationId, year);
@@ -671,8 +792,9 @@ export class FinanceService {
         eligibleResidents: new Set([...byBooking.values()].map((candidate) => candidate.residentId))
           .size,
         created: created.count,
-        skippedExisting: byBooking.size - toCreate.length - skippedZeroPrice,
+        skippedExisting: byBooking.size - toCreate.length - skippedZeroPrice - skippedPendingReview,
         skippedZeroPrice,
+        skippedPendingReview,
         invoices: invoices.map((invoice) => this.serializeInvoice(invoice, today)),
       };
     }, TX_OPTIONS);
@@ -1224,9 +1346,254 @@ export class FinanceService {
     return { items, total: items.length };
   }
 
+  // --------------------------------------------------- correction consequences (P4-2.4)
+
+  /** YYYY-MM keys from the month of `fromDay` to the month after `todayDay`, capped so a bad input cannot run away. */
+  correctionMonthWindow(fromDay: string, todayDay: string): string[] {
+    const first = parseBillingMonth(fromDay.slice(0, 7));
+    const last = shiftMonth(parseBillingMonth(todayDay.slice(0, 7)), 1);
+    const out: string[] = [];
+    let cursor = first;
+    while (cursor.periodStart.getTime() <= last.periodStart.getTime() && out.length < 36) {
+      out.push(cursor.month);
+      cursor = shiftMonth(cursor, 1);
+    }
+    return out;
+  }
+
+  /** Months of the window in which the booking's recorded stay is billable, by the authoritative rule (billableStays). */
+  async billableMonthKeys(
+    tx: Tx,
+    organizationId: string,
+    bookingId: string,
+    months: readonly string[],
+  ): Promise<Set<string>> {
+    const out = new Set<string>();
+    for (const month of months) {
+      const stays = await this.billableStays(tx, organizationId, parseBillingMonth(month), {
+        bookingId,
+      });
+      if (stays.length > 0) out.add(month);
+    }
+    return out;
+  }
+
+  /**
+   * Finance consequences of an APPLIED lifecycle correction, inside the correction's own transaction (the caller holds the
+   * organization gate and its source locks; no Resident row lock may be held here). Only authoritative rules are used.
+   *
+   *  - A booking-month that became billable and has no active invoice gets an unresolved BILLING_GAP link; generation and
+   *    draft creation skip it until an independent OWNER resolves it. No invoice is created or issued.
+   *  - A genuinely unissued DRAFT (DRAFT, never issued, never voided) whose month is no longer billable is voided with a
+   *    recorded reason (InvoiceVoid history is retained); a still-billable draft whose amount differs from the booking price
+   *    is recalculated.
+   *  - An ISSUED invoice is never touched: a mismatch only records an INVOICE_REVIEW link for OWNER review.
+   * No credit, refund, write-off or tax treatment is created.
+   */
+  async applyCorrectionConsequences(
+    tx: Tx,
+    input: {
+      organizationId: string;
+      actorUserId: string;
+      proposalId: string;
+      bookingId: string;
+      residentId: string;
+      before: ReadonlySet<string>;
+      months: readonly string[];
+    },
+  ): Promise<{ gaps: number; draftsVoided: number; draftsRecalculated: number; reviews: number }> {
+    const { organizationId, actorUserId, proposalId, bookingId, residentId } = input;
+    const after = await this.billableMonthKeys(tx, organizationId, bookingId, input.months);
+    const booking = await tx.booking.findFirstOrThrow({
+      where: { id: bookingId, organizationId },
+      select: { monthlyPrice: true },
+    });
+    const invoices = await tx.invoice.findMany({
+      where: { organizationId, bookingId, status: { not: 'CANCELLED' } },
+      select: {
+        id: true,
+        status: true,
+        issuedAt: true,
+        amount: true,
+        periodStart: true,
+        voids: { select: { id: true } },
+      },
+    });
+    const byMonth = new Map<string, typeof invoices>();
+    for (const invoice of invoices) {
+      const key = invoice.periodStart.toISOString().slice(0, 7);
+      byMonth.set(key, [...(byMonth.get(key) ?? []), invoice]);
+    }
+    let gaps = 0;
+    let draftsVoided = 0;
+    let draftsRecalculated = 0;
+    let reviews = 0;
+    const link = (data: Prisma.CorrectionFinanceLinkUncheckedCreateInput) =>
+      tx.correctionFinanceLink.create({ data });
+
+    for (const month of input.months) {
+      const wasBillable = input.before.has(month);
+      const isBillable = after.has(month);
+      const existing = byMonth.get(month) ?? [];
+      const period = parseBillingMonth(month);
+
+      if (isBillable && !wasBillable && existing.length === 0) {
+        const open = await this.openGapBookingIds(tx, organizationId, period.periodStart, false);
+        if (!open.has(bookingId)) {
+          const legacy = await tx.invoice.count({
+            where: {
+              organizationId,
+              residentId,
+              periodStart: period.periodStart,
+              bookingId: null,
+              status: { not: 'CANCELLED' },
+            },
+          });
+          if (legacy === 0) {
+            const created = await link({
+              organizationId,
+              proposalId,
+              kind: 'BILLING_GAP',
+              outcome: 'REVIEW_REQUIRED',
+              residentId,
+              bookingId,
+              periodStart: period.periodStart,
+            });
+            await this.audit(
+              tx,
+              organizationId,
+              actorUserId,
+              'finance.billing_gap.opened',
+              'booking',
+              bookingId,
+              {
+                proposalId,
+                month,
+                linkId: created.id,
+              },
+            );
+            gaps += 1;
+          }
+        }
+      }
+
+      for (const invoice of existing) {
+        const genuineDraft =
+          invoice.status === 'DRAFT' && invoice.issuedAt === null && invoice.voids.length === 0;
+        if (!isBillable && wasBillable) {
+          if (genuineDraft) {
+            await this.voidDraftForCorrection(
+              tx,
+              organizationId,
+              actorUserId,
+              invoice.id,
+              proposalId,
+              month,
+            );
+            draftsVoided += 1;
+          } else if (invoice.status !== 'DRAFT') {
+            await link({
+              organizationId,
+              proposalId,
+              kind: 'INVOICE_REVIEW',
+              outcome: 'REVIEW_REQUIRED',
+              residentId,
+              bookingId,
+              periodStart: period.periodStart,
+              invoiceId: invoice.id,
+            });
+            reviews += 1;
+          }
+        } else if (isBillable && !invoice.amount.equals(booking.monthlyPrice)) {
+          if (genuineDraft) {
+            await tx.invoice.update({
+              where: { id: invoice.id },
+              data: { amount: booking.monthlyPrice },
+            });
+            await this.audit(
+              tx,
+              organizationId,
+              actorUserId,
+              'finance.invoice.draft_recalculated',
+              'invoice',
+              invoice.id,
+              {
+                proposalId,
+                month,
+                amount: formatMoney(booking.monthlyPrice),
+              },
+            );
+            draftsRecalculated += 1;
+          } else if (invoice.status !== 'DRAFT') {
+            await link({
+              organizationId,
+              proposalId,
+              kind: 'INVOICE_REVIEW',
+              outcome: 'REVIEW_REQUIRED',
+              residentId,
+              bookingId,
+              periodStart: period.periodStart,
+              invoiceId: invoice.id,
+            });
+            reviews += 1;
+          }
+        }
+      }
+    }
+    return { gaps, draftsVoided, draftsRecalculated, reviews };
+  }
+
+  /** Voids a genuine draft inside the caller's transaction, exactly as voidInvoice does (history retained, never deleted). */
+  private async voidDraftForCorrection(
+    tx: Tx,
+    organizationId: string,
+    actorUserId: string,
+    invoiceId: string,
+    proposalId: string,
+    month: string,
+  ): Promise<void> {
+    const locked = await this.lockInvoice(tx, organizationId, invoiceId);
+    if (locked.status !== 'DRAFT') {
+      throw new ConflictException(
+        'A draft changed while a correction was being applied (FINANCE_CONFLICT)',
+      );
+    }
+    const record = await tx.invoiceVoid.create({
+      data: {
+        organizationId,
+        invoiceId,
+        residentId: locked.residentId,
+        previousStatus: locked.status as Prisma.InvoiceVoidCreateInput['previousStatus'],
+        amountAtVoid: locked.amount,
+        reason: `Month ${month} is no longer billable after an approved correction`,
+        voidedBy: actorUserId,
+      },
+    });
+    await tx.invoice.update({ where: { id: invoiceId }, data: { status: 'CANCELLED' } });
+    await this.audit(
+      tx,
+      organizationId,
+      actorUserId,
+      'finance.invoice.voided',
+      'invoice',
+      invoiceId,
+      {
+        proposalId,
+        voidId: record.id,
+        source: 'correction',
+        month,
+      },
+    );
+  }
+
   // ------------------------------------------------------------ outstanding
 
-  async outstanding(organizationId: string, query: Record<string, unknown>) {
+  async outstanding(
+    organizationId: string,
+    query: Record<string, unknown>,
+    tx?: Prisma.TransactionClient,
+  ) {
+    const client = tx ?? this.prisma.db;
     const page = parsePage(query.page, 1, 100_000, 'page');
     const limit = parsePage(query.limit, 20, 100, 'limit');
     const today = todayIst();
@@ -1241,20 +1608,20 @@ export class FinanceService {
     const listWhere = query.overdueOnly === 'true' ? overdueWhere : where;
 
     const [items, total, openSum, overdueSum] = await Promise.all([
-      this.prisma.db.invoice.findMany({
+      client.invoice.findMany({
         where: listWhere,
         skip: (page - 1) * limit,
         take: limit,
         orderBy: [{ dueDate: 'asc' }, { number: 'asc' }],
         include: { resident: { select: { id: true, firstName: true, lastName: true } } },
       }),
-      this.prisma.db.invoice.count({ where: listWhere }),
-      this.prisma.db.invoice.aggregate({
+      client.invoice.count({ where: listWhere }),
+      client.invoice.aggregate({
         where,
         _sum: { amount: true, paidAmount: true },
         _count: true,
       }),
-      this.prisma.db.invoice.aggregate({
+      client.invoice.aggregate({
         where: overdueWhere,
         _sum: { amount: true, paidAmount: true },
         _count: true,

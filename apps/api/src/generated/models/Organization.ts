@@ -182,6 +182,13 @@ export type OrganizationWhereInput = {
   status?: Prisma.EnumOrganizationStatusFilter<"Organization"> | $Enums.OrganizationStatus
   createdAt?: Prisma.DateTimeFilter<"Organization"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Organization"> | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementListRelationFilter
+  transferFinanceReviews?: Prisma.TransferFinanceReviewListRelationFilter
+  correctionProposals?: Prisma.CorrectionProposalListRelationFilter
+  correctionReceipts?: Prisma.CorrectionCommandReceiptListRelationFilter
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkListRelationFilter
+  stayAssignments?: Prisma.StayAssignmentListRelationFilter
+  transfers?: Prisma.TransferListRelationFilter
   memberships?: Prisma.MembershipListRelationFilter
   properties?: Prisma.PropertyListRelationFilter
   auditEvents?: Prisma.AuditEventListRelationFilter
@@ -205,6 +212,13 @@ export type OrganizationOrderByWithRelationInput = {
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  assignmentReplacements?: Prisma.StayAssignmentReplacementOrderByRelationAggregateInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewOrderByRelationAggregateInput
+  correctionProposals?: Prisma.CorrectionProposalOrderByRelationAggregateInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptOrderByRelationAggregateInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkOrderByRelationAggregateInput
+  stayAssignments?: Prisma.StayAssignmentOrderByRelationAggregateInput
+  transfers?: Prisma.TransferOrderByRelationAggregateInput
   memberships?: Prisma.MembershipOrderByRelationAggregateInput
   properties?: Prisma.PropertyOrderByRelationAggregateInput
   auditEvents?: Prisma.AuditEventOrderByRelationAggregateInput
@@ -231,6 +245,13 @@ export type OrganizationWhereUniqueInput = Prisma.AtLeast<{
   status?: Prisma.EnumOrganizationStatusFilter<"Organization"> | $Enums.OrganizationStatus
   createdAt?: Prisma.DateTimeFilter<"Organization"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Organization"> | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementListRelationFilter
+  transferFinanceReviews?: Prisma.TransferFinanceReviewListRelationFilter
+  correctionProposals?: Prisma.CorrectionProposalListRelationFilter
+  correctionReceipts?: Prisma.CorrectionCommandReceiptListRelationFilter
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkListRelationFilter
+  stayAssignments?: Prisma.StayAssignmentListRelationFilter
+  transfers?: Prisma.TransferListRelationFilter
   memberships?: Prisma.MembershipListRelationFilter
   properties?: Prisma.PropertyListRelationFilter
   auditEvents?: Prisma.AuditEventListRelationFilter
@@ -276,6 +297,13 @@ export type OrganizationCreateInput = {
   status?: $Enums.OrganizationStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementCreateNestedManyWithoutOrganizationInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewCreateNestedManyWithoutOrganizationInput
+  correctionProposals?: Prisma.CorrectionProposalCreateNestedManyWithoutOrganizationInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptCreateNestedManyWithoutOrganizationInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutOrganizationInput
+  stayAssignments?: Prisma.StayAssignmentCreateNestedManyWithoutOrganizationInput
+  transfers?: Prisma.TransferCreateNestedManyWithoutOrganizationInput
   memberships?: Prisma.MembershipCreateNestedManyWithoutOrganizationInput
   properties?: Prisma.PropertyCreateNestedManyWithoutOrganizationInput
   auditEvents?: Prisma.AuditEventCreateNestedManyWithoutOrganizationInput
@@ -299,6 +327,13 @@ export type OrganizationUncheckedCreateInput = {
   status?: $Enums.OrganizationStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedCreateNestedManyWithoutOrganizationInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutOrganizationInput
   memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutOrganizationInput
   properties?: Prisma.PropertyUncheckedCreateNestedManyWithoutOrganizationInput
   auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutOrganizationInput
@@ -322,6 +357,13 @@ export type OrganizationUpdateInput = {
   status?: Prisma.EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUpdateManyWithoutOrganizationNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUpdateManyWithoutOrganizationNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUpdateManyWithoutOrganizationNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUpdateManyWithoutOrganizationNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUpdateManyWithoutOrganizationNestedInput
+  stayAssignments?: Prisma.StayAssignmentUpdateManyWithoutOrganizationNestedInput
+  transfers?: Prisma.TransferUpdateManyWithoutOrganizationNestedInput
   memberships?: Prisma.MembershipUpdateManyWithoutOrganizationNestedInput
   properties?: Prisma.PropertyUpdateManyWithoutOrganizationNestedInput
   auditEvents?: Prisma.AuditEventUpdateManyWithoutOrganizationNestedInput
@@ -345,6 +387,13 @@ export type OrganizationUncheckedUpdateInput = {
   status?: Prisma.EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedUpdateManyWithoutOrganizationNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  transfers?: Prisma.TransferUncheckedUpdateManyWithoutOrganizationNestedInput
   memberships?: Prisma.MembershipUncheckedUpdateManyWithoutOrganizationNestedInput
   properties?: Prisma.PropertyUncheckedUpdateManyWithoutOrganizationNestedInput
   auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -644,12 +693,117 @@ export type OrganizationUpdateOneRequiredWithoutPaymentIdempotencyKeysNestedInpu
   update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutPaymentIdempotencyKeysInput, Prisma.OrganizationUpdateWithoutPaymentIdempotencyKeysInput>, Prisma.OrganizationUncheckedUpdateWithoutPaymentIdempotencyKeysInput>
 }
 
+export type OrganizationCreateNestedOneWithoutCorrectionProposalsInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutCorrectionProposalsInput, Prisma.OrganizationUncheckedCreateWithoutCorrectionProposalsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutCorrectionProposalsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+}
+
+export type OrganizationUpdateOneRequiredWithoutCorrectionProposalsNestedInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutCorrectionProposalsInput, Prisma.OrganizationUncheckedCreateWithoutCorrectionProposalsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutCorrectionProposalsInput
+  upsert?: Prisma.OrganizationUpsertWithoutCorrectionProposalsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutCorrectionProposalsInput, Prisma.OrganizationUpdateWithoutCorrectionProposalsInput>, Prisma.OrganizationUncheckedUpdateWithoutCorrectionProposalsInput>
+}
+
+export type OrganizationCreateNestedOneWithoutCorrectionReceiptsInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutCorrectionReceiptsInput, Prisma.OrganizationUncheckedCreateWithoutCorrectionReceiptsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutCorrectionReceiptsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+}
+
+export type OrganizationUpdateOneRequiredWithoutCorrectionReceiptsNestedInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutCorrectionReceiptsInput, Prisma.OrganizationUncheckedCreateWithoutCorrectionReceiptsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutCorrectionReceiptsInput
+  upsert?: Prisma.OrganizationUpsertWithoutCorrectionReceiptsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutCorrectionReceiptsInput, Prisma.OrganizationUpdateWithoutCorrectionReceiptsInput>, Prisma.OrganizationUncheckedUpdateWithoutCorrectionReceiptsInput>
+}
+
+export type OrganizationCreateNestedOneWithoutCorrectionFinanceLinksInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutCorrectionFinanceLinksInput, Prisma.OrganizationUncheckedCreateWithoutCorrectionFinanceLinksInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutCorrectionFinanceLinksInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+}
+
+export type OrganizationUpdateOneRequiredWithoutCorrectionFinanceLinksNestedInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutCorrectionFinanceLinksInput, Prisma.OrganizationUncheckedCreateWithoutCorrectionFinanceLinksInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutCorrectionFinanceLinksInput
+  upsert?: Prisma.OrganizationUpsertWithoutCorrectionFinanceLinksInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutCorrectionFinanceLinksInput, Prisma.OrganizationUpdateWithoutCorrectionFinanceLinksInput>, Prisma.OrganizationUncheckedUpdateWithoutCorrectionFinanceLinksInput>
+}
+
+export type OrganizationCreateNestedOneWithoutStayAssignmentsInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutStayAssignmentsInput, Prisma.OrganizationUncheckedCreateWithoutStayAssignmentsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutStayAssignmentsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+}
+
+export type OrganizationUpdateOneRequiredWithoutStayAssignmentsNestedInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutStayAssignmentsInput, Prisma.OrganizationUncheckedCreateWithoutStayAssignmentsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutStayAssignmentsInput
+  upsert?: Prisma.OrganizationUpsertWithoutStayAssignmentsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutStayAssignmentsInput, Prisma.OrganizationUpdateWithoutStayAssignmentsInput>, Prisma.OrganizationUncheckedUpdateWithoutStayAssignmentsInput>
+}
+
+export type OrganizationCreateNestedOneWithoutTransfersInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutTransfersInput, Prisma.OrganizationUncheckedCreateWithoutTransfersInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutTransfersInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+}
+
+export type OrganizationUpdateOneRequiredWithoutTransfersNestedInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutTransfersInput, Prisma.OrganizationUncheckedCreateWithoutTransfersInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutTransfersInput
+  upsert?: Prisma.OrganizationUpsertWithoutTransfersInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutTransfersInput, Prisma.OrganizationUpdateWithoutTransfersInput>, Prisma.OrganizationUncheckedUpdateWithoutTransfersInput>
+}
+
+export type OrganizationCreateNestedOneWithoutAssignmentReplacementsInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutAssignmentReplacementsInput, Prisma.OrganizationUncheckedCreateWithoutAssignmentReplacementsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutAssignmentReplacementsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+}
+
+export type OrganizationUpdateOneRequiredWithoutAssignmentReplacementsNestedInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutAssignmentReplacementsInput, Prisma.OrganizationUncheckedCreateWithoutAssignmentReplacementsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutAssignmentReplacementsInput
+  upsert?: Prisma.OrganizationUpsertWithoutAssignmentReplacementsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutAssignmentReplacementsInput, Prisma.OrganizationUpdateWithoutAssignmentReplacementsInput>, Prisma.OrganizationUncheckedUpdateWithoutAssignmentReplacementsInput>
+}
+
+export type OrganizationCreateNestedOneWithoutTransferFinanceReviewsInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutTransferFinanceReviewsInput, Prisma.OrganizationUncheckedCreateWithoutTransferFinanceReviewsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutTransferFinanceReviewsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+}
+
+export type OrganizationUpdateOneRequiredWithoutTransferFinanceReviewsNestedInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutTransferFinanceReviewsInput, Prisma.OrganizationUncheckedCreateWithoutTransferFinanceReviewsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutTransferFinanceReviewsInput
+  upsert?: Prisma.OrganizationUpsertWithoutTransferFinanceReviewsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutTransferFinanceReviewsInput, Prisma.OrganizationUpdateWithoutTransferFinanceReviewsInput>, Prisma.OrganizationUncheckedUpdateWithoutTransferFinanceReviewsInput>
+}
+
 export type OrganizationCreateWithoutMembershipsInput = {
   id?: string
   name: string
   status?: $Enums.OrganizationStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementCreateNestedManyWithoutOrganizationInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewCreateNestedManyWithoutOrganizationInput
+  correctionProposals?: Prisma.CorrectionProposalCreateNestedManyWithoutOrganizationInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptCreateNestedManyWithoutOrganizationInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutOrganizationInput
+  stayAssignments?: Prisma.StayAssignmentCreateNestedManyWithoutOrganizationInput
+  transfers?: Prisma.TransferCreateNestedManyWithoutOrganizationInput
   properties?: Prisma.PropertyCreateNestedManyWithoutOrganizationInput
   auditEvents?: Prisma.AuditEventCreateNestedManyWithoutOrganizationInput
   residents?: Prisma.ResidentCreateNestedManyWithoutOrganizationInput
@@ -672,6 +826,13 @@ export type OrganizationUncheckedCreateWithoutMembershipsInput = {
   status?: $Enums.OrganizationStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedCreateNestedManyWithoutOrganizationInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutOrganizationInput
   properties?: Prisma.PropertyUncheckedCreateNestedManyWithoutOrganizationInput
   auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutOrganizationInput
   residents?: Prisma.ResidentUncheckedCreateNestedManyWithoutOrganizationInput
@@ -710,6 +871,13 @@ export type OrganizationUpdateWithoutMembershipsInput = {
   status?: Prisma.EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUpdateManyWithoutOrganizationNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUpdateManyWithoutOrganizationNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUpdateManyWithoutOrganizationNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUpdateManyWithoutOrganizationNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUpdateManyWithoutOrganizationNestedInput
+  stayAssignments?: Prisma.StayAssignmentUpdateManyWithoutOrganizationNestedInput
+  transfers?: Prisma.TransferUpdateManyWithoutOrganizationNestedInput
   properties?: Prisma.PropertyUpdateManyWithoutOrganizationNestedInput
   auditEvents?: Prisma.AuditEventUpdateManyWithoutOrganizationNestedInput
   residents?: Prisma.ResidentUpdateManyWithoutOrganizationNestedInput
@@ -732,6 +900,13 @@ export type OrganizationUncheckedUpdateWithoutMembershipsInput = {
   status?: Prisma.EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedUpdateManyWithoutOrganizationNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  transfers?: Prisma.TransferUncheckedUpdateManyWithoutOrganizationNestedInput
   properties?: Prisma.PropertyUncheckedUpdateManyWithoutOrganizationNestedInput
   auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
   residents?: Prisma.ResidentUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -754,6 +929,13 @@ export type OrganizationCreateWithoutAuditEventsInput = {
   status?: $Enums.OrganizationStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementCreateNestedManyWithoutOrganizationInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewCreateNestedManyWithoutOrganizationInput
+  correctionProposals?: Prisma.CorrectionProposalCreateNestedManyWithoutOrganizationInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptCreateNestedManyWithoutOrganizationInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutOrganizationInput
+  stayAssignments?: Prisma.StayAssignmentCreateNestedManyWithoutOrganizationInput
+  transfers?: Prisma.TransferCreateNestedManyWithoutOrganizationInput
   memberships?: Prisma.MembershipCreateNestedManyWithoutOrganizationInput
   properties?: Prisma.PropertyCreateNestedManyWithoutOrganizationInput
   residents?: Prisma.ResidentCreateNestedManyWithoutOrganizationInput
@@ -776,6 +958,13 @@ export type OrganizationUncheckedCreateWithoutAuditEventsInput = {
   status?: $Enums.OrganizationStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedCreateNestedManyWithoutOrganizationInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutOrganizationInput
   memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutOrganizationInput
   properties?: Prisma.PropertyUncheckedCreateNestedManyWithoutOrganizationInput
   residents?: Prisma.ResidentUncheckedCreateNestedManyWithoutOrganizationInput
@@ -814,6 +1003,13 @@ export type OrganizationUpdateWithoutAuditEventsInput = {
   status?: Prisma.EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUpdateManyWithoutOrganizationNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUpdateManyWithoutOrganizationNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUpdateManyWithoutOrganizationNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUpdateManyWithoutOrganizationNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUpdateManyWithoutOrganizationNestedInput
+  stayAssignments?: Prisma.StayAssignmentUpdateManyWithoutOrganizationNestedInput
+  transfers?: Prisma.TransferUpdateManyWithoutOrganizationNestedInput
   memberships?: Prisma.MembershipUpdateManyWithoutOrganizationNestedInput
   properties?: Prisma.PropertyUpdateManyWithoutOrganizationNestedInput
   residents?: Prisma.ResidentUpdateManyWithoutOrganizationNestedInput
@@ -836,6 +1032,13 @@ export type OrganizationUncheckedUpdateWithoutAuditEventsInput = {
   status?: Prisma.EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedUpdateManyWithoutOrganizationNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  transfers?: Prisma.TransferUncheckedUpdateManyWithoutOrganizationNestedInput
   memberships?: Prisma.MembershipUncheckedUpdateManyWithoutOrganizationNestedInput
   properties?: Prisma.PropertyUncheckedUpdateManyWithoutOrganizationNestedInput
   residents?: Prisma.ResidentUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -858,6 +1061,13 @@ export type OrganizationCreateWithoutPropertiesInput = {
   status?: $Enums.OrganizationStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementCreateNestedManyWithoutOrganizationInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewCreateNestedManyWithoutOrganizationInput
+  correctionProposals?: Prisma.CorrectionProposalCreateNestedManyWithoutOrganizationInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptCreateNestedManyWithoutOrganizationInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutOrganizationInput
+  stayAssignments?: Prisma.StayAssignmentCreateNestedManyWithoutOrganizationInput
+  transfers?: Prisma.TransferCreateNestedManyWithoutOrganizationInput
   memberships?: Prisma.MembershipCreateNestedManyWithoutOrganizationInput
   auditEvents?: Prisma.AuditEventCreateNestedManyWithoutOrganizationInput
   residents?: Prisma.ResidentCreateNestedManyWithoutOrganizationInput
@@ -880,6 +1090,13 @@ export type OrganizationUncheckedCreateWithoutPropertiesInput = {
   status?: $Enums.OrganizationStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedCreateNestedManyWithoutOrganizationInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutOrganizationInput
   memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutOrganizationInput
   auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutOrganizationInput
   residents?: Prisma.ResidentUncheckedCreateNestedManyWithoutOrganizationInput
@@ -918,6 +1135,13 @@ export type OrganizationUpdateWithoutPropertiesInput = {
   status?: Prisma.EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUpdateManyWithoutOrganizationNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUpdateManyWithoutOrganizationNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUpdateManyWithoutOrganizationNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUpdateManyWithoutOrganizationNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUpdateManyWithoutOrganizationNestedInput
+  stayAssignments?: Prisma.StayAssignmentUpdateManyWithoutOrganizationNestedInput
+  transfers?: Prisma.TransferUpdateManyWithoutOrganizationNestedInput
   memberships?: Prisma.MembershipUpdateManyWithoutOrganizationNestedInput
   auditEvents?: Prisma.AuditEventUpdateManyWithoutOrganizationNestedInput
   residents?: Prisma.ResidentUpdateManyWithoutOrganizationNestedInput
@@ -940,6 +1164,13 @@ export type OrganizationUncheckedUpdateWithoutPropertiesInput = {
   status?: Prisma.EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedUpdateManyWithoutOrganizationNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  transfers?: Prisma.TransferUncheckedUpdateManyWithoutOrganizationNestedInput
   memberships?: Prisma.MembershipUncheckedUpdateManyWithoutOrganizationNestedInput
   auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
   residents?: Prisma.ResidentUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -962,6 +1193,13 @@ export type OrganizationCreateWithoutResidentsInput = {
   status?: $Enums.OrganizationStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementCreateNestedManyWithoutOrganizationInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewCreateNestedManyWithoutOrganizationInput
+  correctionProposals?: Prisma.CorrectionProposalCreateNestedManyWithoutOrganizationInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptCreateNestedManyWithoutOrganizationInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutOrganizationInput
+  stayAssignments?: Prisma.StayAssignmentCreateNestedManyWithoutOrganizationInput
+  transfers?: Prisma.TransferCreateNestedManyWithoutOrganizationInput
   memberships?: Prisma.MembershipCreateNestedManyWithoutOrganizationInput
   properties?: Prisma.PropertyCreateNestedManyWithoutOrganizationInput
   auditEvents?: Prisma.AuditEventCreateNestedManyWithoutOrganizationInput
@@ -984,6 +1222,13 @@ export type OrganizationUncheckedCreateWithoutResidentsInput = {
   status?: $Enums.OrganizationStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedCreateNestedManyWithoutOrganizationInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutOrganizationInput
   memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutOrganizationInput
   properties?: Prisma.PropertyUncheckedCreateNestedManyWithoutOrganizationInput
   auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutOrganizationInput
@@ -1022,6 +1267,13 @@ export type OrganizationUpdateWithoutResidentsInput = {
   status?: Prisma.EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUpdateManyWithoutOrganizationNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUpdateManyWithoutOrganizationNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUpdateManyWithoutOrganizationNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUpdateManyWithoutOrganizationNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUpdateManyWithoutOrganizationNestedInput
+  stayAssignments?: Prisma.StayAssignmentUpdateManyWithoutOrganizationNestedInput
+  transfers?: Prisma.TransferUpdateManyWithoutOrganizationNestedInput
   memberships?: Prisma.MembershipUpdateManyWithoutOrganizationNestedInput
   properties?: Prisma.PropertyUpdateManyWithoutOrganizationNestedInput
   auditEvents?: Prisma.AuditEventUpdateManyWithoutOrganizationNestedInput
@@ -1044,6 +1296,13 @@ export type OrganizationUncheckedUpdateWithoutResidentsInput = {
   status?: Prisma.EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedUpdateManyWithoutOrganizationNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  transfers?: Prisma.TransferUncheckedUpdateManyWithoutOrganizationNestedInput
   memberships?: Prisma.MembershipUncheckedUpdateManyWithoutOrganizationNestedInput
   properties?: Prisma.PropertyUncheckedUpdateManyWithoutOrganizationNestedInput
   auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -1066,6 +1325,13 @@ export type OrganizationCreateWithoutBookingsInput = {
   status?: $Enums.OrganizationStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementCreateNestedManyWithoutOrganizationInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewCreateNestedManyWithoutOrganizationInput
+  correctionProposals?: Prisma.CorrectionProposalCreateNestedManyWithoutOrganizationInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptCreateNestedManyWithoutOrganizationInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutOrganizationInput
+  stayAssignments?: Prisma.StayAssignmentCreateNestedManyWithoutOrganizationInput
+  transfers?: Prisma.TransferCreateNestedManyWithoutOrganizationInput
   memberships?: Prisma.MembershipCreateNestedManyWithoutOrganizationInput
   properties?: Prisma.PropertyCreateNestedManyWithoutOrganizationInput
   auditEvents?: Prisma.AuditEventCreateNestedManyWithoutOrganizationInput
@@ -1088,6 +1354,13 @@ export type OrganizationUncheckedCreateWithoutBookingsInput = {
   status?: $Enums.OrganizationStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedCreateNestedManyWithoutOrganizationInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutOrganizationInput
   memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutOrganizationInput
   properties?: Prisma.PropertyUncheckedCreateNestedManyWithoutOrganizationInput
   auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutOrganizationInput
@@ -1126,6 +1399,13 @@ export type OrganizationUpdateWithoutBookingsInput = {
   status?: Prisma.EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUpdateManyWithoutOrganizationNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUpdateManyWithoutOrganizationNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUpdateManyWithoutOrganizationNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUpdateManyWithoutOrganizationNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUpdateManyWithoutOrganizationNestedInput
+  stayAssignments?: Prisma.StayAssignmentUpdateManyWithoutOrganizationNestedInput
+  transfers?: Prisma.TransferUpdateManyWithoutOrganizationNestedInput
   memberships?: Prisma.MembershipUpdateManyWithoutOrganizationNestedInput
   properties?: Prisma.PropertyUpdateManyWithoutOrganizationNestedInput
   auditEvents?: Prisma.AuditEventUpdateManyWithoutOrganizationNestedInput
@@ -1148,6 +1428,13 @@ export type OrganizationUncheckedUpdateWithoutBookingsInput = {
   status?: Prisma.EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedUpdateManyWithoutOrganizationNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  transfers?: Prisma.TransferUncheckedUpdateManyWithoutOrganizationNestedInput
   memberships?: Prisma.MembershipUncheckedUpdateManyWithoutOrganizationNestedInput
   properties?: Prisma.PropertyUncheckedUpdateManyWithoutOrganizationNestedInput
   auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -1170,6 +1457,13 @@ export type OrganizationCreateWithoutAdmissionsInput = {
   status?: $Enums.OrganizationStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementCreateNestedManyWithoutOrganizationInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewCreateNestedManyWithoutOrganizationInput
+  correctionProposals?: Prisma.CorrectionProposalCreateNestedManyWithoutOrganizationInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptCreateNestedManyWithoutOrganizationInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutOrganizationInput
+  stayAssignments?: Prisma.StayAssignmentCreateNestedManyWithoutOrganizationInput
+  transfers?: Prisma.TransferCreateNestedManyWithoutOrganizationInput
   memberships?: Prisma.MembershipCreateNestedManyWithoutOrganizationInput
   properties?: Prisma.PropertyCreateNestedManyWithoutOrganizationInput
   auditEvents?: Prisma.AuditEventCreateNestedManyWithoutOrganizationInput
@@ -1192,6 +1486,13 @@ export type OrganizationUncheckedCreateWithoutAdmissionsInput = {
   status?: $Enums.OrganizationStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedCreateNestedManyWithoutOrganizationInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutOrganizationInput
   memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutOrganizationInput
   properties?: Prisma.PropertyUncheckedCreateNestedManyWithoutOrganizationInput
   auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutOrganizationInput
@@ -1230,6 +1531,13 @@ export type OrganizationUpdateWithoutAdmissionsInput = {
   status?: Prisma.EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUpdateManyWithoutOrganizationNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUpdateManyWithoutOrganizationNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUpdateManyWithoutOrganizationNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUpdateManyWithoutOrganizationNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUpdateManyWithoutOrganizationNestedInput
+  stayAssignments?: Prisma.StayAssignmentUpdateManyWithoutOrganizationNestedInput
+  transfers?: Prisma.TransferUpdateManyWithoutOrganizationNestedInput
   memberships?: Prisma.MembershipUpdateManyWithoutOrganizationNestedInput
   properties?: Prisma.PropertyUpdateManyWithoutOrganizationNestedInput
   auditEvents?: Prisma.AuditEventUpdateManyWithoutOrganizationNestedInput
@@ -1252,6 +1560,13 @@ export type OrganizationUncheckedUpdateWithoutAdmissionsInput = {
   status?: Prisma.EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedUpdateManyWithoutOrganizationNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  transfers?: Prisma.TransferUncheckedUpdateManyWithoutOrganizationNestedInput
   memberships?: Prisma.MembershipUncheckedUpdateManyWithoutOrganizationNestedInput
   properties?: Prisma.PropertyUncheckedUpdateManyWithoutOrganizationNestedInput
   auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -1274,6 +1589,13 @@ export type OrganizationCreateWithoutEnquiriesInput = {
   status?: $Enums.OrganizationStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementCreateNestedManyWithoutOrganizationInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewCreateNestedManyWithoutOrganizationInput
+  correctionProposals?: Prisma.CorrectionProposalCreateNestedManyWithoutOrganizationInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptCreateNestedManyWithoutOrganizationInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutOrganizationInput
+  stayAssignments?: Prisma.StayAssignmentCreateNestedManyWithoutOrganizationInput
+  transfers?: Prisma.TransferCreateNestedManyWithoutOrganizationInput
   memberships?: Prisma.MembershipCreateNestedManyWithoutOrganizationInput
   properties?: Prisma.PropertyCreateNestedManyWithoutOrganizationInput
   auditEvents?: Prisma.AuditEventCreateNestedManyWithoutOrganizationInput
@@ -1296,6 +1618,13 @@ export type OrganizationUncheckedCreateWithoutEnquiriesInput = {
   status?: $Enums.OrganizationStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedCreateNestedManyWithoutOrganizationInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutOrganizationInput
   memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutOrganizationInput
   properties?: Prisma.PropertyUncheckedCreateNestedManyWithoutOrganizationInput
   auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutOrganizationInput
@@ -1334,6 +1663,13 @@ export type OrganizationUpdateWithoutEnquiriesInput = {
   status?: Prisma.EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUpdateManyWithoutOrganizationNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUpdateManyWithoutOrganizationNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUpdateManyWithoutOrganizationNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUpdateManyWithoutOrganizationNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUpdateManyWithoutOrganizationNestedInput
+  stayAssignments?: Prisma.StayAssignmentUpdateManyWithoutOrganizationNestedInput
+  transfers?: Prisma.TransferUpdateManyWithoutOrganizationNestedInput
   memberships?: Prisma.MembershipUpdateManyWithoutOrganizationNestedInput
   properties?: Prisma.PropertyUpdateManyWithoutOrganizationNestedInput
   auditEvents?: Prisma.AuditEventUpdateManyWithoutOrganizationNestedInput
@@ -1356,6 +1692,13 @@ export type OrganizationUncheckedUpdateWithoutEnquiriesInput = {
   status?: Prisma.EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedUpdateManyWithoutOrganizationNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  transfers?: Prisma.TransferUncheckedUpdateManyWithoutOrganizationNestedInput
   memberships?: Prisma.MembershipUncheckedUpdateManyWithoutOrganizationNestedInput
   properties?: Prisma.PropertyUncheckedUpdateManyWithoutOrganizationNestedInput
   auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -1378,6 +1721,13 @@ export type OrganizationCreateWithoutCheckInsInput = {
   status?: $Enums.OrganizationStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementCreateNestedManyWithoutOrganizationInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewCreateNestedManyWithoutOrganizationInput
+  correctionProposals?: Prisma.CorrectionProposalCreateNestedManyWithoutOrganizationInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptCreateNestedManyWithoutOrganizationInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutOrganizationInput
+  stayAssignments?: Prisma.StayAssignmentCreateNestedManyWithoutOrganizationInput
+  transfers?: Prisma.TransferCreateNestedManyWithoutOrganizationInput
   memberships?: Prisma.MembershipCreateNestedManyWithoutOrganizationInput
   properties?: Prisma.PropertyCreateNestedManyWithoutOrganizationInput
   auditEvents?: Prisma.AuditEventCreateNestedManyWithoutOrganizationInput
@@ -1400,6 +1750,13 @@ export type OrganizationUncheckedCreateWithoutCheckInsInput = {
   status?: $Enums.OrganizationStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedCreateNestedManyWithoutOrganizationInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutOrganizationInput
   memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutOrganizationInput
   properties?: Prisma.PropertyUncheckedCreateNestedManyWithoutOrganizationInput
   auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutOrganizationInput
@@ -1438,6 +1795,13 @@ export type OrganizationUpdateWithoutCheckInsInput = {
   status?: Prisma.EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUpdateManyWithoutOrganizationNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUpdateManyWithoutOrganizationNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUpdateManyWithoutOrganizationNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUpdateManyWithoutOrganizationNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUpdateManyWithoutOrganizationNestedInput
+  stayAssignments?: Prisma.StayAssignmentUpdateManyWithoutOrganizationNestedInput
+  transfers?: Prisma.TransferUpdateManyWithoutOrganizationNestedInput
   memberships?: Prisma.MembershipUpdateManyWithoutOrganizationNestedInput
   properties?: Prisma.PropertyUpdateManyWithoutOrganizationNestedInput
   auditEvents?: Prisma.AuditEventUpdateManyWithoutOrganizationNestedInput
@@ -1460,6 +1824,13 @@ export type OrganizationUncheckedUpdateWithoutCheckInsInput = {
   status?: Prisma.EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedUpdateManyWithoutOrganizationNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  transfers?: Prisma.TransferUncheckedUpdateManyWithoutOrganizationNestedInput
   memberships?: Prisma.MembershipUncheckedUpdateManyWithoutOrganizationNestedInput
   properties?: Prisma.PropertyUncheckedUpdateManyWithoutOrganizationNestedInput
   auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -1482,6 +1853,13 @@ export type OrganizationCreateWithoutCheckOutsInput = {
   status?: $Enums.OrganizationStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementCreateNestedManyWithoutOrganizationInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewCreateNestedManyWithoutOrganizationInput
+  correctionProposals?: Prisma.CorrectionProposalCreateNestedManyWithoutOrganizationInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptCreateNestedManyWithoutOrganizationInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutOrganizationInput
+  stayAssignments?: Prisma.StayAssignmentCreateNestedManyWithoutOrganizationInput
+  transfers?: Prisma.TransferCreateNestedManyWithoutOrganizationInput
   memberships?: Prisma.MembershipCreateNestedManyWithoutOrganizationInput
   properties?: Prisma.PropertyCreateNestedManyWithoutOrganizationInput
   auditEvents?: Prisma.AuditEventCreateNestedManyWithoutOrganizationInput
@@ -1504,6 +1882,13 @@ export type OrganizationUncheckedCreateWithoutCheckOutsInput = {
   status?: $Enums.OrganizationStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedCreateNestedManyWithoutOrganizationInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutOrganizationInput
   memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutOrganizationInput
   properties?: Prisma.PropertyUncheckedCreateNestedManyWithoutOrganizationInput
   auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutOrganizationInput
@@ -1542,6 +1927,13 @@ export type OrganizationUpdateWithoutCheckOutsInput = {
   status?: Prisma.EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUpdateManyWithoutOrganizationNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUpdateManyWithoutOrganizationNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUpdateManyWithoutOrganizationNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUpdateManyWithoutOrganizationNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUpdateManyWithoutOrganizationNestedInput
+  stayAssignments?: Prisma.StayAssignmentUpdateManyWithoutOrganizationNestedInput
+  transfers?: Prisma.TransferUpdateManyWithoutOrganizationNestedInput
   memberships?: Prisma.MembershipUpdateManyWithoutOrganizationNestedInput
   properties?: Prisma.PropertyUpdateManyWithoutOrganizationNestedInput
   auditEvents?: Prisma.AuditEventUpdateManyWithoutOrganizationNestedInput
@@ -1564,6 +1956,13 @@ export type OrganizationUncheckedUpdateWithoutCheckOutsInput = {
   status?: Prisma.EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedUpdateManyWithoutOrganizationNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  transfers?: Prisma.TransferUncheckedUpdateManyWithoutOrganizationNestedInput
   memberships?: Prisma.MembershipUncheckedUpdateManyWithoutOrganizationNestedInput
   properties?: Prisma.PropertyUncheckedUpdateManyWithoutOrganizationNestedInput
   auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -1586,6 +1985,13 @@ export type OrganizationCreateWithoutInvoicesInput = {
   status?: $Enums.OrganizationStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementCreateNestedManyWithoutOrganizationInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewCreateNestedManyWithoutOrganizationInput
+  correctionProposals?: Prisma.CorrectionProposalCreateNestedManyWithoutOrganizationInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptCreateNestedManyWithoutOrganizationInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutOrganizationInput
+  stayAssignments?: Prisma.StayAssignmentCreateNestedManyWithoutOrganizationInput
+  transfers?: Prisma.TransferCreateNestedManyWithoutOrganizationInput
   memberships?: Prisma.MembershipCreateNestedManyWithoutOrganizationInput
   properties?: Prisma.PropertyCreateNestedManyWithoutOrganizationInput
   auditEvents?: Prisma.AuditEventCreateNestedManyWithoutOrganizationInput
@@ -1608,6 +2014,13 @@ export type OrganizationUncheckedCreateWithoutInvoicesInput = {
   status?: $Enums.OrganizationStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedCreateNestedManyWithoutOrganizationInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutOrganizationInput
   memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutOrganizationInput
   properties?: Prisma.PropertyUncheckedCreateNestedManyWithoutOrganizationInput
   auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutOrganizationInput
@@ -1646,6 +2059,13 @@ export type OrganizationUpdateWithoutInvoicesInput = {
   status?: Prisma.EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUpdateManyWithoutOrganizationNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUpdateManyWithoutOrganizationNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUpdateManyWithoutOrganizationNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUpdateManyWithoutOrganizationNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUpdateManyWithoutOrganizationNestedInput
+  stayAssignments?: Prisma.StayAssignmentUpdateManyWithoutOrganizationNestedInput
+  transfers?: Prisma.TransferUpdateManyWithoutOrganizationNestedInput
   memberships?: Prisma.MembershipUpdateManyWithoutOrganizationNestedInput
   properties?: Prisma.PropertyUpdateManyWithoutOrganizationNestedInput
   auditEvents?: Prisma.AuditEventUpdateManyWithoutOrganizationNestedInput
@@ -1668,6 +2088,13 @@ export type OrganizationUncheckedUpdateWithoutInvoicesInput = {
   status?: Prisma.EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedUpdateManyWithoutOrganizationNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  transfers?: Prisma.TransferUncheckedUpdateManyWithoutOrganizationNestedInput
   memberships?: Prisma.MembershipUncheckedUpdateManyWithoutOrganizationNestedInput
   properties?: Prisma.PropertyUncheckedUpdateManyWithoutOrganizationNestedInput
   auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -1690,6 +2117,13 @@ export type OrganizationCreateWithoutPaymentsInput = {
   status?: $Enums.OrganizationStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementCreateNestedManyWithoutOrganizationInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewCreateNestedManyWithoutOrganizationInput
+  correctionProposals?: Prisma.CorrectionProposalCreateNestedManyWithoutOrganizationInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptCreateNestedManyWithoutOrganizationInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutOrganizationInput
+  stayAssignments?: Prisma.StayAssignmentCreateNestedManyWithoutOrganizationInput
+  transfers?: Prisma.TransferCreateNestedManyWithoutOrganizationInput
   memberships?: Prisma.MembershipCreateNestedManyWithoutOrganizationInput
   properties?: Prisma.PropertyCreateNestedManyWithoutOrganizationInput
   auditEvents?: Prisma.AuditEventCreateNestedManyWithoutOrganizationInput
@@ -1712,6 +2146,13 @@ export type OrganizationUncheckedCreateWithoutPaymentsInput = {
   status?: $Enums.OrganizationStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedCreateNestedManyWithoutOrganizationInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutOrganizationInput
   memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutOrganizationInput
   properties?: Prisma.PropertyUncheckedCreateNestedManyWithoutOrganizationInput
   auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutOrganizationInput
@@ -1750,6 +2191,13 @@ export type OrganizationUpdateWithoutPaymentsInput = {
   status?: Prisma.EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUpdateManyWithoutOrganizationNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUpdateManyWithoutOrganizationNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUpdateManyWithoutOrganizationNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUpdateManyWithoutOrganizationNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUpdateManyWithoutOrganizationNestedInput
+  stayAssignments?: Prisma.StayAssignmentUpdateManyWithoutOrganizationNestedInput
+  transfers?: Prisma.TransferUpdateManyWithoutOrganizationNestedInput
   memberships?: Prisma.MembershipUpdateManyWithoutOrganizationNestedInput
   properties?: Prisma.PropertyUpdateManyWithoutOrganizationNestedInput
   auditEvents?: Prisma.AuditEventUpdateManyWithoutOrganizationNestedInput
@@ -1772,6 +2220,13 @@ export type OrganizationUncheckedUpdateWithoutPaymentsInput = {
   status?: Prisma.EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedUpdateManyWithoutOrganizationNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  transfers?: Prisma.TransferUncheckedUpdateManyWithoutOrganizationNestedInput
   memberships?: Prisma.MembershipUncheckedUpdateManyWithoutOrganizationNestedInput
   properties?: Prisma.PropertyUncheckedUpdateManyWithoutOrganizationNestedInput
   auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -1794,6 +2249,13 @@ export type OrganizationCreateWithoutPaymentReversalsInput = {
   status?: $Enums.OrganizationStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementCreateNestedManyWithoutOrganizationInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewCreateNestedManyWithoutOrganizationInput
+  correctionProposals?: Prisma.CorrectionProposalCreateNestedManyWithoutOrganizationInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptCreateNestedManyWithoutOrganizationInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutOrganizationInput
+  stayAssignments?: Prisma.StayAssignmentCreateNestedManyWithoutOrganizationInput
+  transfers?: Prisma.TransferCreateNestedManyWithoutOrganizationInput
   memberships?: Prisma.MembershipCreateNestedManyWithoutOrganizationInput
   properties?: Prisma.PropertyCreateNestedManyWithoutOrganizationInput
   auditEvents?: Prisma.AuditEventCreateNestedManyWithoutOrganizationInput
@@ -1816,6 +2278,13 @@ export type OrganizationUncheckedCreateWithoutPaymentReversalsInput = {
   status?: $Enums.OrganizationStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedCreateNestedManyWithoutOrganizationInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutOrganizationInput
   memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutOrganizationInput
   properties?: Prisma.PropertyUncheckedCreateNestedManyWithoutOrganizationInput
   auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutOrganizationInput
@@ -1854,6 +2323,13 @@ export type OrganizationUpdateWithoutPaymentReversalsInput = {
   status?: Prisma.EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUpdateManyWithoutOrganizationNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUpdateManyWithoutOrganizationNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUpdateManyWithoutOrganizationNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUpdateManyWithoutOrganizationNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUpdateManyWithoutOrganizationNestedInput
+  stayAssignments?: Prisma.StayAssignmentUpdateManyWithoutOrganizationNestedInput
+  transfers?: Prisma.TransferUpdateManyWithoutOrganizationNestedInput
   memberships?: Prisma.MembershipUpdateManyWithoutOrganizationNestedInput
   properties?: Prisma.PropertyUpdateManyWithoutOrganizationNestedInput
   auditEvents?: Prisma.AuditEventUpdateManyWithoutOrganizationNestedInput
@@ -1876,6 +2352,13 @@ export type OrganizationUncheckedUpdateWithoutPaymentReversalsInput = {
   status?: Prisma.EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedUpdateManyWithoutOrganizationNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  transfers?: Prisma.TransferUncheckedUpdateManyWithoutOrganizationNestedInput
   memberships?: Prisma.MembershipUncheckedUpdateManyWithoutOrganizationNestedInput
   properties?: Prisma.PropertyUncheckedUpdateManyWithoutOrganizationNestedInput
   auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -1898,6 +2381,13 @@ export type OrganizationCreateWithoutInvoiceAdjustmentsInput = {
   status?: $Enums.OrganizationStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementCreateNestedManyWithoutOrganizationInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewCreateNestedManyWithoutOrganizationInput
+  correctionProposals?: Prisma.CorrectionProposalCreateNestedManyWithoutOrganizationInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptCreateNestedManyWithoutOrganizationInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutOrganizationInput
+  stayAssignments?: Prisma.StayAssignmentCreateNestedManyWithoutOrganizationInput
+  transfers?: Prisma.TransferCreateNestedManyWithoutOrganizationInput
   memberships?: Prisma.MembershipCreateNestedManyWithoutOrganizationInput
   properties?: Prisma.PropertyCreateNestedManyWithoutOrganizationInput
   auditEvents?: Prisma.AuditEventCreateNestedManyWithoutOrganizationInput
@@ -1920,6 +2410,13 @@ export type OrganizationUncheckedCreateWithoutInvoiceAdjustmentsInput = {
   status?: $Enums.OrganizationStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedCreateNestedManyWithoutOrganizationInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutOrganizationInput
   memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutOrganizationInput
   properties?: Prisma.PropertyUncheckedCreateNestedManyWithoutOrganizationInput
   auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutOrganizationInput
@@ -1958,6 +2455,13 @@ export type OrganizationUpdateWithoutInvoiceAdjustmentsInput = {
   status?: Prisma.EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUpdateManyWithoutOrganizationNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUpdateManyWithoutOrganizationNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUpdateManyWithoutOrganizationNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUpdateManyWithoutOrganizationNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUpdateManyWithoutOrganizationNestedInput
+  stayAssignments?: Prisma.StayAssignmentUpdateManyWithoutOrganizationNestedInput
+  transfers?: Prisma.TransferUpdateManyWithoutOrganizationNestedInput
   memberships?: Prisma.MembershipUpdateManyWithoutOrganizationNestedInput
   properties?: Prisma.PropertyUpdateManyWithoutOrganizationNestedInput
   auditEvents?: Prisma.AuditEventUpdateManyWithoutOrganizationNestedInput
@@ -1980,6 +2484,13 @@ export type OrganizationUncheckedUpdateWithoutInvoiceAdjustmentsInput = {
   status?: Prisma.EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedUpdateManyWithoutOrganizationNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  transfers?: Prisma.TransferUncheckedUpdateManyWithoutOrganizationNestedInput
   memberships?: Prisma.MembershipUncheckedUpdateManyWithoutOrganizationNestedInput
   properties?: Prisma.PropertyUncheckedUpdateManyWithoutOrganizationNestedInput
   auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -2002,6 +2513,13 @@ export type OrganizationCreateWithoutInvoiceVoidsInput = {
   status?: $Enums.OrganizationStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementCreateNestedManyWithoutOrganizationInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewCreateNestedManyWithoutOrganizationInput
+  correctionProposals?: Prisma.CorrectionProposalCreateNestedManyWithoutOrganizationInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptCreateNestedManyWithoutOrganizationInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutOrganizationInput
+  stayAssignments?: Prisma.StayAssignmentCreateNestedManyWithoutOrganizationInput
+  transfers?: Prisma.TransferCreateNestedManyWithoutOrganizationInput
   memberships?: Prisma.MembershipCreateNestedManyWithoutOrganizationInput
   properties?: Prisma.PropertyCreateNestedManyWithoutOrganizationInput
   auditEvents?: Prisma.AuditEventCreateNestedManyWithoutOrganizationInput
@@ -2024,6 +2542,13 @@ export type OrganizationUncheckedCreateWithoutInvoiceVoidsInput = {
   status?: $Enums.OrganizationStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedCreateNestedManyWithoutOrganizationInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutOrganizationInput
   memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutOrganizationInput
   properties?: Prisma.PropertyUncheckedCreateNestedManyWithoutOrganizationInput
   auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutOrganizationInput
@@ -2062,6 +2587,13 @@ export type OrganizationUpdateWithoutInvoiceVoidsInput = {
   status?: Prisma.EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUpdateManyWithoutOrganizationNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUpdateManyWithoutOrganizationNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUpdateManyWithoutOrganizationNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUpdateManyWithoutOrganizationNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUpdateManyWithoutOrganizationNestedInput
+  stayAssignments?: Prisma.StayAssignmentUpdateManyWithoutOrganizationNestedInput
+  transfers?: Prisma.TransferUpdateManyWithoutOrganizationNestedInput
   memberships?: Prisma.MembershipUpdateManyWithoutOrganizationNestedInput
   properties?: Prisma.PropertyUpdateManyWithoutOrganizationNestedInput
   auditEvents?: Prisma.AuditEventUpdateManyWithoutOrganizationNestedInput
@@ -2084,6 +2616,13 @@ export type OrganizationUncheckedUpdateWithoutInvoiceVoidsInput = {
   status?: Prisma.EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedUpdateManyWithoutOrganizationNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  transfers?: Prisma.TransferUncheckedUpdateManyWithoutOrganizationNestedInput
   memberships?: Prisma.MembershipUncheckedUpdateManyWithoutOrganizationNestedInput
   properties?: Prisma.PropertyUncheckedUpdateManyWithoutOrganizationNestedInput
   auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -2106,6 +2645,13 @@ export type OrganizationCreateWithoutPaymentIdempotencyKeysInput = {
   status?: $Enums.OrganizationStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementCreateNestedManyWithoutOrganizationInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewCreateNestedManyWithoutOrganizationInput
+  correctionProposals?: Prisma.CorrectionProposalCreateNestedManyWithoutOrganizationInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptCreateNestedManyWithoutOrganizationInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutOrganizationInput
+  stayAssignments?: Prisma.StayAssignmentCreateNestedManyWithoutOrganizationInput
+  transfers?: Prisma.TransferCreateNestedManyWithoutOrganizationInput
   memberships?: Prisma.MembershipCreateNestedManyWithoutOrganizationInput
   properties?: Prisma.PropertyCreateNestedManyWithoutOrganizationInput
   auditEvents?: Prisma.AuditEventCreateNestedManyWithoutOrganizationInput
@@ -2128,6 +2674,13 @@ export type OrganizationUncheckedCreateWithoutPaymentIdempotencyKeysInput = {
   status?: $Enums.OrganizationStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedCreateNestedManyWithoutOrganizationInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutOrganizationInput
   memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutOrganizationInput
   properties?: Prisma.PropertyUncheckedCreateNestedManyWithoutOrganizationInput
   auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutOrganizationInput
@@ -2166,6 +2719,13 @@ export type OrganizationUpdateWithoutPaymentIdempotencyKeysInput = {
   status?: Prisma.EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUpdateManyWithoutOrganizationNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUpdateManyWithoutOrganizationNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUpdateManyWithoutOrganizationNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUpdateManyWithoutOrganizationNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUpdateManyWithoutOrganizationNestedInput
+  stayAssignments?: Prisma.StayAssignmentUpdateManyWithoutOrganizationNestedInput
+  transfers?: Prisma.TransferUpdateManyWithoutOrganizationNestedInput
   memberships?: Prisma.MembershipUpdateManyWithoutOrganizationNestedInput
   properties?: Prisma.PropertyUpdateManyWithoutOrganizationNestedInput
   auditEvents?: Prisma.AuditEventUpdateManyWithoutOrganizationNestedInput
@@ -2188,6 +2748,13 @@ export type OrganizationUncheckedUpdateWithoutPaymentIdempotencyKeysInput = {
   status?: Prisma.EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedUpdateManyWithoutOrganizationNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  transfers?: Prisma.TransferUncheckedUpdateManyWithoutOrganizationNestedInput
   memberships?: Prisma.MembershipUncheckedUpdateManyWithoutOrganizationNestedInput
   properties?: Prisma.PropertyUncheckedUpdateManyWithoutOrganizationNestedInput
   auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -2204,12 +2771,943 @@ export type OrganizationUncheckedUpdateWithoutPaymentIdempotencyKeysInput = {
   invoiceVoids?: Prisma.InvoiceVoidUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
+export type OrganizationCreateWithoutCorrectionProposalsInput = {
+  id?: string
+  name: string
+  status?: $Enums.OrganizationStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementCreateNestedManyWithoutOrganizationInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewCreateNestedManyWithoutOrganizationInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptCreateNestedManyWithoutOrganizationInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutOrganizationInput
+  stayAssignments?: Prisma.StayAssignmentCreateNestedManyWithoutOrganizationInput
+  transfers?: Prisma.TransferCreateNestedManyWithoutOrganizationInput
+  memberships?: Prisma.MembershipCreateNestedManyWithoutOrganizationInput
+  properties?: Prisma.PropertyCreateNestedManyWithoutOrganizationInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutOrganizationInput
+  residents?: Prisma.ResidentCreateNestedManyWithoutOrganizationInput
+  enquiries?: Prisma.EnquiryCreateNestedManyWithoutOrganizationInput
+  bookings?: Prisma.BookingCreateNestedManyWithoutOrganizationInput
+  admissions?: Prisma.AdmissionCreateNestedManyWithoutOrganizationInput
+  checkIns?: Prisma.CheckInCreateNestedManyWithoutOrganizationInput
+  checkOuts?: Prisma.CheckOutCreateNestedManyWithoutOrganizationInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutOrganizationInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutOrganizationInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyCreateNestedManyWithoutOrganizationInput
+  paymentReversals?: Prisma.PaymentReversalCreateNestedManyWithoutOrganizationInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentCreateNestedManyWithoutOrganizationInput
+  invoiceVoids?: Prisma.InvoiceVoidCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationUncheckedCreateWithoutCorrectionProposalsInput = {
+  id?: string
+  name: string
+  status?: $Enums.OrganizationStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedCreateNestedManyWithoutOrganizationInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutOrganizationInput
+  memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutOrganizationInput
+  properties?: Prisma.PropertyUncheckedCreateNestedManyWithoutOrganizationInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  residents?: Prisma.ResidentUncheckedCreateNestedManyWithoutOrganizationInput
+  enquiries?: Prisma.EnquiryUncheckedCreateNestedManyWithoutOrganizationInput
+  bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutOrganizationInput
+  admissions?: Prisma.AdmissionUncheckedCreateNestedManyWithoutOrganizationInput
+  checkIns?: Prisma.CheckInUncheckedCreateNestedManyWithoutOrganizationInput
+  checkOuts?: Prisma.CheckOutUncheckedCreateNestedManyWithoutOrganizationInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutOrganizationInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentReversals?: Prisma.PaymentReversalUncheckedCreateNestedManyWithoutOrganizationInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedCreateNestedManyWithoutOrganizationInput
+  invoiceVoids?: Prisma.InvoiceVoidUncheckedCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationCreateOrConnectWithoutCorrectionProposalsInput = {
+  where: Prisma.OrganizationWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutCorrectionProposalsInput, Prisma.OrganizationUncheckedCreateWithoutCorrectionProposalsInput>
+}
+
+export type OrganizationUpsertWithoutCorrectionProposalsInput = {
+  update: Prisma.XOR<Prisma.OrganizationUpdateWithoutCorrectionProposalsInput, Prisma.OrganizationUncheckedUpdateWithoutCorrectionProposalsInput>
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutCorrectionProposalsInput, Prisma.OrganizationUncheckedCreateWithoutCorrectionProposalsInput>
+  where?: Prisma.OrganizationWhereInput
+}
+
+export type OrganizationUpdateToOneWithWhereWithoutCorrectionProposalsInput = {
+  where?: Prisma.OrganizationWhereInput
+  data: Prisma.XOR<Prisma.OrganizationUpdateWithoutCorrectionProposalsInput, Prisma.OrganizationUncheckedUpdateWithoutCorrectionProposalsInput>
+}
+
+export type OrganizationUpdateWithoutCorrectionProposalsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUpdateManyWithoutOrganizationNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUpdateManyWithoutOrganizationNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUpdateManyWithoutOrganizationNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUpdateManyWithoutOrganizationNestedInput
+  stayAssignments?: Prisma.StayAssignmentUpdateManyWithoutOrganizationNestedInput
+  transfers?: Prisma.TransferUpdateManyWithoutOrganizationNestedInput
+  memberships?: Prisma.MembershipUpdateManyWithoutOrganizationNestedInput
+  properties?: Prisma.PropertyUpdateManyWithoutOrganizationNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutOrganizationNestedInput
+  residents?: Prisma.ResidentUpdateManyWithoutOrganizationNestedInput
+  enquiries?: Prisma.EnquiryUpdateManyWithoutOrganizationNestedInput
+  bookings?: Prisma.BookingUpdateManyWithoutOrganizationNestedInput
+  admissions?: Prisma.AdmissionUpdateManyWithoutOrganizationNestedInput
+  checkIns?: Prisma.CheckInUpdateManyWithoutOrganizationNestedInput
+  checkOuts?: Prisma.CheckOutUpdateManyWithoutOrganizationNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutOrganizationNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutOrganizationNestedInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyUpdateManyWithoutOrganizationNestedInput
+  paymentReversals?: Prisma.PaymentReversalUpdateManyWithoutOrganizationNestedInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUpdateManyWithoutOrganizationNestedInput
+  invoiceVoids?: Prisma.InvoiceVoidUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationUncheckedUpdateWithoutCorrectionProposalsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedUpdateManyWithoutOrganizationNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  transfers?: Prisma.TransferUncheckedUpdateManyWithoutOrganizationNestedInput
+  memberships?: Prisma.MembershipUncheckedUpdateManyWithoutOrganizationNestedInput
+  properties?: Prisma.PropertyUncheckedUpdateManyWithoutOrganizationNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  residents?: Prisma.ResidentUncheckedUpdateManyWithoutOrganizationNestedInput
+  enquiries?: Prisma.EnquiryUncheckedUpdateManyWithoutOrganizationNestedInput
+  bookings?: Prisma.BookingUncheckedUpdateManyWithoutOrganizationNestedInput
+  admissions?: Prisma.AdmissionUncheckedUpdateManyWithoutOrganizationNestedInput
+  checkIns?: Prisma.CheckInUncheckedUpdateManyWithoutOrganizationNestedInput
+  checkOuts?: Prisma.CheckOutUncheckedUpdateManyWithoutOrganizationNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentReversals?: Prisma.PaymentReversalUncheckedUpdateManyWithoutOrganizationNestedInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  invoiceVoids?: Prisma.InvoiceVoidUncheckedUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationCreateWithoutCorrectionReceiptsInput = {
+  id?: string
+  name: string
+  status?: $Enums.OrganizationStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementCreateNestedManyWithoutOrganizationInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewCreateNestedManyWithoutOrganizationInput
+  correctionProposals?: Prisma.CorrectionProposalCreateNestedManyWithoutOrganizationInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutOrganizationInput
+  stayAssignments?: Prisma.StayAssignmentCreateNestedManyWithoutOrganizationInput
+  transfers?: Prisma.TransferCreateNestedManyWithoutOrganizationInput
+  memberships?: Prisma.MembershipCreateNestedManyWithoutOrganizationInput
+  properties?: Prisma.PropertyCreateNestedManyWithoutOrganizationInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutOrganizationInput
+  residents?: Prisma.ResidentCreateNestedManyWithoutOrganizationInput
+  enquiries?: Prisma.EnquiryCreateNestedManyWithoutOrganizationInput
+  bookings?: Prisma.BookingCreateNestedManyWithoutOrganizationInput
+  admissions?: Prisma.AdmissionCreateNestedManyWithoutOrganizationInput
+  checkIns?: Prisma.CheckInCreateNestedManyWithoutOrganizationInput
+  checkOuts?: Prisma.CheckOutCreateNestedManyWithoutOrganizationInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutOrganizationInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutOrganizationInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyCreateNestedManyWithoutOrganizationInput
+  paymentReversals?: Prisma.PaymentReversalCreateNestedManyWithoutOrganizationInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentCreateNestedManyWithoutOrganizationInput
+  invoiceVoids?: Prisma.InvoiceVoidCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationUncheckedCreateWithoutCorrectionReceiptsInput = {
+  id?: string
+  name: string
+  status?: $Enums.OrganizationStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedCreateNestedManyWithoutOrganizationInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutOrganizationInput
+  memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutOrganizationInput
+  properties?: Prisma.PropertyUncheckedCreateNestedManyWithoutOrganizationInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  residents?: Prisma.ResidentUncheckedCreateNestedManyWithoutOrganizationInput
+  enquiries?: Prisma.EnquiryUncheckedCreateNestedManyWithoutOrganizationInput
+  bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutOrganizationInput
+  admissions?: Prisma.AdmissionUncheckedCreateNestedManyWithoutOrganizationInput
+  checkIns?: Prisma.CheckInUncheckedCreateNestedManyWithoutOrganizationInput
+  checkOuts?: Prisma.CheckOutUncheckedCreateNestedManyWithoutOrganizationInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutOrganizationInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentReversals?: Prisma.PaymentReversalUncheckedCreateNestedManyWithoutOrganizationInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedCreateNestedManyWithoutOrganizationInput
+  invoiceVoids?: Prisma.InvoiceVoidUncheckedCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationCreateOrConnectWithoutCorrectionReceiptsInput = {
+  where: Prisma.OrganizationWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutCorrectionReceiptsInput, Prisma.OrganizationUncheckedCreateWithoutCorrectionReceiptsInput>
+}
+
+export type OrganizationUpsertWithoutCorrectionReceiptsInput = {
+  update: Prisma.XOR<Prisma.OrganizationUpdateWithoutCorrectionReceiptsInput, Prisma.OrganizationUncheckedUpdateWithoutCorrectionReceiptsInput>
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutCorrectionReceiptsInput, Prisma.OrganizationUncheckedCreateWithoutCorrectionReceiptsInput>
+  where?: Prisma.OrganizationWhereInput
+}
+
+export type OrganizationUpdateToOneWithWhereWithoutCorrectionReceiptsInput = {
+  where?: Prisma.OrganizationWhereInput
+  data: Prisma.XOR<Prisma.OrganizationUpdateWithoutCorrectionReceiptsInput, Prisma.OrganizationUncheckedUpdateWithoutCorrectionReceiptsInput>
+}
+
+export type OrganizationUpdateWithoutCorrectionReceiptsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUpdateManyWithoutOrganizationNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUpdateManyWithoutOrganizationNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUpdateManyWithoutOrganizationNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUpdateManyWithoutOrganizationNestedInput
+  stayAssignments?: Prisma.StayAssignmentUpdateManyWithoutOrganizationNestedInput
+  transfers?: Prisma.TransferUpdateManyWithoutOrganizationNestedInput
+  memberships?: Prisma.MembershipUpdateManyWithoutOrganizationNestedInput
+  properties?: Prisma.PropertyUpdateManyWithoutOrganizationNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutOrganizationNestedInput
+  residents?: Prisma.ResidentUpdateManyWithoutOrganizationNestedInput
+  enquiries?: Prisma.EnquiryUpdateManyWithoutOrganizationNestedInput
+  bookings?: Prisma.BookingUpdateManyWithoutOrganizationNestedInput
+  admissions?: Prisma.AdmissionUpdateManyWithoutOrganizationNestedInput
+  checkIns?: Prisma.CheckInUpdateManyWithoutOrganizationNestedInput
+  checkOuts?: Prisma.CheckOutUpdateManyWithoutOrganizationNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutOrganizationNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutOrganizationNestedInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyUpdateManyWithoutOrganizationNestedInput
+  paymentReversals?: Prisma.PaymentReversalUpdateManyWithoutOrganizationNestedInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUpdateManyWithoutOrganizationNestedInput
+  invoiceVoids?: Prisma.InvoiceVoidUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationUncheckedUpdateWithoutCorrectionReceiptsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedUpdateManyWithoutOrganizationNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  transfers?: Prisma.TransferUncheckedUpdateManyWithoutOrganizationNestedInput
+  memberships?: Prisma.MembershipUncheckedUpdateManyWithoutOrganizationNestedInput
+  properties?: Prisma.PropertyUncheckedUpdateManyWithoutOrganizationNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  residents?: Prisma.ResidentUncheckedUpdateManyWithoutOrganizationNestedInput
+  enquiries?: Prisma.EnquiryUncheckedUpdateManyWithoutOrganizationNestedInput
+  bookings?: Prisma.BookingUncheckedUpdateManyWithoutOrganizationNestedInput
+  admissions?: Prisma.AdmissionUncheckedUpdateManyWithoutOrganizationNestedInput
+  checkIns?: Prisma.CheckInUncheckedUpdateManyWithoutOrganizationNestedInput
+  checkOuts?: Prisma.CheckOutUncheckedUpdateManyWithoutOrganizationNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentReversals?: Prisma.PaymentReversalUncheckedUpdateManyWithoutOrganizationNestedInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  invoiceVoids?: Prisma.InvoiceVoidUncheckedUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationCreateWithoutCorrectionFinanceLinksInput = {
+  id?: string
+  name: string
+  status?: $Enums.OrganizationStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementCreateNestedManyWithoutOrganizationInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewCreateNestedManyWithoutOrganizationInput
+  correctionProposals?: Prisma.CorrectionProposalCreateNestedManyWithoutOrganizationInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptCreateNestedManyWithoutOrganizationInput
+  stayAssignments?: Prisma.StayAssignmentCreateNestedManyWithoutOrganizationInput
+  transfers?: Prisma.TransferCreateNestedManyWithoutOrganizationInput
+  memberships?: Prisma.MembershipCreateNestedManyWithoutOrganizationInput
+  properties?: Prisma.PropertyCreateNestedManyWithoutOrganizationInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutOrganizationInput
+  residents?: Prisma.ResidentCreateNestedManyWithoutOrganizationInput
+  enquiries?: Prisma.EnquiryCreateNestedManyWithoutOrganizationInput
+  bookings?: Prisma.BookingCreateNestedManyWithoutOrganizationInput
+  admissions?: Prisma.AdmissionCreateNestedManyWithoutOrganizationInput
+  checkIns?: Prisma.CheckInCreateNestedManyWithoutOrganizationInput
+  checkOuts?: Prisma.CheckOutCreateNestedManyWithoutOrganizationInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutOrganizationInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutOrganizationInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyCreateNestedManyWithoutOrganizationInput
+  paymentReversals?: Prisma.PaymentReversalCreateNestedManyWithoutOrganizationInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentCreateNestedManyWithoutOrganizationInput
+  invoiceVoids?: Prisma.InvoiceVoidCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationUncheckedCreateWithoutCorrectionFinanceLinksInput = {
+  id?: string
+  name: string
+  status?: $Enums.OrganizationStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedCreateNestedManyWithoutOrganizationInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutOrganizationInput
+  memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutOrganizationInput
+  properties?: Prisma.PropertyUncheckedCreateNestedManyWithoutOrganizationInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  residents?: Prisma.ResidentUncheckedCreateNestedManyWithoutOrganizationInput
+  enquiries?: Prisma.EnquiryUncheckedCreateNestedManyWithoutOrganizationInput
+  bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutOrganizationInput
+  admissions?: Prisma.AdmissionUncheckedCreateNestedManyWithoutOrganizationInput
+  checkIns?: Prisma.CheckInUncheckedCreateNestedManyWithoutOrganizationInput
+  checkOuts?: Prisma.CheckOutUncheckedCreateNestedManyWithoutOrganizationInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutOrganizationInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentReversals?: Prisma.PaymentReversalUncheckedCreateNestedManyWithoutOrganizationInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedCreateNestedManyWithoutOrganizationInput
+  invoiceVoids?: Prisma.InvoiceVoidUncheckedCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationCreateOrConnectWithoutCorrectionFinanceLinksInput = {
+  where: Prisma.OrganizationWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutCorrectionFinanceLinksInput, Prisma.OrganizationUncheckedCreateWithoutCorrectionFinanceLinksInput>
+}
+
+export type OrganizationUpsertWithoutCorrectionFinanceLinksInput = {
+  update: Prisma.XOR<Prisma.OrganizationUpdateWithoutCorrectionFinanceLinksInput, Prisma.OrganizationUncheckedUpdateWithoutCorrectionFinanceLinksInput>
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutCorrectionFinanceLinksInput, Prisma.OrganizationUncheckedCreateWithoutCorrectionFinanceLinksInput>
+  where?: Prisma.OrganizationWhereInput
+}
+
+export type OrganizationUpdateToOneWithWhereWithoutCorrectionFinanceLinksInput = {
+  where?: Prisma.OrganizationWhereInput
+  data: Prisma.XOR<Prisma.OrganizationUpdateWithoutCorrectionFinanceLinksInput, Prisma.OrganizationUncheckedUpdateWithoutCorrectionFinanceLinksInput>
+}
+
+export type OrganizationUpdateWithoutCorrectionFinanceLinksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUpdateManyWithoutOrganizationNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUpdateManyWithoutOrganizationNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUpdateManyWithoutOrganizationNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUpdateManyWithoutOrganizationNestedInput
+  stayAssignments?: Prisma.StayAssignmentUpdateManyWithoutOrganizationNestedInput
+  transfers?: Prisma.TransferUpdateManyWithoutOrganizationNestedInput
+  memberships?: Prisma.MembershipUpdateManyWithoutOrganizationNestedInput
+  properties?: Prisma.PropertyUpdateManyWithoutOrganizationNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutOrganizationNestedInput
+  residents?: Prisma.ResidentUpdateManyWithoutOrganizationNestedInput
+  enquiries?: Prisma.EnquiryUpdateManyWithoutOrganizationNestedInput
+  bookings?: Prisma.BookingUpdateManyWithoutOrganizationNestedInput
+  admissions?: Prisma.AdmissionUpdateManyWithoutOrganizationNestedInput
+  checkIns?: Prisma.CheckInUpdateManyWithoutOrganizationNestedInput
+  checkOuts?: Prisma.CheckOutUpdateManyWithoutOrganizationNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutOrganizationNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutOrganizationNestedInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyUpdateManyWithoutOrganizationNestedInput
+  paymentReversals?: Prisma.PaymentReversalUpdateManyWithoutOrganizationNestedInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUpdateManyWithoutOrganizationNestedInput
+  invoiceVoids?: Prisma.InvoiceVoidUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationUncheckedUpdateWithoutCorrectionFinanceLinksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedUpdateManyWithoutOrganizationNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  transfers?: Prisma.TransferUncheckedUpdateManyWithoutOrganizationNestedInput
+  memberships?: Prisma.MembershipUncheckedUpdateManyWithoutOrganizationNestedInput
+  properties?: Prisma.PropertyUncheckedUpdateManyWithoutOrganizationNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  residents?: Prisma.ResidentUncheckedUpdateManyWithoutOrganizationNestedInput
+  enquiries?: Prisma.EnquiryUncheckedUpdateManyWithoutOrganizationNestedInput
+  bookings?: Prisma.BookingUncheckedUpdateManyWithoutOrganizationNestedInput
+  admissions?: Prisma.AdmissionUncheckedUpdateManyWithoutOrganizationNestedInput
+  checkIns?: Prisma.CheckInUncheckedUpdateManyWithoutOrganizationNestedInput
+  checkOuts?: Prisma.CheckOutUncheckedUpdateManyWithoutOrganizationNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentReversals?: Prisma.PaymentReversalUncheckedUpdateManyWithoutOrganizationNestedInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  invoiceVoids?: Prisma.InvoiceVoidUncheckedUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationCreateWithoutStayAssignmentsInput = {
+  id?: string
+  name: string
+  status?: $Enums.OrganizationStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementCreateNestedManyWithoutOrganizationInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewCreateNestedManyWithoutOrganizationInput
+  correctionProposals?: Prisma.CorrectionProposalCreateNestedManyWithoutOrganizationInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptCreateNestedManyWithoutOrganizationInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutOrganizationInput
+  transfers?: Prisma.TransferCreateNestedManyWithoutOrganizationInput
+  memberships?: Prisma.MembershipCreateNestedManyWithoutOrganizationInput
+  properties?: Prisma.PropertyCreateNestedManyWithoutOrganizationInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutOrganizationInput
+  residents?: Prisma.ResidentCreateNestedManyWithoutOrganizationInput
+  enquiries?: Prisma.EnquiryCreateNestedManyWithoutOrganizationInput
+  bookings?: Prisma.BookingCreateNestedManyWithoutOrganizationInput
+  admissions?: Prisma.AdmissionCreateNestedManyWithoutOrganizationInput
+  checkIns?: Prisma.CheckInCreateNestedManyWithoutOrganizationInput
+  checkOuts?: Prisma.CheckOutCreateNestedManyWithoutOrganizationInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutOrganizationInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutOrganizationInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyCreateNestedManyWithoutOrganizationInput
+  paymentReversals?: Prisma.PaymentReversalCreateNestedManyWithoutOrganizationInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentCreateNestedManyWithoutOrganizationInput
+  invoiceVoids?: Prisma.InvoiceVoidCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationUncheckedCreateWithoutStayAssignmentsInput = {
+  id?: string
+  name: string
+  status?: $Enums.OrganizationStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedCreateNestedManyWithoutOrganizationInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutOrganizationInput
+  memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutOrganizationInput
+  properties?: Prisma.PropertyUncheckedCreateNestedManyWithoutOrganizationInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  residents?: Prisma.ResidentUncheckedCreateNestedManyWithoutOrganizationInput
+  enquiries?: Prisma.EnquiryUncheckedCreateNestedManyWithoutOrganizationInput
+  bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutOrganizationInput
+  admissions?: Prisma.AdmissionUncheckedCreateNestedManyWithoutOrganizationInput
+  checkIns?: Prisma.CheckInUncheckedCreateNestedManyWithoutOrganizationInput
+  checkOuts?: Prisma.CheckOutUncheckedCreateNestedManyWithoutOrganizationInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutOrganizationInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentReversals?: Prisma.PaymentReversalUncheckedCreateNestedManyWithoutOrganizationInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedCreateNestedManyWithoutOrganizationInput
+  invoiceVoids?: Prisma.InvoiceVoidUncheckedCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationCreateOrConnectWithoutStayAssignmentsInput = {
+  where: Prisma.OrganizationWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutStayAssignmentsInput, Prisma.OrganizationUncheckedCreateWithoutStayAssignmentsInput>
+}
+
+export type OrganizationUpsertWithoutStayAssignmentsInput = {
+  update: Prisma.XOR<Prisma.OrganizationUpdateWithoutStayAssignmentsInput, Prisma.OrganizationUncheckedUpdateWithoutStayAssignmentsInput>
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutStayAssignmentsInput, Prisma.OrganizationUncheckedCreateWithoutStayAssignmentsInput>
+  where?: Prisma.OrganizationWhereInput
+}
+
+export type OrganizationUpdateToOneWithWhereWithoutStayAssignmentsInput = {
+  where?: Prisma.OrganizationWhereInput
+  data: Prisma.XOR<Prisma.OrganizationUpdateWithoutStayAssignmentsInput, Prisma.OrganizationUncheckedUpdateWithoutStayAssignmentsInput>
+}
+
+export type OrganizationUpdateWithoutStayAssignmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUpdateManyWithoutOrganizationNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUpdateManyWithoutOrganizationNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUpdateManyWithoutOrganizationNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUpdateManyWithoutOrganizationNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUpdateManyWithoutOrganizationNestedInput
+  transfers?: Prisma.TransferUpdateManyWithoutOrganizationNestedInput
+  memberships?: Prisma.MembershipUpdateManyWithoutOrganizationNestedInput
+  properties?: Prisma.PropertyUpdateManyWithoutOrganizationNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutOrganizationNestedInput
+  residents?: Prisma.ResidentUpdateManyWithoutOrganizationNestedInput
+  enquiries?: Prisma.EnquiryUpdateManyWithoutOrganizationNestedInput
+  bookings?: Prisma.BookingUpdateManyWithoutOrganizationNestedInput
+  admissions?: Prisma.AdmissionUpdateManyWithoutOrganizationNestedInput
+  checkIns?: Prisma.CheckInUpdateManyWithoutOrganizationNestedInput
+  checkOuts?: Prisma.CheckOutUpdateManyWithoutOrganizationNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutOrganizationNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutOrganizationNestedInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyUpdateManyWithoutOrganizationNestedInput
+  paymentReversals?: Prisma.PaymentReversalUpdateManyWithoutOrganizationNestedInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUpdateManyWithoutOrganizationNestedInput
+  invoiceVoids?: Prisma.InvoiceVoidUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationUncheckedUpdateWithoutStayAssignmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedUpdateManyWithoutOrganizationNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  transfers?: Prisma.TransferUncheckedUpdateManyWithoutOrganizationNestedInput
+  memberships?: Prisma.MembershipUncheckedUpdateManyWithoutOrganizationNestedInput
+  properties?: Prisma.PropertyUncheckedUpdateManyWithoutOrganizationNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  residents?: Prisma.ResidentUncheckedUpdateManyWithoutOrganizationNestedInput
+  enquiries?: Prisma.EnquiryUncheckedUpdateManyWithoutOrganizationNestedInput
+  bookings?: Prisma.BookingUncheckedUpdateManyWithoutOrganizationNestedInput
+  admissions?: Prisma.AdmissionUncheckedUpdateManyWithoutOrganizationNestedInput
+  checkIns?: Prisma.CheckInUncheckedUpdateManyWithoutOrganizationNestedInput
+  checkOuts?: Prisma.CheckOutUncheckedUpdateManyWithoutOrganizationNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentReversals?: Prisma.PaymentReversalUncheckedUpdateManyWithoutOrganizationNestedInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  invoiceVoids?: Prisma.InvoiceVoidUncheckedUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationCreateWithoutTransfersInput = {
+  id?: string
+  name: string
+  status?: $Enums.OrganizationStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementCreateNestedManyWithoutOrganizationInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewCreateNestedManyWithoutOrganizationInput
+  correctionProposals?: Prisma.CorrectionProposalCreateNestedManyWithoutOrganizationInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptCreateNestedManyWithoutOrganizationInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutOrganizationInput
+  stayAssignments?: Prisma.StayAssignmentCreateNestedManyWithoutOrganizationInput
+  memberships?: Prisma.MembershipCreateNestedManyWithoutOrganizationInput
+  properties?: Prisma.PropertyCreateNestedManyWithoutOrganizationInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutOrganizationInput
+  residents?: Prisma.ResidentCreateNestedManyWithoutOrganizationInput
+  enquiries?: Prisma.EnquiryCreateNestedManyWithoutOrganizationInput
+  bookings?: Prisma.BookingCreateNestedManyWithoutOrganizationInput
+  admissions?: Prisma.AdmissionCreateNestedManyWithoutOrganizationInput
+  checkIns?: Prisma.CheckInCreateNestedManyWithoutOrganizationInput
+  checkOuts?: Prisma.CheckOutCreateNestedManyWithoutOrganizationInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutOrganizationInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutOrganizationInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyCreateNestedManyWithoutOrganizationInput
+  paymentReversals?: Prisma.PaymentReversalCreateNestedManyWithoutOrganizationInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentCreateNestedManyWithoutOrganizationInput
+  invoiceVoids?: Prisma.InvoiceVoidCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationUncheckedCreateWithoutTransfersInput = {
+  id?: string
+  name: string
+  status?: $Enums.OrganizationStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedCreateNestedManyWithoutOrganizationInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutOrganizationInput
+  properties?: Prisma.PropertyUncheckedCreateNestedManyWithoutOrganizationInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  residents?: Prisma.ResidentUncheckedCreateNestedManyWithoutOrganizationInput
+  enquiries?: Prisma.EnquiryUncheckedCreateNestedManyWithoutOrganizationInput
+  bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutOrganizationInput
+  admissions?: Prisma.AdmissionUncheckedCreateNestedManyWithoutOrganizationInput
+  checkIns?: Prisma.CheckInUncheckedCreateNestedManyWithoutOrganizationInput
+  checkOuts?: Prisma.CheckOutUncheckedCreateNestedManyWithoutOrganizationInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutOrganizationInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentReversals?: Prisma.PaymentReversalUncheckedCreateNestedManyWithoutOrganizationInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedCreateNestedManyWithoutOrganizationInput
+  invoiceVoids?: Prisma.InvoiceVoidUncheckedCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationCreateOrConnectWithoutTransfersInput = {
+  where: Prisma.OrganizationWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutTransfersInput, Prisma.OrganizationUncheckedCreateWithoutTransfersInput>
+}
+
+export type OrganizationUpsertWithoutTransfersInput = {
+  update: Prisma.XOR<Prisma.OrganizationUpdateWithoutTransfersInput, Prisma.OrganizationUncheckedUpdateWithoutTransfersInput>
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutTransfersInput, Prisma.OrganizationUncheckedCreateWithoutTransfersInput>
+  where?: Prisma.OrganizationWhereInput
+}
+
+export type OrganizationUpdateToOneWithWhereWithoutTransfersInput = {
+  where?: Prisma.OrganizationWhereInput
+  data: Prisma.XOR<Prisma.OrganizationUpdateWithoutTransfersInput, Prisma.OrganizationUncheckedUpdateWithoutTransfersInput>
+}
+
+export type OrganizationUpdateWithoutTransfersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUpdateManyWithoutOrganizationNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUpdateManyWithoutOrganizationNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUpdateManyWithoutOrganizationNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUpdateManyWithoutOrganizationNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUpdateManyWithoutOrganizationNestedInput
+  stayAssignments?: Prisma.StayAssignmentUpdateManyWithoutOrganizationNestedInput
+  memberships?: Prisma.MembershipUpdateManyWithoutOrganizationNestedInput
+  properties?: Prisma.PropertyUpdateManyWithoutOrganizationNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutOrganizationNestedInput
+  residents?: Prisma.ResidentUpdateManyWithoutOrganizationNestedInput
+  enquiries?: Prisma.EnquiryUpdateManyWithoutOrganizationNestedInput
+  bookings?: Prisma.BookingUpdateManyWithoutOrganizationNestedInput
+  admissions?: Prisma.AdmissionUpdateManyWithoutOrganizationNestedInput
+  checkIns?: Prisma.CheckInUpdateManyWithoutOrganizationNestedInput
+  checkOuts?: Prisma.CheckOutUpdateManyWithoutOrganizationNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutOrganizationNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutOrganizationNestedInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyUpdateManyWithoutOrganizationNestedInput
+  paymentReversals?: Prisma.PaymentReversalUpdateManyWithoutOrganizationNestedInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUpdateManyWithoutOrganizationNestedInput
+  invoiceVoids?: Prisma.InvoiceVoidUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationUncheckedUpdateWithoutTransfersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedUpdateManyWithoutOrganizationNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  memberships?: Prisma.MembershipUncheckedUpdateManyWithoutOrganizationNestedInput
+  properties?: Prisma.PropertyUncheckedUpdateManyWithoutOrganizationNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  residents?: Prisma.ResidentUncheckedUpdateManyWithoutOrganizationNestedInput
+  enquiries?: Prisma.EnquiryUncheckedUpdateManyWithoutOrganizationNestedInput
+  bookings?: Prisma.BookingUncheckedUpdateManyWithoutOrganizationNestedInput
+  admissions?: Prisma.AdmissionUncheckedUpdateManyWithoutOrganizationNestedInput
+  checkIns?: Prisma.CheckInUncheckedUpdateManyWithoutOrganizationNestedInput
+  checkOuts?: Prisma.CheckOutUncheckedUpdateManyWithoutOrganizationNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentReversals?: Prisma.PaymentReversalUncheckedUpdateManyWithoutOrganizationNestedInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  invoiceVoids?: Prisma.InvoiceVoidUncheckedUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationCreateWithoutAssignmentReplacementsInput = {
+  id?: string
+  name: string
+  status?: $Enums.OrganizationStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  transferFinanceReviews?: Prisma.TransferFinanceReviewCreateNestedManyWithoutOrganizationInput
+  correctionProposals?: Prisma.CorrectionProposalCreateNestedManyWithoutOrganizationInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptCreateNestedManyWithoutOrganizationInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutOrganizationInput
+  stayAssignments?: Prisma.StayAssignmentCreateNestedManyWithoutOrganizationInput
+  transfers?: Prisma.TransferCreateNestedManyWithoutOrganizationInput
+  memberships?: Prisma.MembershipCreateNestedManyWithoutOrganizationInput
+  properties?: Prisma.PropertyCreateNestedManyWithoutOrganizationInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutOrganizationInput
+  residents?: Prisma.ResidentCreateNestedManyWithoutOrganizationInput
+  enquiries?: Prisma.EnquiryCreateNestedManyWithoutOrganizationInput
+  bookings?: Prisma.BookingCreateNestedManyWithoutOrganizationInput
+  admissions?: Prisma.AdmissionCreateNestedManyWithoutOrganizationInput
+  checkIns?: Prisma.CheckInCreateNestedManyWithoutOrganizationInput
+  checkOuts?: Prisma.CheckOutCreateNestedManyWithoutOrganizationInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutOrganizationInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutOrganizationInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyCreateNestedManyWithoutOrganizationInput
+  paymentReversals?: Prisma.PaymentReversalCreateNestedManyWithoutOrganizationInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentCreateNestedManyWithoutOrganizationInput
+  invoiceVoids?: Prisma.InvoiceVoidCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationUncheckedCreateWithoutAssignmentReplacementsInput = {
+  id?: string
+  name: string
+  status?: $Enums.OrganizationStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutOrganizationInput
+  memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutOrganizationInput
+  properties?: Prisma.PropertyUncheckedCreateNestedManyWithoutOrganizationInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  residents?: Prisma.ResidentUncheckedCreateNestedManyWithoutOrganizationInput
+  enquiries?: Prisma.EnquiryUncheckedCreateNestedManyWithoutOrganizationInput
+  bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutOrganizationInput
+  admissions?: Prisma.AdmissionUncheckedCreateNestedManyWithoutOrganizationInput
+  checkIns?: Prisma.CheckInUncheckedCreateNestedManyWithoutOrganizationInput
+  checkOuts?: Prisma.CheckOutUncheckedCreateNestedManyWithoutOrganizationInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutOrganizationInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentReversals?: Prisma.PaymentReversalUncheckedCreateNestedManyWithoutOrganizationInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedCreateNestedManyWithoutOrganizationInput
+  invoiceVoids?: Prisma.InvoiceVoidUncheckedCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationCreateOrConnectWithoutAssignmentReplacementsInput = {
+  where: Prisma.OrganizationWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutAssignmentReplacementsInput, Prisma.OrganizationUncheckedCreateWithoutAssignmentReplacementsInput>
+}
+
+export type OrganizationUpsertWithoutAssignmentReplacementsInput = {
+  update: Prisma.XOR<Prisma.OrganizationUpdateWithoutAssignmentReplacementsInput, Prisma.OrganizationUncheckedUpdateWithoutAssignmentReplacementsInput>
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutAssignmentReplacementsInput, Prisma.OrganizationUncheckedCreateWithoutAssignmentReplacementsInput>
+  where?: Prisma.OrganizationWhereInput
+}
+
+export type OrganizationUpdateToOneWithWhereWithoutAssignmentReplacementsInput = {
+  where?: Prisma.OrganizationWhereInput
+  data: Prisma.XOR<Prisma.OrganizationUpdateWithoutAssignmentReplacementsInput, Prisma.OrganizationUncheckedUpdateWithoutAssignmentReplacementsInput>
+}
+
+export type OrganizationUpdateWithoutAssignmentReplacementsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUpdateManyWithoutOrganizationNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUpdateManyWithoutOrganizationNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUpdateManyWithoutOrganizationNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUpdateManyWithoutOrganizationNestedInput
+  stayAssignments?: Prisma.StayAssignmentUpdateManyWithoutOrganizationNestedInput
+  transfers?: Prisma.TransferUpdateManyWithoutOrganizationNestedInput
+  memberships?: Prisma.MembershipUpdateManyWithoutOrganizationNestedInput
+  properties?: Prisma.PropertyUpdateManyWithoutOrganizationNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutOrganizationNestedInput
+  residents?: Prisma.ResidentUpdateManyWithoutOrganizationNestedInput
+  enquiries?: Prisma.EnquiryUpdateManyWithoutOrganizationNestedInput
+  bookings?: Prisma.BookingUpdateManyWithoutOrganizationNestedInput
+  admissions?: Prisma.AdmissionUpdateManyWithoutOrganizationNestedInput
+  checkIns?: Prisma.CheckInUpdateManyWithoutOrganizationNestedInput
+  checkOuts?: Prisma.CheckOutUpdateManyWithoutOrganizationNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutOrganizationNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutOrganizationNestedInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyUpdateManyWithoutOrganizationNestedInput
+  paymentReversals?: Prisma.PaymentReversalUpdateManyWithoutOrganizationNestedInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUpdateManyWithoutOrganizationNestedInput
+  invoiceVoids?: Prisma.InvoiceVoidUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationUncheckedUpdateWithoutAssignmentReplacementsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  transfers?: Prisma.TransferUncheckedUpdateManyWithoutOrganizationNestedInput
+  memberships?: Prisma.MembershipUncheckedUpdateManyWithoutOrganizationNestedInput
+  properties?: Prisma.PropertyUncheckedUpdateManyWithoutOrganizationNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  residents?: Prisma.ResidentUncheckedUpdateManyWithoutOrganizationNestedInput
+  enquiries?: Prisma.EnquiryUncheckedUpdateManyWithoutOrganizationNestedInput
+  bookings?: Prisma.BookingUncheckedUpdateManyWithoutOrganizationNestedInput
+  admissions?: Prisma.AdmissionUncheckedUpdateManyWithoutOrganizationNestedInput
+  checkIns?: Prisma.CheckInUncheckedUpdateManyWithoutOrganizationNestedInput
+  checkOuts?: Prisma.CheckOutUncheckedUpdateManyWithoutOrganizationNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentReversals?: Prisma.PaymentReversalUncheckedUpdateManyWithoutOrganizationNestedInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  invoiceVoids?: Prisma.InvoiceVoidUncheckedUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationCreateWithoutTransferFinanceReviewsInput = {
+  id?: string
+  name: string
+  status?: $Enums.OrganizationStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementCreateNestedManyWithoutOrganizationInput
+  correctionProposals?: Prisma.CorrectionProposalCreateNestedManyWithoutOrganizationInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptCreateNestedManyWithoutOrganizationInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutOrganizationInput
+  stayAssignments?: Prisma.StayAssignmentCreateNestedManyWithoutOrganizationInput
+  transfers?: Prisma.TransferCreateNestedManyWithoutOrganizationInput
+  memberships?: Prisma.MembershipCreateNestedManyWithoutOrganizationInput
+  properties?: Prisma.PropertyCreateNestedManyWithoutOrganizationInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutOrganizationInput
+  residents?: Prisma.ResidentCreateNestedManyWithoutOrganizationInput
+  enquiries?: Prisma.EnquiryCreateNestedManyWithoutOrganizationInput
+  bookings?: Prisma.BookingCreateNestedManyWithoutOrganizationInput
+  admissions?: Prisma.AdmissionCreateNestedManyWithoutOrganizationInput
+  checkIns?: Prisma.CheckInCreateNestedManyWithoutOrganizationInput
+  checkOuts?: Prisma.CheckOutCreateNestedManyWithoutOrganizationInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutOrganizationInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutOrganizationInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyCreateNestedManyWithoutOrganizationInput
+  paymentReversals?: Prisma.PaymentReversalCreateNestedManyWithoutOrganizationInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentCreateNestedManyWithoutOrganizationInput
+  invoiceVoids?: Prisma.InvoiceVoidCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationUncheckedCreateWithoutTransferFinanceReviewsInput = {
+  id?: string
+  name: string
+  status?: $Enums.OrganizationStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedCreateNestedManyWithoutOrganizationInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+  transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutOrganizationInput
+  memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutOrganizationInput
+  properties?: Prisma.PropertyUncheckedCreateNestedManyWithoutOrganizationInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutOrganizationInput
+  residents?: Prisma.ResidentUncheckedCreateNestedManyWithoutOrganizationInput
+  enquiries?: Prisma.EnquiryUncheckedCreateNestedManyWithoutOrganizationInput
+  bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutOrganizationInput
+  admissions?: Prisma.AdmissionUncheckedCreateNestedManyWithoutOrganizationInput
+  checkIns?: Prisma.CheckInUncheckedCreateNestedManyWithoutOrganizationInput
+  checkOuts?: Prisma.CheckOutUncheckedCreateNestedManyWithoutOrganizationInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutOrganizationInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyUncheckedCreateNestedManyWithoutOrganizationInput
+  paymentReversals?: Prisma.PaymentReversalUncheckedCreateNestedManyWithoutOrganizationInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedCreateNestedManyWithoutOrganizationInput
+  invoiceVoids?: Prisma.InvoiceVoidUncheckedCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationCreateOrConnectWithoutTransferFinanceReviewsInput = {
+  where: Prisma.OrganizationWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutTransferFinanceReviewsInput, Prisma.OrganizationUncheckedCreateWithoutTransferFinanceReviewsInput>
+}
+
+export type OrganizationUpsertWithoutTransferFinanceReviewsInput = {
+  update: Prisma.XOR<Prisma.OrganizationUpdateWithoutTransferFinanceReviewsInput, Prisma.OrganizationUncheckedUpdateWithoutTransferFinanceReviewsInput>
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutTransferFinanceReviewsInput, Prisma.OrganizationUncheckedCreateWithoutTransferFinanceReviewsInput>
+  where?: Prisma.OrganizationWhereInput
+}
+
+export type OrganizationUpdateToOneWithWhereWithoutTransferFinanceReviewsInput = {
+  where?: Prisma.OrganizationWhereInput
+  data: Prisma.XOR<Prisma.OrganizationUpdateWithoutTransferFinanceReviewsInput, Prisma.OrganizationUncheckedUpdateWithoutTransferFinanceReviewsInput>
+}
+
+export type OrganizationUpdateWithoutTransferFinanceReviewsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUpdateManyWithoutOrganizationNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUpdateManyWithoutOrganizationNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUpdateManyWithoutOrganizationNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUpdateManyWithoutOrganizationNestedInput
+  stayAssignments?: Prisma.StayAssignmentUpdateManyWithoutOrganizationNestedInput
+  transfers?: Prisma.TransferUpdateManyWithoutOrganizationNestedInput
+  memberships?: Prisma.MembershipUpdateManyWithoutOrganizationNestedInput
+  properties?: Prisma.PropertyUpdateManyWithoutOrganizationNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutOrganizationNestedInput
+  residents?: Prisma.ResidentUpdateManyWithoutOrganizationNestedInput
+  enquiries?: Prisma.EnquiryUpdateManyWithoutOrganizationNestedInput
+  bookings?: Prisma.BookingUpdateManyWithoutOrganizationNestedInput
+  admissions?: Prisma.AdmissionUpdateManyWithoutOrganizationNestedInput
+  checkIns?: Prisma.CheckInUpdateManyWithoutOrganizationNestedInput
+  checkOuts?: Prisma.CheckOutUpdateManyWithoutOrganizationNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutOrganizationNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutOrganizationNestedInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyUpdateManyWithoutOrganizationNestedInput
+  paymentReversals?: Prisma.PaymentReversalUpdateManyWithoutOrganizationNestedInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUpdateManyWithoutOrganizationNestedInput
+  invoiceVoids?: Prisma.InvoiceVoidUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationUncheckedUpdateWithoutTransferFinanceReviewsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedUpdateManyWithoutOrganizationNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  transfers?: Prisma.TransferUncheckedUpdateManyWithoutOrganizationNestedInput
+  memberships?: Prisma.MembershipUncheckedUpdateManyWithoutOrganizationNestedInput
+  properties?: Prisma.PropertyUncheckedUpdateManyWithoutOrganizationNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutOrganizationNestedInput
+  residents?: Prisma.ResidentUncheckedUpdateManyWithoutOrganizationNestedInput
+  enquiries?: Prisma.EnquiryUncheckedUpdateManyWithoutOrganizationNestedInput
+  bookings?: Prisma.BookingUncheckedUpdateManyWithoutOrganizationNestedInput
+  admissions?: Prisma.AdmissionUncheckedUpdateManyWithoutOrganizationNestedInput
+  checkIns?: Prisma.CheckInUncheckedUpdateManyWithoutOrganizationNestedInput
+  checkOuts?: Prisma.CheckOutUncheckedUpdateManyWithoutOrganizationNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentIdempotencyKeys?: Prisma.PaymentIdempotencyKeyUncheckedUpdateManyWithoutOrganizationNestedInput
+  paymentReversals?: Prisma.PaymentReversalUncheckedUpdateManyWithoutOrganizationNestedInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  invoiceVoids?: Prisma.InvoiceVoidUncheckedUpdateManyWithoutOrganizationNestedInput
+}
+
 
 /**
  * Count Type OrganizationCountOutputType
  */
 
 export type OrganizationCountOutputType = {
+  assignmentReplacements: number
+  transferFinanceReviews: number
+  correctionProposals: number
+  correctionReceipts: number
+  correctionFinanceLinks: number
+  stayAssignments: number
+  transfers: number
   memberships: number
   properties: number
   auditEvents: number
@@ -2228,6 +3726,13 @@ export type OrganizationCountOutputType = {
 }
 
 export type OrganizationCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  assignmentReplacements?: boolean | OrganizationCountOutputTypeCountAssignmentReplacementsArgs
+  transferFinanceReviews?: boolean | OrganizationCountOutputTypeCountTransferFinanceReviewsArgs
+  correctionProposals?: boolean | OrganizationCountOutputTypeCountCorrectionProposalsArgs
+  correctionReceipts?: boolean | OrganizationCountOutputTypeCountCorrectionReceiptsArgs
+  correctionFinanceLinks?: boolean | OrganizationCountOutputTypeCountCorrectionFinanceLinksArgs
+  stayAssignments?: boolean | OrganizationCountOutputTypeCountStayAssignmentsArgs
+  transfers?: boolean | OrganizationCountOutputTypeCountTransfersArgs
   memberships?: boolean | OrganizationCountOutputTypeCountMembershipsArgs
   properties?: boolean | OrganizationCountOutputTypeCountPropertiesArgs
   auditEvents?: boolean | OrganizationCountOutputTypeCountAuditEventsArgs
@@ -2253,6 +3758,55 @@ export type OrganizationCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types
    * Select specific fields to fetch from the OrganizationCountOutputType
    */
   select?: Prisma.OrganizationCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * OrganizationCountOutputType without action
+ */
+export type OrganizationCountOutputTypeCountAssignmentReplacementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.StayAssignmentReplacementWhereInput
+}
+
+/**
+ * OrganizationCountOutputType without action
+ */
+export type OrganizationCountOutputTypeCountTransferFinanceReviewsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TransferFinanceReviewWhereInput
+}
+
+/**
+ * OrganizationCountOutputType without action
+ */
+export type OrganizationCountOutputTypeCountCorrectionProposalsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CorrectionProposalWhereInput
+}
+
+/**
+ * OrganizationCountOutputType without action
+ */
+export type OrganizationCountOutputTypeCountCorrectionReceiptsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CorrectionCommandReceiptWhereInput
+}
+
+/**
+ * OrganizationCountOutputType without action
+ */
+export type OrganizationCountOutputTypeCountCorrectionFinanceLinksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CorrectionFinanceLinkWhereInput
+}
+
+/**
+ * OrganizationCountOutputType without action
+ */
+export type OrganizationCountOutputTypeCountStayAssignmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.StayAssignmentWhereInput
+}
+
+/**
+ * OrganizationCountOutputType without action
+ */
+export type OrganizationCountOutputTypeCountTransfersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TransferWhereInput
 }
 
 /**
@@ -2367,6 +3921,13 @@ export type OrganizationSelect<ExtArgs extends runtime.Types.Extensions.Internal
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  assignmentReplacements?: boolean | Prisma.Organization$assignmentReplacementsArgs<ExtArgs>
+  transferFinanceReviews?: boolean | Prisma.Organization$transferFinanceReviewsArgs<ExtArgs>
+  correctionProposals?: boolean | Prisma.Organization$correctionProposalsArgs<ExtArgs>
+  correctionReceipts?: boolean | Prisma.Organization$correctionReceiptsArgs<ExtArgs>
+  correctionFinanceLinks?: boolean | Prisma.Organization$correctionFinanceLinksArgs<ExtArgs>
+  stayAssignments?: boolean | Prisma.Organization$stayAssignmentsArgs<ExtArgs>
+  transfers?: boolean | Prisma.Organization$transfersArgs<ExtArgs>
   memberships?: boolean | Prisma.Organization$membershipsArgs<ExtArgs>
   properties?: boolean | Prisma.Organization$propertiesArgs<ExtArgs>
   auditEvents?: boolean | Prisma.Organization$auditEventsArgs<ExtArgs>
@@ -2411,6 +3972,13 @@ export type OrganizationSelectScalar = {
 
 export type OrganizationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["organization"]>
 export type OrganizationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  assignmentReplacements?: boolean | Prisma.Organization$assignmentReplacementsArgs<ExtArgs>
+  transferFinanceReviews?: boolean | Prisma.Organization$transferFinanceReviewsArgs<ExtArgs>
+  correctionProposals?: boolean | Prisma.Organization$correctionProposalsArgs<ExtArgs>
+  correctionReceipts?: boolean | Prisma.Organization$correctionReceiptsArgs<ExtArgs>
+  correctionFinanceLinks?: boolean | Prisma.Organization$correctionFinanceLinksArgs<ExtArgs>
+  stayAssignments?: boolean | Prisma.Organization$stayAssignmentsArgs<ExtArgs>
+  transfers?: boolean | Prisma.Organization$transfersArgs<ExtArgs>
   memberships?: boolean | Prisma.Organization$membershipsArgs<ExtArgs>
   properties?: boolean | Prisma.Organization$propertiesArgs<ExtArgs>
   auditEvents?: boolean | Prisma.Organization$auditEventsArgs<ExtArgs>
@@ -2434,6 +4002,13 @@ export type OrganizationIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types
 export type $OrganizationPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Organization"
   objects: {
+    assignmentReplacements: Prisma.$StayAssignmentReplacementPayload<ExtArgs>[]
+    transferFinanceReviews: Prisma.$TransferFinanceReviewPayload<ExtArgs>[]
+    correctionProposals: Prisma.$CorrectionProposalPayload<ExtArgs>[]
+    correctionReceipts: Prisma.$CorrectionCommandReceiptPayload<ExtArgs>[]
+    correctionFinanceLinks: Prisma.$CorrectionFinanceLinkPayload<ExtArgs>[]
+    stayAssignments: Prisma.$StayAssignmentPayload<ExtArgs>[]
+    transfers: Prisma.$TransferPayload<ExtArgs>[]
     memberships: Prisma.$MembershipPayload<ExtArgs>[]
     properties: Prisma.$PropertyPayload<ExtArgs>[]
     auditEvents: Prisma.$AuditEventPayload<ExtArgs>[]
@@ -2850,6 +4425,13 @@ readonly fields: OrganizationFieldRefs;
  */
 export interface Prisma__OrganizationClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  assignmentReplacements<T extends Prisma.Organization$assignmentReplacementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$assignmentReplacementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StayAssignmentReplacementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  transferFinanceReviews<T extends Prisma.Organization$transferFinanceReviewsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$transferFinanceReviewsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TransferFinanceReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  correctionProposals<T extends Prisma.Organization$correctionProposalsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$correctionProposalsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CorrectionProposalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  correctionReceipts<T extends Prisma.Organization$correctionReceiptsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$correctionReceiptsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CorrectionCommandReceiptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  correctionFinanceLinks<T extends Prisma.Organization$correctionFinanceLinksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$correctionFinanceLinksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CorrectionFinanceLinkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  stayAssignments<T extends Prisma.Organization$stayAssignmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$stayAssignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StayAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  transfers<T extends Prisma.Organization$transfersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$transfersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TransferPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   memberships<T extends Prisma.Organization$membershipsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$membershipsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MembershipPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   properties<T extends Prisma.Organization$propertiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$propertiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PropertyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   auditEvents<T extends Prisma.Organization$auditEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$auditEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuditEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -3289,6 +4871,174 @@ export type OrganizationDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.
    * Limit how many Organizations to delete.
    */
   limit?: number
+}
+
+/**
+ * Organization.assignmentReplacements
+ */
+export type Organization$assignmentReplacementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the StayAssignmentReplacement
+   */
+  select?: Prisma.StayAssignmentReplacementSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the StayAssignmentReplacement
+   */
+  omit?: Prisma.StayAssignmentReplacementOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.StayAssignmentReplacementInclude<ExtArgs> | null
+  where?: Prisma.StayAssignmentReplacementWhereInput
+  orderBy?: Prisma.StayAssignmentReplacementOrderByWithRelationInput | Prisma.StayAssignmentReplacementOrderByWithRelationInput[]
+  cursor?: Prisma.StayAssignmentReplacementWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.StayAssignmentReplacementScalarFieldEnum | Prisma.StayAssignmentReplacementScalarFieldEnum[]
+}
+
+/**
+ * Organization.transferFinanceReviews
+ */
+export type Organization$transferFinanceReviewsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TransferFinanceReview
+   */
+  select?: Prisma.TransferFinanceReviewSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the TransferFinanceReview
+   */
+  omit?: Prisma.TransferFinanceReviewOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TransferFinanceReviewInclude<ExtArgs> | null
+  where?: Prisma.TransferFinanceReviewWhereInput
+  orderBy?: Prisma.TransferFinanceReviewOrderByWithRelationInput | Prisma.TransferFinanceReviewOrderByWithRelationInput[]
+  cursor?: Prisma.TransferFinanceReviewWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TransferFinanceReviewScalarFieldEnum | Prisma.TransferFinanceReviewScalarFieldEnum[]
+}
+
+/**
+ * Organization.correctionProposals
+ */
+export type Organization$correctionProposalsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CorrectionProposal
+   */
+  select?: Prisma.CorrectionProposalSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CorrectionProposal
+   */
+  omit?: Prisma.CorrectionProposalOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CorrectionProposalInclude<ExtArgs> | null
+  where?: Prisma.CorrectionProposalWhereInput
+  orderBy?: Prisma.CorrectionProposalOrderByWithRelationInput | Prisma.CorrectionProposalOrderByWithRelationInput[]
+  cursor?: Prisma.CorrectionProposalWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CorrectionProposalScalarFieldEnum | Prisma.CorrectionProposalScalarFieldEnum[]
+}
+
+/**
+ * Organization.correctionReceipts
+ */
+export type Organization$correctionReceiptsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CorrectionCommandReceipt
+   */
+  select?: Prisma.CorrectionCommandReceiptSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CorrectionCommandReceipt
+   */
+  omit?: Prisma.CorrectionCommandReceiptOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CorrectionCommandReceiptInclude<ExtArgs> | null
+  where?: Prisma.CorrectionCommandReceiptWhereInput
+  orderBy?: Prisma.CorrectionCommandReceiptOrderByWithRelationInput | Prisma.CorrectionCommandReceiptOrderByWithRelationInput[]
+  cursor?: Prisma.CorrectionCommandReceiptWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CorrectionCommandReceiptScalarFieldEnum | Prisma.CorrectionCommandReceiptScalarFieldEnum[]
+}
+
+/**
+ * Organization.correctionFinanceLinks
+ */
+export type Organization$correctionFinanceLinksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CorrectionFinanceLink
+   */
+  select?: Prisma.CorrectionFinanceLinkSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CorrectionFinanceLink
+   */
+  omit?: Prisma.CorrectionFinanceLinkOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CorrectionFinanceLinkInclude<ExtArgs> | null
+  where?: Prisma.CorrectionFinanceLinkWhereInput
+  orderBy?: Prisma.CorrectionFinanceLinkOrderByWithRelationInput | Prisma.CorrectionFinanceLinkOrderByWithRelationInput[]
+  cursor?: Prisma.CorrectionFinanceLinkWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CorrectionFinanceLinkScalarFieldEnum | Prisma.CorrectionFinanceLinkScalarFieldEnum[]
+}
+
+/**
+ * Organization.stayAssignments
+ */
+export type Organization$stayAssignmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the StayAssignment
+   */
+  select?: Prisma.StayAssignmentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the StayAssignment
+   */
+  omit?: Prisma.StayAssignmentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.StayAssignmentInclude<ExtArgs> | null
+  where?: Prisma.StayAssignmentWhereInput
+  orderBy?: Prisma.StayAssignmentOrderByWithRelationInput | Prisma.StayAssignmentOrderByWithRelationInput[]
+  cursor?: Prisma.StayAssignmentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.StayAssignmentScalarFieldEnum | Prisma.StayAssignmentScalarFieldEnum[]
+}
+
+/**
+ * Organization.transfers
+ */
+export type Organization$transfersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Transfer
+   */
+  select?: Prisma.TransferSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Transfer
+   */
+  omit?: Prisma.TransferOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TransferInclude<ExtArgs> | null
+  where?: Prisma.TransferWhereInput
+  orderBy?: Prisma.TransferOrderByWithRelationInput | Prisma.TransferOrderByWithRelationInput[]
+  cursor?: Prisma.TransferWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TransferScalarFieldEnum | Prisma.TransferScalarFieldEnum[]
 }
 
 /**

@@ -4,6 +4,7 @@ import { reportError } from './error-reporter.js';
 import { log } from './json-logger.js';
 import { currentRequestId } from './request-context.js';
 import { serializeError } from './redact.js';
+import { classifyFailure } from '../common/tx-errors.js';
 
 /**
  * The single place where an exception becomes a response.
@@ -29,7 +30,22 @@ export class AllExceptionsFilter implements ExceptionFilter {
     let body: unknown;
     let internal = true;
 
-    if (exception instanceof HttpException) {
+    // A lock timeout or deadlock is a certain rollback: nothing committed, so it is reported as a retryable 409 (not a 500).
+    // Other ambiguous database failures stay internal errors, because an ordinary write has no receipt to resolve them.
+    const failure = classifyFailure(exception);
+    if (
+      !(exception instanceof HttpException) &&
+      (failure === 'LOCK_TIMEOUT' || failure === 'DEADLOCK')
+    ) {
+      internal = false;
+      status = HttpStatus.CONFLICT;
+      body = {
+        statusCode: 409,
+        code: 'RETRY_REQUIRED',
+        message: 'The system is busy. Nothing was changed; please try again.',
+        ...(requestId ? { requestId } : {}),
+      };
+    } else if (exception instanceof HttpException) {
       status = exception.getStatus();
       const response = exception.getResponse();
       if (status < 500) {

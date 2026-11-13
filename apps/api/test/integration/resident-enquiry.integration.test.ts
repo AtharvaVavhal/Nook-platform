@@ -111,12 +111,20 @@ test('resident: create, read, update, search and paginate within the organizatio
   const page = await call('get', org, '/residents?limit=1&page=2').expect(200);
   assert.equal(page.body.items.length, 1);
   assert.equal(page.body.total, 2);
-  const updated = await call('put', org, `/residents/${created.body.id}`, {
+  // a name is not editable through the ordinary route (an approved correction is required), and the bundled status
+  // change must not slip through
+  const refused = await call('put', org, `/residents/${created.body.id}`, {
     lastName: 'Rao-Iyer',
     status: 'INACTIVE',
+  }).expect(409);
+  assert.equal(refused.body.code, 'CORRECTION_REQUIRED');
+  const updated = await call('put', org, `/residents/${created.body.id}`, {
+    address: 'Hostel Road 4',
+    status: 'INACTIVE',
   }).expect(200);
-  assert.equal(updated.body.lastName, 'Rao-Iyer');
+  assert.equal(updated.body.address, 'Hostel Road 4');
   assert.equal(updated.body.status, 'INACTIVE');
+  assert.equal(updated.body.lastName, created.body.lastName, 'the name is unchanged');
 });
 
 test('resident: another organization cannot read, change, delete or list it, and a body organizationId is ignored', async () => {
@@ -406,13 +414,13 @@ test('resident: a body can never move a resident to another organization or choo
     organizationId: orgA.orgId,
     id: forged,
     createdAt: '2000-01-01T00:00:00Z',
-    firstName: 'Renamed',
+    address: 'Renamed street',
   }).expect(200);
   assert.equal(upd.body.organizationId, orgB.orgId);
   assert.equal(upd.body.id, mine.body.id);
   const after = await residentRow(mine.body.id);
   assert.equal(after.organization_id, orgB.orgId, "still in the caller's organization");
-  assert.equal(after.first_name, 'Renamed');
+  assert.equal(after.address, 'Renamed street');
   assert.deepEqual(after.created_at, before.created_at, 'timestamps cannot be forged');
   assert.equal(await residentRow(forged), undefined, 'no row under the forged id');
   assert.equal(
