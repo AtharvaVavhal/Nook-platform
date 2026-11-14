@@ -12,7 +12,12 @@ import { todayIst } from '../../src/common/time.js';
 import { PrismaClient } from '../../src/generated/client.js';
 import { PrismaService } from '../../src/database/prisma.service.js';
 import { DashboardService } from '../../src/dashboard/dashboard.service.js';
-import { addDays, computeGates, dateKey } from '../../src/dashboard/dashboard.rules.js';
+import {
+  addDays,
+  computeGates,
+  dashboardWindows,
+  dateKey,
+} from '../../src/dashboard/dashboard.rules.js';
 import type { Dashboard } from '../../src/dashboard/dashboard.types.js';
 import { withMigratorClient } from './helpers/db.js';
 import { requireTestDatabaseUrl } from './helpers/env.js';
@@ -1278,6 +1283,82 @@ test('gating: a role without a permission gets null for exactly that section and
   assert.ok(financeOnly.finance);
 });
 
+test('gating: an activity entry needs its source permission to appear and resident.read to name the resident', async () => {
+  const { org, prop } = await worldA();
+  const only = (...granted: string[]) => computeGates((p) => granted.includes(p));
+  const sources: Array<[string, string[]]> = [
+    ['checkin.read', ['check_in', 'check_out']],
+    ['booking.read', ['booking_created']],
+    ['admission.read', ['admission_recorded']],
+  ];
+  for (const [permission, kinds] of sources) {
+    // Source permission only: the events are there, with their time and place, but nobody is identified.
+    const anonymous = await dash(org, prop.id, { gates: only(permission) });
+    const entries = anonymous.activity!;
+    assert.ok(entries.length > 0, `${permission} still shows its events`);
+    for (const entry of entries) {
+      assert.ok(
+        kinds.includes(entry.kind),
+        `${permission} shows only ${kinds.join('/')}, not ${entry.kind}`,
+      );
+      assert.equal(
+        entry.residentName,
+        null,
+        `${entry.kind} must not name a resident without resident.read`,
+      );
+      assert.equal(
+        entry.residentId,
+        null,
+        `${entry.kind} must not identify a resident without resident.read`,
+      );
+      assert.ok(
+        entry.occurredAt && entry.refId && entry.timeBasis,
+        'the permitted event information is kept',
+      );
+      assert.ok(entry.bedLabel && entry.roomLabel, 'the bed and room are kept');
+    }
+    const feed = JSON.stringify(anonymous.activity);
+    for (const first of ['Asha', 'Bala', 'Chitra', 'Elan', 'Esha', 'Faye', 'Gita', 'Farah'])
+      assert.ok(!feed.includes(first), `${first} leaked into the unnamed feed for ${permission}`);
+
+    // Source permission plus resident.read: the same events, now named.
+    const named = await dash(org, prop.id, { gates: only(permission, 'resident.read') });
+    assert.equal(named.activity!.length, entries.length, 'the same events');
+    assert.ok(
+      named.activity!.every(
+        (e) =>
+          typeof e.residentName === 'string' && e.residentName.length > 0 && e.residentId !== null,
+      ),
+    );
+  }
+  // resident.read alone opens no activity at all: the event permission is still required.
+  assert.equal((await dash(org, prop.id, { gates: only('resident.read') })).activity, null);
+});
+
+test('gating: payment activity is unnamed without resident.read and named with it', async () => {
+  const { org, prop } = await worldB();
+  const only = (...granted: string[]) => computeGates((p) => granted.includes(p));
+  const anonymous = await dash(org, prop.id, { gates: only('finance.read') });
+  const payments = anonymous.activity!.filter((e) => e.kind === 'payment_received');
+  assert.equal(payments.length, 4, 'the four attributed payments received in the window');
+  for (const entry of payments) {
+    assert.equal(entry.residentName, null);
+    assert.equal(entry.residentId, null);
+    assert.match(entry.amount!, /^\d+\.\d{2}$/, 'the amount is kept');
+    assert.equal(typeof entry.reversed, 'boolean');
+  }
+  assert.ok(
+    !JSON.stringify(anonymous.activity).includes('Fin'),
+    'no resident name in the activity feed',
+  );
+  const named = await dash(org, prop.id, { gates: only('finance.read', 'resident.read') });
+  assert.ok(
+    named
+      .activity!.filter((e) => e.kind === 'payment_received')
+      .every((e) => /^Fin\d Tester$/.test(e.residentName!)),
+  );
+});
+
 // ------------------------------------------------------------------------------------------------ finance (fixed now)
 
 interface WorldB {
@@ -1952,6 +2033,380 @@ test('isolation: another organization data never enters the aggregates', async (
   assert.ok(!JSON.stringify(da).includes('IsoResB'));
   // Asking organization A's service for organization B's property is a 404, not an empty dashboard.
   await assert.rejects(dash(a, propB.id), (e) => e instanceof NotFoundException);
+});
+
+// ------------------------------------------------------------------------------------------------ isolation, with records INSIDE every window
+//
+// The tests above isolate by presence (a foreign stay or invoice that would show up in an ACTIVE figure). Foreign records
+// that are dated inside the recent or upcoming windows are a different risk: a dropped filter on a windowed list would
+// leak them, and old fixtures would never notice. These worlds are structurally identical, every kind of record is dated
+// inside the 14-day windows at the fixed NOW (today = 2026-11-14 IST), and each carries a distinctive name and amount.
+
+interface InWindowWorld {
+  names: { active: string; past: string; upcoming: string; departed: string; broken: string };
+  /** Every instant that must fall inside the recent window, and every date inside the upcoming window. */
+  recentInstants: string[];
+  upcomingDates: string[];
+  invoice: string;
+  paid: string;
+}
+
+async function seedInWindowWorld(
+  org: Org,
+  prop: Prop,
+  tag: string,
+  money: { invoice: string; paid: string },
+  opts: { unattributed?: { amount: string; paid: string } } = {},
+): Promise<InWindowWorld> {
+  const names = {
+    active: `${tag}Active`,
+    past: `${tag}Past`,
+    upcoming: `${tag}Upcoming`,
+    departed: `${tag}Departed`,
+    broken: `${tag}Broken`,
+  };
+  const person = {
+    active: await seedResident(org, names.active),
+    past: await seedResident(org, names.past),
+    upcoming: await seedResident(org, names.upcoming),
+    departed: await seedResident(org, names.departed),
+    broken: await seedResident(org, names.broken),
+  };
+  // Active stay, ends in five days: an upcoming check-out. Booking, admission and check-in are all recorded inside R.
+  const active = await seedStay(org, {
+    bed: prop.bed.F0R0B0!,
+    resident: person.active,
+    start: '2026-11-01',
+    end: '2026-11-19',
+    checkInAt: '2026-11-12T04:00:00Z',
+    admissionDate: '2026-11-12T00:00:00Z',
+    bookingCreatedAt: '2026-11-11T05:00:00Z',
+    admissionCreatedAt: '2026-11-12T03:00:00Z',
+  });
+  // Active stay that ended yesterday: past end date. Also recorded inside R.
+  await seedStay(org, {
+    bed: prop.bed.F0R0B1!,
+    resident: person.past,
+    start: '2026-11-01',
+    end: '2026-11-13',
+    checkInAt: '2026-11-10T04:00:00Z',
+    admissionDate: '2026-11-10T00:00:00Z',
+    bookingCreatedAt: '2026-11-09T05:00:00Z',
+    admissionCreatedAt: '2026-11-10T03:00:00Z',
+  });
+  // Confirmed booking starting in four days, created yesterday: inside both U and R.
+  await seedBooking(org, {
+    resident: person.upcoming,
+    bedId: prop.bed.F0R0B2!,
+    start: '2026-11-18',
+    end: '2027-01-01',
+    createdAt: '2026-11-13T05:00:00Z',
+  });
+  // A resident who left yesterday (the booking, admission and check-in are old; only the check-out is recent).
+  await seedStay(org, {
+    bed: prop.bed.F0R0B3!,
+    resident: person.departed,
+    start: '2026-01-01',
+    end: '2026-11-02',
+    checkedOutAt: '2026-11-13T05:00:00Z',
+  });
+  // A stay with inconsistent bed history: reported as an anomaly of ITS property only.
+  await seedStay(org, {
+    bed: prop.bed.F0R0B4!,
+    resident: person.broken,
+    start: '2026-01-01',
+    end: '2027-01-01',
+    segments: 'zero-open',
+  });
+  // Money: one overdue partly paid invoice for the active stay, with its payment received yesterday.
+  const invoice = await seedInvoice(org, {
+    resident: person.active,
+    bookingId: active.booking,
+    period: '2026-11-01',
+    amount: money.invoice,
+    paid: money.paid,
+    status: 'PARTIALLY_PAID',
+    due: '2026-11-05',
+  });
+  await seedPayment(org, {
+    invoiceId: invoice,
+    resident: person.active,
+    amount: money.paid,
+    receivedAt: '2026-11-13T06:00:00Z',
+  });
+  if (opts.unattributed) {
+    // Organization-level money: an invoice with no booking, partly paid, with its payment received inside the month.
+    const loose = await seedInvoice(org, {
+      resident: person.active,
+      bookingId: null,
+      period: '2026-11-01',
+      amount: opts.unattributed.amount,
+      paid: opts.unattributed.paid,
+      status: 'PARTIALLY_PAID',
+      due: '2026-11-02',
+    });
+    await seedPayment(org, {
+      invoiceId: loose,
+      resident: person.active,
+      amount: opts.unattributed.paid,
+      receivedAt: '2026-11-13T07:00:00Z',
+    });
+  }
+  return {
+    names,
+    recentInstants: [
+      '2026-11-09T05:00:00Z',
+      '2026-11-11T05:00:00Z',
+      '2026-11-13T05:00:00Z', // bookings created, departure
+      '2026-11-10T04:00:00Z',
+      '2026-11-12T04:00:00Z', // check-ins
+      '2026-11-10T03:00:00Z',
+      '2026-11-12T03:00:00Z', // admission records
+      '2026-11-10T00:00:00Z',
+      '2026-11-12T00:00:00Z', // admission dates
+      '2026-11-13T06:00:00Z', // payment
+    ],
+    upcomingDates: ['2026-11-18', '2026-11-19'],
+    invoice: money.invoice,
+    paid: money.paid,
+  };
+}
+
+interface IsoWorlds {
+  orgA: Org;
+  orgB: Org;
+  own: { prop: Prop; world: InWindowWorld };
+  otherProp: { prop: Prop; world: InWindowWorld };
+  foreignOrg: { prop: Prop; world: InWindowWorld };
+}
+let isoWorldsPromise: Promise<IsoWorlds> | undefined;
+const isoWorlds = () => (isoWorldsPromise ??= buildIsoWorlds());
+
+async function buildIsoWorlds(): Promise<IsoWorlds> {
+  const orgA = await seedOrg();
+  const orgB = await seedOrg();
+  const ownProp = await seedProperty(orgA, 'IsoOwn', gridSpec(1, 1, 6));
+  const otherProp = await seedProperty(orgA, 'IsoOtherProperty', gridSpec(1, 1, 6));
+  const foreignProp = await seedProperty(orgB, 'IsoForeignOrganization', gridSpec(1, 1, 6));
+  return {
+    orgA,
+    orgB,
+    own: {
+      prop: ownProp,
+      world: await seedInWindowWorld(orgA, ownProp, 'Own', { invoice: '1000.00', paid: '400.00' }),
+    },
+    otherProp: {
+      prop: otherProp,
+      world: await seedInWindowWorld(orgA, otherProp, 'OtherProp', {
+        invoice: '88888.00',
+        paid: '22222.00',
+      }),
+    },
+    foreignOrg: {
+      prop: foreignProp,
+      world: await seedInWindowWorld(
+        orgB,
+        foreignProp,
+        'ForeignOrg',
+        { invoice: '77777.00', paid: '11111.00' },
+        { unattributed: { amount: '55555.00', paid: '1234.00' } },
+      ),
+    },
+  };
+}
+
+/** Asserts that `d` describes exactly the records of the world tagged `tag`, and nothing of the other two worlds. */
+function assertOnly(
+  d: Dashboard,
+  tag: string,
+  foreignTags: string[],
+  money: { invoice: string; paid: string; balance: string },
+) {
+  const name = (suffix: string) => `${tag}${suffix} Tester`;
+  const t = d.tenants!;
+  // inventory and tenants (active records)
+  assert.deepEqual(
+    [
+      d.inventory.beds,
+      d.inventory.occupiedBeds,
+      d.inventory.availableBeds,
+      d.inventory.outOfServiceBeds,
+    ],
+    [6, 2, 4, 0],
+  );
+  assert.equal(t.activeTenants, 2);
+  assert.deepEqual(
+    d.inventory.anomalies,
+    { occupiedOutOfService: 0, stayNeedsReview: 1 },
+    "only this property's inconsistent stay",
+  );
+  assert.deepEqual(
+    t.upcomingCheckOuts.items.map((s) => s.residentName),
+    [name('Active')],
+  );
+  assert.deepEqual(
+    t.pastEndDate.items.map((s) => s.residentName),
+    [name('Past')],
+  );
+  assert.equal(t.upcomingCheckOuts.count + t.pastEndDate.count, 2);
+  // windowed lists and counts
+  assert.equal(t.upcomingCheckIns!.count, 1);
+  assert.deepEqual(
+    t.upcomingCheckIns!.items.map((b) => b.residentName),
+    [name('Upcoming')],
+  );
+  assert.deepEqual(d.bookings!.confirmedUpcoming, t.upcomingCheckIns);
+  assert.equal(d.bookings!.committedBeds, 1);
+  assert.deepEqual(
+    t.recentAdmissions!.map((a) => a.residentName).sort(),
+    [name('Active'), name('Past')].sort(),
+  );
+  assert.deepEqual(
+    t.recentDepartures.map((x) => x.residentName),
+    [name('Departed')],
+  );
+  assert.deepEqual(
+    d.bookings!.recent.map((b) => b.residentName).sort(),
+    [name('Active'), name('Past'), name('Upcoming')].sort(),
+  );
+  // finance
+  const f = d.finance!;
+  assert.equal(f.invoiced, money.invoice);
+  assert.equal(f.collected, money.paid);
+  assert.equal(f.monthUnpaid, money.balance);
+  assert.equal(f.outstanding, money.balance);
+  assert.deepEqual(f.overdue, { count: 1, amount: money.balance });
+  assert.deepEqual(f.pendingPayments, { count: 0, amount: '0.00' });
+  assert.deepEqual(
+    f.recentPayments.map((p) => [p.residentName, p.amount]),
+    [[name('Active'), money.paid]],
+  );
+  // activity: 3 bookings, 2 admission records, 2 check-ins, 1 check-out, 1 payment
+  const kinds = (k: string) => d.activity!.filter((e) => e.kind === k).length;
+  assert.deepEqual(
+    ['booking_created', 'admission_recorded', 'check_in', 'check_out', 'payment_received'].map(
+      kinds,
+    ),
+    [3, 2, 2, 1, 1],
+  );
+  assert.equal(d.activity!.length, 9);
+  for (const entry of d.activity!)
+    assert.ok(entry.residentName!.startsWith(tag), `${entry.kind} names ${entry.residentName}`);
+  // and not one byte of any other world
+  const text = JSON.stringify(d);
+  for (const foreign of foreignTags)
+    assert.ok(!text.includes(foreign), `${foreign} leaked into ${tag}'s dashboard`);
+}
+
+test('isolation fixtures really fall inside the windows they are meant to test', async () => {
+  const { own, otherProp, foreignOrg } = await isoWorlds();
+  const w = dashboardWindows(NOW, 14);
+  for (const { world } of [own, otherProp, foreignOrg]) {
+    for (const iso of world.recentInstants) {
+      const at = new Date(iso);
+      assert.ok(at >= w.recentStart && at < w.recentEnd, `${iso} is not inside the recent window`);
+    }
+    for (const day of world.upcomingDates) {
+      const at = new Date(`${day}T00:00:00Z`);
+      assert.ok(
+        at >= w.upcomingStart && at < w.upcomingEnd,
+        `${day} is not inside the upcoming window`,
+      );
+    }
+  }
+  assert.equal(dateKey(w.today), '2026-11-14');
+});
+
+test('isolation (in-window): the selected property sees only its own records; other-property and other-organization records dated inside every window never appear', async () => {
+  const { orgA, own } = await isoWorlds();
+  const d = await dash(orgA, own.prop.id);
+  assertOnly(
+    d,
+    'Own',
+    [
+      'OtherProp',
+      'ForeignOrg',
+      'IsoOtherProperty',
+      'IsoForeignOrganization',
+      '88888.00',
+      '77777.00',
+      '55555.00',
+      '54321.00',
+      '1234.00',
+      '22222.00',
+      '11111.00',
+    ],
+    {
+      invoice: '1000.00',
+      paid: '400.00',
+      balance: '600.00',
+    },
+  );
+  assert.equal(
+    d.finance!.unattributed,
+    null,
+    "the other organization's invoice with no booking is not this organization's unattributed money",
+  );
+});
+
+test('isolation (in-window): the other property of the same organization sees only its own records', async () => {
+  const { orgA, otherProp } = await isoWorlds();
+  const d = await dash(orgA, otherProp.prop.id);
+  assertOnly(
+    d,
+    'OtherProp',
+    ['Own', 'ForeignOrg', 'IsoOwn', '77777.00', '55555.00', '54321.00', '11111.00'],
+    {
+      invoice: '88888.00',
+      paid: '22222.00',
+      balance: '66666.00',
+    },
+  );
+  assert.equal(d.finance!.unattributed, null);
+});
+
+test('isolation (in-window): the other organization sees only its own records, including its organization-level unattributed money', async () => {
+  const { orgB, foreignOrg } = await isoWorlds();
+  const d = await dash(orgB, foreignOrg.prop.id);
+  assertOnly(
+    d,
+    'ForeignOrg',
+    ['Own', 'OtherProp', 'IsoOwn', 'IsoOtherProperty', '88888.00', '22222.00'],
+    { invoice: '77777.00', paid: '11111.00', balance: '66666.00' },
+  );
+  assert.deepEqual(d.finance!.unattributed, {
+    count: 1,
+    invoiced: '55555.00',
+    collected: '1234.00',
+    outstanding: '54321.00',
+    overdue: '54321.00',
+  });
+});
+
+test("isolation (in-window): the activity feed alone contains only the selected property's events", async () => {
+  const { orgA, own } = await isoWorlds();
+  const only = (...granted: string[]) => computeGates((p) => granted.includes(p));
+  const all = ['booking.read', 'admission.read', 'checkin.read', 'finance.read', 'resident.read'];
+  // Each activity source on its own, so a leak in one query cannot hide behind the 10-entry cap or another source.
+  const expected: Record<string, [string, number]> = {
+    'booking.read': ['booking_created', 3],
+    'admission.read': ['admission_recorded', 2],
+    'checkin.read': ['check_in', 2],
+    'finance.read': ['payment_received', 1],
+  };
+  for (const [permission, [kind, count]] of Object.entries(expected)) {
+    const d = await dash(orgA, own.prop.id, { gates: only(permission, 'resident.read') });
+    const entries = d.activity!.filter((e) => e.kind === kind);
+    assert.equal(entries.length, count, `${kind}`);
+    for (const entry of d.activity!)
+      assert.ok(
+        entry.residentName!.startsWith('Own'),
+        `${permission}: ${entry.kind} ${entry.residentName}`,
+      );
+  }
+  const check = await dash(orgA, own.prop.id, { gates: only('checkin.read', 'resident.read') });
+  assert.equal(check.activity!.filter((e) => e.kind === 'check_out').length, 1);
+  void all;
 });
 
 // ------------------------------------------------------------------------------------------------ existing behaviour, snapshot, queries

@@ -168,6 +168,21 @@ export function activityText(item: ActivityItem): ActivityText {
   }
 }
 
+/**
+ * The descriptive parts of an activity line after its title: the resident (when the server named one), the bed and the
+ * amount. An entry the caller may see but may not attribute to a resident has no name, and none is invented.
+ */
+export function activityParts(
+  item: ActivityItem,
+  formatAmount: (amount: string) => string = (amount) => amount,
+): string[] {
+  const parts: string[] = [];
+  if (item.residentName) parts.push(item.residentName);
+  if (item.bedLabel && item.roomLabel) parts.push(`Room ${item.roomLabel}, Bed ${item.bedLabel}`);
+  if (item.amount) parts.push(formatAmount(item.amount));
+  return parts;
+}
+
 export const PAYMENT_METHOD_LABELS = {
   CASH: 'Cash',
   UPI: 'UPI',

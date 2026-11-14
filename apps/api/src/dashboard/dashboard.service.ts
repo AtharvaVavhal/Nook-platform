@@ -533,6 +533,11 @@ export class DashboardService {
         let activity: ActivityItem[] | null = null;
         if (access.activity) {
           const events: ActivityItem[] = [];
+          // Activity needs the source permission to appear and `resident.read` to name the resident.
+          const person = (id: string, name: string) =>
+            gates.residentNames
+              ? { residentId: id, residentName: name }
+              : { residentId: null, residentName: null };
           if (sources.booking && recentBookings) {
             for (const booking of recentBookings) {
               events.push({
@@ -540,8 +545,7 @@ export class DashboardService {
                 occurredAt: booking.createdAt,
                 timeBasis: 'RECORD_CREATED',
                 refId: booking.bookingId,
-                residentId: booking.residentId,
-                residentName: booking.residentName,
+                ...person(booking.residentId, booking.residentName),
                 bedId: booking.bedId,
                 bedLabel: booking.bedLabel,
                 roomLabel: booking.roomLabel,
@@ -563,8 +567,7 @@ export class DashboardService {
                 occurredAt: row.createdAt.toISOString(),
                 timeBasis: 'RECORD_CREATED',
                 refId: row.id,
-                residentId: row.resident.id,
-                residentName: fullName(row.resident),
+                ...person(row.resident.id, fullName(row.resident)),
                 bedId: row.bed.id,
                 bedLabel: row.bed.label,
                 roomLabel: row.bed.room.label,
@@ -586,8 +589,7 @@ export class DashboardService {
                 occurredAt: row.checkInAt.toISOString(),
                 timeBasis: 'EVENT',
                 refId: row.id,
-                residentId: row.resident.id,
-                residentName: fullName(row.resident),
+                ...person(row.resident.id, fullName(row.resident)),
                 bedId: row.bed.id,
                 bedLabel: row.bed.label,
                 roomLabel: row.bed.room.label,
@@ -601,8 +603,7 @@ export class DashboardService {
                 occurredAt: departure.checkOutAt,
                 timeBasis: 'EVENT',
                 refId: departure.checkOutId,
-                residentId: departure.residentId,
-                residentName: departure.residentName,
+                ...person(departure.residentId, departure.residentName),
                 bedId: departure.bedId,
                 bedLabel: departure.bedLabel,
                 roomLabel: departure.roomLabel,
@@ -618,8 +619,7 @@ export class DashboardService {
                 occurredAt: item.receivedAt,
                 timeBasis: 'EVENT',
                 refId: item.paymentId,
-                residentId: item.residentId,
-                residentName: item.residentName,
+                ...person(item.residentId, item.residentName),
                 bedId: bed?.id ?? null,
                 bedLabel: bed?.label ?? null,
                 roomLabel: bed?.room.label ?? null,

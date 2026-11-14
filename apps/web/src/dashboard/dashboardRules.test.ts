@@ -1,11 +1,18 @@
 import assert from 'node:assert/strict';
+import { readdirSync, readFileSync } from 'node:fs';
 import test from 'node:test';
+import { fileURLToPath } from 'node:url';
+import { createElement } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
+import { formatDateTime } from '../finance/financeFormat';
+import { PageHead } from '../ops/PageHead';
 import type { ActivityItem, Inventory } from './dashboardApi';
 import {
   ADMISSION_STATUS_LABELS,
   DASHBOARD_DAYS,
   MONTHS_BACK,
   PAYMENT_METHOD_LABELS,
+  activityParts,
   activityText,
   addDaysKey,
   anomalyMessages,
@@ -198,4 +205,127 @@ test('labels and place text', () => {
   assert.equal(plural(1, 'invoice'), '1 invoice');
   assert.equal(plural(3, 'invoice'), '3 invoices');
   assert.equal(plural(0, 'day'), '0 days');
+});
+
+// ---- Fix: instants are shown in Asia/Kolkata time, whatever the browser's time zone ------------------------------
+
+function inTimeZone<T>(zone: string, run: () => T): T {
+  const previous = process.env.TZ;
+  process.env.TZ = zone;
+  try {
+    return run();
+  } finally {
+    if (previous === undefined) delete process.env.TZ;
+    else process.env.TZ = previous;
+  }
+}
+
+// 2026-11-13T20:00:00Z is 14 Nov 2026, 01:30 in India: the day the dashboard's IST windows use.
+const DEPARTURE = '2026-11-13T20:00:00Z';
+
+test('a departure time shows its Asia/Kolkata calendar day when the browser time zone is UTC or Los Angeles', () => {
+  for (const zone of ['Asia/Kolkata', 'UTC', 'America/Los_Angeles', 'Pacific/Auckland']) {
+    const shown = inTimeZone(zone, () => formatInstantIst(DEPARTURE));
+    assert.match(shown, /14 Nov 2026/, `${zone}: ${shown}`);
+    assert.match(shown, /1:30\s?am/i, `${zone}: ${shown}`);
+  }
+});
+
+test('the browser-local formatter this replaces really does shift the day (so the test above is meaningful)', () => {
+  assert.match(
+    inTimeZone('Asia/Kolkata', () => formatDateTime(DEPARTURE)),
+    /14 Nov 2026/,
+  );
+  assert.match(
+    inTimeZone('UTC', () => formatDateTime(DEPARTURE)),
+    /13 Nov 2026/,
+  );
+  assert.match(
+    inTimeZone('America/Los_Angeles', () => formatDateTime(DEPARTURE)),
+    /13 Nov 2026/,
+  );
+});
+
+test('no dashboard component formats an instant in the browser time zone', () => {
+  const dir = fileURLToPath(new URL('.', import.meta.url));
+  const files = readdirSync(dir).filter((name) => name.endsWith('.tsx'));
+  assert.ok(files.includes('MovementsPanel.tsx') && files.includes('PaymentsPanel.tsx'));
+  for (const name of files) {
+    const source = readFileSync(`${dir}${name}`, 'utf8');
+    assert.doesNotMatch(source, /formatDateTime/, `${name} must use formatInstantIst for instants`);
+    assert.doesNotMatch(
+      source,
+      /toLocale(Date|Time)?String\(/,
+      `${name} must not format instants itself`,
+    );
+  }
+});
+
+// ---- Fix: activity entries without a resident name --------------------------------------------------------------
+
+const baseItem = (over: Partial<ActivityItem> = {}): ActivityItem => ({
+  kind: 'check_in',
+  occurredAt: '2026-11-12T03:00:00.000Z',
+  timeBasis: 'EVENT',
+  refId: 'x',
+  residentId: 'r1',
+  residentName: 'Asha Rao',
+  bedId: 'b1',
+  bedLabel: '2',
+  roomLabel: '101',
+  amount: null,
+  reversed: null,
+  ...over,
+});
+
+test('an activity line names the resident only when the server did, and never invents one', () => {
+  assert.deepEqual(activityParts(baseItem()), ['Asha Rao', 'Room 101, Bed 2']);
+  const unnamed = activityParts(baseItem({ residentId: null, residentName: null }));
+  assert.deepEqual(unnamed, ['Room 101, Bed 2']);
+  assert.ok(!unnamed.join(' ').includes('Asha'));
+  assert.deepEqual(
+    activityParts(
+      baseItem({
+        kind: 'payment_received',
+        residentName: null,
+        residentId: null,
+        amount: '1500.00',
+      }),
+      (a) => `₹${a}`,
+    ),
+    ['Room 101, Bed 2', '₹1500.00'],
+  );
+  assert.deepEqual(
+    activityParts(baseItem({ bedLabel: null, roomLabel: null, residentName: null })),
+    [],
+  );
+});
+
+// ---- Fix: the dashboard is the page's single h1 ------------------------------------------------------------------
+
+test('PageHead renders an h2 by default and an h1 on request', () => {
+  assert.equal(
+    renderToStaticMarkup(createElement(PageHead, { title: 'Rooms', id: 'r' })),
+    '<div class="fin-card-head"><h2 id="r">Rooms</h2></div>',
+  );
+  assert.equal(
+    renderToStaticMarkup(
+      createElement(PageHead, { title: 'Dashboard', id: 'dash-title', as: 'h1' }),
+    ),
+    '<div class="fin-card-head"><h1 id="dash-title">Dashboard</h1></div>',
+  );
+});
+
+test('the owner dashboard declares its title as the page h1, and no other dashboard component declares one', () => {
+  const dir = fileURLToPath(new URL('.', import.meta.url));
+  const owner = readFileSync(`${dir}OwnerDashboard.tsx`, 'utf8');
+  assert.match(
+    owner,
+    /<PageHead[^>]*as="h1"[^>]*id="dash-title"|<PageHead[^>]*id="dash-title"[^>]*as="h1"/s,
+  );
+  for (const name of readdirSync(dir).filter(
+    (n) => n.endsWith('.tsx') && n !== 'OwnerDashboard.tsx',
+  )) {
+    assert.doesNotMatch(readFileSync(`${dir}${name}`, 'utf8'), /<h1|as="h1"/, `${name}`);
+  }
 });

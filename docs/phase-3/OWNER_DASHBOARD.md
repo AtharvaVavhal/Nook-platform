@@ -5,6 +5,13 @@ response schema and acceptance criteria are frozen in `OWNER_DASHBOARD_IMPLEMENT
 is tested, what was measured, and what is known to be limited. Where the two differ the plan states the intent and this document states the
 fact; the differences are listed in "Notes against the frozen plan".
 
+## Status
+
+Implemented in PR #5 after the owner's explicit implementation authorization, and revised after an independent pre-merge review (the
+fixes are listed under "Review follow-ups"). `OWNER_DASHBOARD_IMPLEMENTATION_PLAN.md` is the **frozen** plan and still carries its original
+"not authorized for implementation" header, because its authorization history is not rewritten; this document is where implementation
+completion is recorded.
+
 ## What it is
 
 A real, read-only, property-scoped dashboard for the owner overview. It replaces the hardcoded demonstration content on the home page
@@ -25,8 +32,9 @@ GET /api/v1/properties/:propertyId/dashboard?month=YYYY-MM&days=14
 - A missing, archived or other-organization property is an indistinguishable `404 { code: 'NOT_FOUND' }`.
 - Sections are gated by the existing permission constants and are `null` when the caller lacks the permission: `tenants` needs `checkin.read`
   and `resident.read`; `tenants.upcomingCheckIns` and `bookings` need `booking.read`; `tenants.recentAdmissions` needs `admission.read`;
-  `finance` needs `finance.read`; each activity entry needs its source permission. Both existing roles hold all of them, so every section is
-  present today; the gating is proven with fake roles in the unit and integration tests.
+  `finance` needs `finance.read`; each activity entry needs its source permission **and** `resident.read` to name the resident (without
+  `resident.read` the event, its time, bed and amount are kept, but `residentName` and `residentId` are `null`). Both existing roles hold all
+  of them, so every section is present and named today; the gating is proven with fake roles in the unit and integration tests.
 - The whole response is one `REPEATABLE READ` read transaction (precedent: `stay-summary.service.ts`), so the sections always agree.
 
 The response schema is `apps/api/src/dashboard/dashboard.types.ts` (mirrored for the browser in `apps/web/src/dashboard/dashboardApi.ts`).
@@ -69,13 +77,80 @@ The pure rules (validation, windows, bed categories, the dashboard-only "past en
 
 | Where | What | Registered |
 |---|---|---|
-| `apps/api/test/dashboard.rules.test.ts` (28) | validation, IST window edges (18:29:59Z vs 18:30:00Z), the D7 boundary against the unchanged `isOverstay`, percent rounding, bed categories, gating with fake roles, activity merge | `scripts/ci/test-files.json` `quality` |
-| `apps/api/test/integration/dashboard.integration.test.ts` (38) | real PostgreSQL: inventory and archived rows, physical beds and cross-property transfers, anomalies, tenants, windows and caps, activity, gating, finance by hand-computed figures, reconciliation with `GET /finance/reports/monthly` and `GET /finance/outstanding` (one property; and two properties plus an archived one plus unattributed), HTTP contract, 400 and 404 and isolation, REPEATABLE READ and concurrent-write consistency, constant statement count, a 100-bed hostel, a read-only fingerprint, the D7 regression against `/check-ins/occupancy` | `test-files.json` `full` and the pinned list in `scripts/ci/integration-test-reporter.test.js` (15 → 16) |
-| `apps/web/src/dashboard/overviewRoute.test.ts`, `dashboardRules.test.ts` (19) | hash routing (including legacy `#floor-plan` and that `#overview/<id>` is never an ops, finance or admin hash), labels, month choices, occupancy wording, the R7 activity wording | glob (`npm run test --workspace @nook/web`) |
-| Browser (manual, real Chrome) | 17 scenarios against the real API and Vite app on a disposable database: picker and auto-selection, month switching, legacy and malformed links, loading and error and empty states, demo content gone, inventory intact, keyboard order, layout at 390, 768 and 1440 px | not run by hosted CI; local evidence only |
+| `apps/api/test/dashboard.rules.test.ts` (29) | validation, IST window edges (18:29:59Z vs 18:30:00Z), the D7 boundary against the unchanged `isOverstay`, percent rounding, bed categories, gating with fake roles (including that an activity entry needs `resident.read` to name a resident), activity merge | `scripts/ci/test-files.json` `quality` |
+| `apps/api/test/integration/dashboard.integration.test.ts` (45) | real PostgreSQL: inventory and archived rows, physical beds and cross-property transfers, anomalies, tenants, windows and caps, activity, gating, finance by hand-computed figures, reconciliation with `GET /finance/reports/monthly` and `GET /finance/outstanding` (one property; and two properties plus an archived one plus unattributed), HTTP contract, 400 and 404 and isolation, REPEATABLE READ and concurrent-write consistency, constant statement count, a 100-bed hostel, a read-only fingerprint, the D7 regression against `/check-ins/occupancy`; and isolation with records dated **inside** every window (below) | `test-files.json` `full` and the pinned list in `scripts/ci/integration-test-reporter.test.js` (15 → 16) |
+| `apps/web/src/dashboard/overviewRoute.test.ts`, `dashboardRules.test.ts` (25) | IST rendering of instants under UTC and Los Angeles browser zones, no browser-local formatting in any dashboard component, the page `<h1>`, unnamed activity lines, hash routing (including legacy `#floor-plan` and that `#overview/<id>` is never an ops, finance or admin hash), labels, month choices, occupancy wording, the R7 activity wording | glob (`npm run test --workspace @nook/web`) |
+| Browser (manual, real Chrome) | 19 scenarios against the real API and Vite app on a disposable database: picker and auto-selection, month switching, legacy and malformed links, loading and error and empty states, demo content gone, exactly one `<h1>` with the title's computed style unchanged, departure times identical under emulated Asia/Kolkata, UTC, Los Angeles and Auckland browser zones, inventory intact, keyboard order, layout at 390, 768 and 1440 px | **local only: the harness is not in this repository** (see "QA evidence that cannot be reproduced from the repository") |
 
-The 403 for a role without `inventory.read` is covered by the default-deny permission layer tests (the route is discovered automatically) and the
-gating unit tests; no database role lacks the permission, so it cannot be provoked over HTTP.
+The 403 for a role without `inventory.read` **is** exercised over real HTTP: `apps/api/test/permission-layer.test.ts` (registered in
+`test-files.json` `quality`) discovers every route from the framework's own metadata, so it includes this one, and drives each
+permission-protected route with the synthetic roles `STAFF`, `RESIDENT`, empty and `constructor`, expecting `403 INSUFFICIENT_ROLE` (and
+`OWNER` and `PROPERTY_MANAGER` never being refused). The dashboard integration file adds no separate 403 case because that test already
+covers the route. What the database cannot provoke is a real *member* without a section permission, since both existing roles hold every
+permission; section gating for such a role is therefore proven with fake permission sets in the unit and integration tests.
+
+## Isolation tests with records inside every window
+
+The first version isolated by presence: a foreign stay or invoice that would show up in an *active* figure. The foreign and other-property
+rows were dated long ago, so they sat outside the recent and upcoming windows, and a dropped filter on a *windowed* list would not have been
+noticed. `dashboard.integration.test.ts` now builds three structurally identical worlds at the fixed `NOW` (today = 2026-11-14 IST): the
+selected property, **another property of the same organization**, and **another organization**. Each has an active stay ending in five days,
+a stay that ended yesterday, a confirmed booking starting in four days, a departed resident, a stay with inconsistent bed history, an overdue
+partly-paid invoice with its payment, and (for the other organization) an organization-level invoice with no booking and its payment. Every
+record is dated inside its window (the test asserts that for each timestamp), and each world has distinctive names and amounts. The selected
+property's response must contain exactly its own counts and names, none of the others' names or amounts, and every activity source is also
+asserted on its own so a leak cannot hide behind the ten-entry cap.
+
+**Mutation check (local script, not committed).** For each query, the property or organization filter was removed in turn and
+`dashboard.integration.test.ts` was run on a disposable database:
+
+| Filter removed | Result |
+|---|---|
+| `propertyId`: floors, rooms, beds | detected |
+| `propertyId`: stays (query filter, segment filter and anomaly guard together) | detected |
+| `propertyId`: upcoming bookings (count, distinct beds, list) | detected |
+| `propertyId`: recent bookings, recent admissions, recent departures | detected |
+| `propertyId`: finance attribution (invoiced, open, overdue, pending, collected, recent payments) | detected |
+| `propertyId`: activity admissions, activity check-ins | detected |
+| `organizationId`: property lookup (a cross-organization request would succeed) | detected |
+| `organizationId`: the four unattributed-money queries (invoiced, open balance and count, overdue, collected) | detected, each |
+| `propertyId`: stays query filter **alone**, or the anomaly guard **alone** | **not detected, by design**: the two protect each other (and the live-bed lookup), so removing one cannot leak |
+| `organizationId`: every property-scoped query at once | **not detected, by design**: a property id belongs to exactly one organization (composite foreign keys), so the filter there is defence in depth and removing it changes no result |
+
+Two earlier mutations of the stays query that replaced the filter with an empty object were *discarded as invalid evidence*: they were
+"detected", but because the changed query no longer meant what it did, not because they modelled a leak. They were replaced by mutations that
+genuinely widen the filter.
+
+## Review follow-ups
+
+An independent pre-merge review of PR #5 found no blocker or high-severity defect and asked for these fixes, which are done:
+- Isolation tests with in-window records (above).
+- Departure times use the existing IST formatter; a test proves the calendar day is right when the browser is in UTC or Los Angeles, and another
+  fails if any dashboard component formats an instant in the browser's zone again.
+- The dashboard title is the page's single `<h1>` (`PageHead` gained an optional `as`, default `h2`, so no other screen changes; the title keeps
+  its exact computed style, checked in the browser).
+- Activity entries need `resident.read` to name a resident (above).
+- This document now states which QA evidence is local and uncommitted, and the 403 coverage is described correctly.
+
+Left as follow-ups, not blockers: remembering the selected property across other sections, reducing the 62 round trips, the organization-sized
+work of the active-stays query, announcing the loading placeholder to assistive technology, and a contract test between the API and web types.
+
+## QA evidence that cannot be reproduced from the repository
+
+Two kinds of evidence in this work come from **local scripts that are not committed**, so they cannot be re-run from the repository:
+
+- **Browser verification.** A puppeteer script drove real Chrome against the real API and Vite app on a disposable database (built from copies of
+  the existing disposable-database runner with its paths rewritten). The scenarios above describe what it covered; its screenshots and
+  per-run results are not kept. Hosted CI does not run a browser. Treat the browser result as the author's local observation.
+- **Performance measurements.** The harness that seeded the data and ran `EXPLAIN (ANALYZE, BUFFERS)` is likewise not committed. The numbers
+  below, and `docs/phase-3/evidence/dashboard-performance-2026-11-14.json` (which carries a `provenance` block saying the same), are a record
+  of **one run in a synthetic, disposable environment**. They are historical evidence, not a service-level promise, and nothing here
+  claims they can be regenerated.
+- **Mutation checks of the isolation tests** (below) were also driven by a local script. They are described so they can be repeated by hand:
+  remove the named filter from `dashboard.service.ts`, run `dashboard.integration.test.ts` on a disposable database, and expect a failure.
+
+What *is* in the repository and re-runnable: every automated test listed above, on the existing disposable-database runner
+(`node --import tsx scripts/qa/phase4-disposable.mjs full regression`, with `NOOK_ALLOW_DISPOSABLE_INTEGRATION_DB=1`) and in hosted CI.
 
 ## Measured performance
 
@@ -112,7 +187,8 @@ Measured on a throwaway PostgreSQL 17 in Docker on a developer laptop (tmpfs sto
 - Inventory changes, and who made any change, cannot be shown: the **inventory module writes no audit events**. This is unchanged and out of
   scope. (Earlier documents said the runtime role *cannot write* `audit_events`; that was not supported and has been corrected. The production
   role's grants have not been verified. No grant or schema was changed.)
-- Browser results are local evidence; hosted CI does not run a browser.
+- Browser results are local evidence from an uncommitted harness; hosted CI does not run a browser. The performance figures are likewise a record
+  of one synthetic run from an uncommitted harness.
 
 ## Notes against the frozen plan
 

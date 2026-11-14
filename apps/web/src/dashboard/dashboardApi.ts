@@ -85,8 +85,9 @@ export interface ActivityItem {
   /** RECORD_CREATED: when the row was created. EVENT: the business time the row states. */
   timeBasis: 'RECORD_CREATED' | 'EVENT';
   refId: string;
-  residentId: string;
-  residentName: string;
+  /** null when the caller lacks `resident.read`: the event is shown, the resident is not identified. */
+  residentId: string | null;
+  residentName: string | null;
   bedId: string | null;
   bedLabel: string | null;
   roomLabel: string | null;

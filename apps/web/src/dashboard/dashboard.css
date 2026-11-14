@@ -3,6 +3,15 @@
   display: grid;
   gap: 16px;
 }
+/* The page title is the page's <h1>. It keeps the look the title had as an <h2> (24px, bold, default heading margins),
+   so the semantic change is not a visual one; the global h1 rule would otherwise restyle it. */
+.dash .fin-card-head > h1 {
+  margin: 0.83em 0;
+  font-size: 1.5em;
+  font-weight: 700;
+  line-height: normal;
+  letter-spacing: normal;
+}
 .dash-controls {
   display: flex;
   flex-wrap: wrap;

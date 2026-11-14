@@ -362,6 +362,28 @@ test('gating: finance follows finance.read alone; activity is open when any sour
   });
 });
 
+test('gating: activity entries may name a resident only with resident.read, whatever the source permission', () => {
+  for (const role of ['OWNER', 'PROPERTY_MANAGER']) {
+    assert.equal(computeGates((p) => roleHasPermission(role, p)).residentNames, true, role);
+  }
+  assert.equal(computeGates((p) => roleHasPermission('STAFF', p)).residentNames, false);
+  assert.equal(only('resident.read').residentNames, true);
+  for (const source of [
+    'booking.read',
+    'admission.read',
+    'checkin.read',
+    'finance.read',
+  ] as const) {
+    const gates = only(source);
+    assert.equal(gates.access.activity, true, `${source} opens the activity feed`);
+    assert.equal(gates.residentNames, false, `${source} alone does not name residents`);
+  }
+  const both = only('checkin.read', 'resident.read');
+  assert.equal(both.access.activity && both.residentNames, true);
+  // resident.read on its own opens no activity: the event permission is still required.
+  assert.equal(only('resident.read').access.activity, false);
+});
+
 test('gating only uses permission constants that exist', () => {
   for (const permission of [
     'checkin.read',

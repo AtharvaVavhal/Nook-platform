@@ -1,7 +1,7 @@
 import { formatMoney } from '../finance/financeFormat';
 import { Tag } from '../ops/ui';
 import type { ActivityItem, Dashboard } from './dashboardApi';
-import { activityText, recentWindowText } from './dashboardRules';
+import { activityParts, activityText, recentWindowText } from './dashboardRules';
 import { NoAccess, Panel } from './Panel';
 
 /** Recorded events only. Inventory changes, and who made any change, are not recorded and so are not shown. */
@@ -27,14 +27,12 @@ export function ActivityPanel({
         <ol className="dash-activity">
           {activity.map((item) => {
             const text = activityText(item);
+            const parts = activityParts(item, formatMoney);
             return (
               <li key={`${item.kind}:${item.refId}`}>
                 <div>
-                  <strong>{text.title}</strong> · {item.residentName}
-                  {item.bedLabel && item.roomLabel
-                    ? ` · Room ${item.roomLabel}, Bed ${item.bedLabel}`
-                    : ''}
-                  {item.amount ? ` · ${formatMoney(item.amount)}` : ''}{' '}
+                  <strong>{text.title}</strong>
+                  {parts.map((part) => ` · ${part}`).join('')}{' '}
                   {item.reversed ? <Tag>Reversed</Tag> : null}
                 </div>
                 <small>

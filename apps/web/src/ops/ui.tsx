@@ -85,19 +85,4 @@ export function Tag({ children }: { children: ReactNode }) {
   return <span className="fin-tag">{children}</span>;
 }
 
-export function PageHead({
-  title,
-  action,
-  id,
-}: {
-  title: string;
-  action?: ReactNode;
-  id?: string;
-}) {
-  return (
-    <div className="fin-card-head">
-      <h2 id={id}>{title}</h2>
-      {action}
-    </div>
-  );
-}
+export { PageHead } from './PageHead';

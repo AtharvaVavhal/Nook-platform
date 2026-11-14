@@ -180,6 +180,7 @@ export function OwnerDashboard({ hash }: { hash: string }) {
   return (
     <section id="overview" className="dash" aria-labelledby="dash-title">
       <PageHead
+        as="h1"
         id="dash-title"
         title="Dashboard"
         action={

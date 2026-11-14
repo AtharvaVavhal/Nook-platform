@@ -1,9 +1,10 @@
-import { formatDate, formatDateTime } from '../finance/financeFormat';
+import { formatDate } from '../finance/financeFormat';
 import { Stat } from '../finance/shared';
 import { Tag } from '../ops/ui';
 import type { Dashboard, Tenants } from './dashboardApi';
 import {
   ADMISSION_STATUS_LABELS,
+  formatInstantIst,
   plural,
   placeText,
   recentWindowText,
@@ -122,7 +123,7 @@ export function MovementsPanel({
         empty="Nobody checked out in this period."
         rows={tenants.recentDepartures.map((item) => ({
           key: item.checkOutId,
-          cells: [item.residentName, placeText(item), formatDateTime(item.checkOutAt)],
+          cells: [item.residentName, placeText(item), formatInstantIst(item.checkOutAt)],
         }))}
       />
     </Panel>

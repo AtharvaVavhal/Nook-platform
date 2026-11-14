@@ -1,4 +1,18 @@
 {
+  "provenance": {
+    "kind": "historical measurement in a synthetic, disposable environment; not a production guarantee",
+    "reproducibleFromRepository": false,
+    "why": "The harness that seeded the data and produced these numbers was a local script that is NOT committed to this repository, so these figures cannot be regenerated from the repository. They are kept as a record of one run.",
+    "method": "A throwaway PostgreSQL 17.11 (Docker, tmpfs, loopback) was seeded with synthetic rows and analyzed; the real DashboardService was called 25 times in sequence after one warm-up call (no concurrency); each statement it issued was then run under EXPLAIN (ANALYZE, BUFFERS) with its captured parameters. Latency is the service call as seen by the caller, over loopback.",
+    "notMeasured": [
+      "concurrent load",
+      "a production or network-attached database",
+      "cold-cache behaviour",
+      "datasets beyond about 2,000 beds per organization"
+    ],
+    "fullPlansKept": false,
+    "fullPlansNote": "The raw plan text was about 2.3 MB and was not committed; only this summary is."
+  },
   "dataset": {
     "seedMs": 6812,
     "rows": {

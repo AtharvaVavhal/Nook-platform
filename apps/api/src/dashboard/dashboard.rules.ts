@@ -256,6 +256,11 @@ export interface DashboardGates {
   access: DashboardAccessView;
   /** Per-source permissions behind the activity feed and the admission state of upcoming arrivals. */
   sources: { booking: boolean; admission: boolean; checkin: boolean; finance: boolean };
+  /**
+   * Whether activity entries may carry resident names. An entry needs its source-event permission to appear at all and
+   * `resident.read` to name the resident, so the activity feed is never looser than the tenants section.
+   */
+  residentNames: boolean;
 }
 
 /**
@@ -280,6 +285,7 @@ export function computeGates(has: (permission: Permission) => boolean): Dashboar
       activity: sources.booking || sources.admission || sources.checkin || sources.finance,
     },
     sources,
+    residentNames: has('resident.read'),
   };
 }
 
