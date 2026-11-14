@@ -9,6 +9,7 @@ const names = [
   'checkin',
   'corrections',
   'cross-origin',
+  'dashboard',
   'finance',
   'hostel-scale',
   'inventory',
@@ -19,10 +20,10 @@ const names = [
   'uuid-params',
 ];
 const FILE_COUNT = names.length;
-assert.equal(FILE_COUNT, 15, 'the full integration list is pinned at fifteen files');
+assert.equal(FILE_COUNT, 16, 'the full integration list is pinned at sixteen files');
 const line = (event, data) => `NOOK_TEST_${event} ${JSON.stringify(data)}\n`;
 const result = { tests: 2, passed: 1, failed: 0, skipped: 1, todo: 0, cancelled: 0 };
-test('fifteen independent files retain order and counts', () => {
+test('sixteen independent files retain order and counts', () => {
   const output = [];
   const p = createTestProtocol((s) => output.push(s));
   for (const name of names) {

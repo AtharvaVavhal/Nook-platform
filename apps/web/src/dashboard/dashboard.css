@@ -1,0 +1,220 @@
+/* Owner dashboard. Layout only; colours come from the canonical tokens (tokens.css), never hex literals. */
+.dash {
+  display: grid;
+  gap: 16px;
+}
+.dash-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: flex-end;
+}
+.dash-controls .fin-field {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+  flex: 1 1 220px;
+  max-width: 320px;
+}
+.dash-controls .fin-field span {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}
+.dash-controls select {
+  width: 100%;
+  font: inherit;
+  color: var(--color-text-primary);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: 8px;
+  padding: 9px 10px;
+  min-height: 40px;
+}
+.dash-controls .outline-button {
+  min-height: 40px;
+}
+.dash-asof {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+
+/* One column on a phone, two on a tablet, wide panels span both on a desktop. */
+.dash-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: minmax(0, 1fr);
+}
+@media (min-width: 768px) {
+  .dash-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .dash-grid .dash-wide {
+    grid-column: 1 / -1;
+  }
+}
+.dash-panel {
+  min-width: 0;
+  margin-bottom: 0;
+}
+.dash-panel h3 {
+  margin: 0;
+  font-size: 16px;
+  color: var(--color-text-primary);
+}
+.dash-sub {
+  margin: 14px 0 0;
+  font-size: 13px;
+  color: var(--color-text-primary);
+}
+.dash-empty,
+.dash-noaccess {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: var(--color-brand-subtle);
+  color: var(--color-text-secondary);
+}
+.dash-warning {
+  border-left: 3px solid var(--color-warning-solid);
+  background: var(--color-warning-tint);
+  color: var(--color-text-primary);
+  padding: 8px 10px;
+  border-radius: 6px;
+  margin: 0;
+}
+.dash-unattributed {
+  background: var(--color-brand-subtle);
+  color: var(--color-text-primary);
+  padding: 10px 12px;
+  border-radius: 8px;
+  margin: 0;
+}
+
+/* Occupancy */
+.dash-headline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 14px;
+  margin: 0;
+}
+.dash-headline strong {
+  font-size: 32px;
+  line-height: 1.1;
+  color: var(--color-brand-primary);
+}
+.dash-headline span {
+  color: var(--color-text-secondary);
+}
+.dash-bar {
+  display: flex;
+  height: 14px;
+  border-radius: 7px;
+  overflow: hidden;
+  background: var(--color-disabled-background);
+  border: 1px solid var(--color-border-subtle);
+}
+.dash-seg {
+  display: block;
+  height: 100%;
+}
+.dash-seg-occupied {
+  background: var(--color-brand-accent);
+}
+.dash-seg-available {
+  background: var(--color-success-solid);
+}
+.dash-seg-outOfService {
+  background: var(--color-warning-solid);
+}
+.dash-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+.dash-legend strong {
+  color: var(--color-text-primary);
+}
+.dash-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  margin-right: 4px;
+  vertical-align: baseline;
+}
+
+/* Activity */
+.dash-activity {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.dash-activity li {
+  display: grid;
+  gap: 2px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--color-border-subtle);
+  overflow-wrap: anywhere;
+}
+.dash-activity li:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+.dash-activity small {
+  color: var(--color-text-secondary);
+}
+
+/* Loading placeholders: static blocks, no animation. */
+.dash-skeleton {
+  gap: 10px;
+}
+.dash-skel-line {
+  display: block;
+  height: 12px;
+  border-radius: 6px;
+  background: var(--color-disabled-background);
+}
+.dash-skel-title {
+  width: 40%;
+  height: 16px;
+}
+.dash-skel-short {
+  width: 60%;
+}
+
+/* Tables scroll inside their own box on a narrow screen. */
+.dash .fin-table-wrap {
+  max-width: 100%;
+  overflow-x: auto;
+}
+.dash .fin-stats {
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+}
+/* Below a wide desktop a table keeps its natural width and scrolls inside its own box instead of wrapping word by word. */
+@media (max-width: 1100px) {
+  .dash .fin-table {
+    min-width: max-content;
+  }
+  .dash .fin-table th,
+  .dash .fin-table td {
+    white-space: nowrap;
+  }
+}
+.dash .fin-table-wrap:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+@media (max-width: 480px) {
+  .dash-headline strong {
+    font-size: 28px;
+  }
+}

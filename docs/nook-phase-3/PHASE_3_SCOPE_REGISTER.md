@@ -103,6 +103,15 @@ saving anything. Batch limits are 100 rooms and 200 beds per request. No new tab
 migrations or database privileges. Floor creation, capacity or room-type fields and audit logging are not part of
 this slice. The approval is not extended to any other route or operation.
 
+## Slice 3.10 Owner dashboard
+
+Approved by the project owner on 2026-11-14 (approver: AtharvaVavhal; decision record D1-D14 and the 14 November 2026
+contract decisions in `docs/phase-3/OWNER_DASHBOARD_IMPLEMENTATION_PLAN.md`).
+Adds exactly one route: `GET /api/v1/properties/:propertyId/dashboard`. It is read-only and reads existing tables. No new
+tables, models, enums, columns, indexes, migrations, permissions or database privileges. Floor, room and bed management,
+property-scoped manager authorization and inventory audit events are not part of this slice. The approval is not extended
+to any other route or operation.
+
 ## Dependency additions since Phase 2
 
 All are exact-pinned and used by committed code. Recorded for owner confirmation.

@@ -1,8 +1,5 @@
-import { useReducer, useState, useEffect } from 'react';
-import { demoFloors, demoProperty, bedStatuses, statusLabels, summarize } from './propertyDemo';
-import { floorPlanReducer, initialFloorPlanState } from './floorPlanState';
-import { Icon, PropertyIllustration } from './components/BrandIllustration';
-import { FloorPlan } from './components/FloorPlan';
+import { useState, useEffect } from 'react';
+import { Icon } from './components/BrandIllustration';
 import { InventoryOverview } from './components/InventoryOverview';
 import { FinanceShell } from './finance/FinanceShell';
 import { isFinanceHash } from './finance/financeRoute';
@@ -14,10 +11,10 @@ import { roleLabel as describeRole } from './access';
 import { AdmissionPanel } from './ops/Admissions';
 import { UserMenu } from './auth/UserMenu';
 import { useAuth } from './auth/AuthContext';
-import { DemoBadge } from './components/DemoBadge';
+import { OwnerDashboard } from './dashboard/OwnerDashboard';
+import { parseOverviewHash } from './dashboard/overviewRoute';
 
 export function App() {
-  const [state, dispatch] = useReducer(floorPlanReducer, initialFloorPlanState);
   const [navigationOpen, setNavigationOpen] = useState(false);
   const [hash, setHash] = useState(() => window.location.hash);
   const financeView = isFinanceHash(hash);
@@ -45,15 +42,13 @@ export function App() {
                   ? 'check-ins'
                   : opsRoute
                     ? 'corrections'
-                    : hash.slice(1) || 'overview';
+                    : parseOverviewHash(hash).section;
   const sectionLabel =
     section === 'overview'
-      ? 'Property overview'
-      : section === 'floor-plan'
-        ? 'Demonstration floor plan'
-        : section === 'inventory'
-          ? 'Inventory overview'
-          : section.replace(/-/g, ' ').replace(/^./, (letter) => letter.toUpperCase());
+      ? 'Dashboard'
+      : section === 'inventory'
+        ? 'Inventory overview'
+        : section.replace(/-/g, ' ').replace(/^./, (letter) => letter.toUpperCase());
   useEffect(() => {
     const onHash = () => {
       setHash(window.location.hash);
@@ -70,8 +65,6 @@ export function App() {
     .slice(0, 2)
     .map((word) => word[0]!.toUpperCase())
     .join('');
-  const totals = summarize(demoFloors.flatMap((floor) => floor.rooms));
-  const populatedFloors = demoFloors.filter((floor) => floor.rooms.length).length;
   return (
     <div className="app-shell">
       <a
@@ -122,15 +115,7 @@ export function App() {
               aria-current={section === 'overview' ? 'page' : undefined}
             >
               <Icon name="building" />
-              Property overview
-            </a>
-            <a
-              className="nav-item"
-              href="#floor-plan"
-              aria-current={section === 'floor-plan' ? 'page' : undefined}
-            >
-              <Icon name="layers" />
-              Interactive floor plan
+              Dashboard
             </a>
             <a
               className="nav-item"
@@ -263,109 +248,13 @@ export function App() {
           <OpsShell />
         ) : (
           <>
-            <section id="overview" aria-labelledby="page-title">
-              <div className="page-heading">
-                <div>
-                  <p className="eyebrow violet">ROOM TO BELONG</p>
-                  <h1 id="page-title">Property management</h1>
-                  <p className="page-description">The whole property. A little more clarity.</p>
-                </div>
-                <a className="primary-button" href="#floor-plan">
-                  Explore floor plan <Icon name="arrow" size={16} />
-                </a>
-              </div>
-              <div className="property-banner">
-                <div className="property-copy">
-                  <span className="property-kicker">YOUR DEMONSTRATION PROPERTY</span>
-                  <h2>
-                    {demoProperty.name} <DemoBadge />
-                  </h2>
-                  <p>
-                    <Icon name="pin" size={16} />
-                    {demoProperty.location}
-                    <span>· Fictional property</span>
-                  </p>
-                  <div className="property-meta">
-                    <span>Shared living</span>
-                    <span>{demoFloors.length} floors</span>
-                    <span>{totals.rooms} rooms</span>
-                  </div>
-                </div>
-                <PropertyIllustration />
-              </div>
-              <p className="demo-notice">
-                <span aria-hidden="true">ⓘ</span> A space to explore: every figure is synthetic demo
-                data. No live property or resident records are connected.
-              </p>
-              <div className="summary-grid" aria-label="Demonstration property summary">
-                <a className="summary-card" href="#inventory">
-                  <div>
-                    <span className="card-label">Total floors</span>
-                    <strong>{String(demoFloors.length).padStart(2, '0')}</strong>
-                    <p>
-                      {populatedFloors} with rooms · {demoFloors.length - populatedFloors} empty
-                    </p>
-                  </div>
-                  <span className="summary-icon">
-                    <Icon name="layers" size={23} />
-                  </span>
-                </a>
-                <a className="summary-card" href="#inventory">
-                  <div>
-                    <span className="card-label">Total rooms</span>
-                    <strong>{String(totals.rooms).padStart(2, '0')}</strong>
-                    <p>Explore floor inventory</p>
-                  </div>
-                  <span className="summary-icon">
-                    <Icon name="grid" size={23} />
-                  </span>
-                </a>
-                <a className="summary-card" href="#inventory">
-                  <div>
-                    <span className="card-label">Total beds</span>
-                    <strong>{totals.beds}</strong>
-                    <p>Every bed accounted for</p>
-                  </div>
-                  <span className="summary-icon">
-                    <Icon name="bed" size={23} />
-                  </span>
-                </a>
-              </div>
-              <div className="availability-strip">
-                <span className="strip-label">Demo bed snapshot</span>
-                <div className="availability-track" aria-hidden="true">
-                  {bedStatuses.map((status) => (
-                    <span key={status} className={status} style={{ flex: totals[status] }} />
-                  ))}
-                </div>
-                <div className="snapshot-labels">
-                  {bedStatuses.map((status) => (
-                    <a
-                      key={status}
-                      href="#floor-plan"
-                      aria-label={`Explore ${totals[status]} ${status} demo beds, starting on ground floor`}
-                      onClick={() => dispatch({ type: 'floor', floorId: 'ground', status })}
-                    >
-                      <i className={`legend-dot ${status}`} aria-hidden="true" />
-                      <strong>{totals[status]}</strong> {statusLabels[status]}{' '}
-                      <span aria-hidden="true">↗</span>
-                    </a>
-                  ))}
-                </div>
-              </div>
-            </section>
-            <FloorPlan state={state} dispatch={dispatch} />
+            <OwnerDashboard hash={hash} />
             <InventoryOverview />
             <AdmissionPanel />
           </>
         )}
         <footer className="footer-note">
           <span>Thoughtfully organised. Simply nook.</span>
-          {financeView || adminView ? null : (
-            <span>
-              Sections marked DEMO DATA are samples. Admissions and finance use your real records.
-            </span>
-          )}
         </footer>
       </main>
     </div>

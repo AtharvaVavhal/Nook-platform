@@ -382,6 +382,21 @@
         "POST /api/v1/properties/:propertyId/rooms/bulk"
       ]
     },
+    "3.10": {
+      "status": "approved",
+      "approver": "AtharvaVavhal",
+      "date": "2026-11-14",
+      "ref": "docs/nook-phase-3/PHASE_3_SCOPE_REGISTER.md#slice-310-owner-dashboard",
+      "description": "Owner dashboard: the single read-only route GET /api/v1/properties/:propertyId/dashboard and its tests, on existing tables. No schema, permission or grant change. Not extended to any other route or operation.",
+      "models": [],
+      "enums": [],
+      "tables": [],
+      "functions": [],
+      "extensions": [],
+      "routes": [
+        "GET /api/v1/properties/:propertyId/dashboard"
+      ]
+    },
     "4.1": {
       "status": "approved",
       "approver": "Repository user via explicit Phase 4 implementation mission",
