@@ -1,4 +1,4 @@
-import { useState, type ChangeEvent } from 'react';
+import { useReducer, useState, type ChangeEvent } from 'react';
 import { EmptyState, ErrorState, LoadingState, useAsync } from '../finance/shared';
 import { Field, FormError, PageHead, Tag, useGuardedAction } from './ui';
 import { opsApi, OpsApiError, type BulkRoomsResult, type Floor } from './opsApi';
@@ -6,10 +6,11 @@ import { opsLinks } from './opsRoute';
 import {
   BULK_MAX_BEDS,
   BULK_MAX_ROOMS,
-  batchLevelProblems,
   bedPath,
   describeFailure,
+  editStepMessages,
   newRoomKey,
+  nextFailure,
   problemsByField,
   resizeBeds,
   roomPath,
@@ -18,11 +19,19 @@ import {
   toRequestBody,
   validateDraft,
   type BedStatus,
+  type BulkFailure,
   type DraftRoom,
   type FieldProblem,
 } from './bulkRoomBedRules';
 
 type Step = 'edit' | 'review' | 'done';
+
+/** The words for a failed request: the server's explanation when it has one (they say nothing was created). */
+function failureMessage(error: unknown): string {
+  if (error instanceof OpsApiError)
+    return describeFailure(error.status, error.code) ?? error.message;
+  return error instanceof Error ? error.message : 'Something went wrong. Please try again.';
+}
 
 /**
  * Add many rooms, and the beds in each room, to a property in one go.
@@ -84,16 +93,19 @@ function BulkEditor({
     count: '5',
     bedsPerRoom: '4',
   });
+  // Both requests share one failure slot: a new attempt, an edit or a success replaces it, so the screen never
+  // shows a stale or contradictory message. The guarded actions only provide the in-flight flag.
+  const [failure, dispatchFailure] = useReducer(nextFailure, null as BulkFailure | null);
   const previewAction = useGuardedAction();
   const submitAction = useGuardedAction();
   const floorLabel = (id: string) => floors.find((f) => f.id === id)?.label ?? 'Unknown floor';
   const totals = summarize(rooms);
   const errors = problemsByField(problems);
-  const batchProblems = batchLevelProblems(problems);
 
   function update(next: DraftRoom[]) {
     setRooms(next);
     setProblems([]);
+    dispatchFailure({ type: 'edited' });
   }
   function patchRoom(index: number, change: Partial<DraftRoom>) {
     update(rooms.map((room, i) => (i === index ? { ...room, ...change } : room)));
@@ -140,6 +152,7 @@ function BulkEditor({
 
   /** Runs the server's dry-run. Nothing is saved; the same validation as the real submission applies. */
   async function runPreview() {
+    dispatchFailure({ type: 'preview-started' });
     const local = validateDraft(rooms);
     setProblems(local);
     if (local.length) return;
@@ -147,34 +160,31 @@ function BulkEditor({
       try {
         setPreview(await opsApi.inventory.rooms.bulkCreate(propertyId, toRequestBody(rooms, true)));
         setStep('review');
+        dispatchFailure({ type: 'preview-succeeded' });
       } catch (e) {
-        if (e instanceof OpsApiError) {
-          if (e.details?.length) setProblems([...e.details]);
-          throw new Error(describeFailure(e.status, e.code) ?? e.message);
-        }
-        throw e;
+        if (e instanceof OpsApiError && e.details?.length) setProblems([...e.details]);
+        dispatchFailure({ type: 'preview-failed', message: failureMessage(e) });
       }
     });
   }
 
   async function submit() {
+    dispatchFailure({ type: 'submit-started' });
     await submitAction.run(async () => {
       try {
         setCreated(
           await opsApi.inventory.rooms.bulkCreate(propertyId, toRequestBody(rooms, false)),
         );
         setStep('done');
+        dispatchFailure({ type: 'submit-succeeded' });
       } catch (e) {
-        if (e instanceof OpsApiError) {
-          // Something changed since the preview (for example a label was taken meanwhile): back to editing, with
-          // the marked rows. Nothing was created.
-          if (e.details?.length) {
-            setProblems([...e.details]);
-            setStep('edit');
-          }
-          throw new Error(describeFailure(e.status, e.code) ?? e.message);
+        // Something changed since the preview (for example a label was taken meanwhile): back to editing, with
+        // the marked rows and the failure message (which says nothing was created).
+        if (e instanceof OpsApiError && e.details?.length) {
+          setProblems([...e.details]);
+          setStep('edit');
         }
-        throw e;
+        dispatchFailure({ type: 'submit-failed', message: failureMessage(e) });
       }
     });
   }
@@ -200,6 +210,7 @@ function BulkEditor({
               setPreview(null);
               setCreated(null);
               setProblems([]);
+              dispatchFailure({ type: 'reset' });
               setStep('edit');
             }}
           >
@@ -281,7 +292,7 @@ function BulkEditor({
         <p className="fin-note">
           Everything is created together. If anything fails, no room and no bed is created.
         </p>
-        <FormError message={submitAction.error} />
+        <FormError message={failure?.message ?? null} />
         <div className="ops-actions">
           <button
             type="button"
@@ -297,7 +308,10 @@ function BulkEditor({
             type="button"
             className="outline-button"
             disabled={submitAction.busy}
-            onClick={() => setStep('edit')}
+            onClick={() => {
+              dispatchFailure({ type: 'back-to-edit' });
+              setStep('edit');
+            }}
           >
             Back to edit
           </button>
@@ -453,13 +467,9 @@ function BulkEditor({
         </fieldset>
       ))}
 
-      {batchProblems.map((message) => (
+      {editStepMessages(problems, failure).map((message) => (
         <FormError key={message} message={message} />
       ))}
-      {problems.length > 0 && batchProblems.length === 0 ? (
-        <FormError message="Some rows need attention. Fix the marked fields." />
-      ) : null}
-      <FormError message={previewAction.error} />
       <div className="ops-actions">
         <button
           type="button"

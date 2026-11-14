@@ -8,14 +8,19 @@ import {
   defaultBedLabels,
   describeFailure,
   describeProblem,
+  editStepMessages,
   newBed,
+  nextFailure,
   problemsByField,
   resizeBeds,
+  ROWS_NEED_ATTENTION,
   roomPath,
   roomsFromPattern,
   summarize,
   toRequestBody,
   validateDraft,
+  type BulkFailure,
+  type BulkFailureEvent,
   type DraftRoom,
 } from './bulkRoomBedRules';
 import { opsLinks, parseOpsRoute } from './opsRoute';
@@ -225,4 +230,100 @@ test('the bulk screen has its own hash route and does not hijack the existing ro
     name: 'floors',
     propertyId: FLOOR_A,
   });
+});
+
+// ---- failure messages in the edit step ----------------------------------------------------------------------------
+
+const fold = (events: BulkFailureEvent[], start: BulkFailure | null = null) =>
+  events.reduce<BulkFailure | null>(nextFailure, start);
+const SERVER_CONFLICT = [{ field: 'rooms[1].label', code: 'DUPLICATE_EXISTING' }];
+
+test('a failed preview shows the preview error in the edit step', () => {
+  const message = describeFailure(409, 'DUPLICATE_ACTIVE_IDENTIFIER')!;
+  const failure = fold([{ type: 'preview-failed', message }]);
+  assert.deepEqual(failure, { source: 'preview', message });
+  assert.deepEqual(editStepMessages(SERVER_CONFLICT, failure), [message]);
+});
+
+test('a failed submission shows the submission error, saying nothing was created', () => {
+  const message = describeFailure(409, 'DUPLICATE_ACTIVE_IDENTIFIER')!;
+  const failure = fold([
+    { type: 'preview-succeeded' },
+    { type: 'submit-started' },
+    { type: 'submit-failed', message },
+  ]);
+  assert.deepEqual(failure, { source: 'submit', message });
+  const shown = editStepMessages(SERVER_CONFLICT, failure);
+  assert.deepEqual(shown, [message]);
+  assert.match(shown[0]!, /Nothing was created/);
+});
+
+test('the failure message replaces the generic line instead of repeating it', () => {
+  const failure: BulkFailure = { source: 'submit', message: 'Nothing was created. Fix the rows.' };
+  const shown = editStepMessages(SERVER_CONFLICT, failure);
+  assert.equal(shown.includes(ROWS_NEED_ATTENTION), false);
+  assert.equal(new Set(shown).size, shown.length);
+  // A server problem that belongs to no row is listed once, even if the failure carries the same words.
+  const batch = [{ field: 'rooms', code: 'TOO_MANY' }];
+  const same: BulkFailure = { source: 'submit', message: describeProblem(batch[0]!) };
+  assert.deepEqual(editStepMessages(batch, same), [describeProblem(batch[0]!)]);
+});
+
+test('indexed submission errors identify exactly the offending rows and fields', () => {
+  const byField = problemsByField([
+    { field: roomPath(1, 'label'), code: 'DUPLICATE_EXISTING' },
+    { field: bedPath(2, 0, 'label'), code: 'DUPLICATE_IN_REQUEST' },
+  ]);
+  assert.deepEqual(Object.keys(byField).sort(), ['rooms[1].label', 'rooms[2].beds[0].label']);
+  assert.equal(byField[roomPath(0, 'label')], undefined);
+  assert.equal(byField[roomPath(1, 'floorId')], undefined);
+  assert.match(byField[roomPath(1, 'label')]!, /already exists in this property/);
+});
+
+test('a stale failure is cleared by an edit, a new attempt, going back, or starting over', () => {
+  const preview: BulkFailure = { source: 'preview', message: 'preview failed' };
+  const submit: BulkFailure = { source: 'submit', message: 'submit failed' };
+  for (const type of [
+    'edited',
+    'preview-started',
+    'submit-started',
+    'back-to-edit',
+    'reset',
+  ] as const) {
+    assert.equal(fold([{ type }], preview), null, `${type} clears a preview failure`);
+    assert.equal(fold([{ type }], submit), null, `${type} clears a submit failure`);
+  }
+  // A new failure replaces the old one: never two messages, never the old source.
+  assert.deepEqual(fold([{ type: 'submit-failed', message: 'second' }], preview), {
+    source: 'submit',
+    message: 'second',
+  });
+});
+
+test('a later successful preview or submission leaves no failure behind', () => {
+  const failed: BulkFailureEvent = { type: 'submit-failed', message: 'x' };
+  assert.equal(
+    fold([failed, { type: 'edited' }, { type: 'preview-started' }, { type: 'preview-succeeded' }]),
+    null,
+  );
+  assert.equal(fold([failed, { type: 'submit-started' }, { type: 'submit-succeeded' }]), null);
+  assert.equal(
+    fold([
+      { type: 'preview-failed', message: 'x' },
+      { type: 'preview-started' },
+      { type: 'preview-succeeded' },
+    ]),
+    null,
+  );
+});
+
+test('without a failure the edit step shows what it showed before: nothing, or the generic line for marked rows', () => {
+  assert.deepEqual(editStepMessages([], null), []);
+  assert.deepEqual(editStepMessages([{ field: roomPath(0, 'label'), code: 'REQUIRED' }], null), [
+    ROWS_NEED_ATTENTION,
+  ]);
+  // Batch-level server problems are still listed on their own.
+  assert.deepEqual(editStepMessages([{ field: 'rooms', code: 'TOO_MANY' }], null), [
+    describeProblem({ field: 'rooms', code: 'TOO_MANY' }),
+  ]);
 });

@@ -109,7 +109,9 @@ Route `#rooms/:propertyId/bulk`, opened from "Add multiple rooms" on the room li
 4. **Preview** runs quick local checks, then the server dry-run (D4). The review step shows totals, a per-floor
    breakdown and each room's beds, and states that nothing is saved yet.
 5. **Create** sends one request. The button is disabled while it is in flight. Server field errors are mapped back
-   onto the exact room and bed rows by their indexed paths.
+   onto the exact room and bed rows by their indexed paths. A rejected preview or submission shows one message
+   (for a rejected submission it says nothing was created); an edit, a new attempt, going back or starting over
+   clears it, so a stale message never sits next to a newer result.
 6. On success the screen shows the counts and links to the room list.
 
 ## Tests
@@ -118,7 +120,9 @@ Route `#rooms/:propertyId/bulk`, opened from "Add multiple rooms" on the room li
 - `apps/api/test/integration/bulk-inventory.integration.test.ts` — real PostgreSQL: several rooms and beds, a
   100-bed hostel, maximum and over-limit, duplicates, archived-label reuse, invalid payloads, missing and
   archived properties and floors, authentication, CSRF and origin, cross-tenant requests, rollback after a partial
-  insert, concurrent identical and conflicting batches, a race with an availability change, dry-run persistence and
+  insert, concurrent identical and conflicting batches, a race with an availability change, a held organization
+  gate (the real advisory lock held on a second connection: `409 INVENTORY_BUSY` after about 3 s, nothing written, the
+  same request succeeding once released, no lock or transaction left behind), dry-run persistence and
   consistency, and untouched existing data.
 - `apps/web/src/ops/bulkRoomBedRules.test.ts` — label generation, draft validation, summary, request building and
   server-error mapping.

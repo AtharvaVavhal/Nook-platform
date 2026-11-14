@@ -6,7 +6,12 @@ import { randomUUID } from 'node:crypto';
 import { NestFactory } from '@nestjs/core';
 import request from 'supertest';
 import { AppModule } from '../../src/app.module.js';
-import { assertFaultInjectionName, withMigratorClient } from './helpers/db.js';
+import { ORDINARY_GATE_LOCK_TIMEOUT_MS, orgGateKeyText } from '../../src/common/org-gate.js';
+import {
+  assertFaultInjectionName,
+  createMigratorClient,
+  withMigratorClient,
+} from './helpers/db.js';
 import { requireTestDatabaseUrl } from './helpers/env.js';
 import { TEST_PASSWORD, hashTestPassword } from './helpers/fixtures.js';
 
@@ -526,6 +531,116 @@ test('a bulk create racing an inventory availability change on the same organiza
     'the status changes all complete',
   );
   assert.deepEqual(await counts(org.orgId), { rooms: 3, beds: 24 });
+});
+
+/** Backends currently waiting for (not granted) or holding the organization gate's advisory lock. */
+async function gateLockRows(orgId: string): Promise<{ granted: boolean; pid: number }[]> {
+  return withMigratorClient(async (c) => {
+    const r = await c.query(
+      `SELECT granted, pid FROM pg_locks
+        WHERE locktype = 'advisory'
+          AND database = (SELECT oid FROM pg_database WHERE datname = current_database())
+          AND ((classid::bigint << 32) | objid::bigint) = hashtextextended($1, 0)`,
+      [orgGateKeyText(orgId)],
+    );
+    return r.rows;
+  });
+}
+
+test('a held organization gate gives a bulk submission a bounded 409 INVENTORY_BUSY, writes nothing, and the same request succeeds once released', async () => {
+  const org = await newOrg();
+  const floor = org.floorIds[0]!;
+  const body = { rooms: [room(floor, 'B1', bedsOf(4)), room(floor, 'B2', bedsOf(4))] };
+  const holder = createMigratorClient();
+  await holder.connect();
+  let holderPid = -1;
+  let elapsedMs = -1;
+  let waitObservedAfterMs = -1;
+  try {
+    // A separate connection takes the real gate (the same key and function the API uses) and keeps it.
+    await holder.query('BEGIN');
+    await holder.query('SELECT pg_advisory_xact_lock(hashtextextended($1, 0))', [
+      orgGateKeyText(org.orgId),
+    ]);
+    holderPid = Number((await holder.query('SELECT pg_backend_pid() pid')).rows[0].pid);
+    assert.deepEqual(
+      (await gateLockRows(org.orgId)).map((r) => [r.granted, r.pid]),
+      [[true, holderPid]],
+      'the holder owns the gate',
+    );
+
+    const started = Date.now();
+    const pending = post(org, body).then((response) => ({ response, at: Date.now() }));
+    // Synchronize on the database, not on a sleep: wait until the API's transaction is queued on the gate.
+    let queued = false;
+    for (let attempt = 0; attempt < 100 && !queued; attempt++) {
+      const settled = await Promise.race([
+        pending,
+        new Promise<null>((resolve) => setTimeout(() => resolve(null), 50)),
+      ]);
+      if (settled) {
+        assert.fail(
+          `the request ended before it queued on the gate: ${settled.response.status} ${JSON.stringify(settled.response.body)}`,
+        );
+      }
+      queued = (await gateLockRows(org.orgId)).some((r) => !r.granted);
+    }
+    assert.ok(queued, 'the bulk request is waiting for the organization gate');
+    waitObservedAfterMs = Date.now() - started;
+    // While it waits nothing has been written and it holds no gate itself.
+    assert.deepEqual(await counts(org.orgId), { rooms: 0, beds: 0 });
+
+    const { response, at } = await pending;
+    elapsedMs = at - started;
+    assert.equal(response.status, 409, JSON.stringify(response.body));
+    assert.equal(response.body.code, 'INVENTORY_BUSY');
+    // The wait is the 3 s lock_timeout: it really waited (not an instant refusal) and is bounded (not a hang).
+    assert.ok(
+      elapsedMs >= ORDINARY_GATE_LOCK_TIMEOUT_MS - 500 &&
+        elapsedMs < ORDINARY_GATE_LOCK_TIMEOUT_MS + 3_000,
+      `waited ${elapsedMs} ms for a ${ORDINARY_GATE_LOCK_TIMEOUT_MS} ms lock_timeout`,
+    );
+    assert.deepEqual(
+      await counts(org.orgId),
+      { rooms: 0, beds: 0 },
+      'a timed-out request writes nothing',
+    );
+    assert.equal(
+      (await gateLockRows(org.orgId)).filter((r) => !r.granted).length,
+      0,
+      'the timed-out request left no queued lock behind',
+    );
+  } finally {
+    // Always release the gate, also when an assertion above failed.
+    await holder.query('ROLLBACK').catch(() => undefined);
+    await holder.end().catch(() => undefined);
+  }
+  console.log(
+    JSON.stringify({
+      probe: 'bulk-inventory-busy',
+      configuredLockTimeoutMs: ORDINARY_GATE_LOCK_TIMEOUT_MS,
+      queuedOnGateAfterMs: waitObservedAfterMs,
+      responseAfterMs: elapsedMs,
+    }),
+  );
+
+  // Released: the very same request now succeeds and creates everything.
+  const retry = await post(org, body).expect(201);
+  assert.deepEqual(retry.body.data.summary, { rooms: 2, beds: 8 });
+  assert.deepEqual(await counts(org.orgId), { rooms: 2, beds: 8 });
+
+  // Nothing leaked: no lock on the gate, the holder's backend is gone, and no transaction is left open.
+  assert.deepEqual(await gateLockRows(org.orgId), []);
+  await withMigratorClient(async (c) => {
+    const gone = await c.query('SELECT 1 FROM pg_stat_activity WHERE pid = $1', [holderPid]);
+    assert.equal(gone.rowCount, 0, 'the holder connection is closed');
+    const open = await c.query(
+      `SELECT 1 FROM pg_stat_activity
+        WHERE datname = current_database() AND pid <> pg_backend_pid()
+          AND state IN ('idle in transaction', 'idle in transaction (aborted)')`,
+    );
+    assert.equal(open.rowCount, 0, 'no transaction is left open');
+  });
 });
 
 // ------------------------------------------------------------------ dry-run

@@ -266,3 +266,53 @@ export function describeFailure(status: number, code: string | undefined): strin
   if (status === 400) return 'Some values are not valid. Nothing was created. Fix the marked rows.';
   return null;
 }
+
+/** Shown when rows are marked but no more specific message applies (for example a purely local check failed). */
+export const ROWS_NEED_ATTENTION = 'Some rows need attention. Fix the marked fields.';
+
+/**
+ * The one failure message the screen shows for a rejected preview or submission. There is only ever one: a new
+ * attempt or any edit replaces it, so a stale message can never sit next to a newer result or contradict it.
+ */
+export interface BulkFailure {
+  source: 'preview' | 'submit';
+  message: string;
+}
+
+export type BulkFailureEvent =
+  | { type: 'preview-failed' | 'submit-failed'; message: string }
+  | {
+      type:
+        | 'edited'
+        | 'preview-started'
+        | 'preview-succeeded'
+        | 'submit-started'
+        | 'submit-succeeded'
+        | 'back-to-edit'
+        | 'reset';
+    };
+
+export function nextFailure(
+  _current: BulkFailure | null,
+  event: BulkFailureEvent,
+): BulkFailure | null {
+  if (event.type === 'preview-failed') return { source: 'preview', message: event.message };
+  if (event.type === 'submit-failed') return { source: 'submit', message: event.message };
+  // Every other event means the person has moved on or the last attempt worked: nothing to report.
+  return null;
+}
+
+/**
+ * What the edit step shows above the buttons, without duplicates: server problems that belong to no row, then the
+ * failure of the last attempt; the generic "rows need attention" line appears only when nothing more specific does.
+ * Row-level problems are not listed here. They are marked on their own fields (see `problemsByField`).
+ */
+export function editStepMessages(
+  problems: readonly FieldProblem[],
+  failure: BulkFailure | null,
+): string[] {
+  const messages = batchLevelProblems(problems);
+  if (failure && !messages.includes(failure.message)) messages.push(failure.message);
+  if (messages.length === 0 && problems.length > 0) messages.push(ROWS_NEED_ATTENTION);
+  return messages;
+}
