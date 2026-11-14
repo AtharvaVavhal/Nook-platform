@@ -16,7 +16,7 @@ Everything below is taken from the repository as inspected. Where the repository
 - Prisma unique violation (`P2002`) maps to `409 { code: 'DUPLICATE_ACTIVE_IDENTIFIER' }`. Bed archive maps `BED_OCCUPIED` to `409`.
 - Tenancy: every query carries `organizationId` taken from the session (`request.auth`), never from the client. Org fields in bodies are rejected.
 - Transactions: single-row creates are not wrapped in a transaction. Availability-changing writers (`changeAvailability`: bed archive, room archive, bed status change) use `$transaction` with `acquireOrgGate(tx, organizationId)`, then lock beds in UUID order, with `ORDINARY_TX_OPTIONS` (`maxWait` 5 s, `timeout` 15 s) and a 3 s `lock_timeout`.
-- Audit: the inventory module writes no audit events. The existing integration test "Audit events – runtime role has no audit_events access (blocker check)" shows the runtime DB role cannot write `audit_events`. Bulk creation therefore cannot audit-log without a separate decision (section 12, D6).
+- Audit: the inventory module writes no audit events. (The existing integration test named "Audit events – runtime role has no audit_events access (blocker check)" only shows that an inventory create succeeds without needing an audit write; it does not show that the runtime role lacks access, and other modules write audit events through the same role.) Bulk creation therefore adds none without a separate decision (section 12, D6).
 
 **Frontend (`apps/web`)**
 - Hash-routed React app. Routes are parsed in `apps/web/src/ops/opsRoute.ts` (`room-new`, `bed-new`, `rooms`, `beds`, …). Screens are in `apps/web/src/ops/Inventory.tsx` (1,045 lines) with one single-record form each for property, floor, room and bed (`ops-form`, `noValidate`, per-field error state, `FormEvent` submit).
@@ -64,7 +64,7 @@ Gaps:
 1. No batch endpoint. Creating 100 beds today needs one room POST per room and one bed POST per bed (for example 25 + 100 requests), each in its own transaction, so a mid-way failure leaves a partial hostel.
 2. No pre-validation: the only duplicate detection is the DB unique index, reported one row at a time.
 3. Room and bed creation are not serialised against availability-changing writers (no org gate on create).
-4. No audit trail on inventory writes (runtime role cannot write `audit_events`).
+4. No audit trail on inventory writes (the inventory module writes no audit events).
 5. The UI offers only single-record forms; there is no preview or summary.
 
 ## 4. Proposed API design
@@ -229,7 +229,7 @@ Decisions needed from the owner (no default has been assumed in the plan beyond 
 - **D3 Bed status in bulk.** Single endpoint requires `operationalStatus`. Recommended: bulk defaults to `IN_SERVICE` when omitted (the schema default), `OUT_OF_SERVICE` still requires a reason.
 - **D4 Preview.** Client-only vs server dry-run. Recommended: server dry-run for conflict accuracy.
 - **D5 Capacity / room type.** The model has none, and none is added. If the owner expects "capacity" or "room type" per room, that is a separate schema decision and out of scope here.
-- **D6 Audit logging.** The runtime DB role cannot write `audit_events`, and inventory has no audit today. Adding it would need a DB-privilege/migration decision. Recommended: out of scope for this task; document the gap.
+- **D6 Audit logging.** The inventory module writes no audit events today. Adding them is a separate change in the inventory module; the production runtime role's grants on `audit_events` would first have to be verified (they have not been). Recommended: out of scope for this task; document the gap.
 - **D7 Screen placement.** New `BulkRooms.tsx` vs extending the 1,045-line `Inventory.tsx`.
 - **D8 Governance.** A new route needs an approved slice in `scripts/phase_scope.json`; approver and ref must be supplied by the owner. The plan does not self-approve.
 - **D9 Floor creation.** Bulk covers rooms and beds on existing floors only; creating floors inline is excluded (floors have `ordinal` rules). Confirm.

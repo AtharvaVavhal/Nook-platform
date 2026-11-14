@@ -132,11 +132,12 @@ The integration file is registered in `scripts/ci/test-files.json` (full profile
 
 ## Known limitations
 
-- **No audit trail (D6, out of scope).** Inventory writes in this module record no audit events, and bulk creation
-  adds none. The runtime database role cannot write `audit_events` (see the existing test "Audit events – runtime
-  role has no audit_events access" in `inventory.integration.test.ts`), so recording who created a batch would
-  need a separate decision on database privileges or the audit schema. Until then, a bulk batch cannot be
-  attributed to a user from the database alone.
+- **No audit trail (D6, out of scope).** The inventory module writes no audit events, and bulk creation adds none.
+  Recording who created a batch would require adding audit writes to the inventory module, which is a separate
+  change. (An earlier version of this note said the runtime database role cannot write `audit_events`. That is not
+  supported: the role used by the CI integration profile holds `SELECT` and `INSERT` on `audit_events`, and the
+  booking, admission, check-in, finance and transfer code writes to it. The grants of the production role have not
+  been verified.) Until audit writes are added, a bulk batch cannot be attributed to a user from the database alone.
 - No capacity or room-type field exists, by decision (D5).
 - No floor creation in this flow (D9). A property with no floors gets a link to add one first.
 - A dry-run does not reserve labels; a real submission can still return `409` if another user took one meanwhile.

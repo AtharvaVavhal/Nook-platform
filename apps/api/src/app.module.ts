@@ -13,6 +13,7 @@ import { StaySummaryModule } from './stay-summary/stay-summary.module.js';
 import { ResidentHistoryModule } from './resident-history/resident-history.module.js';
 import { CorrectionsModule } from './corrections/corrections.module.js';
 import { TransferModule } from './transfer/transfer.module.js';
+import { DashboardModule } from './dashboard/dashboard.module.js';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { TransferModule } from './transfer/transfer.module.js';
     ResidentHistoryModule,
     CorrectionsModule,
     TransferModule,
+    DashboardModule,
   ],
   controllers: [HealthController],
   providers: [DatabaseService],

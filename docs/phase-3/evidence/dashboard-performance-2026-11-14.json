@@ -1,0 +1,514 @@
+{
+  "provenance": {
+    "kind": "historical measurement in a synthetic, disposable environment; not a production guarantee",
+    "reproducibleFromRepository": false,
+    "why": "The harness that seeded the data and produced these numbers was a local script that is NOT committed to this repository, so these figures cannot be regenerated from the repository. They are kept as a record of one run.",
+    "method": "A throwaway PostgreSQL 17.11 (Docker, tmpfs, loopback) was seeded with synthetic rows and analyzed; the real DashboardService was called 25 times in sequence after one warm-up call (no concurrency); each statement it issued was then run under EXPLAIN (ANALYZE, BUFFERS) with its captured parameters. Latency is the service call as seen by the caller, over loopback.",
+    "notMeasured": [
+      "concurrent load",
+      "a production or network-attached database",
+      "cold-cache behaviour",
+      "datasets beyond about 2,000 beds per organization"
+    ],
+    "fullPlansKept": false,
+    "fullPlansNote": "The raw plan text was about 2.3 MB and was not committed; only this summary is."
+  },
+  "dataset": {
+    "seedMs": 6812,
+    "rows": {
+      "beds": 6100,
+      "bookings": 11143,
+      "check_ins": 10279,
+      "check_outs": 6100,
+      "admissions": 10279,
+      "stay_assignments": 4179,
+      "invoices": 25137,
+      "payments": 19288
+    }
+  },
+  "runs": {
+    "S100": {
+      "beds": 100,
+      "inventory": {
+        "beds": 100,
+        "occupied": 69,
+        "availableBeds": 29
+      },
+      "sectionsPopulated": {
+        "activeTenants": 69,
+        "upcomingCheckIns": 5,
+        "pastEndDate": 9,
+        "invoiced": "414000.00",
+        "outstanding": "576000.00",
+        "unattributed": {
+          "count": 1,
+          "invoiced": "0.00",
+          "collected": "0.00",
+          "outstanding": "4000.00",
+          "overdue": "4000.00"
+        }
+      },
+      "statementsIncludingTxControl": 62,
+      "selectStatements": 61,
+      "warmMs": {
+        "n": 25,
+        "p50": 30.7,
+        "p95": 35.8,
+        "max": 47.6,
+        "min": 28
+      },
+      "dbReportedStatementMsSum": 28.4,
+      "sumExplainExecMs": 4.54,
+      "slowestStatements": [
+        {
+          "sql": "SELECT \"public\".\"bookings\".\"id\", \"public\".\"bookings\".\"start_date\", \"public\".\"bookings\".\"end_date\", \"public\".\"b",
+          "execMs": 0.548,
+          "planningMs": 0.114,
+          "seqScans": [],
+          "indexes": [
+            "beds_room_id_property_id_organization_id_idx",
+            "bookings_bed_id_start_date_end_date_idx"
+          ]
+        },
+        {
+          "sql": "SELECT \"public\".\"check_ins\".\"id\", \"public\".\"check_ins\".\"booking_id\", \"public\".\"check_ins\".\"resident_id\", \"publ",
+          "execMs": 0.451,
+          "planningMs": 1.818,
+          "seqScans": [
+            {
+              "table": "beds",
+              "rows": 100,
+              "loops": 1
+            }
+          ],
+          "indexes": [
+            "check_ins_organization_id_status_idx",
+            "beds_room_id_property_id_organization_id_idx",
+            "stay_assignments_organization_id_bed_id_start_at_end_at_idx",
+            "check_outs_organization_id_idx",
+            "bookings_organization_id_status_idx"
+          ]
+        },
+        {
+          "sql": "SELECT SUM(\"amount\") AS \"_sum$amount\", SUM(\"paid_amount\") AS \"_sum$paid_amount\" FROM (SELECT \"public\".\"invoice",
+          "execMs": 0.376,
+          "planningMs": 0.68,
+          "seqScans": [],
+          "indexes": [
+            "invoices_organization_id_period_start_idx",
+            "beds_room_id_property_id_organization_id_idx",
+            "bookings_bed_id_start_date_end_date_idx"
+          ]
+        },
+        {
+          "sql": "SELECT COUNT(*) AS \"_count$_all\" FROM (SELECT \"public\".\"bookings\".\"id\" FROM \"public\".\"bookings\" LEFT JOIN \"pub",
+          "execMs": 0.314,
+          "planningMs": 0.397,
+          "seqScans": [
+            {
+              "table": "floors",
+              "rows": 5,
+              "loops": 1
+            }
+          ],
+          "indexes": [
+            "rooms_floor_id_property_id_organization_id_idx",
+            "beds_room_id_property_id_organization_id_idx",
+            "bookings_bed_id_start_date_end_date_idx",
+            "check_ins_organization_id_status_idx"
+          ]
+        },
+        {
+          "sql": "SELECT \"public\".\"effective_stay_assignments\".\"id\", \"public\".\"effective_stay_assignments\".\"bed_id\", \"public\".\"e",
+          "execMs": 0.298,
+          "planningMs": 0.12,
+          "seqScans": [
+            {
+              "table": "stay_assignment_replacements",
+              "rows": 0,
+              "loops": 69
+            }
+          ],
+          "indexes": [
+            "stay_assignments_organization_id_booking_id_start_at_idx"
+          ]
+        },
+        {
+          "sql": "SELECT SUM(\"amount\") AS \"_sum$amount\", SUM(\"paid_amount\") AS \"_sum$paid_amount\", COUNT(*) AS \"_count$_all\" FRO",
+          "execMs": 0.267,
+          "planningMs": 0.139,
+          "seqScans": [],
+          "indexes": [
+            "invoices_organization_id_status_due_date_idx",
+            "beds_room_id_property_id_organization_id_idx",
+            "bookings_bed_id_start_date_end_date_idx"
+          ]
+        }
+      ],
+      "seqScansOnLargeTables": []
+    },
+    "L2000": {
+      "beds": 2000,
+      "inventory": {
+        "beds": 2000,
+        "occupied": 1365,
+        "availableBeds": 585
+      },
+      "sectionsPopulated": {
+        "activeTenants": 1365,
+        "upcomingCheckIns": 89,
+        "pastEndDate": 156,
+        "invoiced": "8190000.00",
+        "outstanding": "11310000.00",
+        "unattributed": {
+          "count": 21,
+          "invoiced": "0.00",
+          "collected": "0.00",
+          "outstanding": "84000.00",
+          "overdue": "84000.00"
+        }
+      },
+      "statementsIncludingTxControl": 62,
+      "selectStatements": 61,
+      "warmMs": {
+        "n": 25,
+        "p50": 82.2,
+        "p95": 112.6,
+        "max": 185.3,
+        "min": 76.8
+      },
+      "dbReportedStatementMsSum": 82.7,
+      "sumExplainExecMs": 22.97,
+      "slowestStatements": [
+        {
+          "sql": "SELECT SUM(\"amount\") AS \"_sum$amount\" FROM (SELECT \"public\".\"payments\".\"amount\" FROM \"public\".\"payments\" LEFT ",
+          "execMs": 2.321,
+          "planningMs": 0.616,
+          "seqScans": [
+            {
+              "table": "payment_reversals",
+              "rows": 0,
+              "loops": 455
+            }
+          ],
+          "indexes": [
+            "bookings_pkey",
+            "beds_pkey",
+            "invoices_organization_id_period_start_idx",
+            "payments_organization_id_received_at_idx"
+          ]
+        },
+        {
+          "sql": "SELECT SUM(\"amount\") AS \"_sum$amount\", SUM(\"paid_amount\") AS \"_sum$paid_amount\" FROM (SELECT \"public\".\"invoice",
+          "execMs": 2.161,
+          "planningMs": 0.156,
+          "seqScans": [
+            {
+              "table": "beds",
+              "rows": 2000,
+              "loops": 1
+            }
+          ],
+          "indexes": [
+            "invoices_organization_id_period_start_idx",
+            "bookings_organization_id_status_idx"
+          ]
+        },
+        {
+          "sql": "SELECT \"public\".\"check_ins\".\"id\", \"public\".\"check_ins\".\"booking_id\", \"public\".\"check_ins\".\"resident_id\", \"publ",
+          "execMs": 2.016,
+          "planningMs": 0.659,
+          "seqScans": [
+            {
+              "table": "beds",
+              "rows": 2000,
+              "loops": 1
+            }
+          ],
+          "indexes": [
+            "check_outs_organization_id_idx",
+            "bookings_organization_id_status_idx",
+            "check_ins_organization_id_status_idx"
+          ]
+        },
+        {
+          "sql": "SELECT SUM(\"amount\") AS \"_sum$amount\", SUM(\"paid_amount\") AS \"_sum$paid_amount\" FROM (SELECT \"public\".\"invoice",
+          "execMs": 1.724,
+          "planningMs": 0.142,
+          "seqScans": [
+            {
+              "table": "beds",
+              "rows": 2000,
+              "loops": 1
+            }
+          ],
+          "indexes": [
+            "invoices_organization_id_status_due_date_idx",
+            "bookings_organization_id_status_idx"
+          ]
+        },
+        {
+          "sql": "SELECT SUM(\"amount\") AS \"_sum$amount\", SUM(\"paid_amount\") AS \"_sum$paid_amount\", COUNT(*) AS \"_count$_all\" FRO",
+          "execMs": 1.69,
+          "planningMs": 0.143,
+          "seqScans": [
+            {
+              "table": "beds",
+              "rows": 2000,
+              "loops": 1
+            }
+          ],
+          "indexes": [
+            "invoices_organization_id_status_due_date_idx",
+            "bookings_organization_id_status_idx"
+          ]
+        },
+        {
+          "sql": "SELECT \"public\".\"effective_stay_assignments\".\"id\", \"public\".\"effective_stay_assignments\".\"bed_id\", \"public\".\"e",
+          "execMs": 1.416,
+          "planningMs": 1.211,
+          "seqScans": [
+            {
+              "table": "stay_assignment_replacements",
+              "rows": 0,
+              "loops": 1365
+            }
+          ],
+          "indexes": [
+            "stay_assignments_organization_id_booking_id_start_at_idx"
+          ]
+        }
+      ],
+      "seqScansOnLargeTables": [
+        {
+          "table": "beds",
+          "rows": 2000,
+          "loops": 1,
+          "sql": "SELECT \"public\".\"beds\".\"id\", \"public\".\"beds\".\"label\", \"public\".\"beds\"."
+        },
+        {
+          "table": "beds",
+          "rows": 2000,
+          "loops": 1,
+          "sql": "SELECT \"public\".\"check_ins\".\"id\", \"public\".\"check_ins\".\"booking_id\", \""
+        },
+        {
+          "table": "beds",
+          "rows": 2000,
+          "loops": 1,
+          "sql": "SELECT COUNT(*) AS \"_count$_all\" FROM (SELECT \"public\".\"bookings\".\"id\""
+        },
+        {
+          "table": "beds",
+          "rows": 2000,
+          "loops": 1,
+          "sql": "SELECT \"public\".\"bookings\".\"bed_id\" FROM \"public\".\"bookings\" LEFT JOIN"
+        },
+        {
+          "table": "beds",
+          "rows": 2000,
+          "loops": 1,
+          "sql": "SELECT \"public\".\"bookings\".\"id\", \"public\".\"bookings\".\"start_date\", \"pu"
+        },
+        {
+          "table": "beds",
+          "rows": 2000,
+          "loops": 1,
+          "sql": "SELECT \"public\".\"bookings\".\"id\", \"public\".\"bookings\".\"start_date\", \"pu"
+        },
+        {
+          "table": "beds",
+          "rows": 2000,
+          "loops": 1,
+          "sql": "SELECT \"public\".\"check_outs\".\"id\", \"public\".\"check_outs\".\"check_in_id\""
+        },
+        {
+          "table": "beds",
+          "rows": 2000,
+          "loops": 1,
+          "sql": "SELECT SUM(\"amount\") AS \"_sum$amount\", SUM(\"paid_amount\") AS \"_sum$pai"
+        },
+        {
+          "table": "beds",
+          "rows": 2000,
+          "loops": 1,
+          "sql": "SELECT SUM(\"amount\") AS \"_sum$amount\", SUM(\"paid_amount\") AS \"_sum$pai"
+        },
+        {
+          "table": "beds",
+          "rows": 2000,
+          "loops": 1,
+          "sql": "SELECT SUM(\"amount\") AS \"_sum$amount\", SUM(\"paid_amount\") AS \"_sum$pai"
+        }
+      ]
+    },
+    "MULTI": {
+      "beds": 2000,
+      "inventory": {
+        "beds": 100,
+        "occupied": 69,
+        "availableBeds": 29
+      },
+      "sectionsPopulated": {
+        "activeTenants": 69,
+        "upcomingCheckIns": 5,
+        "pastEndDate": 9,
+        "invoiced": "414000.00",
+        "outstanding": "576000.00",
+        "unattributed": {
+          "count": 20,
+          "invoiced": "0.00",
+          "collected": "0.00",
+          "outstanding": "80000.00",
+          "overdue": "80000.00"
+        }
+      },
+      "statementsIncludingTxControl": 62,
+      "selectStatements": 61,
+      "warmMs": {
+        "n": 25,
+        "p50": 39.5,
+        "p95": 56.2,
+        "max": 58.1,
+        "min": 35.9
+      },
+      "dbReportedStatementMsSum": 46.8,
+      "sumExplainExecMs": 14.28,
+      "slowestStatements": [
+        {
+          "sql": "SELECT \"public\".\"check_ins\".\"id\", \"public\".\"check_ins\".\"booking_id\", \"public\".\"check_ins\".\"resident_id\", \"publ",
+          "execMs": 2.558,
+          "planningMs": 0.517,
+          "seqScans": [
+            {
+              "table": "beds",
+              "rows": 2000,
+              "loops": 1
+            },
+            {
+              "table": "stay_assignments",
+              "rows": 1380,
+              "loops": 1
+            },
+            {
+              "table": "beds",
+              "rows": 100,
+              "loops": 1
+            },
+            {
+              "table": "stay_assignment_replacements",
+              "rows": 0,
+              "loops": 69
+            }
+          ],
+          "indexes": [
+            "check_outs_organization_id_idx",
+            "bookings_organization_id_status_idx",
+            "check_ins_organization_id_status_idx"
+          ]
+        },
+        {
+          "sql": "SELECT \"public\".\"payments\".\"id\", \"public\".\"payments\".\"amount\", \"public\".\"payments\".\"method\"::text, \"public\".\"p",
+          "execMs": 1.911,
+          "planningMs": 0.389,
+          "seqScans": [
+            {
+              "table": "beds",
+              "rows": 100,
+              "loops": 1
+            }
+          ],
+          "indexes": [
+            "payments_invoice_id_idx",
+            "invoices_organization_id_period_start_idx",
+            "bookings_organization_id_status_idx"
+          ]
+        },
+        {
+          "sql": "SELECT SUM(\"amount\") AS \"_sum$amount\" FROM (SELECT \"public\".\"payments\".\"amount\" FROM \"public\".\"payments\" LEFT ",
+          "execMs": 1.893,
+          "planningMs": 0.441,
+          "seqScans": [
+            {
+              "table": "beds",
+              "rows": 100,
+              "loops": 1
+            },
+            {
+              "table": "payment_reversals",
+              "rows": 0,
+              "loops": 23
+            }
+          ],
+          "indexes": [
+            "payments_invoice_id_idx",
+            "invoices_organization_id_period_start_idx",
+            "bookings_organization_id_status_idx"
+          ]
+        },
+        {
+          "sql": "SELECT SUM(\"amount\") AS \"_sum$amount\", SUM(\"paid_amount\") AS \"_sum$paid_amount\" FROM (SELECT \"public\".\"invoice",
+          "execMs": 1.243,
+          "planningMs": 0.122,
+          "seqScans": [
+            {
+              "table": "beds",
+              "rows": 100,
+              "loops": 1
+            }
+          ],
+          "indexes": [
+            "invoices_organization_id_period_start_idx",
+            "bookings_organization_id_status_idx"
+          ]
+        },
+        {
+          "sql": "SELECT SUM(\"amount\") AS \"_sum$amount\", SUM(\"paid_amount\") AS \"_sum$paid_amount\" FROM (SELECT \"public\".\"invoice",
+          "execMs": 0.928,
+          "planningMs": 0.129,
+          "seqScans": [
+            {
+              "table": "beds",
+              "rows": 100,
+              "loops": 1
+            }
+          ],
+          "indexes": [
+            "invoices_organization_id_status_due_date_idx",
+            "bookings_organization_id_status_idx"
+          ]
+        },
+        {
+          "sql": "SELECT SUM(\"amount\") AS \"_sum$amount\", SUM(\"paid_amount\") AS \"_sum$paid_amount\", COUNT(*) AS \"_count$_all\" FRO",
+          "execMs": 0.897,
+          "planningMs": 0.113,
+          "seqScans": [
+            {
+              "table": "beds",
+              "rows": 100,
+              "loops": 1
+            }
+          ],
+          "indexes": [
+            "invoices_organization_id_status_due_date_idx",
+            "bookings_organization_id_status_idx"
+          ]
+        }
+      ],
+      "seqScansOnLargeTables": [
+        {
+          "table": "beds",
+          "rows": 2000,
+          "loops": 1,
+          "sql": "SELECT \"public\".\"check_ins\".\"id\", \"public\".\"check_ins\".\"booking_id\", \""
+        },
+        {
+          "table": "stay_assignments",
+          "rows": 1380,
+          "loops": 1,
+          "sql": "SELECT \"public\".\"check_ins\".\"id\", \"public\".\"check_ins\".\"booking_id\", \""
+        }
+      ]
+    }
+  }
+}

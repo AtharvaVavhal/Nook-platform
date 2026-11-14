@@ -17,7 +17,7 @@ export class OpsApiError extends Error {
   }
 }
 
-async function request<T>(
+export async function request<T>(
   method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE',
   path: string,
   body?: unknown,
@@ -65,7 +65,7 @@ async function request<T>(
   return (await response.json()) as T;
 }
 
-const qs = (params?: Record<string, string | number | undefined>) => {
+export const qs = (params?: Record<string, string | number | undefined>) => {
   if (!params) return '';
   const search = new URLSearchParams();
   for (const [key, value] of Object.entries(params))
@@ -78,7 +78,7 @@ export interface ApiResponse<T> {
   data: T;
 }
 
-function unwrap<T>(response: ApiResponse<T>): T {
+export function unwrap<T>(response: ApiResponse<T>): T {
   return response.data;
 }
 
