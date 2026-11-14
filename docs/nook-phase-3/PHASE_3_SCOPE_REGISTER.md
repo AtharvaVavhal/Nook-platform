@@ -93,6 +93,16 @@ Index change only: the resident-level unique index on `invoices` is replaced by 
 invoices (per booking, and per resident for legacy invoices with no booking). No new table, model, function or route. Applied only
 to the isolated scratch database `nook_layer1_clean`; applying it anywhere else needs a separate approval.
 
+## Slice 3.9 Bulk room and bed creation
+
+Approved by the project owner on 2026-11-13 (Phase 3 Task 1 authorization; the full decision record is in
+`docs/phase-3/BULK_ROOM_BED_IMPLEMENTATION_PLAN.md`, section "Owner approval record").
+Adds exactly one route: `POST /api/v1/properties/:propertyId/rooms/bulk`. It creates rooms and their beds on the
+existing `rooms` and `beds` tables in one transaction, and with `"dryRun": true` validates the same request without
+saving anything. Batch limits are 100 rooms and 200 beds per request. No new tables, models, enums, columns,
+migrations or database privileges. Floor creation, capacity or room-type fields and audit logging are not part of
+this slice. The approval is not extended to any other route or operation.
+
 ## Dependency additions since Phase 2
 
 All are exact-pinned and used by committed code. Recorded for owner confirmation.

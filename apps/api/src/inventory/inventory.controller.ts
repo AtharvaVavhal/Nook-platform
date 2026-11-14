@@ -10,10 +10,12 @@ import {
   Post,
   Query,
   Req,
+  Res,
   UseGuards,
 } from '@nestjs/common';
 import { CsrfGuard, OriginGuard, SessionGuard } from '../auth/auth.guards.js';
 import type { AuthenticatedRequest } from '../auth/auth.types.js';
+import { parseBulkPropertyId, parseBulkRoomsBody } from './inventory.bulk.validation.js';
 import { InventoryService } from './inventory.service.js';
 import {
   codeField,
@@ -28,6 +30,11 @@ import {
   stringField,
 } from './inventory.validation.js';
 import { RequirePermission } from '../auth/permissions.js';
+
+/** The one response capability the bulk route needs: a dry-run answers 200 instead of the POST default 201. */
+interface StatusResponse {
+  status(code: number): unknown;
+}
 
 @Controller()
 @UseGuards(SessionGuard)
@@ -162,6 +169,29 @@ export class InventoryController {
       floorId: parseUuid(stringField(input, 'floorId', true)!, 'floorId'),
       label: labelField(input, true)!,
     });
+  }
+
+  /**
+   * Bulk-creates rooms and their beds under one property in a single transaction. `dryRun: true` runs the identical
+   * validation and conflict detection and persists nothing (200); a real submission answers 201.
+   */
+  @RequirePermission('inventory.write')
+  @Post('properties/:propertyId/rooms/bulk')
+  @UseGuards(OriginGuard, CsrfGuard)
+  async bulkCreateRooms(
+    @Req() request: AuthenticatedRequest,
+    @Param('propertyId') propertyId: string,
+    @Body() body: unknown,
+    @Res({ passthrough: true }) response: StatusResponse,
+  ) {
+    const input = parseBulkRoomsBody(body);
+    const result = await this.inventory.bulkCreateRooms(
+      request.auth!,
+      parseBulkPropertyId(propertyId),
+      input,
+    );
+    if (input.dryRun) response.status(HttpStatus.OK);
+    return result;
   }
 
   @RequirePermission('inventory.write')

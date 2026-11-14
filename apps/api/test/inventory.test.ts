@@ -110,6 +110,10 @@ class FakeInventoryRepository implements InventoryRepository {
       bedsArchived: 0,
     };
   }
+  async bulkCreateRooms(organizationId: string) {
+    this.scope(organizationId);
+    return { kind: 'ok' as const, rooms: [] };
+  }
 }
 
 const context = (role: 'OWNER' | 'PROPERTY_MANAGER' = 'OWNER'): AuthenticatedContext => ({

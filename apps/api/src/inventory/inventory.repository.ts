@@ -3,7 +3,8 @@ import { Inject, Injectable, ConflictException } from '@nestjs/common';
 import { PrismaService } from '../database/prisma.service.js';
 import { Prisma } from '../generated/client.js';
 import { acquireOrgGate, ORDINARY_TX_OPTIONS } from '../common/org-gate.js';
-import type { InventoryRepository } from './inventory.types.js';
+import type { InventoryRepository, BulkRoomsOutcome } from './inventory.types.js';
+import { findBulkConflicts, type BulkRoomInput } from './inventory.bulk.validation.js';
 
 export const INVENTORY_REPOSITORY = Symbol('INVENTORY_REPOSITORY');
 
@@ -244,6 +245,110 @@ export class PrismaInventoryRepository implements InventoryRepository {
       });
       return changed.count ? tx.bed.findFirst({ where: { id: bedId, organizationId } }) : null;
     });
+  }
+
+  async bulkCreateRooms(
+    organizationId: string,
+    propertyId: string,
+    input: { rooms: BulkRoomInput[]; dryRun: boolean },
+  ): Promise<BulkRoomsOutcome> {
+    const { rooms, dryRun } = input;
+    return this.prisma.db.$transaction(async (tx): Promise<BulkRoomsOutcome> => {
+      // A real submission joins the organization lifecycle gate (as archive and bed-status changes do), so it
+      // cannot interleave with a booking/admission/check-in transaction or with another inventory availability
+      // writer. A dry-run writes nothing and therefore takes no gate.
+      if (!dryRun) await acquireOrgGate(tx, organizationId);
+
+      const property = await tx.property.findFirst({
+        where: { id: propertyId, organizationId, archivedAt: null },
+        select: { id: true },
+      });
+      if (!property) return { kind: 'not_found' };
+
+      const floorIds = [...new Set(rooms.map((room) => room.floorId))];
+      const floors = await tx.floor.findMany({
+        where: { id: { in: floorIds }, organizationId, propertyId, archivedAt: null },
+        select: { id: true },
+      });
+      if (floors.length !== floorIds.length) return { kind: 'not_found' };
+
+      const existing = await tx.room.findMany({
+        where: {
+          organizationId,
+          propertyId,
+          archivedAt: null,
+          label: { in: rooms.map((room) => room.label) },
+        },
+        select: { label: true },
+      });
+      const conflicts = findBulkConflicts(rooms, new Set(existing.map((room) => room.label)));
+      if (conflicts.length) return { kind: 'conflict', details: conflicts };
+
+      if (dryRun) {
+        return {
+          kind: 'ok',
+          rooms: rooms.map((room) => ({
+            id: null,
+            floorId: room.floorId,
+            label: room.label,
+            beds: room.beds.map((bed) => ({
+              id: null,
+              label: bed.label,
+              operationalStatus: bed.operationalStatus,
+              outOfServiceReason: bed.outOfServiceReason ?? null,
+            })),
+          })),
+        };
+      }
+
+      const createdRooms = await tx.room.createManyAndReturn({
+        data: rooms.map((room) => ({
+          organizationId,
+          propertyId,
+          floorId: room.floorId,
+          label: room.label,
+        })),
+      });
+      const roomIdByLabel = new Map(createdRooms.map((room) => [room.label, room.id]));
+      const bedRows = rooms.flatMap((room) =>
+        room.beds.map((bed) => ({
+          organizationId,
+          propertyId,
+          roomId: roomIdByLabel.get(room.label)!,
+          label: bed.label,
+          operationalStatus: bed.operationalStatus,
+          ...(bed.outOfServiceReason !== undefined
+            ? { outOfServiceReason: bed.outOfServiceReason }
+            : {}),
+        })),
+      );
+      const createdBeds = bedRows.length ? await tx.bed.createManyAndReturn({ data: bedRows }) : [];
+      const bedsByRoomId = new Map<string, typeof createdBeds>();
+      for (const bed of createdBeds) {
+        bedsByRoomId.set(bed.roomId, [...(bedsByRoomId.get(bed.roomId) ?? []), bed]);
+      }
+      return {
+        kind: 'ok',
+        rooms: rooms.map((room) => {
+          const id = roomIdByLabel.get(room.label)!;
+          const created = bedsByRoomId.get(id) ?? [];
+          return {
+            id,
+            floorId: room.floorId,
+            label: room.label,
+            beds: room.beds.map((bed) => {
+              const row = created.find((candidate) => candidate.label === bed.label)!;
+              return {
+                id: row.id,
+                label: row.label,
+                operationalStatus: row.operationalStatus,
+                outOfServiceReason: row.outOfServiceReason,
+              };
+            }),
+          };
+        }),
+      };
+    }, ORDINARY_TX_OPTIONS);
   }
 
   /** Availability-changing inventory writers join the lifecycle gate, then lock beds in UUID order. */

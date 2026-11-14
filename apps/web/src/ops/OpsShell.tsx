@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import '../finance/finance.css';
 import { AdmissionDetail, AdmissionPanel } from './Admissions';
+import { BulkRooms } from './BulkRooms';
 import { CorrectionDetail, CorrectionList, CorrectionNew, FinanceReviews } from './Corrections';
 import { BookingDetail, BookingList, BookingNew } from './Bookings';
 import { CheckInDetail, CheckInList, CheckInNew } from './CheckIns';
@@ -116,6 +117,7 @@ export function OpsShell() {
         ) : null}
         {route.name === 'rooms' ? <RoomList propertyId={route.propertyId} /> : null}
         {route.name === 'room-new' ? <RoomNew propertyId={route.propertyId} /> : null}
+        {route.name === 'room-bulk' ? <BulkRooms propertyId={route.propertyId} /> : null}
         {route.name === 'room' ? <RoomDetail propertyId={route.propertyId} id={route.id} /> : null}
         {route.name === 'beds' ? <BedList roomId={route.roomId} /> : null}
         {route.name === 'bed-new' ? <BedNew roomId={route.roomId} /> : null}
