@@ -9,6 +9,18 @@
 -- then paste this file. Nothing here touches existing databases other than creating `nook`.
 \set ON_ERROR_STOP on
 
+-- Refuse to continue unless all three variables are real SCRAM verifiers. A value that still carries its own quotes (for
+-- example from `psql -v v_app="'SCRAM-SHA-256$...'"`) would otherwise be stored as a literal password nobody can use.
+-- Set the variables with `\set` exactly as shown above, or pass `-v v_app=SCRAM-SHA-256$...` without extra quotes.
+SELECT :'v_migrator' ~ '^SCRAM-SHA-256\$[0-9]+:[A-Za-z0-9+/=]+\$[A-Za-z0-9+/=]+:[A-Za-z0-9+/=]+$'
+   AND :'v_app'      ~ '^SCRAM-SHA-256\$[0-9]+:[A-Za-z0-9+/=]+\$[A-Za-z0-9+/=]+:[A-Za-z0-9+/=]+$'
+   AND :'v_backup'   ~ '^SCRAM-SHA-256\$[0-9]+:[A-Za-z0-9+/=]+\$[A-Za-z0-9+/=]+:[A-Za-z0-9+/=]+$' AS verifiers_ok \gset
+\if :verifiers_ok
+\else
+  \echo 'STOP: v_migrator, v_app and v_backup must each be a SCRAM-SHA-256 verifier without surrounding quotes. Nothing was changed.'
+  SELECT 1/0 AS stopped_because_verifiers_are_invalid;
+\endif
+
 CREATE ROLE nook_migrator LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION NOBYPASSRLS PASSWORD :'v_migrator';
 CREATE ROLE nook_app      LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION NOBYPASSRLS PASSWORD :'v_app';
 CREATE ROLE nook_backup   LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION NOBYPASSRLS PASSWORD :'v_backup';

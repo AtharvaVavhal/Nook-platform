@@ -33,6 +33,7 @@ interface MigrateModule {
     port: number;
     user: string;
     password: string;
+    proxyPort?: number;
   };
   buildChildEnv: (
     base: NodeJS.ProcessEnv,
@@ -372,13 +373,23 @@ test('migration environment: required variables, no superuser, and secrets remov
     child.DATABASE_URL,
     'postgresql://nook_migrator:p%40ss%2Fw%3Ard%3F%23@127.0.0.1:5555/nook?sslmode=disable',
   );
-  for (const name of [
-    'MIGRATION_DB_PASSWORD',
-    'DB_CA_PEM',
-    'DB_CERT_SHA256',
-    'MIGRATOR_DATABASE_URL',
-  ]) {
+  for (const name of ['MIGRATION_DB_PASSWORD', 'DB_CA_PEM', 'DB_CERT_SHA256']) {
     assert.equal(child[name], undefined, `${name} must not reach the migration command`);
   }
+  // An inherited MIGRATOR_DATABASE_URL never reaches the command; the ops scripts get only the loopback proxy URL.
+  assert.notEqual(child.MIGRATOR_DATABASE_URL, 'x');
+  assert.equal(child.MIGRATOR_DATABASE_URL, child.DATABASE_URL);
+  assert.match(child.MIGRATOR_DATABASE_URL ?? '', /@127\.0\.0\.1:5555\//);
   assert.equal(child.PATH, '/bin');
+  assert.equal(
+    migrateModule.parseMigrationEnv({ ...complete, MIGRATION_PROXY_PORT: '15432' }).proxyPort,
+    15432,
+  );
+  assert.equal(migrateModule.parseMigrationEnv(complete).proxyPort, undefined);
+  for (const bad of ['80', '70000', 'abc', '15432.5']) {
+    assert.throws(
+      () => migrateModule.parseMigrationEnv({ ...complete, MIGRATION_PROXY_PORT: bad }),
+      /MIGRATION_PROXY_PORT/,
+    );
+  }
 });

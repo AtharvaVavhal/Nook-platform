@@ -1,6 +1,8 @@
 // Runs the real Prisma migration command through an authenticated-TLS proxy (see pg-tls-proxy.ts for the why).
 //
 //   node --import tsx scripts/ops/migrate-with-tls-proxy.ts [-- <command> <args...>]
+//   e.g. MIGRATION_PROXY_PORT=15432 node --import tsx scripts/ops/migrate-with-tls-proxy.ts -- \
+//          node --import tsx scripts/ops/provision-user.ts --confirm-target 127.0.0.1:15432/<database> ...
 //
 // Default command: npx --no-install prisma migrate deploy --config prisma.config.ts
 // Prisma history, checksums and transaction behaviour are untouched: this only changes the transport.
@@ -13,6 +15,9 @@
 //   MIGRATION_DB_PASSWORD  secret
 //   DB_CA_PEM              the pinned CA / certificate (PEM; public)
 //   DB_CERT_SHA256         SHA-256 fingerprint of the expected server certificate (hex; public)
+//   MIGRATION_PROXY_PORT   optional fixed loopback port for the proxy (default: a free port). Needed to run the
+//                          ops scripts (provision-user.ts, reset-password.ts, revoke-access.ts) through the proxy,
+//                          because their --confirm-target must name host:port/database in advance.
 //
 // Exit codes: 0 migrations ok, 1 migration command failed, 2 bad configuration, 3 the TLS endpoint could not be
 // authenticated (nothing was migrated).
@@ -27,6 +32,8 @@ export interface MigrationEnv {
   password: string;
   caPem: string;
   pinSha256: string;
+  /** Fixed loopback port for the proxy; undefined lets the system pick a free one. */
+  proxyPort?: number;
 }
 
 const FORBIDDEN_USERS = new Set(['postgres', 'root', 'admin', 'superuser']);
@@ -47,6 +54,16 @@ export function parseMigrationEnv(env: NodeJS.ProcessEnv): MigrationEnv {
   if (!Number.isInteger(port) || port < 1 || port > 65535) {
     throw new ProxyError('CONFIG', 'MIGRATION_DB_PORT must be an integer between 1 and 65535.');
   }
+  const proxyPort = env.MIGRATION_PROXY_PORT?.trim() ? Number(env.MIGRATION_PROXY_PORT) : undefined;
+  if (
+    proxyPort !== undefined &&
+    (!Number.isInteger(proxyPort) || proxyPort < 1024 || proxyPort > 65535)
+  ) {
+    throw new ProxyError(
+      'CONFIG',
+      'MIGRATION_PROXY_PORT must be an integer between 1024 and 65535.',
+    );
+  }
   const user = env.MIGRATION_DB_USER as string;
   if (FORBIDDEN_USERS.has(user.toLowerCase())) {
     throw new ProxyError(
@@ -62,6 +79,7 @@ export function parseMigrationEnv(env: NodeJS.ProcessEnv): MigrationEnv {
     password: env.MIGRATION_DB_PASSWORD as string,
     caPem: env.DB_CA_PEM as string,
     pinSha256: env.DB_CERT_SHA256 as string,
+    ...(proxyPort !== undefined ? { proxyPort } : {}),
   };
 }
 
@@ -80,12 +98,17 @@ export function buildChildEnv(
     'MIGRATION_DB_USER',
     'DB_CA_PEM',
     'DB_CERT_SHA256',
+    'MIGRATION_PROXY_PORT',
     'MIGRATOR_DATABASE_URL',
   ]) {
     delete child[name];
   }
   // sslmode=disable is deliberate and safe here: the only peer is the in-container loopback proxy.
-  child.DATABASE_URL = `postgresql://${encodeURIComponent(config.user)}:${encodeURIComponent(config.password)}@127.0.0.1:${proxyPort}/${encodeURIComponent(config.database)}?sslmode=disable`;
+  const loopbackUrl = `postgresql://${encodeURIComponent(config.user)}:${encodeURIComponent(config.password)}@127.0.0.1:${proxyPort}/${encodeURIComponent(config.database)}?sslmode=disable`;
+  child.DATABASE_URL = loopbackUrl;
+  // The ops scripts (provision-user, reset-password, revoke-access) read MIGRATOR_DATABASE_URL. Any value inherited from
+  // the caller was deleted above; the only value the command can see is the same authenticated loopback proxy URL.
+  child.MIGRATOR_DATABASE_URL = loopbackUrl;
   child.DOTENV_CONFIG_PATH = '/nonexistent'; // never let a stray .env choose the database
   return child;
 }
@@ -124,6 +147,7 @@ async function main(): Promise<number> {
   );
   const proxy = await startPgTlsProxy({
     ...upstream,
+    ...(config.proxyPort !== undefined ? { listenPort: config.proxyPort } : {}),
     onEvent: (event) => {
       if (event.startsWith('rejected:')) console.error(`proxy ${event}`);
     },
