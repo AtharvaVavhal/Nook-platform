@@ -1,17 +1,25 @@
 // Authenticated-TLS PostgreSQL proxy for the migration job.
 //
-// Why it exists: the Prisma migration engine cannot verify a self-signed or hostname-mismatched PostgreSQL certificate
-// with any connection option (tested: `sslaccept=strict` rejects even the exact certificate; `sslmode=require` and
-// `verify-full` connect WITHOUT verifying). This proxy lets `prisma migrate deploy` keep working unchanged while the
-// real network hop is authenticated TLS:
+// Why it exists: the Prisma migration engine cannot verify a PostgreSQL certificate issued by a private CA (or a
+// self-signed one) with any connection option (tested: `sslaccept=strict` rejects even the exact certificate;
+// `sslmode=require` and `verify-full` connect WITHOUT verifying). This proxy lets `prisma migrate deploy` keep working
+// unchanged while the real network hop is authenticated TLS:
 //
 //   prisma (plaintext, 127.0.0.1 only, same container)  ->  this proxy  ->  TLS-authenticated  ->  PostgreSQL
 //
 // Every upstream connection must (1) get "S" in answer to a PostgreSQL SSLRequest, (2) complete a TLS handshake whose
-// certificate chains to the pinned CA with `rejectUnauthorized: true` (expired certificates fail), and (3) present a
-// leaf certificate whose SHA-256 fingerprint equals the pin. Anything else closes the connection; there is no
-// plaintext or unauthenticated fallback. The hostname check is replaced by the fingerprint pin (the template
-// certificate is CN=localhost and cannot match a Railway private hostname).
+// certificate chain verifies against the pinned CA with `rejectUnauthorized: true` (expired certificates fail), and
+// (3) present a leaf certificate whose SHA-256 fingerprint equals the pin. The chain check and the pin are two separate
+// checks: either one failing closes the connection. There is no plaintext or unauthenticated fallback.
+//
+// What the two inputs are (Railway PostgreSQL template): the server presents a LEAF certificate (CN=localhost, with the
+// service's private hostname among its subject alternative names) issued by a self-signed ROOT CA (CN=root-ca).
+//   - the pinned CA (DB_CA_PEM)   is the ROOT CA certificate, the last certificate the server presents. The leaf is not
+//                                 self-signed, so it is refused as a trust anchor;
+//   - the pin (DB_CERT_SHA256)    is the SHA-256 fingerprint of the LEAF certificate, the first one presented.
+// If a server instead presents one self-signed certificate, that certificate is both the CA and the leaf.
+// Hostname verification is deliberately replaced by the fingerprint pin here (the connection target is fixed by the
+// operator, and the pin identifies the exact server certificate), so the certificate's names are not consulted.
 import net from 'node:net';
 import { timingSafeEqual } from 'node:crypto';
 import tls from 'node:tls';
@@ -42,7 +50,12 @@ export class ProxyError extends Error {
 export interface UpstreamOptions {
   upstreamHost: string;
   upstreamPort: number;
-  /** PEM of the pinned CA (for a self-signed server certificate: the certificate itself). */
+  /**
+   * PEM of the CA certificate that the server certificate must chain to. With Railway's PostgreSQL template that is the
+   * self-signed root CA (the last certificate the server presents), NOT the server (leaf) certificate; a leaf that is
+   * not self-signed is refused as its own trust anchor. For a server with a single self-signed certificate, it is that
+   * certificate.
+   */
   caPem: string;
   /** SHA-256 fingerprint of the expected leaf certificate, hex with or without colons. */
   pinSha256: string;
