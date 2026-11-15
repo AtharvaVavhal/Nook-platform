@@ -7,7 +7,7 @@ deployment** (nothing here has touched production infrastructure). Section 6 is 
 
 | Part                 | Host                   | Example                                         |
 | -------------------- | ---------------------- | ----------------------------------------------- |
-| Web app (Vite build) | Vercel                 | `https://trynook.in`                            |
+| Web app (Vite build) | Vercel                 | `https://app.trynook.in`                        |
 | API (NestJS)         | Railway, custom domain | `https://api.trynook.in` (API prefix `/api/v1`) |
 
 Both hosts are under one registrable domain (`trynook.in`), so they are **same-site**. That is what lets the
@@ -32,7 +32,7 @@ No `vercel.json` rewrites or proxy are used: the browser talks to the API direct
    (`SameSite=Strict`), and is refused by the `Origin` check.
 
 Why the token goes in the body and not in a readable cookie: a cookie set by `api.trynook.in` is invisible to
-JavaScript on `trynook.in` unless it is given a shared `Domain`, which would also expose the **session** cookie to every
+JavaScript on `app.trynook.in` unless it is given a shared `Domain`, which would also expose the **session** cookie to every
 subdomain. Option A avoids that.
 
 The CSRF cookie is `HttpOnly` as well (it was readable before). The web app never reads it.
@@ -41,13 +41,13 @@ The CSRF cookie is `HttpOnly` as well (it was readable before). The web app neve
 
 ### API (Railway service variables)
 
-| Variable           | Value                | Notes                                                                                                                                                                                                                                         |
-| ------------------ | -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `APP_ENV`          | `production`         | Turns on `Secure` cookies and the HTTPS-origin check.                                                                                                                                                                                         |
-| `WEB_ORIGIN`       | `https://trynook.in` | **Exact** origin of the web app: scheme + host (+ port), no path, no trailing slash. Used for CORS and the `Origin` guard. If the web app is served from `www.` or an `app.` host, put that exact host here. Only this one origin is allowed. |
-| `TRUST_PROXY_HOPS` | `1`                  | Mandatory in production (the API refuses to start without it). See section 5.                                                                                                                                                                 |
-| `DATABASE_URL`     | the runtime-role URL | Never the migrator or superuser role.                                                                                                                                                                                                         |
-| `PORT`             | provided by Railway  |                                                                                                                                                                                                                                               |
+| Variable           | Value                    | Notes                                                                                                                                                                                                                                      |
+| ------------------ | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `APP_ENV`          | `production`             | Turns on `Secure` cookies and the HTTPS-origin check.                                                                                                                                                                                      |
+| `WEB_ORIGIN`       | `https://app.trynook.in` | **Exact** origin of the web app: scheme + host (+ port), no path, no trailing slash. Used for CORS and the `Origin` guard. If the web app is ever served from a different host, put that exact host here. Only this one origin is allowed. |
+| `TRUST_PROXY_HOPS` | `1`                      | Mandatory in production (the API refuses to start without it). See section 5.                                                                                                                                                              |
+| `DATABASE_URL`     | the runtime-role URL     | Never the migrator or superuser role.                                                                                                                                                                                                      |
+| `PORT`             | provided by Railway      |                                                                                                                                                                                                                                            |
 
 ### Web (Vercel project environment variable, Production)
 
@@ -66,7 +66,7 @@ headers (not even the allowed origin echoed back). Responses vary by `Origin`.
 
 ## 4. DNS and TLS (to do outside the repository)
 
-- `trynook.in` -> Vercel (project domain). `api.trynook.in` -> Railway (custom domain on the API service, `CNAME` as
+- `app.trynook.in` -> Vercel (project domain). `api.trynook.in` -> Railway (custom domain on the API service, `CNAME` as
   Railway instructs). Both certificates are issued by the platforms.
 - The cookies are `Secure`, so the API must be reached over HTTPS only. TLS ends at Railway's edge and the process sees
   plain HTTP; `Secure` is set by configuration (`APP_ENV=production`), not by looking at the request, so this works
