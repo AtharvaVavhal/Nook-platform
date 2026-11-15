@@ -37,6 +37,12 @@ if [ "$count" -lt 1 ]; then
 fi
 leaf="$work/c1.pem"
 ca="$work/c${count}.pem"
+# any certificates between the leaf and the CA are intermediates: they are needed to verify the chain, not to pin it
+: > "$work/intermediates.pem"
+i=2
+while [ "$i" -lt "$count" ]; do cat "$work/c${i}.pem" >> "$work/intermediates.pem"; i=$((i + 1)); done
+untrusted=""
+[ -s "$work/intermediates.pem" ] && untrusted="-untrusted $work/intermediates.pem"   # openssl rejects an empty -untrusted file
 
 proto="$(grep -E "^New, TLSv|Protocol +:" "$work/handshake.txt" | head -2 | tr '\n' ' ')"
 echo "chain: ${count} certificate(s) presented; ${proto:-negotiated protocol not reported}"
@@ -59,13 +65,13 @@ else
 fi
 describe "$ca"
 echo
-if openssl verify -CAfile "$ca" "$leaf" >/dev/null 2>&1; then
+if openssl verify -CAfile "$ca" $untrusted "$leaf" >/dev/null 2>&1; then
   echo "check: the leaf verifies against the CA certificate (OK)"
 else
   echo "check: the leaf does NOT verify against that CA certificate; do not use these values" >&2
   exit 4
 fi
-if [ "$count" -ge 2 ] && openssl verify -CAfile "$leaf" "$leaf" >/dev/null 2>&1; then
+if [ "$count" -ge 2 ] && openssl verify -CAfile "$leaf" $untrusted "$leaf" >/dev/null 2>&1; then
   :
 elif [ "$count" -ge 2 ]; then
   echo "note : the leaf cannot be its own trust anchor (it is not self-signed): DB_CA_PEM must be the CA above, not the leaf"

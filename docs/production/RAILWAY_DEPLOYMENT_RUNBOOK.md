@@ -110,8 +110,10 @@ Apply it with `deploy-kit/require_tls.sh`, inside the database container:
 
 - `sh require_tls.sh` saves the current file once as `pg_hba.conf.pre-nook-tls`, inserts the rule in the position above,
   reloads, then proves the change (the rule is active and ordered correctly, `pg_hba_file_rules` shows no errors, and
-  the server reports a configuration load after the change). It is idempotent, refuses to start if
-  `pg_hba_file_rules` already reports errors, and restores the saved file by itself if validation fails.
+  the server reports a configuration load after the change). It writes the file atomically, is idempotent, refuses to start if
+  `pg_hba_file_rules` already reports errors or if `pg_hba.conf` uses `include` directives (then add the rule by hand
+  before every rule that admits a non-loopback address and confirm it with `--check`), and restores the saved file by
+  itself if the write, the reload or the validation fails.
 - `sh require_tls.sh --check` changes nothing and exits 0 only when the rule is active and correctly placed.
 - `sh require_tls.sh --rollback` restores the saved file and reloads.
 
