@@ -5,7 +5,8 @@
 #
 # Required variables
 #   BACKUP_DB_HOST BACKUP_DB_PORT(5432) BACKUP_DB_NAME BACKUP_DB_USER BACKUP_DB_PASSWORD   the read-only nook_backup role
-#   DB_CA_PEM                       pinned database CA (public); libpq verifies it with sslmode=verify-ca
+#   DB_CA_PEM                       PEM of the database's ROOT CA certificate (public; with Railway's PostgreSQL template the
+#                                   self-signed root-ca, not the server/leaf certificate); libpq verifies it with sslmode=verify-ca
 #   AGE_RECIPIENTS                  one or more age PUBLIC keys, whitespace separated (the private keys stay offline)
 #   S3_BUCKET  S3_PREFIX(daily)     AWS_REGION(ap-south-1) AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY   write-only uploader
 # Optional
