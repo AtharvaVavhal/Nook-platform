@@ -1,0 +1,42 @@
+network mode: none; server: postgres (PostgreSQL) 17.11
+migrations applied: 24
+tables: 32
+=== BASELINE (expect SUMMARY|violations|0)
+SUMMARY|violations|0|
+baseline exit=0
+=== INJECTED DEVIATIONS (function used: assignment_replacement_applied())
+DETECTED  runtime DELETE on payments
+DETECTED  runtime lacks UPDATE on invoices
+DETECTED  runtime lacks SELECT on payments
+DETECTED  runtime UPDATE on audit_events
+DETECTED  runtime column-level UPDATE on append-only transfers
+DETECTED  runtime TRUNCATE on beds
+DETECTED  runtime TRIGGER on residents
+DETECTED  runtime UPDATE on the view
+DETECTED  read-only role INSERT on residents
+DETECTED  read-only role column-level UPDATE
+DETECTED  read-only role CREATE on schema
+DETECTED  default privileges exist
+DETECTED  PUBLIC holds TEMP on the database
+DETECTED  PUBLIC USAGE on schema
+DETECTED  runtime CREATE on schema
+DETECTED  a sequence exists
+DETECTED  function ACL grants EXECUTE to runtime
+DETECTED  runtime owns a table
+DETECTED  runtime role gains CREATEDB
+DETECTED  table owner is not the migrator
+DETECTED  database owner changed
+DETECTED  expected table missing
+DETECTED  runtime CREATE on database
+DETECTED  function EXECUTE revoked from PUBLIC (differs from default)
+DETECTED  runtime role is a member of another role
+DETECTED  read-only role is a member of another role
+DETECTED  an extra schema exists
+DETECTED  enum type owned by someone else
+DETECTED  runtime role cannot connect
+DETECTED  read-only role has TEMP on the database
+DETECTED  runtime SELECT on a table the CI matrix does not know (extra relation)
+=== detected: 31  missed/errors: 0
+=== BASELINE AGAIN after all reverts (expect 0 violations)
+SUMMARY|violations|0|
+container removed:        0 remaining

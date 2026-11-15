@@ -269,6 +269,7 @@ test('SENTRY_DSN and SENTRY_ENVIRONMENT are validated, optional, and never echoe
     APP_ENV: 'production',
     WEB_ORIGIN: 'https://app.example.com',
     TRUST_PROXY_HOPS: '1',
+    DATABASE_URL: 'postgresql://app:pw@db.example.com:5432/nook?sslmode=verify-full',
     SENTRY_DSN: DSN,
   });
   assert.equal(config.sentryDsn, DSN);

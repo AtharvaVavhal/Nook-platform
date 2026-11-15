@@ -33,7 +33,8 @@
     "suite-lock",
     "transfer.preview",
     "stay-occupancy",
-    "assignment-reconciliation"
+    "assignment-reconciliation",
+    "pg-tls-proxy"
   ],
   "initial-migration": ["database-migration"],
   "full": [

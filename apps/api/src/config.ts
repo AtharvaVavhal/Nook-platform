@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+
 export interface RuntimeConfig {
   readonly appEnv: 'development' | 'test' | 'production';
   readonly port: number;
@@ -91,8 +93,85 @@ export function parsePort(raw: string | undefined): number {
   return port;
 }
 
-export function parseDatabaseUrl(raw: string | undefined): string | undefined {
-  if (raw === undefined || raw.trim() === '') return undefined;
+/** Hosts that never leave the machine; a plaintext hop to them is not a network connection. */
+const LOOPBACK_HOSTS = new Set(['localhost', '127.0.0.1', '[::1]']);
+
+/**
+ * Production database connections must be authenticated TLS. This fails closed: anything that could silently end
+ * up unencrypted or unauthenticated is refused at start-up. Messages name the parameter, never a value.
+ *
+ * Accepted: `sslmode=verify-full`, or `sslmode=verify-ca` together with `uselibpqcompat=true` and a readable
+ * `sslrootcert` PEM file (the pinned CA). The node-postgres driver treats `require`, `prefer` and (without
+ * `uselibpqcompat=true`) `verify-ca` as `verify-full`, and `uselibpqcompat=true&sslmode=require` as "encrypt but do
+ * not authenticate", so only the two explicit modes are allowed and `require` is refused to avoid depending on that.
+ * Refused: no `sslmode` (the driver then connects in plaintext), `disable`, `allow`, `prefer`, `require`,
+ * `no-verify`, repeated or `ssl`/`sslaccept` parameters, and an unreadable or non-PEM CA file.
+ * Loopback hosts are exempt (CI runs the API against a local database).
+ */
+const checkedDatabaseUrls = new Set<string>();
+export function assertAuthenticatedDatabaseTls(
+  raw: string,
+  readFile: (path: string) => string = (path) => readFileSync(path, 'utf8'),
+): void {
+  if (checkedDatabaseUrls.has(raw)) return;
+  const url = new URL(raw);
+  if (LOOPBACK_HOSTS.has(url.hostname.toLowerCase())) {
+    checkedDatabaseUrls.add(raw);
+    return;
+  }
+  const params = url.searchParams;
+  for (const name of ['sslmode', 'sslrootcert', 'uselibpqcompat']) {
+    if (params.getAll(name).length > 1) {
+      throw new Error(`DATABASE_URL must not repeat the ${name} parameter.`);
+    }
+  }
+  if (params.has('ssl') || params.has('sslaccept')) {
+    throw new Error('DATABASE_URL must not contain the ssl or sslaccept parameters in production.');
+  }
+  const mode = params.get('sslmode');
+  if (mode !== 'verify-ca' && mode !== 'verify-full') {
+    throw new Error(
+      'DATABASE_URL must set sslmode=verify-ca or sslmode=verify-full in production (plaintext and unauthenticated TLS are refused).',
+    );
+  }
+  const caPath = params.get('sslrootcert');
+  if (mode === 'verify-ca') {
+    if (params.get('uselibpqcompat') !== 'true') {
+      throw new Error(
+        'DATABASE_URL with sslmode=verify-ca must also set uselibpqcompat=true so the pinned CA is verified.',
+      );
+    }
+    if (!caPath) {
+      throw new Error(
+        'DATABASE_URL with sslmode=verify-ca must set sslrootcert to the pinned CA file.',
+      );
+    }
+  }
+  if (caPath) {
+    let pem: string;
+    try {
+      pem = readFile(caPath);
+    } catch {
+      throw new Error(
+        'The CA file named by the DATABASE_URL sslrootcert parameter cannot be read.',
+      );
+    }
+    if (!/-----BEGIN CERTIFICATE-----[\s\S]+-----END CERTIFICATE-----/.test(pem)) {
+      throw new Error(
+        'The CA file named by the DATABASE_URL sslrootcert parameter is not a PEM certificate.',
+      );
+    }
+  }
+  checkedDatabaseUrls.add(raw);
+}
+
+export function parseDatabaseUrl(raw: string | undefined, appEnv?: string): string | undefined {
+  if (raw === undefined || raw.trim() === '') {
+    if (appEnv === 'production') {
+      throw new Error('DATABASE_URL must be set in production.');
+    }
+    return undefined;
+  }
   let parsed: URL;
   try {
     parsed = new URL(raw);
@@ -102,6 +181,7 @@ export function parseDatabaseUrl(raw: string | undefined): string | undefined {
   if (parsed.protocol !== 'postgres:' && parsed.protocol !== 'postgresql:') {
     throw new Error('DATABASE_URL must use the postgres:// or postgresql:// scheme.');
   }
+  if (appEnv === 'production') assertAuthenticatedDatabaseTls(raw);
   // Validate without rewriting operator-supplied startup options or URL encoding.
   return raw;
 }
@@ -130,7 +210,7 @@ export function loadRuntimeConfig(env: NodeJS.ProcessEnv = process.env): Runtime
   if (rawEnv === 'production' && webOrigin.startsWith('http://')) {
     throw new Error('WEB_ORIGIN must use HTTPS in production.');
   }
-  const databaseUrl = parseDatabaseUrl(env.DATABASE_URL);
+  const databaseUrl = parseDatabaseUrl(env.DATABASE_URL, rawEnv);
   const sentryDsn = parseSentryDsn(env.SENTRY_DSN);
   return {
     appEnv: rawEnv as RuntimeConfig['appEnv'],

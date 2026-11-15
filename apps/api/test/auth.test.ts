@@ -247,10 +247,13 @@ test('production login cookies are host-only, HttpOnly, secure and strict (sessi
     APP_ENV: process.env.APP_ENV,
     WEB_ORIGIN: process.env.WEB_ORIGIN,
     TRUST_PROXY_HOPS: process.env.TRUST_PROXY_HOPS,
+    DATABASE_URL: process.env.DATABASE_URL,
   };
   process.env.APP_ENV = 'production';
   process.env.WEB_ORIGIN = 'https://app.example.com';
   process.env.TRUST_PROXY_HOPS = '1';
+  // Production now requires an authenticated-TLS database URL; this test is about cookies, not the database.
+  process.env.DATABASE_URL = 'postgresql://app:pw@db.example.com:5432/nook?sslmode=verify-full';
   const cookies: Array<{ name: string; value: string; options: Record<string, unknown> }> = [];
   const controller = new AuthController(
     {
@@ -297,5 +300,7 @@ test('production login cookies are host-only, HttpOnly, secure and strict (sessi
     else process.env.APP_ENV = saved.APP_ENV;
     if (saved.WEB_ORIGIN === undefined) delete process.env.WEB_ORIGIN;
     else process.env.WEB_ORIGIN = saved.WEB_ORIGIN;
+    if (saved.DATABASE_URL === undefined) delete process.env.DATABASE_URL;
+    else process.env.DATABASE_URL = saved.DATABASE_URL;
   }
 });
