@@ -31,10 +31,13 @@ const CLIENT_BUILDERS = [
  *  - invoice-scheduler.integration.test.ts runs the billing job for one organization (`--org`) it created.
  *  - account-security.integration.test.ts runs the operator scripts with the verified environment.
  *  - restore-drill.test.ts runs a shell script against fake, unreachable hosts and touches no database.
+ *  - pg-tls-proxy.test.ts runs the `openssl` CLI to generate throwaway certificates (no key material is committed)
+ *    and talks only to in-process fake servers on loopback; it never reaches a database.
  */
 const CHILD_PROCESS_USERS = [
   'integration/account-security.integration.test.ts',
   'integration/invoice-scheduler.integration.test.ts',
+  'pg-tls-proxy.test.ts',
   'restore-drill.test.ts',
 ];
 
@@ -42,10 +45,14 @@ const CHILD_PROCESS_USERS = [
  * Files that name a credential variable straight from the environment instead of through the guarded helpers.
  *  - account-security.integration.test.ts hands the already-verified migrator URL to the operator scripts it
  *    runs as child processes.
+ *  - auth.test.ts sets a dummy remote DATABASE_URL (never connected: the controller is built from stubs) for the
+ *    duration of the production-cookie test, because production configuration now refuses to load without an
+ *    authenticated-TLS database URL (config.ts), and restores the previous value afterwards.
  *  - di.test.ts is a unit test that DELETES DATABASE_URL for its duration so that no database is configured
  *    (the health route must answer 503), then restores it. It can only remove a connection, never create one.
  */
 const DIRECT_CREDENTIAL_READERS = [
+  'auth.test.ts',
   'di.test.ts',
   'integration/account-security.integration.test.ts',
 ];

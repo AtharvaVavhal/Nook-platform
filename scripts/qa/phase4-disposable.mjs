@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { createHash, randomBytes, randomUUID } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
 import { readFileSync, readdirSync, lstatSync, writeFileSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { isAbsolute, relative, resolve, sep } from 'node:path';
 import pg from 'pg';
 import { deployFoundation } from '../ci/g6a-migration.js';
 import { verifyMigrationFiles } from '../ci/g6b-migration.js';
@@ -13,6 +13,41 @@ import { DATABASE_MARKER } from '../../apps/api/test/integration/helpers/guard.t
 const root = resolve(import.meta.dirname, '../..');
 const profile = process.argv[2];
 const mode = process.argv[3] ?? 'regression';
+// Opt-in diagnostics for investigating a failure. They only change what this QA runner does against its own throwaway
+// Docker database; none of them can reach another database, because the runner never reads .env or a database URL.
+//   NOOK_TIGHTEN=1        also drop UPDATE on payments, payment_reversals, invoice_adjustments and payment_idempotency_keys
+//                         (the production grant policy in docs/production/deploy-kit/grants.sql)
+//   NOOK_ONLY=<name>      run one entry of the `full` list in scripts/ci/test-files.json; the evidence file is marked PARTIAL
+//   NOOK_RAW_OUT=<path>   save the unfiltered test output (not committed evidence); absolute path outside the repository
+const tighten = process.env.NOOK_TIGHTEN === '1';
+const only = process.env.NOOK_ONLY ?? '';
+const rawOut = process.env.NOOK_RAW_OUT ?? '';
+assert.ok(
+  process.env.NOOK_TIGHTEN === undefined || ['0', '1'].includes(process.env.NOOK_TIGHTEN),
+  'NOOK_TIGHTEN must be 0 or 1',
+);
+assert.ok(
+  process.env.APP_ENV !== 'production' && process.env.NODE_ENV !== 'production',
+  'The QA runner refuses to run in a production environment',
+);
+if (only || rawOut)
+  assert.ok(
+    profile === 'full' && mode === 'regression',
+    'NOOK_ONLY and NOOK_RAW_OUT apply only to the full regression run',
+  );
+if (only)
+  assert.ok(
+    JSON.parse(readFileSync(resolve(root, 'scripts/ci/test-files.json'))).full.includes(only),
+    'NOOK_ONLY must name an entry of the full test list',
+  );
+if (rawOut) {
+  assert.ok(isAbsolute(rawOut), 'NOOK_RAW_OUT must be an absolute path');
+  assert.ok(
+    (relative(root, rawOut) === '..' || relative(root, rawOut).startsWith(`..${sep}`)) &&
+      !isAbsolute(relative(root, rawOut)),
+    'NOOK_RAW_OUT must be outside the repository so raw output is never committed',
+  );
+}
 assert.ok(
   [
     'regression',
@@ -390,23 +425,63 @@ try {
     )
   ).rows) {
     assert.match(tablename, /^[a-z_]+$/);
-    const appendOnly = [
-      'audit_events',
-      'invoice_voids',
-      'correction_command_receipts',
-      'transfers',
-      'transfer_command_receipts',
-      'stay_assignment_replacements',
-      'transfer_finance_reviews',
-      'transfer_finance_resolutions',
-      'correction_finance_links',
-    ].includes(tablename);
+    const appendOnly =
+      [
+        'audit_events',
+        'invoice_voids',
+        'correction_command_receipts',
+        'transfers',
+        'transfer_command_receipts',
+        'stay_assignment_replacements',
+        'transfer_finance_reviews',
+        'transfer_finance_resolutions',
+        'correction_finance_links',
+      ].includes(tablename) ||
+      (tighten &&
+        [
+          'payments',
+          'payment_reversals',
+          'invoice_adjustments',
+          'payment_idempotency_keys',
+        ].includes(tablename));
     await owner.query(
       `GRANT SELECT, INSERT${appendOnly ? '' : ', UPDATE'} ON ${tablename} TO nook_ci_full_runtime`,
     );
   }
   if (profile !== 'initial-migration')
     await owner.query('GRANT SELECT ON effective_stay_assignments TO nook_ci_full_runtime');
+  if (tighten) {
+    // Prove the tightened policy before any test runs: no UPDATE/DELETE/TRUNCATE for the runtime role, and the
+    // unconditional immutability triggers are present and enabled on all four financial tables.
+    const financial = [
+      'payments',
+      'payment_reversals',
+      'invoice_adjustments',
+      'payment_idempotency_keys',
+    ];
+    for (const table of financial) {
+      for (const privilege of ['UPDATE', 'DELETE', 'TRUNCATE']) {
+        const { rows } = await owner.query('SELECT has_table_privilege($1, $2, $3) AS granted', [
+          'nook_ci_full_runtime',
+          `public.${table}`,
+          privilege,
+        ]);
+        assert.equal(rows[0].granted, false, `runtime role must not hold ${privilege} on ${table}`);
+      }
+      const { rows: triggers } = await owner.query(
+        `SELECT t.tgname FROM pg_trigger t WHERE t.tgrelid = $1::regclass AND NOT t.tgisinternal AND t.tgenabled = 'O'
+           AND (t.tgtype & 16) = 16 AND (t.tgtype & 8) = 8 AND (t.tgtype & 2) = 2 AND (t.tgtype & 1) = 1`,
+        [`public.${table}`],
+      );
+      assert.ok(
+        triggers.some((r) => r.tgname.endsWith('_immutable')),
+        `${table} has no enabled BEFORE UPDATE OR DELETE row trigger`,
+      );
+    }
+    console.log(
+      'TIGHTENED GRANTS VERIFIED: runtime role has no UPDATE/DELETE/TRUNCATE on 4 financial tables; 4 immutability triggers enabled',
+    );
+  }
   await owner.query(
     'GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO nook_ci_full_runtime',
   );
@@ -443,8 +518,9 @@ try {
           ...JSON.parse(readFileSync(resolve(root, 'scripts/ci/test-files.json')))
             .full.filter(
               (n) =>
-                mode !== 'nonfinancial-regression' ||
-                !['corrections', 'finance', 'invoice-scheduler'].includes(n),
+                (!only || n === only) &&
+                (mode !== 'nonfinancial-regression' ||
+                  !['corrections', 'finance', 'invoice-scheduler'].includes(n)),
             )
             .map((n) => `apps/api/test/integration/${n}.integration.test.ts`),
         ];
@@ -508,6 +584,8 @@ try {
         });
   if (profile === 'full' && mode !== 'transfer-browser') {
     const lines = `${result.stdout ?? ''}\n${result.stderr ?? ''}`.split('\n');
+    if (rawOut)
+      writeFileSync(rawOut, `${result.stdout ?? ''}\n${result.stderr ?? ''}`, { mode: 0o600 });
     const safe = lines.filter((line) =>
       /^(ℹ (tests|suites|pass|fail|cancelled|skipped|todo|duration_ms) |✖ |# A6 |﹣ |\{"probe":)/.test(
         line,
@@ -515,7 +593,7 @@ try {
     );
     writeFileSync(
       resolve(root, 'docs/phase-4/evidence', `integration-${runId}.txt`),
-      `${safe.join('\n')}\nExit: ${result.status ?? 'terminated'}\n`,
+      `${safe.join('\n')}\n${only ? `PARTIAL RUN: only ${only}; not a full-suite result\n` : ''}${tighten ? 'Grants: tightened (no UPDATE on the four financial tables)\n' : ''}Exit: ${result.status ?? 'terminated'}\n`,
     );
     console.log(safe.join('\n'));
   }
@@ -626,14 +704,21 @@ try {
     ]);
     assert.equal(label, runId, 'Refusing cleanup of a resource not created by this run');
     docker(['stop', '--time', '5', name]);
-    const remaining = docker([
-      'ps',
-      '-a',
-      '--filter',
-      `label=nook.phase4.run=${runId}`,
-      '--format',
-      '{{.ID}}',
-    ]);
+    // `docker stop` returns once the container has stopped; the daemon then removes it asynchronously (--rm), so it can
+    // still be listed for a moment. Wait for the removal, but never accept a container that is still there afterwards.
+    let remaining = '';
+    for (let attempt = 0; attempt < 60; attempt++) {
+      remaining = docker([
+        'ps',
+        '-a',
+        '--filter',
+        `label=nook.phase4.run=${runId}`,
+        '--format',
+        '{{.ID}}',
+      ]);
+      if (remaining === '') break;
+      await new Promise((resolveWait) => setTimeout(resolveWait, 500));
+    }
     assert.equal(remaining, '', 'Disposable container cleanup incomplete');
     console.log(
       `CLEANUP VERIFIED ${runId}: exact container removed; tmpfs discarded; no volumes created or deleted.`,
