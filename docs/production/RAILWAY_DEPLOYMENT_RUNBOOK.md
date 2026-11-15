@@ -177,10 +177,19 @@ Status of the backup tooling (this is **not** a backup or restore readiness clai
 - `backup.sh` was rehearsed locally against PostgreSQL 17.11 with stand-ins for `age` and `aws`: `verify-ca` with the root
   CA, the role and version checks, the checksum and manifest logic, and a restore of the dump into a scratch database
   (data, tables and immutability triggers intact).
-- **Not verified:** the layered image build (it installs `age` and `awscli` from Debian 13, where both packages exist; the
-  build could not be completed in the review environment because the container could not reach the package mirrors, so run
-  `docker build` yourself and check the tools before relying on it), real `age` encryption, the S3 upload, and a restore
-  of a real encrypted backup from off-platform storage. Do not store real data until a real backup and restore succeed.
+- **Verified locally on linux/arm64:** the exact committed `backup/Dockerfile` built successfully on `linux/arm64`
+  (Docker Desktop, 2026-11-15). The build took about 67 minutes because the package mirrors were very slow (roughly 7 to 15
+  kB/s; they were reachable, not blocked). Inside the image: `pg_dump`, `psql` and `pg_restore` 17.11, `age` 1.2.1 and
+  AWS CLI 2.23.6; the script in the image is identical to the committed `backup.sh`. The container started safely: run
+  through the base image's entrypoint with no network, missing configuration or a forbidden role (`nook_app`,
+  `nook_migrator`, `postgres`) makes the script exit non-zero with a short message and without echoing secrets (checked
+  with canary values), and it contacts neither a database nor AWS. An offline `age` encryption and decryption roundtrip
+  with a throwaway key passed (the ciphertext contains no plaintext and a different key is refused). The local image was
+  not pushed to any registry and not deployed.
+- **Not verified:** the `linux/amd64` build (the build Railway runs); a real encrypted backup of a real database; the S3
+  upload; a restore of a real backup from off-platform storage; and key custody (who holds the `age` private keys, and
+  their recovery). No Railway or AWS infrastructure validation has taken place. Do not store real data until a real backup
+  and a restore from it have succeeded.
 
 ## 7. Determining `TRUST_PROXY_HOPS`
 
