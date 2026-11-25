@@ -112,6 +112,9 @@ model Organization {
   paymentReversals         PaymentReversal[]
   invoiceAdjustments       InvoiceAdjustment[]
   invoiceVoids             InvoiceVoid[]
+  residentAccounts         ResidentAccount[]
+  residentOtpChallenges    ResidentOtpChallenge[]
+  residentSessions         ResidentSession[]
   @@map("organizations")
 }
 model User {
@@ -140,6 +143,7 @@ model User {
   paymentReversals        PaymentReversal[]
   invoiceAdjustments      InvoiceAdjustment[]
   invoiceVoids            InvoiceVoid[]
+  residentAccountsCreated ResidentAccount[]
   @@map("users")
 }
 model Membership {
@@ -297,6 +301,7 @@ model Resident {
   checkOuts                  CheckOut[]
   invoices                   Invoice[]
   payments                   Payment[]
+  portalAccounts             ResidentAccount[]
   @@unique([id, organizationId])
   @@map("residents")
 }
@@ -942,4 +947,87 @@ model TransferFinanceResolution {
   @@unique([organizationId, actorUserId, idempotencyKey])
   @@unique([reviewId, organizationId])
   @@map("transfer_finance_resolutions")
+}
+
+enum ResidentAccountStatus {
+  ACTIVE
+  SUSPENDED
+  REVOKED
+}
+
+/// Portal access for exactly one Resident, provisioned by an owner. The phone number is the sign-in identifier (E.164, +91 only).
+/// Partial unique indexes (migration 20261119100000): one non-revoked account per resident and per phone number.
+model ResidentAccount {
+  id              String                @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  organizationId  String                @map("organization_id") @db.Uuid
+  residentId      String                @map("resident_id") @db.Uuid
+  phoneE164       String                @map("phone_e164")
+  status          ResidentAccountStatus @default(ACTIVE)
+  createdByUserId String?               @map("created_by_user_id") @db.Uuid
+  createdAt       DateTime              @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime              @updatedAt @map("updated_at") @db.Timestamptz(6)
+  suspendedAt     DateTime?             @map("suspended_at") @db.Timestamptz(6)
+  revokedAt       DateTime?             @map("revoked_at") @db.Timestamptz(6)
+  lastLoginAt     DateTime?             @map("last_login_at") @db.Timestamptz(6)
+  organization    Organization          @relation(fields: [organizationId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  resident        Resident              @relation(fields: [residentId, organizationId], references: [id, organizationId], onDelete: Restrict, onUpdate: Restrict)
+  createdBy       User?                 @relation(fields: [createdByUserId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  challenges      ResidentOtpChallenge[]
+  sessions        ResidentSession[]
+  @@unique([id, organizationId])
+  @@index([organizationId, residentId])
+  @@map("resident_accounts")
+}
+
+/// One sign-in code. Only a keyed hash of the code is stored. At most one live (unconsumed, not invalidated) challenge per account.
+model ResidentOtpChallenge {
+  id                String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  organizationId    String          @map("organization_id") @db.Uuid
+  accountId         String          @map("resident_account_id") @db.Uuid
+  codeHash          String          @map("code_hash")
+  attempts          Int             @default(0)
+  maxAttempts       Int             @default(5) @map("max_attempts")
+  expiresAt         DateTime        @map("expires_at") @db.Timestamptz(6)
+  consumedAt        DateTime?       @map("consumed_at") @db.Timestamptz(6)
+  invalidatedAt     DateTime?       @map("invalidated_at") @db.Timestamptz(6)
+  invalidatedReason String?         @map("invalidated_reason")
+  deliveryStatus    String          @default("PENDING") @map("delivery_status")
+  createdAt         DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
+  organization      Organization    @relation(fields: [organizationId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  account           ResidentAccount @relation(fields: [accountId, organizationId], references: [id, organizationId], onDelete: Restrict, onUpdate: Restrict)
+  @@index([accountId, createdAt])
+  @@index([expiresAt])
+  @@map("resident_otp_challenges")
+}
+
+/// Resident sessions live in their own table: a resident token can never be looked up as an owner session or the reverse.
+model ResidentSession {
+  id                String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tokenHash         String          @unique @map("token_hash")
+  organizationId    String          @map("organization_id") @db.Uuid
+  accountId         String          @map("resident_account_id") @db.Uuid
+  createdAt         DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
+  lastSeenAt        DateTime        @map("last_seen_at") @db.Timestamptz(6)
+  idleExpiresAt     DateTime        @map("idle_expires_at") @db.Timestamptz(6)
+  absoluteExpiresAt DateTime        @map("absolute_expires_at") @db.Timestamptz(6)
+  revokedAt         DateTime?       @map("revoked_at") @db.Timestamptz(6)
+  revokedReason     String?         @map("revoked_reason")
+  organization      Organization    @relation(fields: [organizationId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  account           ResidentAccount @relation(fields: [accountId, organizationId], references: [id, organizationId], onDelete: Restrict, onUpdate: Restrict)
+  @@index([accountId])
+  @@index([idleExpiresAt])
+  @@map("resident_sessions")
+}
+
+/// Rate-limit state for resident sign-in, kept apart from the owner `login_throttles` table. Keys are keyed hashes, never a phone number or address.
+model ResidentAuthThrottle {
+  scope           String
+  keyHash         String    @map("key_hash")
+  failures        Int       @default(0)
+  windowStartedAt DateTime  @default(now()) @map("window_started_at") @db.Timestamptz(6)
+  lockedUntil     DateTime? @map("locked_until") @db.Timestamptz(6)
+  updatedAt       DateTime  @default(now()) @map("updated_at") @db.Timestamptz(6)
+  @@id([scope, keyHash])
+  @@index([lockedUntil])
+  @@map("resident_auth_throttles")
 }

@@ -4,6 +4,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { randomUUID } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
+import { readFileSync } from 'node:fs';
 import { withMigratorClient } from '../../apps/api/test/integration/helpers/db.js';
 import { PrismaService } from '../../apps/api/src/database/prisma.service.js';
 import { CheckInService } from '../../apps/api/src/checkin/checkin.service.js';
@@ -17,6 +18,9 @@ import { Module } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import request from 'supertest';
 
+// The approved migration manifest is the single source of truth for how many migrations a fully migrated database holds. CI pins its
+// length exactly (scripts/ci/check.js, g6b-migration.js), so this test follows it instead of carrying its own number, which went stale.
+const approvedMigrationCount = (JSON.parse(readFileSync('scripts/ci/g6b-migrations.json','utf8')) as {migrations:unknown[]}).migrations.length;
 const ids = {org:randomUUID(), actor:randomUUID(), property:randomUUID(),floor:randomUUID(),room:randomUUID()};
 const prisma = new PrismaService();
 const sql = <T=any>(query:string,params:unknown[]=[]) => withMigratorClient(async c => (await c.query(query,params)).rows as T[]);
@@ -48,7 +52,7 @@ function backfill(dryRun:boolean) {
 }
 
 test('all migrations and legacy occupancy; dry/live/repeated backfill preserves legacy behavior',async()=>{
-  assert.equal((await sql('SELECT count(*)::int n FROM _prisma_migrations WHERE finished_at IS NOT NULL AND rolled_back_at IS NULL'))[0].n,23);
+  assert.equal((await sql('SELECT count(*)::int n FROM _prisma_migrations WHERE finished_at IS NOT NULL AND rolled_back_at IS NULL'))[0].n,approvedMigrationCount);
   const occupancy=new CheckInService(prisma), booking=new BookingService(prisma);
   const before=await occupancy.occupancy(ids.org);
   assert.deepEqual(before.occupiedBedIds,[stays[0]!.bed]);
@@ -75,7 +79,7 @@ test('transfer-specific receipts enforce identity, idempotency uniqueness and im
     await assert.rejects(sql(command,[receipt]),(e:any)=>e.code==='23001');
   }
   assert.equal((await sql('SELECT request_check FROM transfer_command_receipts WHERE id=$1',[receipt]))[0].request_check,'a'.repeat(64));
-  console.log(JSON.stringify({probe:'transfer-receipts',migrationCount:23,identitySqlState:'23503',duplicateSqlState:'23505',updateDeleteSqlState:'23001',unchanged:true}));
+  console.log(JSON.stringify({probe:'transfer-receipts',migrationCount:approvedMigrationCount,identitySqlState:'23503',duplicateSqlState:'23505',updateDeleteSqlState:'23001',unchanged:true}));
 });
 
 test('HTTP execution stays 503 and changes zero database rows on same-key retry',async()=>{

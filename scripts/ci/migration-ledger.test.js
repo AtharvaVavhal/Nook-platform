@@ -39,8 +39,8 @@ export const goodMetadata = () => ({
   primaryKey: ['id'],
 });
 
-test('all 24 exact successes, independent of query return order', () =>
-  assert.equal(verifyFreshLedger(goodRows().reverse(), expected).size, 24));
+test('all 25 exact successes, independent of query return order', () =>
+  assert.equal(verifyFreshLedger(goodRows().reverse(), expected).size, 25));
 for (const [name, mutate] of [
   ['missing', (r) => r.pop()],
   ['unexpected', (r) => (r[0].migration_name = 'unknown')],

@@ -9,7 +9,14 @@ export default [
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {
-    files: ['apps/api/**/*.ts', 'prisma.config.ts', 'scripts/**/*.js', 'scripts/qa/*.{mjs,ts}', 'apps/web/vite.config.ts'],
+    files: [
+      'apps/api/**/*.ts',
+      'prisma.config.ts',
+      'scripts/**/*.js',
+      'scripts/qa/*.{mjs,ts}',
+      'apps/web/vite.config.ts',
+      'apps/resident/vite.config.ts',
+    ],
     languageOptions: { globals: globals.node },
   },
   {
@@ -18,7 +25,7 @@ export default [
     languageOptions: { globals: { ...globals.node, ...globals.browser } },
   },
   {
-    files: ['apps/web/**/*.{ts,tsx}'],
+    files: ['apps/web/**/*.{ts,tsx}', 'apps/resident/**/*.{ts,tsx}'],
     languageOptions: { globals: globals.browser },
   },
   {

@@ -1,0 +1,58 @@
+name: Resident frontend
+
+# Isolated from the main CI workflow so the resident portal can evolve without touching the API contract checks.
+# Needs no secrets, no database and no network service; it deploys nothing.
+on:
+  pull_request:
+    paths:
+      - 'apps/resident/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'eslint.config.js'
+      - '.github/workflows/resident-frontend.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'apps/resident/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'eslint.config.js'
+      - '.github/workflows/resident-frontend.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: resident-frontend-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  resident-frontend:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24.22.1
+          cache: npm
+      - name: Install locked dependencies
+        run: npm ci
+      - name: Resident TypeScript
+        run: npm run typecheck --workspace @nook/resident
+      - name: Resident ESLint
+        run: npx --no-install eslint apps/resident
+      - name: Resident Prettier
+        run: npx --no-install prettier --check apps/resident
+      - name: Resident unit tests
+        run: npm run test --workspace @nook/resident
+      - name: Resident production build (public placeholder API address, no secrets)
+        env:
+          VITE_API_BASE: https://api.example.invalid/api/v1
+        run: npm run build --workspace @nook/resident
+      - name: Resident build output tests (no source maps in production output)
+        run: node --import tsx --test apps/resident/tests/build-output.test.ts

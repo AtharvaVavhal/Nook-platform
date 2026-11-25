@@ -97,6 +97,10 @@
     {
       "name": "20261111130000_assignment_replacement_chain_guards",
       "checksum": "e969606be1f87a2b4b1e86f67c9e280112f2b6be7bf58c5efa65993e040b1b0f"
+    },
+    {
+      "name": "20261119100000_resident_otp_auth",
+      "checksum": "ac87503d6b047c428a44dfbbdcb30f5f52048c21848a8a3aa26b1015a3531558"
     }
   ]
 }

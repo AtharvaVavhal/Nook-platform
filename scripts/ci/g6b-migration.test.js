@@ -66,7 +66,7 @@ function migrationCopy(t) {
   copyFileSync(join(source, 'migration_lock.toml'), join(directory, 'migration_lock.toml'));
   return directory;
 }
-test('approved source migration set has exactly 24 lexically ordered hashes', () =>
+test('approved source migration set has exactly 25 lexically ordered hashes', () =>
   verifyMigrationFiles(source, manifest));
 for (const [name, mutate] of [
   ['count', (m) => m.migrations.pop()],
@@ -810,7 +810,7 @@ test('runtime grants keep invoice_voids append-only and preserve every other tab
   assert.match(queries[0], /tablename <> '_prisma_migrations'/);
   const tableGrants = queries.slice(1, -1);
   assert.equal(tableGrants.length, FULL_APPLICATION_TABLES.length + 1);
-  assert.equal(tableGrants.length, 33);
+  assert.equal(tableGrants.length, 37);
   assert.ok(
     tableGrants.includes(
       'GRANT SELECT, INSERT ON TABLE public."invoice_voids" TO "synthetic_runtime"',

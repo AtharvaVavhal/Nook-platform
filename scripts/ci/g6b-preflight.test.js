@@ -78,6 +78,7 @@ const ENUM_COLUMNS = [
   ['transfers', 'type', 'TransferType', null],
   ['transfers', 'actor_role', 'MembershipRole', null],
   ['stay_assignment_replacements', 'field_key', 'CorrectionFieldKey', null],
+  ['resident_accounts', 'status', 'ResidentAccountStatus', 'ACTIVE'],
 ];
 const enumColumn = (type, label, nullable = false) => ({
   type: `"${type}"`,

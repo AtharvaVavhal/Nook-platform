@@ -34,7 +34,13 @@
     "transfer.preview",
     "stay-occupancy",
     "assignment-reconciliation",
-    "pg-tls-proxy"
+    "pg-tls-proxy",
+    "resident-auth.rules",
+    "resident-self.rules",
+    "resident-retention.rules",
+    "resident-sms.rules",
+    "resident-sms-preview.rules",
+    "resident-cache-control"
   ],
   "initial-migration": ["database-migration"],
   "full": [
@@ -52,7 +58,9 @@
     "invoice-scheduler",
     "lifecycle",
     "observability",
+    "resident-auth",
     "resident-enquiry",
+    "resident-self",
     "uuid-params"
   ],
   "manual": ["restore-drill"]

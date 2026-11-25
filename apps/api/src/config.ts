@@ -17,6 +17,15 @@ export interface RuntimeConfig {
   /** Sentry environment tag (SENTRY_ENVIRONMENT), default: APP_ENV. */
   readonly sentryEnvironment: string;
   readonly databaseUrl?: string;
+  /**
+   * Origin of the resident portal (RESIDENT_WEB_ORIGIN). Absent means the resident portal is switched off: every resident
+   * sign-in route answers 404. When present it must differ from WEB_ORIGIN and RESIDENT_OTP_SECRET must be set.
+   */
+  readonly residentWebOrigin?: string;
+  /** Key for the one-way OTP and rate-limit hashes (RESIDENT_OTP_SECRET, at least 32 characters). A secret: never log it. */
+  readonly residentOtpSecret?: string;
+  /** SMS provider adapter (RESIDENT_SMS_PROVIDER): `disabled` (default) or `mock`. `mock` is refused in production. */
+  readonly residentSmsProvider?: 'disabled' | 'mock';
 }
 
 const LOG_LEVEL_NAMES = ['debug', 'info', 'warn', 'error'] as const;
@@ -186,6 +195,49 @@ export function parseDatabaseUrl(raw: string | undefined, appEnv?: string): stri
   return raw;
 }
 
+export const RESIDENT_OTP_SECRET_MIN_LENGTH = 32;
+const RESIDENT_SMS_PROVIDERS = ['disabled', 'mock'] as const;
+
+/** Resident-portal settings, validated. Nothing here enables resident access on its own: RESIDENT_WEB_ORIGIN must be set. */
+export function parseResidentConfig(
+  env: NodeJS.ProcessEnv,
+  appEnv: string,
+  webOrigin: string,
+): Pick<RuntimeConfig, 'residentWebOrigin' | 'residentOtpSecret' | 'residentSmsProvider'> {
+  const rawProvider = (env.RESIDENT_SMS_PROVIDER ?? 'disabled').trim().toLowerCase();
+  if (!(RESIDENT_SMS_PROVIDERS as readonly string[]).includes(rawProvider)) {
+    throw new Error(`RESIDENT_SMS_PROVIDER must be one of: ${RESIDENT_SMS_PROVIDERS.join(', ')}.`);
+  }
+  if (rawProvider === 'mock' && appEnv === 'production') {
+    throw new Error('RESIDENT_SMS_PROVIDER=mock is refused in production.');
+  }
+  const residentSmsProvider = rawProvider as 'disabled' | 'mock';
+  const raw = env.RESIDENT_WEB_ORIGIN;
+  if (raw === undefined || raw.trim() === '') return { residentSmsProvider };
+  let origin: URL;
+  try {
+    origin = new URL(raw);
+  } catch {
+    throw new Error('RESIDENT_WEB_ORIGIN must be an absolute origin URL.');
+  }
+  if (!['http:', 'https:'].includes(origin.protocol) || origin.origin !== raw.replace(/\/$/, '')) {
+    throw new Error('RESIDENT_WEB_ORIGIN must be a valid HTTP(S) origin without a path.');
+  }
+  if (appEnv === 'production' && origin.protocol !== 'https:') {
+    throw new Error('RESIDENT_WEB_ORIGIN must use HTTPS in production.');
+  }
+  if (origin.origin === webOrigin) {
+    throw new Error('RESIDENT_WEB_ORIGIN must differ from WEB_ORIGIN.');
+  }
+  const secret = env.RESIDENT_OTP_SECRET;
+  if (typeof secret !== 'string' || secret.length < RESIDENT_OTP_SECRET_MIN_LENGTH) {
+    throw new Error(
+      `RESIDENT_OTP_SECRET must be set (at least ${RESIDENT_OTP_SECRET_MIN_LENGTH} characters) when RESIDENT_WEB_ORIGIN is set.`,
+    );
+  }
+  return { residentWebOrigin: origin.origin, residentOtpSecret: secret, residentSmsProvider };
+}
+
 export function loadRuntimeConfig(env: NodeJS.ProcessEnv = process.env): RuntimeConfig {
   const rawEnv = env.APP_ENV;
   if (rawEnv === undefined) {
@@ -222,5 +274,6 @@ export function loadRuntimeConfig(env: NodeJS.ProcessEnv = process.env): Runtime
     ...(sentryDsn === undefined ? {} : { sentryDsn }),
     sentryEnvironment: parseSentryEnvironment(env.SENTRY_ENVIRONMENT, rawEnv),
     ...(databaseUrl === undefined ? {} : { databaseUrl }),
+    ...parseResidentConfig(env, rawEnv, origin.origin),
   };
 }

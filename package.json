@@ -11,7 +11,8 @@
   },
   "workspaces": [
     "apps/api",
-    "apps/web"
+    "apps/web",
+    "apps/resident"
   ],
   "scripts": {
     "dev:api": "npm run dev --workspace @nook/api",
@@ -42,6 +43,7 @@
     "typescript-eslint": "8.46.2"
   },
   "overrides": {
-    "multer": "2.5.0"
+    "multer": "2.5.0",
+    "effect": "3.22.1"
   }
 }

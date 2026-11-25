@@ -16,14 +16,16 @@ const names = [
   'invoice-scheduler',
   'lifecycle',
   'observability',
+  'resident-auth',
   'resident-enquiry',
+  'resident-self',
   'uuid-params',
 ];
 const FILE_COUNT = names.length;
-assert.equal(FILE_COUNT, 16, 'the full integration list is pinned at sixteen files');
+assert.equal(FILE_COUNT, 18, 'the full integration list is pinned at eighteen files');
 const line = (event, data) => `NOOK_TEST_${event} ${JSON.stringify(data)}\n`;
 const result = { tests: 2, passed: 1, failed: 0, skipped: 1, todo: 0, cancelled: 0 };
-test('sixteen independent files retain order and counts', () => {
+test('eighteen independent files retain order and counts', () => {
   const output = [];
   const p = createTestProtocol((s) => output.push(s));
   for (const name of names) {

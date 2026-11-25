@@ -6,6 +6,7 @@ Run: python3 -m unittest scripts/test_phase_scope.py
 Each test builds a scratch copy of the files the guard reads, applies ONE violation and
 asserts that exactly the intended rule fails. The clean copy must pass. No network, no database.
 """
+import hashlib
 import json
 import shutil
 import subprocess
@@ -27,11 +28,36 @@ FILES = [
     "docs/MILESTONE_0_SCOPE.md", "docs/nook-phase-2/PHASE_2_DECISION_LOG.md",
     "docs/nook-phase-3/PHASE_3_SCOPE_REGISTER.md",
     "docs/phase-4/IMPLEMENTATION_AUTHORIZATION.md",
+    "docs/resident-portal/PHASE_1_RESIDENT_AUTH_SCOPE.md",
+    "docs/resident-portal/PHASE_2_RESIDENT_APIS.md",
     "scripts/secret_scan.py", "scripts/verify_m0_scope.py", "scripts/verify_phase_scope.py",
     "scripts/phase_scope.json", "scripts/test_phase_scope.py", "scripts/db_guard.py",
     "package.json", "apps/api/package.json", "apps/web/package.json",
 ]
 APPROVED_REF = "docs/nook-phase-2/PHASE_2_DECISION_LOG.md"
+
+# Governance states are tested in isolated temporary copies only. The real manifest is never written by these tests:
+# its hash is taken at import and checked again when the module finishes (tearDownModule), pass or fail.
+REAL_MANIFEST = REAL / "scripts/phase_scope.json"
+REAL_MANIFEST_SHA256 = hashlib.sha256(REAL_MANIFEST.read_bytes()).hexdigest()
+PENDING_STATUS = "pending-owner-signoff"
+# Obviously fake approval metadata, used ONLY inside a temporary fixture to build the approved state. It is not an approval.
+FIXTURE_APPROVER = "TEST FIXTURE ONLY - not an owner approval"
+FIXTURE_DATE = "2000-01-01"
+RESIDENT_SELF_ROUTES = {
+    "GET /api/v1/me",
+    "GET /api/v1/me/stay",
+    "GET /api/v1/me/rent-summary",
+    "GET /api/v1/me/invoices",
+    "GET /api/v1/me/invoices/:id",
+    "GET /api/v1/me/payments",
+    "GET /api/v1/me/receipts/:id",
+}
+
+
+def tearDownModule():
+    now = hashlib.sha256(REAL_MANIFEST.read_bytes()).hexdigest()
+    assert now == REAL_MANIFEST_SHA256, "the self-tests modified the real scripts/phase_scope.json"
 
 
 def git(root, *args):
@@ -49,12 +75,38 @@ class ScopeGuardTests(unittest.TestCase):
             dest = self.root / rel
             dest.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy(REAL / rel, dest)
+        self.addCleanup(self.tmp.cleanup)  # restored even when setUp or an assertion fails
+        # Baseline = the real manifest with any slice that is still pending owner sign-off APPROVED IN THIS TEMPORARY COPY ONLY,
+        # so that each test can apply ONE violation and see exactly one rule fail. Pending behaviour has its own tests below.
+        self.manifest(self.approve_pending_in_fixture)
         git(self.root, "init", "-q")
         git(self.root, "add", "-A")
         git(self.root, "commit", "-q", "-m", "base")
 
-    def tearDown(self):
-        self.tmp.cleanup()
+    @staticmethod
+    def approve_pending_in_fixture(data):
+        for sl in data["slices"].values():
+            if sl.get("status") != "approved":
+                sl.update(status="approved", approver=FIXTURE_APPROVER, date=FIXTURE_DATE)
+
+    def pend(self, with_metadata=False):
+        """Put slice 5.2 into the pending state inside the temporary fixture (the real manifest is untouched)."""
+        def mutate(d):
+            sl = d["slices"]["5.2"]
+            sl["status"] = PENDING_STATUS
+            sl["approver"] = FIXTURE_APPROVER if with_metadata else ""
+            sl["date"] = FIXTURE_DATE if with_metadata else ""
+        self.manifest(mutate)
+
+    def add_resident_self_routes(self):
+        """Copy the real resident self-service controller so the guard sees the real seven routes."""
+        src = REAL / "apps/api/src/resident-self/resident-self.controller.ts"
+        dest = self.root / "apps/api/src/resident-self/resident-self.controller.ts"
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy(src, dest)
+
+    def failures(self):
+        return {r.rule: r for r in self.results() if not r.ok}
 
     # helpers
     def results(self):
@@ -86,13 +138,42 @@ class ScopeGuardTests(unittest.TestCase):
         self.assertEqual(self.failed(), [], [r for r in self.results() if not r.ok])
 
     def test_real_repository_passes(self):
+        """Real tree: only an EXPECTED governance failure (slice 5.2 pending) or the local .env may fail, and nothing else."""
         bad = [r for r in guard.run_checks(REAL) if not r.ok]
-        # A developer's git-ignored local .env is normal. A clean checkout (CI) has none, and
-        # test_S1_env_file_present proves the rule, so only that one environment-dependent check is skipped.
+        # ENVIRONMENT-specific: a developer's git-ignored local .env is normal. A clean checkout (CI) has none, and
+        # test_S1_env_file_present proves the rule, so only that one environment-dependent check is set aside, and only
+        # when the file really is git-ignored.
         ignored = subprocess.run(["git", "-C", str(REAL), "check-ignore", "-q", ".env"]).returncode == 0
-        if ignored:
-            bad = [r for r in bad if r.name != "no real .env file"]
-        self.assertEqual(bad, [], bad)
+        env_failures = [r for r in bad if r.name == "no real .env file"]
+        if not ignored:
+            self.assertEqual(env_failures, [], "a .env that is not git-ignored is a real failure")
+        governance = [r for r in bad if r not in env_failures]
+        slice_52 = json.loads(REAL_MANIFEST.read_text())["slices"]["5.2"]
+        if slice_52["status"] == "approved":
+            self.assertEqual(governance, [], governance)
+        else:
+            # GOVERNANCE-expected: pending owner sign-off fails exactly the approval-dependent rules, for exactly that reason.
+            by_rule = {r.rule: r for r in governance}
+            self.assertEqual(sorted(by_rule), ["S11", "S8"], governance)
+            self.assertEqual(by_rule["S11"].detail, "slice 5.2: status is not 'approved'")
+            self.assertEqual(set(by_rule["S8"].detail.split(", ")), RESIDENT_SELF_ROUTES)
+
+    def test_real_slice_5_2_state_is_consistent_and_its_scope_is_exact(self):
+        """Read-only: no half-approved state, no invented approval, and the approved scope is exactly what was reviewed."""
+        data = json.loads(REAL_MANIFEST.read_text())
+        sl = data["slices"]["5.2"]
+        self.assertIn(sl["status"], ("approved", PENDING_STATUS))
+        if sl["status"] == PENDING_STATUS:
+            self.assertEqual((sl["approver"], sl["date"]), ("", ""), "pending means no approver and no date")
+        else:
+            self.assertTrue(sl["approver"].strip() and sl["date"].strip())
+            self.assertNotEqual(sl["approver"], FIXTURE_APPROVER, "fixture metadata must never reach the real manifest")
+            self.assertNotEqual(sl["date"], FIXTURE_DATE)
+        self.assertEqual(set(sl["routes"]), RESIDENT_SELF_ROUTES)
+        self.assertEqual(len(sl["routes"]), 7)
+        for key in ("models", "enums", "tables", "functions", "extensions", "allowsVocabulary", "allowsTypes"):
+            self.assertEqual(sl[key], [], key)
+        self.assertEqual(data["allowedIdentifiers"], ["_api_v1_me_rent"])
 
     # S1 retained Milestone 0 checks
     def test_S1_env_file_present(self):
@@ -203,12 +284,18 @@ class ScopeGuardTests(unittest.TestCase):
         self.assertOnly("S6")
 
     def test_S6_words_beyond_the_approved_slices_stay_forbidden(self):
-        # ledger, settlement, kyc, aadhaar, otp, sms and whatsapp are not declared by any slice
-        for word in ("ledger", "settlement", "kyc", "aadhaar", "otp", "sms", "whatsapp"):
+        # ledger, settlement, kyc, aadhaar and whatsapp are not declared by any slice (otp and sms are, by slice 5.1 only)
+        for word in ("ledger", "settlement", "kyc", "aadhaar", "whatsapp"):
             with self.subTest(word=word):
                 self.write("apps/api/src/" + word + ".util.ts", "export const a = 1;\n")
                 self.assertOnly("S6")
                 (self.root / "apps/api/src" / (word + ".util.ts")).unlink()
+
+    def test_S6_otp_and_sms_are_allowed_only_through_slice_5_1(self):
+        def drop(d):
+            d["slices"]["5.1"]["allowsVocabulary"] = [w for w in d["slices"]["5.1"]["allowsVocabulary"] if w not in ("otp", "sms")]
+        self.manifest(drop)
+        self.assertIn("S6", self.failed())
 
     def test_S6_approved_vocabulary_is_allowed_only_through_a_slice(self):
         def drop(d):
@@ -242,6 +329,83 @@ class ScopeGuardTests(unittest.TestCase):
         self.write("apps/api/src/extra.controller.ts",
                    "@Controller('extras')\nexport class E {\n  @Get('list')\n  l() {}\n}\n")
         self.assertOnly("S8")
+
+    # S8 / S11 governance states of the resident self-service slice (5.2), each in an isolated temporary fixture
+    def test_S8_pending_slice_fails_approval_rules_only_for_the_approval_reason(self):
+        self.add_resident_self_routes()
+        self.pend()
+        failures = self.failures()
+        self.assertEqual(sorted(failures), ["S11", "S8"], "no unrelated rule may fail")
+        self.assertEqual(failures["S11"].detail, "slice 5.2: status is not 'approved'")
+        self.assertEqual(set(failures["S8"].detail.split(", ")), RESIDENT_SELF_ROUTES)
+        # the .env protection is not involved: it neither fails here nor is it weakened
+        self.assertFalse(any(r.name == "no real .env file" and not r.ok for r in self.results()))
+        # and the guard never approves anything by itself
+        self.assertEqual(json.loads((self.root / "scripts/phase_scope.json").read_text())["slices"]["5.2"]["status"], PENDING_STATUS)
+
+    def test_S11_pending_slice_stays_unapproved_even_with_metadata_filled_in(self):
+        self.add_resident_self_routes()
+        self.pend(with_metadata=True)  # approver and date present but status is not approved
+        failures = self.failures()
+        self.assertEqual(sorted(failures), ["S11", "S8"])
+        self.assertEqual(failures["S11"].detail, "slice 5.2: status is not 'approved'")
+
+    def test_S11_approved_slice_without_approver_or_date_fails(self):
+        for field in ("approver", "date"):
+            with self.subTest(field=field):
+                self.manifest(lambda d, f=field: d["slices"]["5.2"].update({f: ""}))
+                self.assertIn("S11", self.failed())
+                self.manifest(lambda d: self.approve_pending_in_fixture(d) or d["slices"]["5.2"].update(approver=FIXTURE_APPROVER, date=FIXTURE_DATE))
+
+    def test_S8_approved_fixture_allows_exactly_the_seven_resident_routes(self):
+        self.add_resident_self_routes()
+        self.assertEqual({r for r in guard.declared_routes(self.root) if "/me" in r}, RESIDENT_SELF_ROUTES)
+        self.assertEqual(self.failed(), [], [r for r in self.results() if not r.ok])
+
+    def test_S8_approved_fixture_still_rejects_routes_and_verbs_beyond_the_seven(self):
+        self.add_resident_self_routes()
+        self.write("apps/api/src/resident-self/extra.controller.ts", (
+            "@Controller('me')\nexport class Extra {\n"
+            "  @Get('rent-history')\n  a() {}\n"
+            "  @Post('payments')\n  b() {}\n"
+            "  @Put('stay')\n  c() {}\n"
+            "  @Patch()\n  d() {}\n"
+            "  @Delete('invoices/:id')\n  e() {}\n}\n"))
+        failures = self.failures()
+        self.assertEqual(sorted(failures), ["S8"])
+        self.assertEqual(set(failures["S8"].detail.split(", ")), {
+            "GET /api/v1/me/rent-history", "POST /api/v1/me/payments", "PUT /api/v1/me/stay",
+            "PATCH /api/v1/me", "DELETE /api/v1/me/invoices/:id"})
+
+    def test_S6_rent_exception_is_the_exact_route_token_and_nothing_broader(self):
+        self.add_resident_self_routes()
+        data = json.loads((self.root / "scripts/phase_scope.json").read_text())
+        self.assertEqual(data["slices"]["5.2"]["allowsVocabulary"], [], "no broad vocabulary exception")
+        self.assertEqual(data["allowedIdentifiers"], ["_api_v1_me_rent"])
+        self.assertEqual(self.failed(), [])
+        # remove the exact-token exception: the rent-summary route is rejected again
+        self.manifest(lambda d: d.update(allowedIdentifiers=[]))
+        self.assertOnly("S6")
+
+    def test_S6_rent_stays_forbidden_everywhere_else_while_the_exception_exists(self):
+        self.add_resident_self_routes()
+        self.manifest(lambda d: d["slices"]["5.2"]["routes"].append("GET /api/v1/rent"))
+        self.write("apps/api/src/rent.controller.ts", "@Controller('rent')\nexport class R {\n  @Get()\n  a() {}\n}\n")
+        failures = self.failures()
+        self.assertEqual(sorted(failures), ["S6"])  # the route is listed (S8 passes) but the vocabulary is still forbidden
+        self.assertIn("_api_v1_rent", failures["S6"].detail)
+        self.assertNotIn("_api_v1_me_rent", failures["S6"].detail)
+
+    def test_S8_S11_cli_pending_fails_nonzero_for_approval_and_approved_fixture_passes(self):
+        script = str(HERE / "verify_phase_scope.py")
+        self.add_resident_self_routes()
+        approved = subprocess.run([sys.executable, script, "--root", str(self.root)], capture_output=True, text=True)
+        self.assertEqual(approved.returncode, 0, approved.stdout)
+        self.pend()
+        pending = subprocess.run([sys.executable, script, "--root", str(self.root)], capture_output=True, text=True)
+        self.assertEqual(pending.returncode, 1)
+        failing = sorted(line.split("\t")[1] for line in pending.stdout.splitlines() if line.startswith("FAIL"))
+        self.assertEqual(failing, ["S11", "S8"])
 
     # S9 raw SQL
     def test_S9_raw_sql(self):
