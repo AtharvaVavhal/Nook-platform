@@ -137,6 +137,7 @@ export class ResidentAuthService {
       to: account.phoneE164,
       body: otpMessageBody(code, OTP_TTL_MS / 60000),
       reference: challengeId,
+      expiresAt: new Date(now.getTime() + OTP_TTL_MS),
     });
     if (delivery.status === 'SENT') {
       await this.prisma.db.residentOtpChallenge.update({

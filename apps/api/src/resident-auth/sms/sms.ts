@@ -9,6 +9,8 @@ export interface SmsMessage {
   readonly body: string;
   /** An opaque internal id (the challenge id) so a delivery can be traced without the text or the number. */
   readonly reference: string;
+  /** When the code stops working. Not secret; used only by the non-production preview mock to tell a presenter how long it lasts. */
+  readonly expiresAt?: Date;
 }
 
 export type SmsFailureKind = 'transient' | 'permanent' | 'timeout';

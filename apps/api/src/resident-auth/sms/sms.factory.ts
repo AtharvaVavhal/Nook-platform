@@ -1,4 +1,5 @@
 import type { RuntimeConfig } from '../../config.js';
+import { log } from '../../observability/json-logger.js';
 import { MockSmsProvider } from './mock-sms.provider.js';
 import { DisabledSmsProvider, type SmsProvider } from './sms.js';
 
@@ -14,7 +15,11 @@ export function createSmsProvider(
     if (config.appEnv === 'production') {
       throw new Error('The mock SMS provider cannot be used in production.');
     }
-    return new MockSmsProvider();
+    // Preview only: the one-time code is written to the API server log so an authorised presenter can read it there.
+    return new MockSmsProvider({
+      appEnv: config.appEnv,
+      previewLog: (line) => log.warn(line, { context: 'resident-mock-sms' }),
+    });
   }
   return new DisabledSmsProvider();
 }

@@ -38,7 +38,8 @@
     "resident-auth.rules",
     "resident-self.rules",
     "resident-retention.rules",
-    "resident-sms.rules"
+    "resident-sms.rules",
+    "resident-sms-preview.rules"
   ],
   "initial-migration": ["database-migration"],
   "full": [

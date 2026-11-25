@@ -47,7 +47,7 @@ export function requireOtpSecret(): string {
   return secret;
 }
 
-/** The message text. It is the only place the code leaves this process; it is never logged. */
+/** The message text. It is the only place the code leaves this process. It is never logged, except by the non-production preview mock (mock-sms.provider.ts). */
 export function otpMessageBody(code: string, ttlMinutes: number): string {
   return `Your Nook verification code is ${code}. It expires in ${ttlMinutes} minutes. Do not share it with anyone.`;
 }

@@ -137,3 +137,13 @@ The portal may be called production-ready only when ALL of these have evidence:
 7. Smoke tests 1 to 8 pass on production.
 8. Monitoring and alerts from section 8 are active.
 9. An independent review has signed off.
+
+## 14. Non-production preview: reading the mock one-time code
+
+Preview only. Real SMS is NOT implemented and this section never applies to production (the API refuses `RESIDENT_SMS_PROVIDER=mock` when `APP_ENV=production`).
+
+- Preview API settings: `APP_ENV=development` (the only non-production values the API accepts are `development` and `test`), `RESIDENT_SMS_PROVIDER=mock`.
+- When a code is requested for a provisioned account, the API writes ONE warning-level log line that starts with `PREVIEW-ONLY MOCK SMS (not delivered to any handset)` and contains the masked number (`+91******NNNN`), the expiry time (UTC) and the code (`otp=NNNNNN`).
+- A presenter with access to the preview API's logs (the hosting platform's log viewer) filters for `PREVIEW-ONLY MOCK SMS` and reads the newest line for the masked number. Codes are random per request, valid 5 minutes, and a new request replaces the previous code.
+- The code is never in an API response, a database row (only its hash), the browser, or this repository. Treat preview logs as sensitive and restrict who can read them.
+- `APP_ENV=development` also turns off the `Secure` cookie flag and the production-only start-up checks; use it only for a short-lived, non-production preview. Cookies are `SameSite=Strict`, so the portal and the API must share a registrable domain (or run on localhost).
