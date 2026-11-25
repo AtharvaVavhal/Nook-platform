@@ -29,10 +29,7 @@
     "docs/nook-phase-3/PHASE_3_SCOPE_REGISTER.md",
     "docs/phase-4/IMPLEMENTATION_AUTHORIZATION.md"
   ],
-  "scopeDocPhrases": [
-    "real resident data",
-    "production deployment"
-  ],
+  "scopeDocPhrases": ["real resident data", "production deployment"],
   "slices": {
     "2.2": {
       "status": "approved",
@@ -115,16 +112,9 @@
       "date": "2026-11-01",
       "ref": "docs/nook-phase-3/PHASE_3_SCOPE_REGISTER.md#slice-31-resident-management",
       "description": "Resident model and organization-scoped CRUD (commit c7118b5). Recorded retroactively.",
-      "models": [
-        "Resident"
-      ],
-      "enums": [
-        "ResidentStatus",
-        "DocumentVerificationStatus"
-      ],
-      "tables": [
-        "residents"
-      ],
+      "models": ["Resident"],
+      "enums": ["ResidentStatus", "DocumentVerificationStatus"],
+      "tables": ["residents"],
       "functions": [],
       "extensions": [],
       "routes": [
@@ -134,10 +124,7 @@
         "POST /api/v1/residents",
         "PUT /api/v1/residents/:id"
       ],
-      "allowsVocabulary": [
-        "resident",
-        "document"
-      ]
+      "allowsVocabulary": ["resident", "document"]
     },
     "3.2": {
       "status": "approved",
@@ -145,18 +132,9 @@
       "date": "2026-11-01",
       "ref": "docs/nook-phase-3/PHASE_3_SCOPE_REGISTER.md#slice-32-enquiry-and-lead-management",
       "description": "Enquiry and follow-up models, CRUD and conversion (commits 40c2b36 and the archive follow-up). Recorded retroactively.",
-      "models": [
-        "Enquiry",
-        "EnquiryFollowUp"
-      ],
-      "enums": [
-        "EnquiryStatus",
-        "EnquirySource"
-      ],
-      "tables": [
-        "enquiries",
-        "enquiry_follow_ups"
-      ],
+      "models": ["Enquiry", "EnquiryFollowUp"],
+      "enums": ["EnquiryStatus", "EnquirySource"],
+      "tables": ["enquiries", "enquiry_follow_ups"],
       "functions": [],
       "extensions": [],
       "routes": [
@@ -171,11 +149,7 @@
         "POST /api/v1/enquiries/:id/follow-ups",
         "PUT /api/v1/enquiries/:id"
       ],
-      "allowsVocabulary": [
-        "enquiry",
-        "stay",
-        "resident"
-      ]
+      "allowsVocabulary": ["enquiry", "stay", "resident"]
     },
     "3.3": {
       "status": "approved",
@@ -183,16 +157,9 @@
       "date": "2026-11-01",
       "ref": "docs/nook-phase-3/PHASE_3_SCOPE_REGISTER.md#slice-33-booking-and-reservation-management",
       "description": "Booking model, bed availability and CRUD (commit c01bb93). Recorded retroactively.",
-      "models": [
-        "Booking"
-      ],
-      "enums": [
-        "BookingStatus",
-        "PaymentStatus"
-      ],
-      "tables": [
-        "bookings"
-      ],
+      "models": ["Booking"],
+      "enums": ["BookingStatus", "PaymentStatus"],
+      "tables": ["bookings"],
       "functions": [],
       "extensions": [],
       "routes": [
@@ -204,11 +171,7 @@
         "POST /api/v1/bookings/:id/extend",
         "PUT /api/v1/bookings/:id"
       ],
-      "allowsVocabulary": [
-        "booking",
-        "price",
-        "payment"
-      ]
+      "allowsVocabulary": ["booking", "price", "payment"]
     },
     "3.4": {
       "status": "approved",
@@ -216,15 +179,9 @@
       "date": "2026-11-01",
       "ref": "docs/nook-phase-3/PHASE_3_SCOPE_REGISTER.md#slice-34-admission-and-bed-allocation",
       "description": "Admission model and CRUD (commit 7238b78). Recorded retroactively.",
-      "models": [
-        "Admission"
-      ],
-      "enums": [
-        "AdmissionStatus"
-      ],
-      "tables": [
-        "admissions"
-      ],
+      "models": ["Admission"],
+      "enums": ["AdmissionStatus"],
+      "tables": ["admissions"],
       "functions": [],
       "extensions": [],
       "routes": [
@@ -241,17 +198,9 @@
       "date": "2026-11-01",
       "ref": "docs/nook-phase-3/PHASE_3_SCOPE_REGISTER.md#slice-35-check-in-and-check-out-management",
       "description": "CheckIn and CheckOut models and CRUD (commit 7edcf70). Recorded retroactively.",
-      "models": [
-        "CheckIn",
-        "CheckOut"
-      ],
-      "enums": [
-        "CheckInStatus"
-      ],
-      "tables": [
-        "check_ins",
-        "check_outs"
-      ],
+      "models": ["CheckIn", "CheckOut"],
+      "enums": ["CheckInStatus"],
+      "tables": ["check_ins", "check_outs"],
       "functions": [],
       "extensions": [],
       "routes": [
@@ -277,10 +226,7 @@
         "InvoiceAdjustment",
         "LoginThrottle"
       ],
-      "enums": [
-        "InvoiceStatus",
-        "PaymentMethod"
-      ],
+      "enums": ["InvoiceStatus", "PaymentMethod"],
       "tables": [
         "invoices",
         "payments",
@@ -318,15 +264,8 @@
         "POST /api/v1/finance/payments/:id/reverse",
         "POST /api/v1/auth/password"
       ],
-      "allowsVocabulary": [
-        "amount",
-        "invoice",
-        "payment",
-        "receipt"
-      ],
-      "allowsTypes": [
-        "Decimal"
-      ]
+      "allowsVocabulary": ["amount", "invoice", "payment", "receipt"],
+      "allowsTypes": ["Decimal"]
     },
     "3.7": {
       "status": "approved",
@@ -334,24 +273,13 @@
       "date": "2026-11-02",
       "ref": "docs/nook-phase-3/PHASE_3_SCOPE_REGISTER.md#slice-37-finance-ledger-integrity",
       "description": "Payment receipt snapshots, the append-only invoice void record, and issued-invoice trigger hardening (Task 4F.2). Approved in session on 2026-11-02 from the 4F.2 migration design.",
-      "models": [
-        "InvoiceVoid"
-      ],
+      "models": ["InvoiceVoid"],
       "enums": [],
-      "tables": [
-        "invoice_voids"
-      ],
-      "functions": [
-        "finance_snapshot_payment",
-        "finance_check_void"
-      ],
+      "tables": ["invoice_voids"],
+      "functions": ["finance_snapshot_payment", "finance_check_void"],
       "extensions": [],
-      "routes": [
-        "POST /api/v1/finance/invoices/:id/void"
-      ],
-      "allowsVocabulary": [
-        "balance"
-      ]
+      "routes": ["POST /api/v1/finance/invoices/:id/void"],
+      "allowsVocabulary": ["balance"]
     },
     "3.8": {
       "status": "approved",
@@ -378,9 +306,7 @@
       "tables": [],
       "functions": [],
       "extensions": [],
-      "routes": [
-        "POST /api/v1/properties/:propertyId/rooms/bulk"
-      ]
+      "routes": ["POST /api/v1/properties/:propertyId/rooms/bulk"]
     },
     "3.10": {
       "status": "approved",
@@ -393,9 +319,7 @@
       "tables": [],
       "functions": [],
       "extensions": [],
-      "routes": [
-        "GET /api/v1/properties/:propertyId/dashboard"
-      ]
+      "routes": ["GET /api/v1/properties/:propertyId/dashboard"]
     },
     "4.1": {
       "status": "approved",
@@ -403,11 +327,7 @@
       "date": "2026-11-09",
       "ref": "docs/phase-4/IMPLEMENTATION_AUTHORIZATION.md#current-mission-authorization",
       "description": "Implementation/test scope only; not acceptance or financial-application authorization. Existing resident history and gated corrections.",
-      "models": [
-        "CorrectionProposal",
-        "CorrectionCommandReceipt",
-        "CorrectionFinanceLink"
-      ],
+      "models": ["CorrectionProposal", "CorrectionCommandReceipt", "CorrectionFinanceLink"],
       "enums": [
         "CorrectionTargetType",
         "CorrectionFieldKey",
@@ -417,11 +337,7 @@
         "CorrectionFinanceLinkKind",
         "CorrectionFinanceOutcome"
       ],
-      "tables": [
-        "correction_proposals",
-        "correction_command_receipts",
-        "correction_finance_links"
-      ],
+      "tables": ["correction_proposals", "correction_command_receipts", "correction_finance_links"],
       "functions": [
         "correction_proposals_guard",
         "correction_append_only",
@@ -461,11 +377,7 @@
         "TransferFinanceReview",
         "TransferFinanceResolution"
       ],
-      "enums": [
-        "StayAssignmentKind",
-        "StayAssignmentStatus",
-        "TransferType"
-      ],
+      "enums": ["StayAssignmentKind", "StayAssignmentStatus", "TransferType"],
       "tables": [
         "stay_assignments",
         "transfers",
@@ -483,9 +395,7 @@
         "transfer_finance_resolution_authority",
         "assignment_replacement_chain"
       ],
-      "extensions": [
-        "btree_gist"
-      ],
+      "extensions": ["btree_gist"],
       "routes": [
         "GET /api/v1/transfers/preview",
         "GET /api/v1/transfers/history",
@@ -495,15 +405,70 @@
       ],
       "allowsVocabulary": [],
       "allowsTypes": [],
-      "views": [
-        "effective_stay_assignments"
-      ]
+      "views": ["effective_stay_assignments"]
+    },
+    "5.1": {
+      "status": "approved",
+      "approver": "Repository user via explicit Resident Portal Phase 1 instruction",
+      "date": "2026-11-19",
+      "ref": "docs/resident-portal/PHASE_1_RESIDENT_AUTH_SCOPE.md#resident-authentication-foundation-scope",
+      "description": "Backend foundation for resident phone-OTP sign-in: owner-provisioned accounts, sessions, rate limits and a provider-independent SMS interface. Local and disposable-database testing only; no frontend, no real SMS provider, no production change.",
+      "models": [
+        "ResidentAccount",
+        "ResidentOtpChallenge",
+        "ResidentSession",
+        "ResidentAuthThrottle"
+      ],
+      "enums": ["ResidentAccountStatus"],
+      "tables": [
+        "resident_accounts",
+        "resident_otp_challenges",
+        "resident_sessions",
+        "resident_auth_throttles"
+      ],
+      "functions": ["resident_accounts_identity_immutable"],
+      "extensions": [],
+      "routes": [
+        "POST /api/v1/resident-accounts",
+        "GET /api/v1/resident-accounts",
+        "POST /api/v1/resident-accounts/:id/suspend",
+        "POST /api/v1/resident-accounts/:id/revoke",
+        "POST /api/v1/resident-accounts/:id/reactivate",
+        "POST /api/v1/resident-accounts/:id/phone",
+        "GET /api/v1/resident-auth/csrf",
+        "POST /api/v1/resident-auth/otp/request",
+        "POST /api/v1/resident-auth/otp/verify",
+        "POST /api/v1/resident-auth/logout",
+        "GET /api/v1/resident-auth/me"
+      ],
+      "allowsVocabulary": ["otp", "sms"],
+      "allowsTypes": []
+    },
+    "5.2": {
+      "status": "pending-owner-signoff",
+      "approver": "",
+      "date": "",
+      "ref": "docs/resident-portal/PHASE_2_RESIDENT_APIS.md#resident-self-service-api-scope",
+      "description": "Read-only resident self-service APIs (profile, stay, rent summary, invoices, payments, receipts) built on the Phase 1 resident session and the existing stay and finance services. Access is limited to an ACTIVE resident with an ACTIVE account; a staff status change to INACTIVE or ARCHIVED ends portal access in the same transaction. No schema change, no write route, no frontend. The word rent is permitted only as the exact route token _api_v1_me_rent (allowedIdentifiers), not as general vocabulary. IMPLEMENTATION COMPLETE, AWAITING FINAL OWNER SIGN-OFF: until the owner supplies approver and date and sets status to approved, the guard treats these routes as unapproved.",
+      "models": [],
+      "enums": [],
+      "tables": [],
+      "functions": [],
+      "extensions": [],
+      "routes": [
+        "GET /api/v1/me",
+        "GET /api/v1/me/stay",
+        "GET /api/v1/me/rent-summary",
+        "GET /api/v1/me/invoices",
+        "GET /api/v1/me/invoices/:id",
+        "GET /api/v1/me/payments",
+        "GET /api/v1/me/receipts/:id"
+      ],
+      "allowsVocabulary": [],
+      "allowsTypes": []
     }
   },
-  "baselineRoutes": [
-    "GET /api/v1/health",
-    "GET /api/v1/health/database"
-  ],
+  "baselineRoutes": ["GET /api/v1/health", "GET /api/v1/health/database"],
   "dependencies": {
     "package.json": {
       "@eslint/js": "9.39.1",
@@ -624,7 +589,7 @@
     "sms",
     "whatsapp"
   ],
-  "allowedIdentifiers": [],
+  "allowedIdentifiers": ["_api_v1_me_rent"],
   "forbiddenDependencyPatterns": [
     "razorpay",
     "stripe",
@@ -657,7 +622,8 @@
     "apps/api/src/transfer/transfer.execution.ts",
     "apps/api/src/common/assignment-reconciliation.ts",
     "apps/api/src/transfer/transfer-finance.service.ts",
-    "apps/api/src/common/assignment-adoption.ts"
+    "apps/api/src/common/assignment-adoption.ts",
+    "apps/api/src/resident-auth/resident-throttle.service.ts"
   ],
   "migrationSlices": {
     "20261101093228_add_resident_model": "3.1",
@@ -680,6 +646,7 @@
     "20261110110000_p4_3_transfers": "4.3",
     "20261110120000_transfer_command_receipts": "4.3",
     "20261108120000_p4_2_corrections": "4.1",
-    "20261110100000_p4_2_correction_guards": "4.1"
+    "20261110100000_p4_2_correction_guards": "4.1",
+    "20261119100000_resident_otp_auth": "5.1"
   }
 }

@@ -16,10 +16,13 @@ import {
   RequirePermission,
   ROUTE_ACCESS_KEY,
   SelfService,
+  RESIDENT_PERMISSIONS,
   permissionsForRole,
+  residentHasPermission,
   roleHasPermission,
   type RouteAccess,
 } from '../src/auth/permissions.js';
+import { ResidentSessionService } from '../src/resident-auth/resident-session.service.js';
 import { SessionService } from '../src/auth/session.service.js';
 import { APP_GUARD } from '@nestjs/core';
 import { concretePath, listRoutes, type RouteInfo } from './route-inventory.js';
@@ -73,6 +76,7 @@ let app: INestApplication;
 let server: ReturnType<typeof request>;
 let routes: RouteInfo[];
 let current: Partial<AuthenticatedContext> | null = null;
+let residentCurrent: Record<string, string> | null = null;
 let authenticateCalls = 0;
 const saved = { APP_ENV: process.env.APP_ENV, WEB_ORIGIN: process.env.WEB_ORIGIN };
 
@@ -104,6 +108,12 @@ test.before(async () => {
         }
       : null;
   };
+  // The resident session lookups are replaced the same way (a resident principal can be presented without a database).
+  const residentSessions = app.get(ResidentSessionService, { strict: false }) as any;
+  const asResident = async (secret: string) =>
+    secret && residentCurrent ? { ...residentCurrent } : null;
+  residentSessions.authenticate = asResident;
+  residentSessions.identify = asResident;
   await app.init();
   await app.listen(0);
   server = request(`http://localhost:${(app.getHttpServer() as any).address().port}`);
@@ -136,7 +146,24 @@ test('every route declares its access, and the declarations are exactly the expe
     'GET /auth/csrf',
     'GET /health',
     'GET /health/database',
+    'GET /resident-auth/csrf',
     'POST /auth/login',
+    'POST /resident-auth/otp/request',
+    'POST /resident-auth/otp/verify',
+  ]);
+  const residentRoutes = routes
+    .filter((r) => accessOf(r)?.kind === 'resident')
+    .map((r) => `${r.method} ${r.path}`);
+  assert.deepEqual(residentRoutes.sort(), [
+    'GET /me',
+    'GET /me/invoices',
+    'GET /me/invoices/:id',
+    'GET /me/payments',
+    'GET /me/receipts/:id',
+    'GET /me/rent-summary',
+    'GET /me/stay',
+    'GET /resident-auth/me',
+    'POST /resident-auth/logout',
   ]);
   const selfRoutes = routes
     .filter((r) => accessOf(r)?.kind === 'self')
@@ -338,4 +365,71 @@ test('a route that declares nothing is refused (fail closed); class-level and me
   } finally {
     await probe.close();
   }
+});
+
+test('resident permission table: a resident holds no staff permission, and only the listed resident permissions', () => {
+  for (const permission of PERMISSIONS)
+    assert.equal(residentHasPermission(permission), false, `resident must not hold ${permission}`);
+  for (const bogus of ['', 'constructor', '__proto__', 'OWNER', 'resident.read', 'finance.read'])
+    assert.equal(residentHasPermission(bogus), false, bogus);
+  assert.deepEqual([...RESIDENT_PERMISSIONS], ['resident.self.read']);
+  assert.equal(residentHasPermission('resident.self.read'), true);
+  const overlap = (PERMISSIONS as readonly string[]).filter((p) =>
+    (RESIDENT_PERMISSIONS as readonly string[]).includes(p),
+  );
+  assert.deepEqual(overlap, [], 'resident and staff permission names never overlap');
+});
+
+test('a resident session presented to EVERY staff route (permission-protected or self-service) is refused with 403, never served', async () => {
+  current = null;
+  residentCurrent = {
+    sessionId: 'rs',
+    accountId: 'ra',
+    residentId: 'rr',
+    organizationId: 'o',
+    organizationName: 'O',
+    displayName: 'R',
+  };
+  const wrong: string[] = [];
+  let checked = 0;
+  for (const route of routes.filter((r) =>
+    ['permission', 'self'].includes(accessOf(r)?.kind ?? ''),
+  )) {
+    const path = `/api/v1${concretePath(route.path)}`;
+    const verb = route.method.toLowerCase() as 'get' | 'post' | 'put' | 'patch' | 'delete';
+    const r = (server as any)[verb](path).set('Cookie', 'nook_resident_session=x');
+    const res = await (verb === 'get' || verb === 'delete' ? r : r.send({}));
+    checked++;
+    if (!(res.status === 403 && res.body?.code === 'INSUFFICIENT_ROLE'))
+      wrong.push(`${route.method} ${route.path} -> ${res.status} ${res.body?.code ?? ''}`);
+  }
+  residentCurrent = null;
+  assert.deepEqual(wrong, []);
+  assert.ok(checked >= 80, `checked ${checked} staff routes`);
+});
+
+test('resident-only routes accept a resident session and refuse a staff session (separate audiences)', async () => {
+  // Without a resident cookie, even a valid staff session gets nothing here.
+  current = { role: 'OWNER' };
+  residentCurrent = null;
+  const asStaff = await (server as any)
+    .get('/api/v1/resident-auth/me')
+    .set('Cookie', 'nook_session=x');
+  assert.equal(asStaff.status, 401);
+  assert.equal(asStaff.body?.code, 'UNAUTHENTICATED');
+  // A resident session passes the access guard; the portal is switched off (no RESIDENT_WEB_ORIGIN), so the route then answers 404.
+  current = null;
+  residentCurrent = {
+    sessionId: 'rs',
+    accountId: 'ra',
+    residentId: 'rr',
+    organizationId: 'o',
+    organizationName: 'O',
+    displayName: 'R',
+  };
+  const asResident = await (server as any)
+    .get('/api/v1/resident-auth/me')
+    .set('Cookie', 'nook_resident_session=x');
+  assert.equal(asResident.status, 404);
+  residentCurrent = null;
 });
