@@ -445,9 +445,9 @@
       "allowsTypes": []
     },
     "5.2": {
-      "status": "pending-owner-signoff",
-      "approver": "",
-      "date": "",
+      "status": "approved",
+      "approver": "Atharva Vavhal",
+      "date": "2026-11-25",
       "ref": "docs/resident-portal/PHASE_2_RESIDENT_APIS.md#resident-self-service-api-scope",
       "description": "Read-only resident self-service APIs (profile, stay, rent summary, invoices, payments, receipts) built on the Phase 1 resident session and the existing stay and finance services. Access is limited to an ACTIVE resident with an ACTIVE account; a staff status change to INACTIVE or ARCHIVED ends portal access in the same transaction. No schema change, no write route, no frontend. The word rent is permitted only as the exact route token _api_v1_me_rent (allowedIdentifiers), not as general vocabulary. IMPLEMENTATION COMPLETE, AWAITING FINAL OWNER SIGN-OFF: until the owner supplies approver and date and sets status to approved, the guard treats these routes as unapproved.",
       "models": [],
