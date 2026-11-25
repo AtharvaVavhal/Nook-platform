@@ -82,6 +82,20 @@ test('non-production: the factory wires the mock to the real API logger; two sen
   assert.match(mine[1] as string, /otp=222222/);
 });
 
+test('APP_ENV=test (automated runs, CI) stays silent: the factory wires no preview logging, so no OTP reaches a CI log', async () => {
+  const provider = createSmsProvider({ appEnv: 'test', residentSmsProvider: 'mock' });
+  assert.ok(provider instanceof MockSmsProvider);
+  const { output } = await captureOutput(async () => {
+    await new SmsDispatcher(provider, FAST).send(message('555555'));
+  });
+  assert.deepEqual(output, []);
+  assert.equal(
+    (provider as MockSmsProvider).lastCodeFor(PHONE),
+    '555555',
+    'tests can still read the in-memory outbox',
+  );
+});
+
 test('the mock is silent by default and the code is never a fixed value', async () => {
   const { output } = await captureOutput(async () => {
     await new SmsDispatcher(new MockSmsProvider(), FAST).send(message('333333'));

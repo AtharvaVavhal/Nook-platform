@@ -15,10 +15,13 @@ export function createSmsProvider(
     if (config.appEnv === 'production') {
       throw new Error('The mock SMS provider cannot be used in production.');
     }
-    // Preview only: the one-time code is written to the API server log so an authorised presenter can read it there.
+    // Preview only: when APP_ENV is `development` the one-time code is written to the API server log so an authorised presenter
+    // can read it there. APP_ENV=test (automated runs, CI) stays silent so no code ever reaches a CI log; production is refused above.
     return new MockSmsProvider({
       appEnv: config.appEnv,
-      previewLog: (line) => log.warn(line, { context: 'resident-mock-sms' }),
+      ...(config.appEnv === 'development'
+        ? { previewLog: (line: string) => log.warn(line, { context: 'resident-mock-sms' }) }
+        : {}),
     });
   }
   return new DisabledSmsProvider();
