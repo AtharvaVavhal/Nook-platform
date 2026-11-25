@@ -1,0 +1,78 @@
+/* Nook resident portal tokens. The colour block below is copied verbatim from the owner app's canonical tokens
+   (apps/web/src/tokens.css, Indigo/Violet palette) so both apps share one brand; tokens.test.ts fails if they drift.
+   The portal is light-only by design (soft lavender and white surfaces, Midnight Indigo for emphasis). */
+:root {
+  color-scheme: light;
+  --color-brand-primary: #171338;
+  --color-brand-accent: #7657f6;
+  --color-brand-subtle: #f4f1ff;
+  --color-accent-text: #6e4df5;
+  --color-accent-hover: #6a48f5;
+  --color-accent-pressed: #5630f4;
+  --color-background: #f9f8fc;
+  --color-surface: #ffffff;
+  --color-surface-raised: #ffffff;
+  --color-text-primary: #26233d;
+  --color-text-secondary: #625e78;
+  --color-text-on-accent: #ffffff;
+  --color-text-on-dark: #f4f1ff;
+  --color-border-subtle: #e5e1f0;
+  --color-border-strong: #9585c2;
+  --color-focus: #7657f6;
+  --color-disabled-background: #eeeaf5;
+  --color-disabled-text: #6c677b;
+  --color-success-text: #157b55;
+  --color-success-solid: #16845b;
+  --color-success-tint: #e6f4ed;
+  --color-warning-text: #9d5e11;
+  --color-warning-solid: #a66312;
+  --color-warning-tint: #fbf0e0;
+  --color-danger-text: #b42318;
+  --color-danger-solid: #b42318;
+  --color-danger-tint: #fcebe9;
+  --color-info-text: #2361eb;
+  --color-info-solid: #2563eb;
+  --color-info-tint: #e9f0fe;
+  --color-neutral-text: #4a4560;
+  --color-neutral-solid: #4a4560;
+  --color-neutral-tint: #f1eff7;
+  --color-chart-1: #7657f6;
+  --color-chart-2: #16845b;
+  --color-chart-3: #a66312;
+  --color-chart-4: #b42318;
+  --color-chart-5: #2563eb;
+  --color-chart-grid: #e5e1f0;
+}
+
+/* Resident-only scale: type, spacing, shape, elevation and layout. */
+:root {
+  --color-placeholder: #6c677b; /* 5.3:1 on white: placeholder text must meet AA too */
+  --font-sans:
+    Inter, 'SF Pro Text', 'Segoe UI', system-ui, -apple-system, Roboto, 'Helvetica Neue', Arial,
+    sans-serif;
+  --text-xs: 0.8125rem;
+  --text-sm: 0.9375rem;
+  --text-md: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.375rem;
+  --text-2xl: 1.75rem;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-pill: 999px;
+  --shadow-card: 0 1px 2px rgba(23, 19, 56, 0.04), 0 6px 20px rgba(23, 19, 56, 0.05);
+  --shadow-pop: 0 8px 30px rgba(23, 19, 56, 0.16), 0 2px 6px rgba(23, 19, 56, 0.08);
+  --sidebar-width: 272px;
+  --header-height: 60px;
+  --bottom-nav-height: 68px;
+  --content-max: 1040px;
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
