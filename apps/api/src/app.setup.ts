@@ -15,6 +15,29 @@ export const CORS_METHODS = ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE'];
 /** Paths the resident portal origin may call (under the API prefix). Everything else is owner-only. */
 export const RESIDENT_ORIGIN_PATHS = [`/${API_PREFIX}/resident-auth`, `/${API_PREFIX}/me`] as const;
 
+/** True for a request path under a resident-portal route (`/me/*` or `/resident-auth/*`); query strings are ignored. */
+export function isResidentPath(path: string): boolean {
+  const clean = path.split('?')[0] ?? '';
+  return RESIDENT_ORIGIN_PATHS.some((prefix) => clean === prefix || clean.startsWith(`${prefix}/`));
+}
+
+/**
+ * Resident responses are never cacheable, whatever their status. The controllers already set this on their own answers; this
+ * covers the answers they never get to give: the global access guard refuses an unauthenticated or wrong-principal call (401, 403)
+ * before any controller runs, and an unknown path under a resident prefix is a 404. Scoped to the resident paths only, so owner
+ * routes keep their existing cache behaviour.
+ */
+export function residentNoStoreMiddleware(
+  request: { originalUrl?: string; url?: string },
+  response: { setHeader: (name: string, value: string) => void },
+  next: () => void,
+): void {
+  if (isResidentPath(request.originalUrl ?? request.url ?? '')) {
+    response.setHeader('Cache-Control', 'no-store');
+  }
+  next();
+}
+
 export function isOriginAllowed(
   config: Pick<RuntimeConfig, 'webOrigin' | 'residentWebOrigin'>,
   origin: string | undefined,
@@ -23,10 +46,7 @@ export function isOriginAllowed(
   if (typeof origin !== 'string') return false;
   if (origin === config.webOrigin) return true;
   if (config.residentWebOrigin && origin === config.residentWebOrigin) {
-    const clean = path.split('?')[0] ?? '';
-    return RESIDENT_ORIGIN_PATHS.some(
-      (prefix) => clean === prefix || clean.startsWith(`${prefix}/`),
-    );
+    return isResidentPath(path);
   }
   return false;
 }
@@ -57,6 +77,7 @@ export function configureApp(app: INestApplication, config: RuntimeConfig): void
   app.useLogger(log);
   app.use(requestIdMiddleware);
   app.use(httpLoggingMiddleware);
+  app.use(residentNoStoreMiddleware);
   app.useGlobalFilters(new AllExceptionsFilter());
   if (config.trustProxyHops > 0) {
     // The express instance is reached through the platform adapter.

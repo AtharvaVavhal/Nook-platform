@@ -39,7 +39,8 @@
     "resident-self.rules",
     "resident-retention.rules",
     "resident-sms.rules",
-    "resident-sms-preview.rules"
+    "resident-sms-preview.rules",
+    "resident-cache-control"
   ],
   "initial-migration": ["database-migration"],
   "full": [
