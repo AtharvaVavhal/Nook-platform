@@ -14,6 +14,9 @@ import { ResidentHistoryModule } from './resident-history/resident-history.modul
 import { CorrectionsModule } from './corrections/corrections.module.js';
 import { TransferModule } from './transfer/transfer.module.js';
 import { DashboardModule } from './dashboard/dashboard.module.js';
+import { ResidentAuthModule } from './resident-auth/resident-auth.module.js';
+import { ResidentAccountModule } from './resident-account/resident-account.module.js';
+import { ResidentSelfModule } from './resident-self/resident-self.module.js';
 
 @Module({
   imports: [
@@ -30,6 +33,9 @@ import { DashboardModule } from './dashboard/dashboard.module.js';
     CorrectionsModule,
     TransferModule,
     DashboardModule,
+    ResidentAuthModule,
+    ResidentAccountModule,
+    ResidentSelfModule,
   ],
   controllers: [HealthController],
   providers: [DatabaseService],

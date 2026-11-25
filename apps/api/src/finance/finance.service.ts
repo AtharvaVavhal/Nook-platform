@@ -41,8 +41,8 @@ import {
 import { auditRequestId } from '../observability/request-context.js';
 import { acquireOrgGate } from '../common/org-gate.js';
 
-const OPEN_STATUSES = ['ISSUED', 'PARTIALLY_PAID', 'OVERDUE'] as const;
-const BILLABLE_STATUSES = ['ISSUED', 'PARTIALLY_PAID', 'OVERDUE', 'PAID'] as const;
+export const OPEN_STATUSES = ['ISSUED', 'PARTIALLY_PAID', 'OVERDUE'] as const;
+export const BILLABLE_STATUSES = ['ISSUED', 'PARTIALLY_PAID', 'OVERDUE', 'PAID'] as const;
 const MAX_REPORT_MONTHS = 12;
 const IDEMPOTENCY_KEY_PATTERN = /^[A-Za-z0-9_.:-]{8,128}$/;
 

@@ -11,9 +11,10 @@ import { PasswordHasher } from './password-hasher.js';
 import { SessionService } from './session.service.js';
 import { AuthAuditService } from './auth-audit.service.js';
 import { LoginThrottleService } from './throttle.service.js';
+import { ResidentAuthCoreModule } from '../resident-auth/resident-auth-core.module.js';
 
 @Module({
-  imports: [DatabaseModule],
+  imports: [DatabaseModule, ResidentAuthCoreModule],
   controllers: [AuthController],
   providers: [
     PrismaAuthRepository,

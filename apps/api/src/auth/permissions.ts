@@ -52,6 +52,9 @@ export const PERMISSIONS = [
   'transfer.read',
   'transfer.execute',
   'transfer.finance',
+  // resident portal accounts (owner-side administration; creating, suspending and revoking is OWNER-only in the service)
+  'resident.account.read',
+  'resident.account.manage',
 ] as const;
 
 export type Permission = (typeof PERMISSIONS)[number];
@@ -75,10 +78,26 @@ export function permissionsForRole(role: string | undefined): readonly Permissio
 
 export const ROUTE_ACCESS_KEY = 'nook:route-access';
 
+/**
+ * Resident principal (phone-OTP sign-in). It is a different kind of caller from OWNER and PROPERTY_MANAGER: it has its own
+ * cookie, its own session table and its own permission table, and it holds NO staff permission. The table below is the
+ * only place that decides what a resident may do, and it starts with the single capability the sign-in flow itself needs.
+ */
+export const RESIDENT_PERMISSIONS = ['resident.self.read'] as const;
+export type ResidentPermission = (typeof RESIDENT_PERMISSIONS)[number];
+const RESIDENT_GRANTS: ReadonlySet<string> = new Set<string>(RESIDENT_PERMISSIONS);
+
+/** Default deny: a resident holds a permission only if it is a resident permission listed above. Staff permissions never match. */
+export function residentHasPermission(permission: string): boolean {
+  return typeof permission === 'string' && RESIDENT_GRANTS.has(permission);
+}
+
 export type RouteAccess =
   | { readonly kind: 'public' }
   | { readonly kind: 'self' }
-  | { readonly kind: 'permission'; readonly permission: Permission };
+  | { readonly kind: 'permission'; readonly permission: Permission }
+  /** A valid resident session (cookie), and, when given, the resident permission. */
+  | { readonly kind: 'resident'; readonly permission?: ResidentPermission };
 
 /** No session required (health, login, CSRF token). Use sparingly; every use is visible in the route inventory test. */
 export const Public = () => SetMetadata(ROUTE_ACCESS_KEY, { kind: 'public' } satisfies RouteAccess);
@@ -90,3 +109,11 @@ export const SelfService = () =>
 /** The caller's role must hold this permission. */
 export const RequirePermission = (permission: Permission) =>
   SetMetadata(ROUTE_ACCESS_KEY, { kind: 'permission', permission } satisfies RouteAccess);
+
+/** A valid resident session is enough (for example logout). Staff sessions are not accepted here. */
+export const ResidentSessionOnly = () =>
+  SetMetadata(ROUTE_ACCESS_KEY, { kind: 'resident' } satisfies RouteAccess);
+
+/** The caller must be a resident whose permission table holds this permission. */
+export const RequireResidentPermission = (permission: ResidentPermission) =>
+  SetMetadata(ROUTE_ACCESS_KEY, { kind: 'resident', permission } satisfies RouteAccess);

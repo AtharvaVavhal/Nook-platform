@@ -6,6 +6,7 @@ import { asQuery, queryEnum, queryText } from '../common/input.js';
 import { CreateResidentDto, UpdateResidentDto } from './resident.dto.js';
 import type { Prisma } from '../generated/client.js';
 import { CorrectionError } from '../corrections/corrections.rules.js';
+import { endResidentPortalAccess } from '../resident-auth/resident-access.js';
 
 const RESIDENT_STATUSES = ['ACTIVE', 'INACTIVE', 'ARCHIVED'] as const;
 const DOCUMENT_STATUSES = ['PENDING', 'VERIFIED', 'REJECTED'] as const;
@@ -84,6 +85,14 @@ export class ResidentService {
     if ((data as { status?: string }).status === 'ARCHIVED') {
       return this.archiveGuarded(organizationId, id, data as Record<string, unknown>);
     }
+    // Making a resident INACTIVE ends their portal access in the same transaction as the status change.
+    if ((data as { status?: string }).status === 'INACTIVE') {
+      return this.prisma.db.$transaction(async (tx) => {
+        const updated = await tx.resident.update({ where: { id }, data: data as never });
+        await endResidentPortalAccess(tx, { organizationId, residentId: id }, 'RESIDENT_INACTIVE');
+        return updated;
+      });
+    }
     return this.prisma.db.resident.update({
       where: { id },
       data: data as never,
@@ -130,10 +139,13 @@ export class ResidentService {
           );
         }
       }
-      return tx.resident.update({
+      const archived = await tx.resident.update({
         where: { id },
         data: { ...fields, status: 'ARCHIVED' } as never,
       });
+      // Same transaction: the archive and the end of portal access commit together or not at all (also when already archived).
+      await endResidentPortalAccess(tx, { organizationId, residentId: id }, 'RESIDENT_ARCHIVED');
+      return archived;
     });
   }
 }
