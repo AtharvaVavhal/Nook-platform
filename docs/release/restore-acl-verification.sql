@@ -4,6 +4,9 @@
 -- (24 migrations, 32 tables, migrator-owned database, PUBLIC revoked, runtime role granted per the CI matrix, read-only role per
 -- checklist 12.7): baseline = SUMMARY|violations|0; 31 of 31 injected deviations detected; baseline again 0 after every revert.
 -- Evidence: restore-acl-verification.validation-2026-11-13.txt; runner: restore-acl-verification.validate.sh.
+-- UPDATED 2026-11-20 for migration 20261119100000_resident_otp_auth (four resident_* tables added to expected_table, same grants as other
+-- application tables): re-run of restore-acl-verification.validate.sh on a disposable PostgreSQL 17.11 with 25 migrations and 36 tables:
+-- baseline = SUMMARY|violations|0; 31 of 31 injected deviations detected. That run's output is not committed.
 -- NOT covered by that validation: execution on a hosted platform; execution as a non-superuser; a database provisioned by a platform
 -- (its owner/PUBLIC settings may legitimately differ from CI's and would be REPORTED as violations, not repaired).
 -- Validation found and fixed one false positive (a function ACL equal to the default after a GRANT/REVOKE round trip) and added checks
@@ -50,6 +53,10 @@ expected_table(name, privs) AS (VALUES
   ('payments', ARRAY['SELECT','INSERT','UPDATE']),
   ('properties', ARRAY['SELECT','INSERT','UPDATE']),
   ('residents', ARRAY['SELECT','INSERT','UPDATE']),
+  ('resident_accounts', ARRAY['SELECT','INSERT','UPDATE']),
+  ('resident_auth_throttles', ARRAY['SELECT','INSERT','UPDATE']),
+  ('resident_otp_challenges', ARRAY['SELECT','INSERT','UPDATE']),
+  ('resident_sessions', ARRAY['SELECT','INSERT','UPDATE']),
   ('rooms', ARRAY['SELECT','INSERT','UPDATE']),
   ('sessions', ARRAY['SELECT','INSERT','UPDATE']),
   ('stay_assignments', ARRAY['SELECT','INSERT','UPDATE']),

@@ -229,6 +229,7 @@ export type UserWhereInput = {
   paymentReversals?: Prisma.PaymentReversalListRelationFilter
   invoiceAdjustments?: Prisma.InvoiceAdjustmentListRelationFilter
   invoiceVoids?: Prisma.InvoiceVoidListRelationFilter
+  residentAccountsCreated?: Prisma.ResidentAccountListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -256,6 +257,7 @@ export type UserOrderByWithRelationInput = {
   paymentReversals?: Prisma.PaymentReversalOrderByRelationAggregateInput
   invoiceAdjustments?: Prisma.InvoiceAdjustmentOrderByRelationAggregateInput
   invoiceVoids?: Prisma.InvoiceVoidOrderByRelationAggregateInput
+  residentAccountsCreated?: Prisma.ResidentAccountOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -286,6 +288,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   paymentReversals?: Prisma.PaymentReversalListRelationFilter
   invoiceAdjustments?: Prisma.InvoiceAdjustmentListRelationFilter
   invoiceVoids?: Prisma.InvoiceVoidListRelationFilter
+  residentAccountsCreated?: Prisma.ResidentAccountListRelationFilter
 }, "id" | "loginIdentifier">
 
 export type UserOrderByWithAggregationInput = {
@@ -343,6 +346,7 @@ export type UserCreateInput = {
   paymentReversals?: Prisma.PaymentReversalCreateNestedManyWithoutActorInput
   invoiceAdjustments?: Prisma.InvoiceAdjustmentCreateNestedManyWithoutActorInput
   invoiceVoids?: Prisma.InvoiceVoidCreateNestedManyWithoutActorInput
+  residentAccountsCreated?: Prisma.ResidentAccountCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -370,6 +374,7 @@ export type UserUncheckedCreateInput = {
   paymentReversals?: Prisma.PaymentReversalUncheckedCreateNestedManyWithoutActorInput
   invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedCreateNestedManyWithoutActorInput
   invoiceVoids?: Prisma.InvoiceVoidUncheckedCreateNestedManyWithoutActorInput
+  residentAccountsCreated?: Prisma.ResidentAccountUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUpdateInput = {
@@ -397,6 +402,7 @@ export type UserUpdateInput = {
   paymentReversals?: Prisma.PaymentReversalUpdateManyWithoutActorNestedInput
   invoiceAdjustments?: Prisma.InvoiceAdjustmentUpdateManyWithoutActorNestedInput
   invoiceVoids?: Prisma.InvoiceVoidUpdateManyWithoutActorNestedInput
+  residentAccountsCreated?: Prisma.ResidentAccountUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -424,6 +430,7 @@ export type UserUncheckedUpdateInput = {
   paymentReversals?: Prisma.PaymentReversalUncheckedUpdateManyWithoutActorNestedInput
   invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedUpdateManyWithoutActorNestedInput
   invoiceVoids?: Prisma.InvoiceVoidUncheckedUpdateManyWithoutActorNestedInput
+  residentAccountsCreated?: Prisma.ResidentAccountUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -736,6 +743,22 @@ export type UserUpdateOneRequiredWithoutTransferReviewResolutionsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutTransferReviewResolutionsInput, Prisma.UserUpdateWithoutTransferReviewResolutionsInput>, Prisma.UserUncheckedUpdateWithoutTransferReviewResolutionsInput>
 }
 
+export type UserCreateNestedOneWithoutResidentAccountsCreatedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutResidentAccountsCreatedInput, Prisma.UserUncheckedCreateWithoutResidentAccountsCreatedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutResidentAccountsCreatedInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutResidentAccountsCreatedNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutResidentAccountsCreatedInput, Prisma.UserUncheckedCreateWithoutResidentAccountsCreatedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutResidentAccountsCreatedInput
+  upsert?: Prisma.UserUpsertWithoutResidentAccountsCreatedInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutResidentAccountsCreatedInput, Prisma.UserUpdateWithoutResidentAccountsCreatedInput>, Prisma.UserUncheckedUpdateWithoutResidentAccountsCreatedInput>
+}
+
 export type UserCreateWithoutMembershipsInput = {
   id?: string
   loginIdentifier: string
@@ -760,6 +783,7 @@ export type UserCreateWithoutMembershipsInput = {
   paymentReversals?: Prisma.PaymentReversalCreateNestedManyWithoutActorInput
   invoiceAdjustments?: Prisma.InvoiceAdjustmentCreateNestedManyWithoutActorInput
   invoiceVoids?: Prisma.InvoiceVoidCreateNestedManyWithoutActorInput
+  residentAccountsCreated?: Prisma.ResidentAccountCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutMembershipsInput = {
@@ -786,6 +810,7 @@ export type UserUncheckedCreateWithoutMembershipsInput = {
   paymentReversals?: Prisma.PaymentReversalUncheckedCreateNestedManyWithoutActorInput
   invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedCreateNestedManyWithoutActorInput
   invoiceVoids?: Prisma.InvoiceVoidUncheckedCreateNestedManyWithoutActorInput
+  residentAccountsCreated?: Prisma.ResidentAccountUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutMembershipsInput = {
@@ -828,6 +853,7 @@ export type UserUpdateWithoutMembershipsInput = {
   paymentReversals?: Prisma.PaymentReversalUpdateManyWithoutActorNestedInput
   invoiceAdjustments?: Prisma.InvoiceAdjustmentUpdateManyWithoutActorNestedInput
   invoiceVoids?: Prisma.InvoiceVoidUpdateManyWithoutActorNestedInput
+  residentAccountsCreated?: Prisma.ResidentAccountUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutMembershipsInput = {
@@ -854,6 +880,7 @@ export type UserUncheckedUpdateWithoutMembershipsInput = {
   paymentReversals?: Prisma.PaymentReversalUncheckedUpdateManyWithoutActorNestedInput
   invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedUpdateManyWithoutActorNestedInput
   invoiceVoids?: Prisma.InvoiceVoidUncheckedUpdateManyWithoutActorNestedInput
+  residentAccountsCreated?: Prisma.ResidentAccountUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutSessionsInput = {
@@ -880,6 +907,7 @@ export type UserCreateWithoutSessionsInput = {
   paymentReversals?: Prisma.PaymentReversalCreateNestedManyWithoutActorInput
   invoiceAdjustments?: Prisma.InvoiceAdjustmentCreateNestedManyWithoutActorInput
   invoiceVoids?: Prisma.InvoiceVoidCreateNestedManyWithoutActorInput
+  residentAccountsCreated?: Prisma.ResidentAccountCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -906,6 +934,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   paymentReversals?: Prisma.PaymentReversalUncheckedCreateNestedManyWithoutActorInput
   invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedCreateNestedManyWithoutActorInput
   invoiceVoids?: Prisma.InvoiceVoidUncheckedCreateNestedManyWithoutActorInput
+  residentAccountsCreated?: Prisma.ResidentAccountUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -948,6 +977,7 @@ export type UserUpdateWithoutSessionsInput = {
   paymentReversals?: Prisma.PaymentReversalUpdateManyWithoutActorNestedInput
   invoiceAdjustments?: Prisma.InvoiceAdjustmentUpdateManyWithoutActorNestedInput
   invoiceVoids?: Prisma.InvoiceVoidUpdateManyWithoutActorNestedInput
+  residentAccountsCreated?: Prisma.ResidentAccountUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -974,6 +1004,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   paymentReversals?: Prisma.PaymentReversalUncheckedUpdateManyWithoutActorNestedInput
   invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedUpdateManyWithoutActorNestedInput
   invoiceVoids?: Prisma.InvoiceVoidUncheckedUpdateManyWithoutActorNestedInput
+  residentAccountsCreated?: Prisma.ResidentAccountUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutAuditEventsInput = {
@@ -1000,6 +1031,7 @@ export type UserCreateWithoutAuditEventsInput = {
   paymentReversals?: Prisma.PaymentReversalCreateNestedManyWithoutActorInput
   invoiceAdjustments?: Prisma.InvoiceAdjustmentCreateNestedManyWithoutActorInput
   invoiceVoids?: Prisma.InvoiceVoidCreateNestedManyWithoutActorInput
+  residentAccountsCreated?: Prisma.ResidentAccountCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutAuditEventsInput = {
@@ -1026,6 +1058,7 @@ export type UserUncheckedCreateWithoutAuditEventsInput = {
   paymentReversals?: Prisma.PaymentReversalUncheckedCreateNestedManyWithoutActorInput
   invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedCreateNestedManyWithoutActorInput
   invoiceVoids?: Prisma.InvoiceVoidUncheckedCreateNestedManyWithoutActorInput
+  residentAccountsCreated?: Prisma.ResidentAccountUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutAuditEventsInput = {
@@ -1068,6 +1101,7 @@ export type UserUpdateWithoutAuditEventsInput = {
   paymentReversals?: Prisma.PaymentReversalUpdateManyWithoutActorNestedInput
   invoiceAdjustments?: Prisma.InvoiceAdjustmentUpdateManyWithoutActorNestedInput
   invoiceVoids?: Prisma.InvoiceVoidUpdateManyWithoutActorNestedInput
+  residentAccountsCreated?: Prisma.ResidentAccountUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAuditEventsInput = {
@@ -1094,6 +1128,7 @@ export type UserUncheckedUpdateWithoutAuditEventsInput = {
   paymentReversals?: Prisma.PaymentReversalUncheckedUpdateManyWithoutActorNestedInput
   invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedUpdateManyWithoutActorNestedInput
   invoiceVoids?: Prisma.InvoiceVoidUncheckedUpdateManyWithoutActorNestedInput
+  residentAccountsCreated?: Prisma.ResidentAccountUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutEnquiryFollowUpsInput = {
@@ -1120,6 +1155,7 @@ export type UserCreateWithoutEnquiryFollowUpsInput = {
   paymentReversals?: Prisma.PaymentReversalCreateNestedManyWithoutActorInput
   invoiceAdjustments?: Prisma.InvoiceAdjustmentCreateNestedManyWithoutActorInput
   invoiceVoids?: Prisma.InvoiceVoidCreateNestedManyWithoutActorInput
+  residentAccountsCreated?: Prisma.ResidentAccountCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutEnquiryFollowUpsInput = {
@@ -1146,6 +1182,7 @@ export type UserUncheckedCreateWithoutEnquiryFollowUpsInput = {
   paymentReversals?: Prisma.PaymentReversalUncheckedCreateNestedManyWithoutActorInput
   invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedCreateNestedManyWithoutActorInput
   invoiceVoids?: Prisma.InvoiceVoidUncheckedCreateNestedManyWithoutActorInput
+  residentAccountsCreated?: Prisma.ResidentAccountUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutEnquiryFollowUpsInput = {
@@ -1188,6 +1225,7 @@ export type UserUpdateWithoutEnquiryFollowUpsInput = {
   paymentReversals?: Prisma.PaymentReversalUpdateManyWithoutActorNestedInput
   invoiceAdjustments?: Prisma.InvoiceAdjustmentUpdateManyWithoutActorNestedInput
   invoiceVoids?: Prisma.InvoiceVoidUpdateManyWithoutActorNestedInput
+  residentAccountsCreated?: Prisma.ResidentAccountUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutEnquiryFollowUpsInput = {
@@ -1214,6 +1252,7 @@ export type UserUncheckedUpdateWithoutEnquiryFollowUpsInput = {
   paymentReversals?: Prisma.PaymentReversalUncheckedUpdateManyWithoutActorNestedInput
   invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedUpdateManyWithoutActorNestedInput
   invoiceVoids?: Prisma.InvoiceVoidUncheckedUpdateManyWithoutActorNestedInput
+  residentAccountsCreated?: Prisma.ResidentAccountUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutPaymentReversalsInput = {
@@ -1240,6 +1279,7 @@ export type UserCreateWithoutPaymentReversalsInput = {
   enquiryFollowUps?: Prisma.EnquiryFollowUpCreateNestedManyWithoutUserInput
   invoiceAdjustments?: Prisma.InvoiceAdjustmentCreateNestedManyWithoutActorInput
   invoiceVoids?: Prisma.InvoiceVoidCreateNestedManyWithoutActorInput
+  residentAccountsCreated?: Prisma.ResidentAccountCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutPaymentReversalsInput = {
@@ -1266,6 +1306,7 @@ export type UserUncheckedCreateWithoutPaymentReversalsInput = {
   enquiryFollowUps?: Prisma.EnquiryFollowUpUncheckedCreateNestedManyWithoutUserInput
   invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedCreateNestedManyWithoutActorInput
   invoiceVoids?: Prisma.InvoiceVoidUncheckedCreateNestedManyWithoutActorInput
+  residentAccountsCreated?: Prisma.ResidentAccountUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutPaymentReversalsInput = {
@@ -1308,6 +1349,7 @@ export type UserUpdateWithoutPaymentReversalsInput = {
   enquiryFollowUps?: Prisma.EnquiryFollowUpUpdateManyWithoutUserNestedInput
   invoiceAdjustments?: Prisma.InvoiceAdjustmentUpdateManyWithoutActorNestedInput
   invoiceVoids?: Prisma.InvoiceVoidUpdateManyWithoutActorNestedInput
+  residentAccountsCreated?: Prisma.ResidentAccountUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPaymentReversalsInput = {
@@ -1334,6 +1376,7 @@ export type UserUncheckedUpdateWithoutPaymentReversalsInput = {
   enquiryFollowUps?: Prisma.EnquiryFollowUpUncheckedUpdateManyWithoutUserNestedInput
   invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedUpdateManyWithoutActorNestedInput
   invoiceVoids?: Prisma.InvoiceVoidUncheckedUpdateManyWithoutActorNestedInput
+  residentAccountsCreated?: Prisma.ResidentAccountUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutInvoiceAdjustmentsInput = {
@@ -1360,6 +1403,7 @@ export type UserCreateWithoutInvoiceAdjustmentsInput = {
   enquiryFollowUps?: Prisma.EnquiryFollowUpCreateNestedManyWithoutUserInput
   paymentReversals?: Prisma.PaymentReversalCreateNestedManyWithoutActorInput
   invoiceVoids?: Prisma.InvoiceVoidCreateNestedManyWithoutActorInput
+  residentAccountsCreated?: Prisma.ResidentAccountCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutInvoiceAdjustmentsInput = {
@@ -1386,6 +1430,7 @@ export type UserUncheckedCreateWithoutInvoiceAdjustmentsInput = {
   enquiryFollowUps?: Prisma.EnquiryFollowUpUncheckedCreateNestedManyWithoutUserInput
   paymentReversals?: Prisma.PaymentReversalUncheckedCreateNestedManyWithoutActorInput
   invoiceVoids?: Prisma.InvoiceVoidUncheckedCreateNestedManyWithoutActorInput
+  residentAccountsCreated?: Prisma.ResidentAccountUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutInvoiceAdjustmentsInput = {
@@ -1428,6 +1473,7 @@ export type UserUpdateWithoutInvoiceAdjustmentsInput = {
   enquiryFollowUps?: Prisma.EnquiryFollowUpUpdateManyWithoutUserNestedInput
   paymentReversals?: Prisma.PaymentReversalUpdateManyWithoutActorNestedInput
   invoiceVoids?: Prisma.InvoiceVoidUpdateManyWithoutActorNestedInput
+  residentAccountsCreated?: Prisma.ResidentAccountUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutInvoiceAdjustmentsInput = {
@@ -1454,6 +1500,7 @@ export type UserUncheckedUpdateWithoutInvoiceAdjustmentsInput = {
   enquiryFollowUps?: Prisma.EnquiryFollowUpUncheckedUpdateManyWithoutUserNestedInput
   paymentReversals?: Prisma.PaymentReversalUncheckedUpdateManyWithoutActorNestedInput
   invoiceVoids?: Prisma.InvoiceVoidUncheckedUpdateManyWithoutActorNestedInput
+  residentAccountsCreated?: Prisma.ResidentAccountUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutInvoiceVoidsInput = {
@@ -1480,6 +1527,7 @@ export type UserCreateWithoutInvoiceVoidsInput = {
   enquiryFollowUps?: Prisma.EnquiryFollowUpCreateNestedManyWithoutUserInput
   paymentReversals?: Prisma.PaymentReversalCreateNestedManyWithoutActorInput
   invoiceAdjustments?: Prisma.InvoiceAdjustmentCreateNestedManyWithoutActorInput
+  residentAccountsCreated?: Prisma.ResidentAccountCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutInvoiceVoidsInput = {
@@ -1506,6 +1554,7 @@ export type UserUncheckedCreateWithoutInvoiceVoidsInput = {
   enquiryFollowUps?: Prisma.EnquiryFollowUpUncheckedCreateNestedManyWithoutUserInput
   paymentReversals?: Prisma.PaymentReversalUncheckedCreateNestedManyWithoutActorInput
   invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedCreateNestedManyWithoutActorInput
+  residentAccountsCreated?: Prisma.ResidentAccountUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutInvoiceVoidsInput = {
@@ -1548,6 +1597,7 @@ export type UserUpdateWithoutInvoiceVoidsInput = {
   enquiryFollowUps?: Prisma.EnquiryFollowUpUpdateManyWithoutUserNestedInput
   paymentReversals?: Prisma.PaymentReversalUpdateManyWithoutActorNestedInput
   invoiceAdjustments?: Prisma.InvoiceAdjustmentUpdateManyWithoutActorNestedInput
+  residentAccountsCreated?: Prisma.ResidentAccountUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutInvoiceVoidsInput = {
@@ -1574,6 +1624,7 @@ export type UserUncheckedUpdateWithoutInvoiceVoidsInput = {
   enquiryFollowUps?: Prisma.EnquiryFollowUpUncheckedUpdateManyWithoutUserNestedInput
   paymentReversals?: Prisma.PaymentReversalUncheckedUpdateManyWithoutActorNestedInput
   invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedUpdateManyWithoutActorNestedInput
+  residentAccountsCreated?: Prisma.ResidentAccountUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutCorrectionsRequestedInput = {
@@ -1600,6 +1651,7 @@ export type UserCreateWithoutCorrectionsRequestedInput = {
   paymentReversals?: Prisma.PaymentReversalCreateNestedManyWithoutActorInput
   invoiceAdjustments?: Prisma.InvoiceAdjustmentCreateNestedManyWithoutActorInput
   invoiceVoids?: Prisma.InvoiceVoidCreateNestedManyWithoutActorInput
+  residentAccountsCreated?: Prisma.ResidentAccountCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutCorrectionsRequestedInput = {
@@ -1626,6 +1678,7 @@ export type UserUncheckedCreateWithoutCorrectionsRequestedInput = {
   paymentReversals?: Prisma.PaymentReversalUncheckedCreateNestedManyWithoutActorInput
   invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedCreateNestedManyWithoutActorInput
   invoiceVoids?: Prisma.InvoiceVoidUncheckedCreateNestedManyWithoutActorInput
+  residentAccountsCreated?: Prisma.ResidentAccountUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutCorrectionsRequestedInput = {
@@ -1657,6 +1710,7 @@ export type UserCreateWithoutCorrectionsDecidedInput = {
   paymentReversals?: Prisma.PaymentReversalCreateNestedManyWithoutActorInput
   invoiceAdjustments?: Prisma.InvoiceAdjustmentCreateNestedManyWithoutActorInput
   invoiceVoids?: Prisma.InvoiceVoidCreateNestedManyWithoutActorInput
+  residentAccountsCreated?: Prisma.ResidentAccountCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutCorrectionsDecidedInput = {
@@ -1683,6 +1737,7 @@ export type UserUncheckedCreateWithoutCorrectionsDecidedInput = {
   paymentReversals?: Prisma.PaymentReversalUncheckedCreateNestedManyWithoutActorInput
   invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedCreateNestedManyWithoutActorInput
   invoiceVoids?: Prisma.InvoiceVoidUncheckedCreateNestedManyWithoutActorInput
+  residentAccountsCreated?: Prisma.ResidentAccountUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutCorrectionsDecidedInput = {
@@ -1725,6 +1780,7 @@ export type UserUpdateWithoutCorrectionsRequestedInput = {
   paymentReversals?: Prisma.PaymentReversalUpdateManyWithoutActorNestedInput
   invoiceAdjustments?: Prisma.InvoiceAdjustmentUpdateManyWithoutActorNestedInput
   invoiceVoids?: Prisma.InvoiceVoidUpdateManyWithoutActorNestedInput
+  residentAccountsCreated?: Prisma.ResidentAccountUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCorrectionsRequestedInput = {
@@ -1751,6 +1807,7 @@ export type UserUncheckedUpdateWithoutCorrectionsRequestedInput = {
   paymentReversals?: Prisma.PaymentReversalUncheckedUpdateManyWithoutActorNestedInput
   invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedUpdateManyWithoutActorNestedInput
   invoiceVoids?: Prisma.InvoiceVoidUncheckedUpdateManyWithoutActorNestedInput
+  residentAccountsCreated?: Prisma.ResidentAccountUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUpsertWithoutCorrectionsDecidedInput = {
@@ -1788,6 +1845,7 @@ export type UserUpdateWithoutCorrectionsDecidedInput = {
   paymentReversals?: Prisma.PaymentReversalUpdateManyWithoutActorNestedInput
   invoiceAdjustments?: Prisma.InvoiceAdjustmentUpdateManyWithoutActorNestedInput
   invoiceVoids?: Prisma.InvoiceVoidUpdateManyWithoutActorNestedInput
+  residentAccountsCreated?: Prisma.ResidentAccountUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCorrectionsDecidedInput = {
@@ -1814,6 +1872,7 @@ export type UserUncheckedUpdateWithoutCorrectionsDecidedInput = {
   paymentReversals?: Prisma.PaymentReversalUncheckedUpdateManyWithoutActorNestedInput
   invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedUpdateManyWithoutActorNestedInput
   invoiceVoids?: Prisma.InvoiceVoidUncheckedUpdateManyWithoutActorNestedInput
+  residentAccountsCreated?: Prisma.ResidentAccountUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutCorrectionReceiptsInput = {
@@ -1840,6 +1899,7 @@ export type UserCreateWithoutCorrectionReceiptsInput = {
   paymentReversals?: Prisma.PaymentReversalCreateNestedManyWithoutActorInput
   invoiceAdjustments?: Prisma.InvoiceAdjustmentCreateNestedManyWithoutActorInput
   invoiceVoids?: Prisma.InvoiceVoidCreateNestedManyWithoutActorInput
+  residentAccountsCreated?: Prisma.ResidentAccountCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutCorrectionReceiptsInput = {
@@ -1866,6 +1926,7 @@ export type UserUncheckedCreateWithoutCorrectionReceiptsInput = {
   paymentReversals?: Prisma.PaymentReversalUncheckedCreateNestedManyWithoutActorInput
   invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedCreateNestedManyWithoutActorInput
   invoiceVoids?: Prisma.InvoiceVoidUncheckedCreateNestedManyWithoutActorInput
+  residentAccountsCreated?: Prisma.ResidentAccountUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutCorrectionReceiptsInput = {
@@ -1908,6 +1969,7 @@ export type UserUpdateWithoutCorrectionReceiptsInput = {
   paymentReversals?: Prisma.PaymentReversalUpdateManyWithoutActorNestedInput
   invoiceAdjustments?: Prisma.InvoiceAdjustmentUpdateManyWithoutActorNestedInput
   invoiceVoids?: Prisma.InvoiceVoidUpdateManyWithoutActorNestedInput
+  residentAccountsCreated?: Prisma.ResidentAccountUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCorrectionReceiptsInput = {
@@ -1934,6 +1996,7 @@ export type UserUncheckedUpdateWithoutCorrectionReceiptsInput = {
   paymentReversals?: Prisma.PaymentReversalUncheckedUpdateManyWithoutActorNestedInput
   invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedUpdateManyWithoutActorNestedInput
   invoiceVoids?: Prisma.InvoiceVoidUncheckedUpdateManyWithoutActorNestedInput
+  residentAccountsCreated?: Prisma.ResidentAccountUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutCorrectionLinksResolvedInput = {
@@ -1960,6 +2023,7 @@ export type UserCreateWithoutCorrectionLinksResolvedInput = {
   paymentReversals?: Prisma.PaymentReversalCreateNestedManyWithoutActorInput
   invoiceAdjustments?: Prisma.InvoiceAdjustmentCreateNestedManyWithoutActorInput
   invoiceVoids?: Prisma.InvoiceVoidCreateNestedManyWithoutActorInput
+  residentAccountsCreated?: Prisma.ResidentAccountCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutCorrectionLinksResolvedInput = {
@@ -1986,6 +2050,7 @@ export type UserUncheckedCreateWithoutCorrectionLinksResolvedInput = {
   paymentReversals?: Prisma.PaymentReversalUncheckedCreateNestedManyWithoutActorInput
   invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedCreateNestedManyWithoutActorInput
   invoiceVoids?: Prisma.InvoiceVoidUncheckedCreateNestedManyWithoutActorInput
+  residentAccountsCreated?: Prisma.ResidentAccountUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutCorrectionLinksResolvedInput = {
@@ -2028,6 +2093,7 @@ export type UserUpdateWithoutCorrectionLinksResolvedInput = {
   paymentReversals?: Prisma.PaymentReversalUpdateManyWithoutActorNestedInput
   invoiceAdjustments?: Prisma.InvoiceAdjustmentUpdateManyWithoutActorNestedInput
   invoiceVoids?: Prisma.InvoiceVoidUpdateManyWithoutActorNestedInput
+  residentAccountsCreated?: Prisma.ResidentAccountUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCorrectionLinksResolvedInput = {
@@ -2054,6 +2120,7 @@ export type UserUncheckedUpdateWithoutCorrectionLinksResolvedInput = {
   paymentReversals?: Prisma.PaymentReversalUncheckedUpdateManyWithoutActorNestedInput
   invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedUpdateManyWithoutActorNestedInput
   invoiceVoids?: Prisma.InvoiceVoidUncheckedUpdateManyWithoutActorNestedInput
+  residentAccountsCreated?: Prisma.ResidentAccountUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutTransfersInput = {
@@ -2080,6 +2147,7 @@ export type UserCreateWithoutTransfersInput = {
   paymentReversals?: Prisma.PaymentReversalCreateNestedManyWithoutActorInput
   invoiceAdjustments?: Prisma.InvoiceAdjustmentCreateNestedManyWithoutActorInput
   invoiceVoids?: Prisma.InvoiceVoidCreateNestedManyWithoutActorInput
+  residentAccountsCreated?: Prisma.ResidentAccountCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutTransfersInput = {
@@ -2106,6 +2174,7 @@ export type UserUncheckedCreateWithoutTransfersInput = {
   paymentReversals?: Prisma.PaymentReversalUncheckedCreateNestedManyWithoutActorInput
   invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedCreateNestedManyWithoutActorInput
   invoiceVoids?: Prisma.InvoiceVoidUncheckedCreateNestedManyWithoutActorInput
+  residentAccountsCreated?: Prisma.ResidentAccountUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutTransfersInput = {
@@ -2148,6 +2217,7 @@ export type UserUpdateWithoutTransfersInput = {
   paymentReversals?: Prisma.PaymentReversalUpdateManyWithoutActorNestedInput
   invoiceAdjustments?: Prisma.InvoiceAdjustmentUpdateManyWithoutActorNestedInput
   invoiceVoids?: Prisma.InvoiceVoidUpdateManyWithoutActorNestedInput
+  residentAccountsCreated?: Prisma.ResidentAccountUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTransfersInput = {
@@ -2174,6 +2244,7 @@ export type UserUncheckedUpdateWithoutTransfersInput = {
   paymentReversals?: Prisma.PaymentReversalUncheckedUpdateManyWithoutActorNestedInput
   invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedUpdateManyWithoutActorNestedInput
   invoiceVoids?: Prisma.InvoiceVoidUncheckedUpdateManyWithoutActorNestedInput
+  residentAccountsCreated?: Prisma.ResidentAccountUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutAssignmentReplacementsInput = {
@@ -2200,6 +2271,7 @@ export type UserCreateWithoutAssignmentReplacementsInput = {
   paymentReversals?: Prisma.PaymentReversalCreateNestedManyWithoutActorInput
   invoiceAdjustments?: Prisma.InvoiceAdjustmentCreateNestedManyWithoutActorInput
   invoiceVoids?: Prisma.InvoiceVoidCreateNestedManyWithoutActorInput
+  residentAccountsCreated?: Prisma.ResidentAccountCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutAssignmentReplacementsInput = {
@@ -2226,6 +2298,7 @@ export type UserUncheckedCreateWithoutAssignmentReplacementsInput = {
   paymentReversals?: Prisma.PaymentReversalUncheckedCreateNestedManyWithoutActorInput
   invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedCreateNestedManyWithoutActorInput
   invoiceVoids?: Prisma.InvoiceVoidUncheckedCreateNestedManyWithoutActorInput
+  residentAccountsCreated?: Prisma.ResidentAccountUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutAssignmentReplacementsInput = {
@@ -2268,6 +2341,7 @@ export type UserUpdateWithoutAssignmentReplacementsInput = {
   paymentReversals?: Prisma.PaymentReversalUpdateManyWithoutActorNestedInput
   invoiceAdjustments?: Prisma.InvoiceAdjustmentUpdateManyWithoutActorNestedInput
   invoiceVoids?: Prisma.InvoiceVoidUpdateManyWithoutActorNestedInput
+  residentAccountsCreated?: Prisma.ResidentAccountUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAssignmentReplacementsInput = {
@@ -2294,6 +2368,7 @@ export type UserUncheckedUpdateWithoutAssignmentReplacementsInput = {
   paymentReversals?: Prisma.PaymentReversalUncheckedUpdateManyWithoutActorNestedInput
   invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedUpdateManyWithoutActorNestedInput
   invoiceVoids?: Prisma.InvoiceVoidUncheckedUpdateManyWithoutActorNestedInput
+  residentAccountsCreated?: Prisma.ResidentAccountUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutTransferReviewRequestsInput = {
@@ -2320,6 +2395,7 @@ export type UserCreateWithoutTransferReviewRequestsInput = {
   paymentReversals?: Prisma.PaymentReversalCreateNestedManyWithoutActorInput
   invoiceAdjustments?: Prisma.InvoiceAdjustmentCreateNestedManyWithoutActorInput
   invoiceVoids?: Prisma.InvoiceVoidCreateNestedManyWithoutActorInput
+  residentAccountsCreated?: Prisma.ResidentAccountCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutTransferReviewRequestsInput = {
@@ -2346,6 +2422,7 @@ export type UserUncheckedCreateWithoutTransferReviewRequestsInput = {
   paymentReversals?: Prisma.PaymentReversalUncheckedCreateNestedManyWithoutActorInput
   invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedCreateNestedManyWithoutActorInput
   invoiceVoids?: Prisma.InvoiceVoidUncheckedCreateNestedManyWithoutActorInput
+  residentAccountsCreated?: Prisma.ResidentAccountUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutTransferReviewRequestsInput = {
@@ -2388,6 +2465,7 @@ export type UserUpdateWithoutTransferReviewRequestsInput = {
   paymentReversals?: Prisma.PaymentReversalUpdateManyWithoutActorNestedInput
   invoiceAdjustments?: Prisma.InvoiceAdjustmentUpdateManyWithoutActorNestedInput
   invoiceVoids?: Prisma.InvoiceVoidUpdateManyWithoutActorNestedInput
+  residentAccountsCreated?: Prisma.ResidentAccountUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTransferReviewRequestsInput = {
@@ -2414,6 +2492,7 @@ export type UserUncheckedUpdateWithoutTransferReviewRequestsInput = {
   paymentReversals?: Prisma.PaymentReversalUncheckedUpdateManyWithoutActorNestedInput
   invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedUpdateManyWithoutActorNestedInput
   invoiceVoids?: Prisma.InvoiceVoidUncheckedUpdateManyWithoutActorNestedInput
+  residentAccountsCreated?: Prisma.ResidentAccountUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutTransferReviewResolutionsInput = {
@@ -2440,6 +2519,7 @@ export type UserCreateWithoutTransferReviewResolutionsInput = {
   paymentReversals?: Prisma.PaymentReversalCreateNestedManyWithoutActorInput
   invoiceAdjustments?: Prisma.InvoiceAdjustmentCreateNestedManyWithoutActorInput
   invoiceVoids?: Prisma.InvoiceVoidCreateNestedManyWithoutActorInput
+  residentAccountsCreated?: Prisma.ResidentAccountCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutTransferReviewResolutionsInput = {
@@ -2466,6 +2546,7 @@ export type UserUncheckedCreateWithoutTransferReviewResolutionsInput = {
   paymentReversals?: Prisma.PaymentReversalUncheckedCreateNestedManyWithoutActorInput
   invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedCreateNestedManyWithoutActorInput
   invoiceVoids?: Prisma.InvoiceVoidUncheckedCreateNestedManyWithoutActorInput
+  residentAccountsCreated?: Prisma.ResidentAccountUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutTransferReviewResolutionsInput = {
@@ -2508,6 +2589,7 @@ export type UserUpdateWithoutTransferReviewResolutionsInput = {
   paymentReversals?: Prisma.PaymentReversalUpdateManyWithoutActorNestedInput
   invoiceAdjustments?: Prisma.InvoiceAdjustmentUpdateManyWithoutActorNestedInput
   invoiceVoids?: Prisma.InvoiceVoidUpdateManyWithoutActorNestedInput
+  residentAccountsCreated?: Prisma.ResidentAccountUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTransferReviewResolutionsInput = {
@@ -2522,6 +2604,131 @@ export type UserUncheckedUpdateWithoutTransferReviewResolutionsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedUpdateManyWithoutActorNestedInput
   transferReviewRequests?: Prisma.TransferFinanceReviewUncheckedUpdateManyWithoutRequesterNestedInput
+  correctionsRequested?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutRequesterNestedInput
+  correctionsDecided?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutDeciderNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedUpdateManyWithoutActorNestedInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutResolverNestedInput
+  transfers?: Prisma.TransferUncheckedUpdateManyWithoutActorNestedInput
+  memberships?: Prisma.MembershipUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
+  enquiryFollowUps?: Prisma.EnquiryFollowUpUncheckedUpdateManyWithoutUserNestedInput
+  paymentReversals?: Prisma.PaymentReversalUncheckedUpdateManyWithoutActorNestedInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedUpdateManyWithoutActorNestedInput
+  invoiceVoids?: Prisma.InvoiceVoidUncheckedUpdateManyWithoutActorNestedInput
+  residentAccountsCreated?: Prisma.ResidentAccountUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserCreateWithoutResidentAccountsCreatedInput = {
+  id?: string
+  loginIdentifier: string
+  passwordHash: string
+  displayName: string
+  status?: $Enums.UserStatus
+  passwordChangeRequired?: boolean
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementCreateNestedManyWithoutActorInput
+  transferReviewRequests?: Prisma.TransferFinanceReviewCreateNestedManyWithoutRequesterInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionCreateNestedManyWithoutActorInput
+  correctionsRequested?: Prisma.CorrectionProposalCreateNestedManyWithoutRequesterInput
+  correctionsDecided?: Prisma.CorrectionProposalCreateNestedManyWithoutDeciderInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptCreateNestedManyWithoutActorInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutResolverInput
+  transfers?: Prisma.TransferCreateNestedManyWithoutActorInput
+  memberships?: Prisma.MembershipCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
+  enquiryFollowUps?: Prisma.EnquiryFollowUpCreateNestedManyWithoutUserInput
+  paymentReversals?: Prisma.PaymentReversalCreateNestedManyWithoutActorInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentCreateNestedManyWithoutActorInput
+  invoiceVoids?: Prisma.InvoiceVoidCreateNestedManyWithoutActorInput
+}
+
+export type UserUncheckedCreateWithoutResidentAccountsCreatedInput = {
+  id?: string
+  loginIdentifier: string
+  passwordHash: string
+  displayName: string
+  status?: $Enums.UserStatus
+  passwordChangeRequired?: boolean
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedCreateNestedManyWithoutActorInput
+  transferReviewRequests?: Prisma.TransferFinanceReviewUncheckedCreateNestedManyWithoutRequesterInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionUncheckedCreateNestedManyWithoutActorInput
+  correctionsRequested?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutRequesterInput
+  correctionsDecided?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutDeciderInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedCreateNestedManyWithoutActorInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutResolverInput
+  transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutActorInput
+  memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
+  enquiryFollowUps?: Prisma.EnquiryFollowUpUncheckedCreateNestedManyWithoutUserInput
+  paymentReversals?: Prisma.PaymentReversalUncheckedCreateNestedManyWithoutActorInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUncheckedCreateNestedManyWithoutActorInput
+  invoiceVoids?: Prisma.InvoiceVoidUncheckedCreateNestedManyWithoutActorInput
+}
+
+export type UserCreateOrConnectWithoutResidentAccountsCreatedInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutResidentAccountsCreatedInput, Prisma.UserUncheckedCreateWithoutResidentAccountsCreatedInput>
+}
+
+export type UserUpsertWithoutResidentAccountsCreatedInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutResidentAccountsCreatedInput, Prisma.UserUncheckedUpdateWithoutResidentAccountsCreatedInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutResidentAccountsCreatedInput, Prisma.UserUncheckedCreateWithoutResidentAccountsCreatedInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutResidentAccountsCreatedInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutResidentAccountsCreatedInput, Prisma.UserUncheckedUpdateWithoutResidentAccountsCreatedInput>
+}
+
+export type UserUpdateWithoutResidentAccountsCreatedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  loginIdentifier?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  passwordChangeRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUpdateManyWithoutActorNestedInput
+  transferReviewRequests?: Prisma.TransferFinanceReviewUpdateManyWithoutRequesterNestedInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionUpdateManyWithoutActorNestedInput
+  correctionsRequested?: Prisma.CorrectionProposalUpdateManyWithoutRequesterNestedInput
+  correctionsDecided?: Prisma.CorrectionProposalUpdateManyWithoutDeciderNestedInput
+  correctionReceipts?: Prisma.CorrectionCommandReceiptUpdateManyWithoutActorNestedInput
+  correctionLinksResolved?: Prisma.CorrectionFinanceLinkUpdateManyWithoutResolverNestedInput
+  transfers?: Prisma.TransferUpdateManyWithoutActorNestedInput
+  memberships?: Prisma.MembershipUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
+  enquiryFollowUps?: Prisma.EnquiryFollowUpUpdateManyWithoutUserNestedInput
+  paymentReversals?: Prisma.PaymentReversalUpdateManyWithoutActorNestedInput
+  invoiceAdjustments?: Prisma.InvoiceAdjustmentUpdateManyWithoutActorNestedInput
+  invoiceVoids?: Prisma.InvoiceVoidUpdateManyWithoutActorNestedInput
+}
+
+export type UserUncheckedUpdateWithoutResidentAccountsCreatedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  loginIdentifier?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  passwordChangeRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedUpdateManyWithoutActorNestedInput
+  transferReviewRequests?: Prisma.TransferFinanceReviewUncheckedUpdateManyWithoutRequesterNestedInput
+  transferReviewResolutions?: Prisma.TransferFinanceResolutionUncheckedUpdateManyWithoutActorNestedInput
   correctionsRequested?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutRequesterNestedInput
   correctionsDecided?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutDeciderNestedInput
   correctionReceipts?: Prisma.CorrectionCommandReceiptUncheckedUpdateManyWithoutActorNestedInput
@@ -2557,6 +2764,7 @@ export type UserCountOutputType = {
   paymentReversals: number
   invoiceAdjustments: number
   invoiceVoids: number
+  residentAccountsCreated: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2575,6 +2783,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   paymentReversals?: boolean | UserCountOutputTypeCountPaymentReversalsArgs
   invoiceAdjustments?: boolean | UserCountOutputTypeCountInvoiceAdjustmentsArgs
   invoiceVoids?: boolean | UserCountOutputTypeCountInvoiceVoidsArgs
+  residentAccountsCreated?: boolean | UserCountOutputTypeCountResidentAccountsCreatedArgs
 }
 
 /**
@@ -2692,6 +2901,13 @@ export type UserCountOutputTypeCountInvoiceVoidsArgs<ExtArgs extends runtime.Typ
   where?: Prisma.InvoiceVoidWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountResidentAccountsCreatedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ResidentAccountWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -2718,6 +2934,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   paymentReversals?: boolean | Prisma.User$paymentReversalsArgs<ExtArgs>
   invoiceAdjustments?: boolean | Prisma.User$invoiceAdjustmentsArgs<ExtArgs>
   invoiceVoids?: boolean | Prisma.User$invoiceVoidsArgs<ExtArgs>
+  residentAccountsCreated?: boolean | Prisma.User$residentAccountsCreatedArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -2774,6 +2991,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   paymentReversals?: boolean | Prisma.User$paymentReversalsArgs<ExtArgs>
   invoiceAdjustments?: boolean | Prisma.User$invoiceAdjustmentsArgs<ExtArgs>
   invoiceVoids?: boolean | Prisma.User$invoiceVoidsArgs<ExtArgs>
+  residentAccountsCreated?: boolean | Prisma.User$residentAccountsCreatedArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -2797,6 +3015,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     paymentReversals: Prisma.$PaymentReversalPayload<ExtArgs>[]
     invoiceAdjustments: Prisma.$InvoiceAdjustmentPayload<ExtArgs>[]
     invoiceVoids: Prisma.$InvoiceVoidPayload<ExtArgs>[]
+    residentAccountsCreated: Prisma.$ResidentAccountPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -3220,6 +3439,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   paymentReversals<T extends Prisma.User$paymentReversalsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$paymentReversalsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PaymentReversalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   invoiceAdjustments<T extends Prisma.User$invoiceAdjustmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$invoiceAdjustmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvoiceAdjustmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   invoiceVoids<T extends Prisma.User$invoiceVoidsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$invoiceVoidsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvoiceVoidPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  residentAccountsCreated<T extends Prisma.User$residentAccountsCreatedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$residentAccountsCreatedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ResidentAccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4008,6 +4228,30 @@ export type User$invoiceVoidsArgs<ExtArgs extends runtime.Types.Extensions.Inter
   take?: number
   skip?: number
   distinct?: Prisma.InvoiceVoidScalarFieldEnum | Prisma.InvoiceVoidScalarFieldEnum[]
+}
+
+/**
+ * User.residentAccountsCreated
+ */
+export type User$residentAccountsCreatedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ResidentAccount
+   */
+  select?: Prisma.ResidentAccountSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ResidentAccount
+   */
+  omit?: Prisma.ResidentAccountOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ResidentAccountInclude<ExtArgs> | null
+  where?: Prisma.ResidentAccountWhereInput
+  orderBy?: Prisma.ResidentAccountOrderByWithRelationInput | Prisma.ResidentAccountOrderByWithRelationInput[]
+  cursor?: Prisma.ResidentAccountWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ResidentAccountScalarFieldEnum | Prisma.ResidentAccountScalarFieldEnum[]
 }
 
 /**

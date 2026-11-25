@@ -159,9 +159,9 @@ for (const file of [
 const history = JSON.parse(read('scripts/ci/g6b-migrations.json'));
 assert.equal(history.version, 1);
 assert.equal(history.provider, 'postgresql');
-assert.equal(history.migrations.length, 24);
+assert.equal(history.migrations.length, 25);
 const migrationNames = history.migrations.map((m) => m.name);
-assert.equal(new Set(migrationNames).size, 24);
+assert.equal(new Set(migrationNames).size, 25);
 assert.deepEqual(migrationNames, [...migrationNames].sort());
 assert.deepEqual(
   fs.readdirSync('prisma/migrations').sort(),

@@ -211,3 +211,24 @@ export type TransferFinanceReview = Prisma.TransferFinanceReviewModel
  * 
  */
 export type TransferFinanceResolution = Prisma.TransferFinanceResolutionModel
+/**
+ * Model ResidentAccount
+ * Portal access for exactly one Resident, provisioned by an owner. The phone number is the sign-in identifier (E.164, +91 only).
+ * Partial unique indexes (migration 20261119100000): one non-revoked account per resident and per phone number.
+ */
+export type ResidentAccount = Prisma.ResidentAccountModel
+/**
+ * Model ResidentOtpChallenge
+ * One sign-in code. Only a keyed hash of the code is stored. At most one live (unconsumed, not invalidated) challenge per account.
+ */
+export type ResidentOtpChallenge = Prisma.ResidentOtpChallengeModel
+/**
+ * Model ResidentSession
+ * Resident sessions live in their own table: a resident token can never be looked up as an owner session or the reverse.
+ */
+export type ResidentSession = Prisma.ResidentSessionModel
+/**
+ * Model ResidentAuthThrottle
+ * Rate-limit state for resident sign-in, kept apart from the owner `login_throttles` table. Keys are keyed hashes, never a phone number or address.
+ */
+export type ResidentAuthThrottle = Prisma.ResidentAuthThrottleModel

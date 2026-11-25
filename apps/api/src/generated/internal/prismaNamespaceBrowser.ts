@@ -83,7 +83,11 @@ export const ModelName = {
   StayAssignmentReplacement: 'StayAssignmentReplacement',
   EffectiveStayAssignment: 'EffectiveStayAssignment',
   TransferFinanceReview: 'TransferFinanceReview',
-  TransferFinanceResolution: 'TransferFinanceResolution'
+  TransferFinanceResolution: 'TransferFinanceResolution',
+  ResidentAccount: 'ResidentAccount',
+  ResidentOtpChallenge: 'ResidentOtpChallenge',
+  ResidentSession: 'ResidentSession',
+  ResidentAuthThrottle: 'ResidentAuthThrottle'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -663,6 +667,69 @@ export const TransferFinanceResolutionScalarFieldEnum = {
 } as const
 
 export type TransferFinanceResolutionScalarFieldEnum = (typeof TransferFinanceResolutionScalarFieldEnum)[keyof typeof TransferFinanceResolutionScalarFieldEnum]
+
+
+export const ResidentAccountScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  residentId: 'residentId',
+  phoneE164: 'phoneE164',
+  status: 'status',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  suspendedAt: 'suspendedAt',
+  revokedAt: 'revokedAt',
+  lastLoginAt: 'lastLoginAt'
+} as const
+
+export type ResidentAccountScalarFieldEnum = (typeof ResidentAccountScalarFieldEnum)[keyof typeof ResidentAccountScalarFieldEnum]
+
+
+export const ResidentOtpChallengeScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  accountId: 'accountId',
+  codeHash: 'codeHash',
+  attempts: 'attempts',
+  maxAttempts: 'maxAttempts',
+  expiresAt: 'expiresAt',
+  consumedAt: 'consumedAt',
+  invalidatedAt: 'invalidatedAt',
+  invalidatedReason: 'invalidatedReason',
+  deliveryStatus: 'deliveryStatus',
+  createdAt: 'createdAt'
+} as const
+
+export type ResidentOtpChallengeScalarFieldEnum = (typeof ResidentOtpChallengeScalarFieldEnum)[keyof typeof ResidentOtpChallengeScalarFieldEnum]
+
+
+export const ResidentSessionScalarFieldEnum = {
+  id: 'id',
+  tokenHash: 'tokenHash',
+  organizationId: 'organizationId',
+  accountId: 'accountId',
+  createdAt: 'createdAt',
+  lastSeenAt: 'lastSeenAt',
+  idleExpiresAt: 'idleExpiresAt',
+  absoluteExpiresAt: 'absoluteExpiresAt',
+  revokedAt: 'revokedAt',
+  revokedReason: 'revokedReason'
+} as const
+
+export type ResidentSessionScalarFieldEnum = (typeof ResidentSessionScalarFieldEnum)[keyof typeof ResidentSessionScalarFieldEnum]
+
+
+export const ResidentAuthThrottleScalarFieldEnum = {
+  scope: 'scope',
+  keyHash: 'keyHash',
+  failures: 'failures',
+  windowStartedAt: 'windowStartedAt',
+  lockedUntil: 'lockedUntil',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ResidentAuthThrottleScalarFieldEnum = (typeof ResidentAuthThrottleScalarFieldEnum)[keyof typeof ResidentAuthThrottleScalarFieldEnum]
 
 
 export const SortOrder = {

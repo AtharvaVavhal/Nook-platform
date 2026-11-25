@@ -36,7 +36,7 @@ export async function prepareUpgrade(db, root, env, migratorUrl) {
   const all = JSON.parse(readFileSync(resolve(root, 'scripts/ci/g6b-migrations.json'))).migrations;
   assert.equal(old.length, 18);
   assert.deepEqual(all.slice(0, 18), old);
-  assert.equal(all.length, 24);
+  assert.equal(all.length, 25);
   const dir = mkdtempSync(join(tmpdir(), 'nook-upgrade-'));
   try {
     const migrations = join(dir, 'migrations');

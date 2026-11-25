@@ -429,7 +429,11 @@ export const ModelName = {
   StayAssignmentReplacement: 'StayAssignmentReplacement',
   EffectiveStayAssignment: 'EffectiveStayAssignment',
   TransferFinanceReview: 'TransferFinanceReview',
-  TransferFinanceResolution: 'TransferFinanceResolution'
+  TransferFinanceResolution: 'TransferFinanceResolution',
+  ResidentAccount: 'ResidentAccount',
+  ResidentOtpChallenge: 'ResidentOtpChallenge',
+  ResidentSession: 'ResidentSession',
+  ResidentAuthThrottle: 'ResidentAuthThrottle'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -445,7 +449,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "organization" | "user" | "membership" | "session" | "auditEvent" | "property" | "floor" | "room" | "bed" | "resident" | "booking" | "admission" | "enquiry" | "enquiryFollowUp" | "checkIn" | "checkOut" | "invoice" | "payment" | "paymentReversal" | "invoiceAdjustment" | "invoiceVoid" | "paymentIdempotencyKey" | "loginThrottle" | "correctionProposal" | "correctionCommandReceipt" | "correctionFinanceLink" | "stayAssignment" | "transfer" | "transferCommandReceipt" | "stayAssignmentReplacement" | "effectiveStayAssignment" | "transferFinanceReview" | "transferFinanceResolution"
+    modelProps: "organization" | "user" | "membership" | "session" | "auditEvent" | "property" | "floor" | "room" | "bed" | "resident" | "booking" | "admission" | "enquiry" | "enquiryFollowUp" | "checkIn" | "checkOut" | "invoice" | "payment" | "paymentReversal" | "invoiceAdjustment" | "invoiceVoid" | "paymentIdempotencyKey" | "loginThrottle" | "correctionProposal" | "correctionCommandReceipt" | "correctionFinanceLink" | "stayAssignment" | "transfer" | "transferCommandReceipt" | "stayAssignmentReplacement" | "effectiveStayAssignment" | "transferFinanceReview" | "transferFinanceResolution" | "residentAccount" | "residentOtpChallenge" | "residentSession" | "residentAuthThrottle"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2891,6 +2895,302 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    ResidentAccount: {
+      payload: Prisma.$ResidentAccountPayload<ExtArgs>
+      fields: Prisma.ResidentAccountFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ResidentAccountFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResidentAccountPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ResidentAccountFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResidentAccountPayload>
+        }
+        findFirst: {
+          args: Prisma.ResidentAccountFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResidentAccountPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ResidentAccountFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResidentAccountPayload>
+        }
+        findMany: {
+          args: Prisma.ResidentAccountFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResidentAccountPayload>[]
+        }
+        create: {
+          args: Prisma.ResidentAccountCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResidentAccountPayload>
+        }
+        createMany: {
+          args: Prisma.ResidentAccountCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ResidentAccountCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResidentAccountPayload>[]
+        }
+        delete: {
+          args: Prisma.ResidentAccountDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResidentAccountPayload>
+        }
+        update: {
+          args: Prisma.ResidentAccountUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResidentAccountPayload>
+        }
+        deleteMany: {
+          args: Prisma.ResidentAccountDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ResidentAccountUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ResidentAccountUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResidentAccountPayload>[]
+        }
+        upsert: {
+          args: Prisma.ResidentAccountUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResidentAccountPayload>
+        }
+        aggregate: {
+          args: Prisma.ResidentAccountAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateResidentAccount>
+        }
+        groupBy: {
+          args: Prisma.ResidentAccountGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ResidentAccountGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ResidentAccountCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ResidentAccountCountAggregateOutputType> | number
+        }
+      }
+    }
+    ResidentOtpChallenge: {
+      payload: Prisma.$ResidentOtpChallengePayload<ExtArgs>
+      fields: Prisma.ResidentOtpChallengeFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ResidentOtpChallengeFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResidentOtpChallengePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ResidentOtpChallengeFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResidentOtpChallengePayload>
+        }
+        findFirst: {
+          args: Prisma.ResidentOtpChallengeFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResidentOtpChallengePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ResidentOtpChallengeFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResidentOtpChallengePayload>
+        }
+        findMany: {
+          args: Prisma.ResidentOtpChallengeFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResidentOtpChallengePayload>[]
+        }
+        create: {
+          args: Prisma.ResidentOtpChallengeCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResidentOtpChallengePayload>
+        }
+        createMany: {
+          args: Prisma.ResidentOtpChallengeCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ResidentOtpChallengeCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResidentOtpChallengePayload>[]
+        }
+        delete: {
+          args: Prisma.ResidentOtpChallengeDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResidentOtpChallengePayload>
+        }
+        update: {
+          args: Prisma.ResidentOtpChallengeUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResidentOtpChallengePayload>
+        }
+        deleteMany: {
+          args: Prisma.ResidentOtpChallengeDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ResidentOtpChallengeUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ResidentOtpChallengeUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResidentOtpChallengePayload>[]
+        }
+        upsert: {
+          args: Prisma.ResidentOtpChallengeUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResidentOtpChallengePayload>
+        }
+        aggregate: {
+          args: Prisma.ResidentOtpChallengeAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateResidentOtpChallenge>
+        }
+        groupBy: {
+          args: Prisma.ResidentOtpChallengeGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ResidentOtpChallengeGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ResidentOtpChallengeCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ResidentOtpChallengeCountAggregateOutputType> | number
+        }
+      }
+    }
+    ResidentSession: {
+      payload: Prisma.$ResidentSessionPayload<ExtArgs>
+      fields: Prisma.ResidentSessionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ResidentSessionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResidentSessionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ResidentSessionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResidentSessionPayload>
+        }
+        findFirst: {
+          args: Prisma.ResidentSessionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResidentSessionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ResidentSessionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResidentSessionPayload>
+        }
+        findMany: {
+          args: Prisma.ResidentSessionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResidentSessionPayload>[]
+        }
+        create: {
+          args: Prisma.ResidentSessionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResidentSessionPayload>
+        }
+        createMany: {
+          args: Prisma.ResidentSessionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ResidentSessionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResidentSessionPayload>[]
+        }
+        delete: {
+          args: Prisma.ResidentSessionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResidentSessionPayload>
+        }
+        update: {
+          args: Prisma.ResidentSessionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResidentSessionPayload>
+        }
+        deleteMany: {
+          args: Prisma.ResidentSessionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ResidentSessionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ResidentSessionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResidentSessionPayload>[]
+        }
+        upsert: {
+          args: Prisma.ResidentSessionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResidentSessionPayload>
+        }
+        aggregate: {
+          args: Prisma.ResidentSessionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateResidentSession>
+        }
+        groupBy: {
+          args: Prisma.ResidentSessionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ResidentSessionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ResidentSessionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ResidentSessionCountAggregateOutputType> | number
+        }
+      }
+    }
+    ResidentAuthThrottle: {
+      payload: Prisma.$ResidentAuthThrottlePayload<ExtArgs>
+      fields: Prisma.ResidentAuthThrottleFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ResidentAuthThrottleFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResidentAuthThrottlePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ResidentAuthThrottleFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResidentAuthThrottlePayload>
+        }
+        findFirst: {
+          args: Prisma.ResidentAuthThrottleFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResidentAuthThrottlePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ResidentAuthThrottleFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResidentAuthThrottlePayload>
+        }
+        findMany: {
+          args: Prisma.ResidentAuthThrottleFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResidentAuthThrottlePayload>[]
+        }
+        create: {
+          args: Prisma.ResidentAuthThrottleCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResidentAuthThrottlePayload>
+        }
+        createMany: {
+          args: Prisma.ResidentAuthThrottleCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ResidentAuthThrottleCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResidentAuthThrottlePayload>[]
+        }
+        delete: {
+          args: Prisma.ResidentAuthThrottleDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResidentAuthThrottlePayload>
+        }
+        update: {
+          args: Prisma.ResidentAuthThrottleUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResidentAuthThrottlePayload>
+        }
+        deleteMany: {
+          args: Prisma.ResidentAuthThrottleDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ResidentAuthThrottleUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ResidentAuthThrottleUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResidentAuthThrottlePayload>[]
+        }
+        upsert: {
+          args: Prisma.ResidentAuthThrottleUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResidentAuthThrottlePayload>
+        }
+        aggregate: {
+          args: Prisma.ResidentAuthThrottleAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateResidentAuthThrottle>
+        }
+        groupBy: {
+          args: Prisma.ResidentAuthThrottleGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ResidentAuthThrottleGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ResidentAuthThrottleCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ResidentAuthThrottleCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -3493,6 +3793,69 @@ export const TransferFinanceResolutionScalarFieldEnum = {
 export type TransferFinanceResolutionScalarFieldEnum = (typeof TransferFinanceResolutionScalarFieldEnum)[keyof typeof TransferFinanceResolutionScalarFieldEnum]
 
 
+export const ResidentAccountScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  residentId: 'residentId',
+  phoneE164: 'phoneE164',
+  status: 'status',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  suspendedAt: 'suspendedAt',
+  revokedAt: 'revokedAt',
+  lastLoginAt: 'lastLoginAt'
+} as const
+
+export type ResidentAccountScalarFieldEnum = (typeof ResidentAccountScalarFieldEnum)[keyof typeof ResidentAccountScalarFieldEnum]
+
+
+export const ResidentOtpChallengeScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  accountId: 'accountId',
+  codeHash: 'codeHash',
+  attempts: 'attempts',
+  maxAttempts: 'maxAttempts',
+  expiresAt: 'expiresAt',
+  consumedAt: 'consumedAt',
+  invalidatedAt: 'invalidatedAt',
+  invalidatedReason: 'invalidatedReason',
+  deliveryStatus: 'deliveryStatus',
+  createdAt: 'createdAt'
+} as const
+
+export type ResidentOtpChallengeScalarFieldEnum = (typeof ResidentOtpChallengeScalarFieldEnum)[keyof typeof ResidentOtpChallengeScalarFieldEnum]
+
+
+export const ResidentSessionScalarFieldEnum = {
+  id: 'id',
+  tokenHash: 'tokenHash',
+  organizationId: 'organizationId',
+  accountId: 'accountId',
+  createdAt: 'createdAt',
+  lastSeenAt: 'lastSeenAt',
+  idleExpiresAt: 'idleExpiresAt',
+  absoluteExpiresAt: 'absoluteExpiresAt',
+  revokedAt: 'revokedAt',
+  revokedReason: 'revokedReason'
+} as const
+
+export type ResidentSessionScalarFieldEnum = (typeof ResidentSessionScalarFieldEnum)[keyof typeof ResidentSessionScalarFieldEnum]
+
+
+export const ResidentAuthThrottleScalarFieldEnum = {
+  scope: 'scope',
+  keyHash: 'keyHash',
+  failures: 'failures',
+  windowStartedAt: 'windowStartedAt',
+  lockedUntil: 'lockedUntil',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ResidentAuthThrottleScalarFieldEnum = (typeof ResidentAuthThrottleScalarFieldEnum)[keyof typeof ResidentAuthThrottleScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -3975,6 +4338,20 @@ export type ListEnumTransferTypeFieldRefInput<$PrismaModel> = FieldRefInputType<
 
 
 /**
+ * Reference to a field of type 'ResidentAccountStatus'
+ */
+export type EnumResidentAccountStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ResidentAccountStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'ResidentAccountStatus[]'
+ */
+export type ListEnumResidentAccountStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ResidentAccountStatus[]'>
+    
+
+
+/**
  * Reference to a field of type 'Float'
  */
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -4171,6 +4548,10 @@ export type GlobalOmitConfig = {
   effectiveStayAssignment?: Prisma.EffectiveStayAssignmentOmit
   transferFinanceReview?: Prisma.TransferFinanceReviewOmit
   transferFinanceResolution?: Prisma.TransferFinanceResolutionOmit
+  residentAccount?: Prisma.ResidentAccountOmit
+  residentOtpChallenge?: Prisma.ResidentOtpChallengeOmit
+  residentSession?: Prisma.ResidentSessionOmit
+  residentAuthThrottle?: Prisma.ResidentAuthThrottleOmit
 }
 
 /* Types for Logging */

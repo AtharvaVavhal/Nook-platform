@@ -44,6 +44,8 @@ test('installed Prisma engine failure is detected and blocks redeploy; record pa
     const first = deploy();
     assert.notEqual(first.status, 0);
     assert.match(first.stdout + first.stderr, /P3018/);
+    const expected = JSON.parse(readFileSync('scripts/ci/g6b-migrations.json', 'utf8')).migrations
+      .length;
     let ddlRemains = false;
     await withMigratorClient(async (db) => {
       ddlRemains = (
@@ -58,8 +60,6 @@ test('installed Prisma engine failure is detected and blocks redeploy; record pa
       assert.equal(row.length, 1);
       assert.equal(row[0].finished_at, null);
       assert.equal(row[0].rolled_back_at, null);
-      const expected = JSON.parse(readFileSync('scripts/ci/g6b-migrations.json', 'utf8')).migrations
-        .length;
       assert.equal(
         (
           await db.query(
@@ -79,7 +79,7 @@ test('installed Prisma engine failure is detected and blocks redeploy; record pa
         error: 'P3018',
         retry: 'P3009',
         partialDdlRemains: ddlRemains,
-        priorMigrationsPreserved: 24,
+        priorMigrationsPreserved: expected,
         cleanup: 'exact disposable cluster removed by parent; no ledger repair attempted',
       }),
     );

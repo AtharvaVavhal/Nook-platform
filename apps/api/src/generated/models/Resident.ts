@@ -296,6 +296,7 @@ export type ResidentWhereInput = {
   checkOuts?: Prisma.CheckOutListRelationFilter
   invoices?: Prisma.InvoiceListRelationFilter
   payments?: Prisma.PaymentListRelationFilter
+  portalAccounts?: Prisma.ResidentAccountListRelationFilter
 }
 
 export type ResidentOrderByWithRelationInput = {
@@ -331,6 +332,7 @@ export type ResidentOrderByWithRelationInput = {
   checkOuts?: Prisma.CheckOutOrderByRelationAggregateInput
   invoices?: Prisma.InvoiceOrderByRelationAggregateInput
   payments?: Prisma.PaymentOrderByRelationAggregateInput
+  portalAccounts?: Prisma.ResidentAccountOrderByRelationAggregateInput
 }
 
 export type ResidentWhereUniqueInput = Prisma.AtLeast<{
@@ -370,6 +372,7 @@ export type ResidentWhereUniqueInput = Prisma.AtLeast<{
   checkOuts?: Prisma.CheckOutListRelationFilter
   invoices?: Prisma.InvoiceListRelationFilter
   payments?: Prisma.PaymentListRelationFilter
+  portalAccounts?: Prisma.ResidentAccountListRelationFilter
 }, "id" | "id_organizationId">
 
 export type ResidentOrderByWithAggregationInput = {
@@ -452,6 +455,7 @@ export type ResidentCreateInput = {
   checkOuts?: Prisma.CheckOutCreateNestedManyWithoutResidentInput
   invoices?: Prisma.InvoiceCreateNestedManyWithoutResidentInput
   payments?: Prisma.PaymentCreateNestedManyWithoutResidentInput
+  portalAccounts?: Prisma.ResidentAccountCreateNestedManyWithoutResidentInput
 }
 
 export type ResidentUncheckedCreateInput = {
@@ -486,6 +490,7 @@ export type ResidentUncheckedCreateInput = {
   checkOuts?: Prisma.CheckOutUncheckedCreateNestedManyWithoutResidentInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutResidentInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutResidentInput
+  portalAccounts?: Prisma.ResidentAccountUncheckedCreateNestedManyWithoutResidentInput
 }
 
 export type ResidentUpdateInput = {
@@ -520,6 +525,7 @@ export type ResidentUpdateInput = {
   checkOuts?: Prisma.CheckOutUpdateManyWithoutResidentNestedInput
   invoices?: Prisma.InvoiceUpdateManyWithoutResidentNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutResidentNestedInput
+  portalAccounts?: Prisma.ResidentAccountUpdateManyWithoutResidentNestedInput
 }
 
 export type ResidentUncheckedUpdateInput = {
@@ -554,6 +560,7 @@ export type ResidentUncheckedUpdateInput = {
   checkOuts?: Prisma.CheckOutUncheckedUpdateManyWithoutResidentNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutResidentNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutResidentNestedInput
+  portalAccounts?: Prisma.ResidentAccountUncheckedUpdateManyWithoutResidentNestedInput
 }
 
 export type ResidentCreateManyInput = {
@@ -940,6 +947,20 @@ export type ResidentUpdateOneRequiredWithoutTransferFinanceReviewsNestedInput = 
   update?: Prisma.XOR<Prisma.XOR<Prisma.ResidentUpdateToOneWithWhereWithoutTransferFinanceReviewsInput, Prisma.ResidentUpdateWithoutTransferFinanceReviewsInput>, Prisma.ResidentUncheckedUpdateWithoutTransferFinanceReviewsInput>
 }
 
+export type ResidentCreateNestedOneWithoutPortalAccountsInput = {
+  create?: Prisma.XOR<Prisma.ResidentCreateWithoutPortalAccountsInput, Prisma.ResidentUncheckedCreateWithoutPortalAccountsInput>
+  connectOrCreate?: Prisma.ResidentCreateOrConnectWithoutPortalAccountsInput
+  connect?: Prisma.ResidentWhereUniqueInput
+}
+
+export type ResidentUpdateOneRequiredWithoutPortalAccountsNestedInput = {
+  create?: Prisma.XOR<Prisma.ResidentCreateWithoutPortalAccountsInput, Prisma.ResidentUncheckedCreateWithoutPortalAccountsInput>
+  connectOrCreate?: Prisma.ResidentCreateOrConnectWithoutPortalAccountsInput
+  upsert?: Prisma.ResidentUpsertWithoutPortalAccountsInput
+  connect?: Prisma.ResidentWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ResidentUpdateToOneWithWhereWithoutPortalAccountsInput, Prisma.ResidentUpdateWithoutPortalAccountsInput>, Prisma.ResidentUncheckedUpdateWithoutPortalAccountsInput>
+}
+
 export type ResidentCreateWithoutOrganizationInput = {
   id?: string
   firstName: string
@@ -971,6 +992,7 @@ export type ResidentCreateWithoutOrganizationInput = {
   checkOuts?: Prisma.CheckOutCreateNestedManyWithoutResidentInput
   invoices?: Prisma.InvoiceCreateNestedManyWithoutResidentInput
   payments?: Prisma.PaymentCreateNestedManyWithoutResidentInput
+  portalAccounts?: Prisma.ResidentAccountCreateNestedManyWithoutResidentInput
 }
 
 export type ResidentUncheckedCreateWithoutOrganizationInput = {
@@ -1004,6 +1026,7 @@ export type ResidentUncheckedCreateWithoutOrganizationInput = {
   checkOuts?: Prisma.CheckOutUncheckedCreateNestedManyWithoutResidentInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutResidentInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutResidentInput
+  portalAccounts?: Prisma.ResidentAccountUncheckedCreateNestedManyWithoutResidentInput
 }
 
 export type ResidentCreateOrConnectWithoutOrganizationInput = {
@@ -1087,6 +1110,7 @@ export type ResidentCreateWithoutBookingsInput = {
   checkOuts?: Prisma.CheckOutCreateNestedManyWithoutResidentInput
   invoices?: Prisma.InvoiceCreateNestedManyWithoutResidentInput
   payments?: Prisma.PaymentCreateNestedManyWithoutResidentInput
+  portalAccounts?: Prisma.ResidentAccountCreateNestedManyWithoutResidentInput
 }
 
 export type ResidentUncheckedCreateWithoutBookingsInput = {
@@ -1120,6 +1144,7 @@ export type ResidentUncheckedCreateWithoutBookingsInput = {
   checkOuts?: Prisma.CheckOutUncheckedCreateNestedManyWithoutResidentInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutResidentInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutResidentInput
+  portalAccounts?: Prisma.ResidentAccountUncheckedCreateNestedManyWithoutResidentInput
 }
 
 export type ResidentCreateOrConnectWithoutBookingsInput = {
@@ -1169,6 +1194,7 @@ export type ResidentUpdateWithoutBookingsInput = {
   checkOuts?: Prisma.CheckOutUpdateManyWithoutResidentNestedInput
   invoices?: Prisma.InvoiceUpdateManyWithoutResidentNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutResidentNestedInput
+  portalAccounts?: Prisma.ResidentAccountUpdateManyWithoutResidentNestedInput
 }
 
 export type ResidentUncheckedUpdateWithoutBookingsInput = {
@@ -1202,6 +1228,7 @@ export type ResidentUncheckedUpdateWithoutBookingsInput = {
   checkOuts?: Prisma.CheckOutUncheckedUpdateManyWithoutResidentNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutResidentNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutResidentNestedInput
+  portalAccounts?: Prisma.ResidentAccountUncheckedUpdateManyWithoutResidentNestedInput
 }
 
 export type ResidentCreateWithoutAdmissionsInput = {
@@ -1235,6 +1262,7 @@ export type ResidentCreateWithoutAdmissionsInput = {
   checkOuts?: Prisma.CheckOutCreateNestedManyWithoutResidentInput
   invoices?: Prisma.InvoiceCreateNestedManyWithoutResidentInput
   payments?: Prisma.PaymentCreateNestedManyWithoutResidentInput
+  portalAccounts?: Prisma.ResidentAccountCreateNestedManyWithoutResidentInput
 }
 
 export type ResidentUncheckedCreateWithoutAdmissionsInput = {
@@ -1268,6 +1296,7 @@ export type ResidentUncheckedCreateWithoutAdmissionsInput = {
   checkOuts?: Prisma.CheckOutUncheckedCreateNestedManyWithoutResidentInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutResidentInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutResidentInput
+  portalAccounts?: Prisma.ResidentAccountUncheckedCreateNestedManyWithoutResidentInput
 }
 
 export type ResidentCreateOrConnectWithoutAdmissionsInput = {
@@ -1317,6 +1346,7 @@ export type ResidentUpdateWithoutAdmissionsInput = {
   checkOuts?: Prisma.CheckOutUpdateManyWithoutResidentNestedInput
   invoices?: Prisma.InvoiceUpdateManyWithoutResidentNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutResidentNestedInput
+  portalAccounts?: Prisma.ResidentAccountUpdateManyWithoutResidentNestedInput
 }
 
 export type ResidentUncheckedUpdateWithoutAdmissionsInput = {
@@ -1350,6 +1380,7 @@ export type ResidentUncheckedUpdateWithoutAdmissionsInput = {
   checkOuts?: Prisma.CheckOutUncheckedUpdateManyWithoutResidentNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutResidentNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutResidentNestedInput
+  portalAccounts?: Prisma.ResidentAccountUncheckedUpdateManyWithoutResidentNestedInput
 }
 
 export type ResidentCreateWithoutEnquiryInput = {
@@ -1383,6 +1414,7 @@ export type ResidentCreateWithoutEnquiryInput = {
   checkOuts?: Prisma.CheckOutCreateNestedManyWithoutResidentInput
   invoices?: Prisma.InvoiceCreateNestedManyWithoutResidentInput
   payments?: Prisma.PaymentCreateNestedManyWithoutResidentInput
+  portalAccounts?: Prisma.ResidentAccountCreateNestedManyWithoutResidentInput
 }
 
 export type ResidentUncheckedCreateWithoutEnquiryInput = {
@@ -1416,6 +1448,7 @@ export type ResidentUncheckedCreateWithoutEnquiryInput = {
   checkOuts?: Prisma.CheckOutUncheckedCreateNestedManyWithoutResidentInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutResidentInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutResidentInput
+  portalAccounts?: Prisma.ResidentAccountUncheckedCreateNestedManyWithoutResidentInput
 }
 
 export type ResidentCreateOrConnectWithoutEnquiryInput = {
@@ -1465,6 +1498,7 @@ export type ResidentUpdateWithoutEnquiryInput = {
   checkOuts?: Prisma.CheckOutUpdateManyWithoutResidentNestedInput
   invoices?: Prisma.InvoiceUpdateManyWithoutResidentNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutResidentNestedInput
+  portalAccounts?: Prisma.ResidentAccountUpdateManyWithoutResidentNestedInput
 }
 
 export type ResidentUncheckedUpdateWithoutEnquiryInput = {
@@ -1498,6 +1532,7 @@ export type ResidentUncheckedUpdateWithoutEnquiryInput = {
   checkOuts?: Prisma.CheckOutUncheckedUpdateManyWithoutResidentNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutResidentNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutResidentNestedInput
+  portalAccounts?: Prisma.ResidentAccountUncheckedUpdateManyWithoutResidentNestedInput
 }
 
 export type ResidentCreateWithoutCheckInsInput = {
@@ -1531,6 +1566,7 @@ export type ResidentCreateWithoutCheckInsInput = {
   checkOuts?: Prisma.CheckOutCreateNestedManyWithoutResidentInput
   invoices?: Prisma.InvoiceCreateNestedManyWithoutResidentInput
   payments?: Prisma.PaymentCreateNestedManyWithoutResidentInput
+  portalAccounts?: Prisma.ResidentAccountCreateNestedManyWithoutResidentInput
 }
 
 export type ResidentUncheckedCreateWithoutCheckInsInput = {
@@ -1564,6 +1600,7 @@ export type ResidentUncheckedCreateWithoutCheckInsInput = {
   checkOuts?: Prisma.CheckOutUncheckedCreateNestedManyWithoutResidentInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutResidentInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutResidentInput
+  portalAccounts?: Prisma.ResidentAccountUncheckedCreateNestedManyWithoutResidentInput
 }
 
 export type ResidentCreateOrConnectWithoutCheckInsInput = {
@@ -1613,6 +1650,7 @@ export type ResidentUpdateWithoutCheckInsInput = {
   checkOuts?: Prisma.CheckOutUpdateManyWithoutResidentNestedInput
   invoices?: Prisma.InvoiceUpdateManyWithoutResidentNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutResidentNestedInput
+  portalAccounts?: Prisma.ResidentAccountUpdateManyWithoutResidentNestedInput
 }
 
 export type ResidentUncheckedUpdateWithoutCheckInsInput = {
@@ -1646,6 +1684,7 @@ export type ResidentUncheckedUpdateWithoutCheckInsInput = {
   checkOuts?: Prisma.CheckOutUncheckedUpdateManyWithoutResidentNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutResidentNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutResidentNestedInput
+  portalAccounts?: Prisma.ResidentAccountUncheckedUpdateManyWithoutResidentNestedInput
 }
 
 export type ResidentCreateWithoutCheckOutsInput = {
@@ -1679,6 +1718,7 @@ export type ResidentCreateWithoutCheckOutsInput = {
   checkIns?: Prisma.CheckInCreateNestedManyWithoutResidentInput
   invoices?: Prisma.InvoiceCreateNestedManyWithoutResidentInput
   payments?: Prisma.PaymentCreateNestedManyWithoutResidentInput
+  portalAccounts?: Prisma.ResidentAccountCreateNestedManyWithoutResidentInput
 }
 
 export type ResidentUncheckedCreateWithoutCheckOutsInput = {
@@ -1712,6 +1752,7 @@ export type ResidentUncheckedCreateWithoutCheckOutsInput = {
   checkIns?: Prisma.CheckInUncheckedCreateNestedManyWithoutResidentInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutResidentInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutResidentInput
+  portalAccounts?: Prisma.ResidentAccountUncheckedCreateNestedManyWithoutResidentInput
 }
 
 export type ResidentCreateOrConnectWithoutCheckOutsInput = {
@@ -1761,6 +1802,7 @@ export type ResidentUpdateWithoutCheckOutsInput = {
   checkIns?: Prisma.CheckInUpdateManyWithoutResidentNestedInput
   invoices?: Prisma.InvoiceUpdateManyWithoutResidentNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutResidentNestedInput
+  portalAccounts?: Prisma.ResidentAccountUpdateManyWithoutResidentNestedInput
 }
 
 export type ResidentUncheckedUpdateWithoutCheckOutsInput = {
@@ -1794,6 +1836,7 @@ export type ResidentUncheckedUpdateWithoutCheckOutsInput = {
   checkIns?: Prisma.CheckInUncheckedUpdateManyWithoutResidentNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutResidentNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutResidentNestedInput
+  portalAccounts?: Prisma.ResidentAccountUncheckedUpdateManyWithoutResidentNestedInput
 }
 
 export type ResidentCreateWithoutInvoicesInput = {
@@ -1827,6 +1870,7 @@ export type ResidentCreateWithoutInvoicesInput = {
   checkIns?: Prisma.CheckInCreateNestedManyWithoutResidentInput
   checkOuts?: Prisma.CheckOutCreateNestedManyWithoutResidentInput
   payments?: Prisma.PaymentCreateNestedManyWithoutResidentInput
+  portalAccounts?: Prisma.ResidentAccountCreateNestedManyWithoutResidentInput
 }
 
 export type ResidentUncheckedCreateWithoutInvoicesInput = {
@@ -1860,6 +1904,7 @@ export type ResidentUncheckedCreateWithoutInvoicesInput = {
   checkIns?: Prisma.CheckInUncheckedCreateNestedManyWithoutResidentInput
   checkOuts?: Prisma.CheckOutUncheckedCreateNestedManyWithoutResidentInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutResidentInput
+  portalAccounts?: Prisma.ResidentAccountUncheckedCreateNestedManyWithoutResidentInput
 }
 
 export type ResidentCreateOrConnectWithoutInvoicesInput = {
@@ -1909,6 +1954,7 @@ export type ResidentUpdateWithoutInvoicesInput = {
   checkIns?: Prisma.CheckInUpdateManyWithoutResidentNestedInput
   checkOuts?: Prisma.CheckOutUpdateManyWithoutResidentNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutResidentNestedInput
+  portalAccounts?: Prisma.ResidentAccountUpdateManyWithoutResidentNestedInput
 }
 
 export type ResidentUncheckedUpdateWithoutInvoicesInput = {
@@ -1942,6 +1988,7 @@ export type ResidentUncheckedUpdateWithoutInvoicesInput = {
   checkIns?: Prisma.CheckInUncheckedUpdateManyWithoutResidentNestedInput
   checkOuts?: Prisma.CheckOutUncheckedUpdateManyWithoutResidentNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutResidentNestedInput
+  portalAccounts?: Prisma.ResidentAccountUncheckedUpdateManyWithoutResidentNestedInput
 }
 
 export type ResidentCreateWithoutPaymentsInput = {
@@ -1975,6 +2022,7 @@ export type ResidentCreateWithoutPaymentsInput = {
   checkIns?: Prisma.CheckInCreateNestedManyWithoutResidentInput
   checkOuts?: Prisma.CheckOutCreateNestedManyWithoutResidentInput
   invoices?: Prisma.InvoiceCreateNestedManyWithoutResidentInput
+  portalAccounts?: Prisma.ResidentAccountCreateNestedManyWithoutResidentInput
 }
 
 export type ResidentUncheckedCreateWithoutPaymentsInput = {
@@ -2008,6 +2056,7 @@ export type ResidentUncheckedCreateWithoutPaymentsInput = {
   checkIns?: Prisma.CheckInUncheckedCreateNestedManyWithoutResidentInput
   checkOuts?: Prisma.CheckOutUncheckedCreateNestedManyWithoutResidentInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutResidentInput
+  portalAccounts?: Prisma.ResidentAccountUncheckedCreateNestedManyWithoutResidentInput
 }
 
 export type ResidentCreateOrConnectWithoutPaymentsInput = {
@@ -2057,6 +2106,7 @@ export type ResidentUpdateWithoutPaymentsInput = {
   checkIns?: Prisma.CheckInUpdateManyWithoutResidentNestedInput
   checkOuts?: Prisma.CheckOutUpdateManyWithoutResidentNestedInput
   invoices?: Prisma.InvoiceUpdateManyWithoutResidentNestedInput
+  portalAccounts?: Prisma.ResidentAccountUpdateManyWithoutResidentNestedInput
 }
 
 export type ResidentUncheckedUpdateWithoutPaymentsInput = {
@@ -2090,6 +2140,7 @@ export type ResidentUncheckedUpdateWithoutPaymentsInput = {
   checkIns?: Prisma.CheckInUncheckedUpdateManyWithoutResidentNestedInput
   checkOuts?: Prisma.CheckOutUncheckedUpdateManyWithoutResidentNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutResidentNestedInput
+  portalAccounts?: Prisma.ResidentAccountUncheckedUpdateManyWithoutResidentNestedInput
 }
 
 export type ResidentCreateWithoutCorrectionProposalsInput = {
@@ -2123,6 +2174,7 @@ export type ResidentCreateWithoutCorrectionProposalsInput = {
   checkOuts?: Prisma.CheckOutCreateNestedManyWithoutResidentInput
   invoices?: Prisma.InvoiceCreateNestedManyWithoutResidentInput
   payments?: Prisma.PaymentCreateNestedManyWithoutResidentInput
+  portalAccounts?: Prisma.ResidentAccountCreateNestedManyWithoutResidentInput
 }
 
 export type ResidentUncheckedCreateWithoutCorrectionProposalsInput = {
@@ -2156,6 +2208,7 @@ export type ResidentUncheckedCreateWithoutCorrectionProposalsInput = {
   checkOuts?: Prisma.CheckOutUncheckedCreateNestedManyWithoutResidentInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutResidentInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutResidentInput
+  portalAccounts?: Prisma.ResidentAccountUncheckedCreateNestedManyWithoutResidentInput
 }
 
 export type ResidentCreateOrConnectWithoutCorrectionProposalsInput = {
@@ -2205,6 +2258,7 @@ export type ResidentUpdateWithoutCorrectionProposalsInput = {
   checkOuts?: Prisma.CheckOutUpdateManyWithoutResidentNestedInput
   invoices?: Prisma.InvoiceUpdateManyWithoutResidentNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutResidentNestedInput
+  portalAccounts?: Prisma.ResidentAccountUpdateManyWithoutResidentNestedInput
 }
 
 export type ResidentUncheckedUpdateWithoutCorrectionProposalsInput = {
@@ -2238,6 +2292,7 @@ export type ResidentUncheckedUpdateWithoutCorrectionProposalsInput = {
   checkOuts?: Prisma.CheckOutUncheckedUpdateManyWithoutResidentNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutResidentNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutResidentNestedInput
+  portalAccounts?: Prisma.ResidentAccountUncheckedUpdateManyWithoutResidentNestedInput
 }
 
 export type ResidentCreateWithoutCorrectionFinanceLinksInput = {
@@ -2271,6 +2326,7 @@ export type ResidentCreateWithoutCorrectionFinanceLinksInput = {
   checkOuts?: Prisma.CheckOutCreateNestedManyWithoutResidentInput
   invoices?: Prisma.InvoiceCreateNestedManyWithoutResidentInput
   payments?: Prisma.PaymentCreateNestedManyWithoutResidentInput
+  portalAccounts?: Prisma.ResidentAccountCreateNestedManyWithoutResidentInput
 }
 
 export type ResidentUncheckedCreateWithoutCorrectionFinanceLinksInput = {
@@ -2304,6 +2360,7 @@ export type ResidentUncheckedCreateWithoutCorrectionFinanceLinksInput = {
   checkOuts?: Prisma.CheckOutUncheckedCreateNestedManyWithoutResidentInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutResidentInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutResidentInput
+  portalAccounts?: Prisma.ResidentAccountUncheckedCreateNestedManyWithoutResidentInput
 }
 
 export type ResidentCreateOrConnectWithoutCorrectionFinanceLinksInput = {
@@ -2353,6 +2410,7 @@ export type ResidentUpdateWithoutCorrectionFinanceLinksInput = {
   checkOuts?: Prisma.CheckOutUpdateManyWithoutResidentNestedInput
   invoices?: Prisma.InvoiceUpdateManyWithoutResidentNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutResidentNestedInput
+  portalAccounts?: Prisma.ResidentAccountUpdateManyWithoutResidentNestedInput
 }
 
 export type ResidentUncheckedUpdateWithoutCorrectionFinanceLinksInput = {
@@ -2386,6 +2444,7 @@ export type ResidentUncheckedUpdateWithoutCorrectionFinanceLinksInput = {
   checkOuts?: Prisma.CheckOutUncheckedUpdateManyWithoutResidentNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutResidentNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutResidentNestedInput
+  portalAccounts?: Prisma.ResidentAccountUncheckedUpdateManyWithoutResidentNestedInput
 }
 
 export type ResidentCreateWithoutStayAssignmentsInput = {
@@ -2419,6 +2478,7 @@ export type ResidentCreateWithoutStayAssignmentsInput = {
   checkOuts?: Prisma.CheckOutCreateNestedManyWithoutResidentInput
   invoices?: Prisma.InvoiceCreateNestedManyWithoutResidentInput
   payments?: Prisma.PaymentCreateNestedManyWithoutResidentInput
+  portalAccounts?: Prisma.ResidentAccountCreateNestedManyWithoutResidentInput
 }
 
 export type ResidentUncheckedCreateWithoutStayAssignmentsInput = {
@@ -2452,6 +2512,7 @@ export type ResidentUncheckedCreateWithoutStayAssignmentsInput = {
   checkOuts?: Prisma.CheckOutUncheckedCreateNestedManyWithoutResidentInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutResidentInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutResidentInput
+  portalAccounts?: Prisma.ResidentAccountUncheckedCreateNestedManyWithoutResidentInput
 }
 
 export type ResidentCreateOrConnectWithoutStayAssignmentsInput = {
@@ -2501,6 +2562,7 @@ export type ResidentUpdateWithoutStayAssignmentsInput = {
   checkOuts?: Prisma.CheckOutUpdateManyWithoutResidentNestedInput
   invoices?: Prisma.InvoiceUpdateManyWithoutResidentNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutResidentNestedInput
+  portalAccounts?: Prisma.ResidentAccountUpdateManyWithoutResidentNestedInput
 }
 
 export type ResidentUncheckedUpdateWithoutStayAssignmentsInput = {
@@ -2534,6 +2596,7 @@ export type ResidentUncheckedUpdateWithoutStayAssignmentsInput = {
   checkOuts?: Prisma.CheckOutUncheckedUpdateManyWithoutResidentNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutResidentNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutResidentNestedInput
+  portalAccounts?: Prisma.ResidentAccountUncheckedUpdateManyWithoutResidentNestedInput
 }
 
 export type ResidentCreateWithoutTransfersInput = {
@@ -2567,6 +2630,7 @@ export type ResidentCreateWithoutTransfersInput = {
   checkOuts?: Prisma.CheckOutCreateNestedManyWithoutResidentInput
   invoices?: Prisma.InvoiceCreateNestedManyWithoutResidentInput
   payments?: Prisma.PaymentCreateNestedManyWithoutResidentInput
+  portalAccounts?: Prisma.ResidentAccountCreateNestedManyWithoutResidentInput
 }
 
 export type ResidentUncheckedCreateWithoutTransfersInput = {
@@ -2600,6 +2664,7 @@ export type ResidentUncheckedCreateWithoutTransfersInput = {
   checkOuts?: Prisma.CheckOutUncheckedCreateNestedManyWithoutResidentInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutResidentInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutResidentInput
+  portalAccounts?: Prisma.ResidentAccountUncheckedCreateNestedManyWithoutResidentInput
 }
 
 export type ResidentCreateOrConnectWithoutTransfersInput = {
@@ -2649,6 +2714,7 @@ export type ResidentUpdateWithoutTransfersInput = {
   checkOuts?: Prisma.CheckOutUpdateManyWithoutResidentNestedInput
   invoices?: Prisma.InvoiceUpdateManyWithoutResidentNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutResidentNestedInput
+  portalAccounts?: Prisma.ResidentAccountUpdateManyWithoutResidentNestedInput
 }
 
 export type ResidentUncheckedUpdateWithoutTransfersInput = {
@@ -2682,6 +2748,7 @@ export type ResidentUncheckedUpdateWithoutTransfersInput = {
   checkOuts?: Prisma.CheckOutUncheckedUpdateManyWithoutResidentNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutResidentNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutResidentNestedInput
+  portalAccounts?: Prisma.ResidentAccountUncheckedUpdateManyWithoutResidentNestedInput
 }
 
 export type ResidentCreateWithoutAssignmentReplacementsInput = {
@@ -2715,6 +2782,7 @@ export type ResidentCreateWithoutAssignmentReplacementsInput = {
   checkOuts?: Prisma.CheckOutCreateNestedManyWithoutResidentInput
   invoices?: Prisma.InvoiceCreateNestedManyWithoutResidentInput
   payments?: Prisma.PaymentCreateNestedManyWithoutResidentInput
+  portalAccounts?: Prisma.ResidentAccountCreateNestedManyWithoutResidentInput
 }
 
 export type ResidentUncheckedCreateWithoutAssignmentReplacementsInput = {
@@ -2748,6 +2816,7 @@ export type ResidentUncheckedCreateWithoutAssignmentReplacementsInput = {
   checkOuts?: Prisma.CheckOutUncheckedCreateNestedManyWithoutResidentInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutResidentInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutResidentInput
+  portalAccounts?: Prisma.ResidentAccountUncheckedCreateNestedManyWithoutResidentInput
 }
 
 export type ResidentCreateOrConnectWithoutAssignmentReplacementsInput = {
@@ -2797,6 +2866,7 @@ export type ResidentUpdateWithoutAssignmentReplacementsInput = {
   checkOuts?: Prisma.CheckOutUpdateManyWithoutResidentNestedInput
   invoices?: Prisma.InvoiceUpdateManyWithoutResidentNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutResidentNestedInput
+  portalAccounts?: Prisma.ResidentAccountUpdateManyWithoutResidentNestedInput
 }
 
 export type ResidentUncheckedUpdateWithoutAssignmentReplacementsInput = {
@@ -2830,6 +2900,7 @@ export type ResidentUncheckedUpdateWithoutAssignmentReplacementsInput = {
   checkOuts?: Prisma.CheckOutUncheckedUpdateManyWithoutResidentNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutResidentNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutResidentNestedInput
+  portalAccounts?: Prisma.ResidentAccountUncheckedUpdateManyWithoutResidentNestedInput
 }
 
 export type ResidentCreateWithoutTransferFinanceReviewsInput = {
@@ -2863,6 +2934,7 @@ export type ResidentCreateWithoutTransferFinanceReviewsInput = {
   checkOuts?: Prisma.CheckOutCreateNestedManyWithoutResidentInput
   invoices?: Prisma.InvoiceCreateNestedManyWithoutResidentInput
   payments?: Prisma.PaymentCreateNestedManyWithoutResidentInput
+  portalAccounts?: Prisma.ResidentAccountCreateNestedManyWithoutResidentInput
 }
 
 export type ResidentUncheckedCreateWithoutTransferFinanceReviewsInput = {
@@ -2896,6 +2968,7 @@ export type ResidentUncheckedCreateWithoutTransferFinanceReviewsInput = {
   checkOuts?: Prisma.CheckOutUncheckedCreateNestedManyWithoutResidentInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutResidentInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutResidentInput
+  portalAccounts?: Prisma.ResidentAccountUncheckedCreateNestedManyWithoutResidentInput
 }
 
 export type ResidentCreateOrConnectWithoutTransferFinanceReviewsInput = {
@@ -2945,6 +3018,7 @@ export type ResidentUpdateWithoutTransferFinanceReviewsInput = {
   checkOuts?: Prisma.CheckOutUpdateManyWithoutResidentNestedInput
   invoices?: Prisma.InvoiceUpdateManyWithoutResidentNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutResidentNestedInput
+  portalAccounts?: Prisma.ResidentAccountUpdateManyWithoutResidentNestedInput
 }
 
 export type ResidentUncheckedUpdateWithoutTransferFinanceReviewsInput = {
@@ -2967,6 +3041,159 @@ export type ResidentUncheckedUpdateWithoutTransferFinanceReviewsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedUpdateManyWithoutResidentNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutResidentNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutResidentNestedInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedUpdateManyWithoutResidentNestedInput
+  transfers?: Prisma.TransferUncheckedUpdateManyWithoutResidentNestedInput
+  enquiry?: Prisma.EnquiryUncheckedUpdateOneWithoutResidentNestedInput
+  bookings?: Prisma.BookingUncheckedUpdateManyWithoutResidentNestedInput
+  admissions?: Prisma.AdmissionUncheckedUpdateManyWithoutResidentNestedInput
+  checkIns?: Prisma.CheckInUncheckedUpdateManyWithoutResidentNestedInput
+  checkOuts?: Prisma.CheckOutUncheckedUpdateManyWithoutResidentNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutResidentNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutResidentNestedInput
+  portalAccounts?: Prisma.ResidentAccountUncheckedUpdateManyWithoutResidentNestedInput
+}
+
+export type ResidentCreateWithoutPortalAccountsInput = {
+  id?: string
+  firstName: string
+  lastName: string
+  dateOfBirth?: Date | string | null
+  gender?: string | null
+  phone?: string | null
+  email?: string | null
+  address?: string | null
+  emergencyContactName?: string | null
+  emergencyContactPhone?: string | null
+  emergencyContactRelation?: string | null
+  documentMetadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  documentUrl?: string | null
+  documentVerificationStatus?: $Enums.DocumentVerificationStatus
+  status?: $Enums.ResidentStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementCreateNestedManyWithoutResidentInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewCreateNestedManyWithoutResidentInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkCreateNestedManyWithoutResidentInput
+  correctionProposals?: Prisma.CorrectionProposalCreateNestedManyWithoutResidentInput
+  stayAssignments?: Prisma.StayAssignmentCreateNestedManyWithoutResidentInput
+  transfers?: Prisma.TransferCreateNestedManyWithoutResidentInput
+  organization: Prisma.OrganizationCreateNestedOneWithoutResidentsInput
+  enquiry?: Prisma.EnquiryCreateNestedOneWithoutResidentInput
+  bookings?: Prisma.BookingCreateNestedManyWithoutResidentInput
+  admissions?: Prisma.AdmissionCreateNestedManyWithoutResidentInput
+  checkIns?: Prisma.CheckInCreateNestedManyWithoutResidentInput
+  checkOuts?: Prisma.CheckOutCreateNestedManyWithoutResidentInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutResidentInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutResidentInput
+}
+
+export type ResidentUncheckedCreateWithoutPortalAccountsInput = {
+  id?: string
+  organizationId: string
+  firstName: string
+  lastName: string
+  dateOfBirth?: Date | string | null
+  gender?: string | null
+  phone?: string | null
+  email?: string | null
+  address?: string | null
+  emergencyContactName?: string | null
+  emergencyContactPhone?: string | null
+  emergencyContactRelation?: string | null
+  documentMetadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  documentUrl?: string | null
+  documentVerificationStatus?: $Enums.DocumentVerificationStatus
+  status?: $Enums.ResidentStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedCreateNestedManyWithoutResidentInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedCreateNestedManyWithoutResidentInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedCreateNestedManyWithoutResidentInput
+  correctionProposals?: Prisma.CorrectionProposalUncheckedCreateNestedManyWithoutResidentInput
+  stayAssignments?: Prisma.StayAssignmentUncheckedCreateNestedManyWithoutResidentInput
+  transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutResidentInput
+  enquiry?: Prisma.EnquiryUncheckedCreateNestedOneWithoutResidentInput
+  bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutResidentInput
+  admissions?: Prisma.AdmissionUncheckedCreateNestedManyWithoutResidentInput
+  checkIns?: Prisma.CheckInUncheckedCreateNestedManyWithoutResidentInput
+  checkOuts?: Prisma.CheckOutUncheckedCreateNestedManyWithoutResidentInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutResidentInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutResidentInput
+}
+
+export type ResidentCreateOrConnectWithoutPortalAccountsInput = {
+  where: Prisma.ResidentWhereUniqueInput
+  create: Prisma.XOR<Prisma.ResidentCreateWithoutPortalAccountsInput, Prisma.ResidentUncheckedCreateWithoutPortalAccountsInput>
+}
+
+export type ResidentUpsertWithoutPortalAccountsInput = {
+  update: Prisma.XOR<Prisma.ResidentUpdateWithoutPortalAccountsInput, Prisma.ResidentUncheckedUpdateWithoutPortalAccountsInput>
+  create: Prisma.XOR<Prisma.ResidentCreateWithoutPortalAccountsInput, Prisma.ResidentUncheckedCreateWithoutPortalAccountsInput>
+  where?: Prisma.ResidentWhereInput
+}
+
+export type ResidentUpdateToOneWithWhereWithoutPortalAccountsInput = {
+  where?: Prisma.ResidentWhereInput
+  data: Prisma.XOR<Prisma.ResidentUpdateWithoutPortalAccountsInput, Prisma.ResidentUncheckedUpdateWithoutPortalAccountsInput>
+}
+
+export type ResidentUpdateWithoutPortalAccountsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyContactName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyContactPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyContactRelation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  documentMetadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  documentUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  documentVerificationStatus?: Prisma.EnumDocumentVerificationStatusFieldUpdateOperationsInput | $Enums.DocumentVerificationStatus
+  status?: Prisma.EnumResidentStatusFieldUpdateOperationsInput | $Enums.ResidentStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUpdateManyWithoutResidentNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUpdateManyWithoutResidentNestedInput
+  correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUpdateManyWithoutResidentNestedInput
+  correctionProposals?: Prisma.CorrectionProposalUpdateManyWithoutResidentNestedInput
+  stayAssignments?: Prisma.StayAssignmentUpdateManyWithoutResidentNestedInput
+  transfers?: Prisma.TransferUpdateManyWithoutResidentNestedInput
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutResidentsNestedInput
+  enquiry?: Prisma.EnquiryUpdateOneWithoutResidentNestedInput
+  bookings?: Prisma.BookingUpdateManyWithoutResidentNestedInput
+  admissions?: Prisma.AdmissionUpdateManyWithoutResidentNestedInput
+  checkIns?: Prisma.CheckInUpdateManyWithoutResidentNestedInput
+  checkOuts?: Prisma.CheckOutUpdateManyWithoutResidentNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutResidentNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutResidentNestedInput
+}
+
+export type ResidentUncheckedUpdateWithoutPortalAccountsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyContactName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyContactPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyContactRelation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  documentMetadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  documentUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  documentVerificationStatus?: Prisma.EnumDocumentVerificationStatusFieldUpdateOperationsInput | $Enums.DocumentVerificationStatus
+  status?: Prisma.EnumResidentStatusFieldUpdateOperationsInput | $Enums.ResidentStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentReplacements?: Prisma.StayAssignmentReplacementUncheckedUpdateManyWithoutResidentNestedInput
+  transferFinanceReviews?: Prisma.TransferFinanceReviewUncheckedUpdateManyWithoutResidentNestedInput
   correctionFinanceLinks?: Prisma.CorrectionFinanceLinkUncheckedUpdateManyWithoutResidentNestedInput
   correctionProposals?: Prisma.CorrectionProposalUncheckedUpdateManyWithoutResidentNestedInput
   stayAssignments?: Prisma.StayAssignmentUncheckedUpdateManyWithoutResidentNestedInput
@@ -3031,6 +3258,7 @@ export type ResidentUpdateWithoutOrganizationInput = {
   checkOuts?: Prisma.CheckOutUpdateManyWithoutResidentNestedInput
   invoices?: Prisma.InvoiceUpdateManyWithoutResidentNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutResidentNestedInput
+  portalAccounts?: Prisma.ResidentAccountUpdateManyWithoutResidentNestedInput
 }
 
 export type ResidentUncheckedUpdateWithoutOrganizationInput = {
@@ -3064,6 +3292,7 @@ export type ResidentUncheckedUpdateWithoutOrganizationInput = {
   checkOuts?: Prisma.CheckOutUncheckedUpdateManyWithoutResidentNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutResidentNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutResidentNestedInput
+  portalAccounts?: Prisma.ResidentAccountUncheckedUpdateManyWithoutResidentNestedInput
 }
 
 export type ResidentUncheckedUpdateManyWithoutOrganizationInput = {
@@ -3104,6 +3333,7 @@ export type ResidentCountOutputType = {
   checkOuts: number
   invoices: number
   payments: number
+  portalAccounts: number
 }
 
 export type ResidentCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3119,6 +3349,7 @@ export type ResidentCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensio
   checkOuts?: boolean | ResidentCountOutputTypeCountCheckOutsArgs
   invoices?: boolean | ResidentCountOutputTypeCountInvoicesArgs
   payments?: boolean | ResidentCountOutputTypeCountPaymentsArgs
+  portalAccounts?: boolean | ResidentCountOutputTypeCountPortalAccountsArgs
 }
 
 /**
@@ -3215,6 +3446,13 @@ export type ResidentCountOutputTypeCountPaymentsArgs<ExtArgs extends runtime.Typ
   where?: Prisma.PaymentWhereInput
 }
 
+/**
+ * ResidentCountOutputType without action
+ */
+export type ResidentCountOutputTypeCountPortalAccountsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ResidentAccountWhereInput
+}
+
 
 export type ResidentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -3249,6 +3487,7 @@ export type ResidentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   checkOuts?: boolean | Prisma.Resident$checkOutsArgs<ExtArgs>
   invoices?: boolean | Prisma.Resident$invoicesArgs<ExtArgs>
   payments?: boolean | Prisma.Resident$paymentsArgs<ExtArgs>
+  portalAccounts?: boolean | Prisma.Resident$portalAccountsArgs<ExtArgs>
   _count?: boolean | Prisma.ResidentCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["resident"]>
 
@@ -3333,6 +3572,7 @@ export type ResidentInclude<ExtArgs extends runtime.Types.Extensions.InternalArg
   checkOuts?: boolean | Prisma.Resident$checkOutsArgs<ExtArgs>
   invoices?: boolean | Prisma.Resident$invoicesArgs<ExtArgs>
   payments?: boolean | Prisma.Resident$paymentsArgs<ExtArgs>
+  portalAccounts?: boolean | Prisma.Resident$portalAccountsArgs<ExtArgs>
   _count?: boolean | Prisma.ResidentCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ResidentIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3359,6 +3599,7 @@ export type $ResidentPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     checkOuts: Prisma.$CheckOutPayload<ExtArgs>[]
     invoices: Prisma.$InvoicePayload<ExtArgs>[]
     payments: Prisma.$PaymentPayload<ExtArgs>[]
+    portalAccounts: Prisma.$ResidentAccountPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -3787,6 +4028,7 @@ export interface Prisma__ResidentClient<T, Null = never, ExtArgs extends runtime
   checkOuts<T extends Prisma.Resident$checkOutsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Resident$checkOutsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CheckOutPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   invoices<T extends Prisma.Resident$invoicesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Resident$invoicesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   payments<T extends Prisma.Resident$paymentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Resident$paymentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  portalAccounts<T extends Prisma.Resident$portalAccountsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Resident$portalAccountsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ResidentAccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4539,6 +4781,30 @@ export type Resident$paymentsArgs<ExtArgs extends runtime.Types.Extensions.Inter
   take?: number
   skip?: number
   distinct?: Prisma.PaymentScalarFieldEnum | Prisma.PaymentScalarFieldEnum[]
+}
+
+/**
+ * Resident.portalAccounts
+ */
+export type Resident$portalAccountsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ResidentAccount
+   */
+  select?: Prisma.ResidentAccountSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ResidentAccount
+   */
+  omit?: Prisma.ResidentAccountOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ResidentAccountInclude<ExtArgs> | null
+  where?: Prisma.ResidentAccountWhereInput
+  orderBy?: Prisma.ResidentAccountOrderByWithRelationInput | Prisma.ResidentAccountOrderByWithRelationInput[]
+  cursor?: Prisma.ResidentAccountWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ResidentAccountScalarFieldEnum | Prisma.ResidentAccountScalarFieldEnum[]
 }
 
 /**

@@ -95,6 +95,10 @@
     {
       "name": "20261111130000_assignment_replacement_chain_guards",
       "checksum": "e969606be1f87a2b4b1e86f67c9e280112f2b6be7bf58c5efa65993e040b1b0f"
+    },
+    {
+      "name": "20261119100000_resident_otp_auth",
+      "checksum": "ac87503d6b047c428a44dfbbdcb30f5f52048c21848a8a3aa26b1015a3531558"
     }
   ],
   "catalog": {
@@ -277,6 +281,38 @@
       },
       {
         "name": "properties",
+        "kind": "r",
+        "owner": "nook_ci_full_migrator",
+        "rowSecurity": false,
+        "forceRowSecurity": false,
+        "definition": null
+      },
+      {
+        "name": "resident_accounts",
+        "kind": "r",
+        "owner": "nook_ci_full_migrator",
+        "rowSecurity": false,
+        "forceRowSecurity": false,
+        "definition": null
+      },
+      {
+        "name": "resident_auth_throttles",
+        "kind": "r",
+        "owner": "nook_ci_full_migrator",
+        "rowSecurity": false,
+        "forceRowSecurity": false,
+        "definition": null
+      },
+      {
+        "name": "resident_otp_challenges",
+        "kind": "r",
+        "owner": "nook_ci_full_migrator",
+        "rowSecurity": false,
+        "forceRowSecurity": false,
+        "definition": null
+      },
+      {
+        "name": "resident_sessions",
         "kind": "r",
         "owner": "nook_ci_full_migrator",
         "rowSecurity": false,
@@ -2906,6 +2942,396 @@
         "default": null
       },
       {
+        "relation": "resident_accounts",
+        "name": "id",
+        "position": 1,
+        "type": "uuid",
+        "notNull": true,
+        "identity": "",
+        "generated": "",
+        "default": "gen_random_uuid()"
+      },
+      {
+        "relation": "resident_accounts",
+        "name": "organization_id",
+        "position": 2,
+        "type": "uuid",
+        "notNull": true,
+        "identity": "",
+        "generated": "",
+        "default": null
+      },
+      {
+        "relation": "resident_accounts",
+        "name": "resident_id",
+        "position": 3,
+        "type": "uuid",
+        "notNull": true,
+        "identity": "",
+        "generated": "",
+        "default": null
+      },
+      {
+        "relation": "resident_accounts",
+        "name": "phone_e164",
+        "position": 4,
+        "type": "text",
+        "notNull": true,
+        "identity": "",
+        "generated": "",
+        "default": null
+      },
+      {
+        "relation": "resident_accounts",
+        "name": "status",
+        "position": 5,
+        "type": "\"ResidentAccountStatus\"",
+        "notNull": true,
+        "identity": "",
+        "generated": "",
+        "default": "'ACTIVE'::\"ResidentAccountStatus\""
+      },
+      {
+        "relation": "resident_accounts",
+        "name": "created_by_user_id",
+        "position": 6,
+        "type": "uuid",
+        "notNull": false,
+        "identity": "",
+        "generated": "",
+        "default": null
+      },
+      {
+        "relation": "resident_accounts",
+        "name": "created_at",
+        "position": 7,
+        "type": "timestamp(6) with time zone",
+        "notNull": true,
+        "identity": "",
+        "generated": "",
+        "default": "CURRENT_TIMESTAMP"
+      },
+      {
+        "relation": "resident_accounts",
+        "name": "updated_at",
+        "position": 8,
+        "type": "timestamp(6) with time zone",
+        "notNull": true,
+        "identity": "",
+        "generated": "",
+        "default": null
+      },
+      {
+        "relation": "resident_accounts",
+        "name": "suspended_at",
+        "position": 9,
+        "type": "timestamp(6) with time zone",
+        "notNull": false,
+        "identity": "",
+        "generated": "",
+        "default": null
+      },
+      {
+        "relation": "resident_accounts",
+        "name": "revoked_at",
+        "position": 10,
+        "type": "timestamp(6) with time zone",
+        "notNull": false,
+        "identity": "",
+        "generated": "",
+        "default": null
+      },
+      {
+        "relation": "resident_accounts",
+        "name": "last_login_at",
+        "position": 11,
+        "type": "timestamp(6) with time zone",
+        "notNull": false,
+        "identity": "",
+        "generated": "",
+        "default": null
+      },
+      {
+        "relation": "resident_auth_throttles",
+        "name": "scope",
+        "position": 1,
+        "type": "text",
+        "notNull": true,
+        "identity": "",
+        "generated": "",
+        "default": null
+      },
+      {
+        "relation": "resident_auth_throttles",
+        "name": "key_hash",
+        "position": 2,
+        "type": "text",
+        "notNull": true,
+        "identity": "",
+        "generated": "",
+        "default": null
+      },
+      {
+        "relation": "resident_auth_throttles",
+        "name": "failures",
+        "position": 3,
+        "type": "integer",
+        "notNull": true,
+        "identity": "",
+        "generated": "",
+        "default": "0"
+      },
+      {
+        "relation": "resident_auth_throttles",
+        "name": "window_started_at",
+        "position": 4,
+        "type": "timestamp(6) with time zone",
+        "notNull": true,
+        "identity": "",
+        "generated": "",
+        "default": "CURRENT_TIMESTAMP"
+      },
+      {
+        "relation": "resident_auth_throttles",
+        "name": "locked_until",
+        "position": 5,
+        "type": "timestamp(6) with time zone",
+        "notNull": false,
+        "identity": "",
+        "generated": "",
+        "default": null
+      },
+      {
+        "relation": "resident_auth_throttles",
+        "name": "updated_at",
+        "position": 6,
+        "type": "timestamp(6) with time zone",
+        "notNull": true,
+        "identity": "",
+        "generated": "",
+        "default": "CURRENT_TIMESTAMP"
+      },
+      {
+        "relation": "resident_otp_challenges",
+        "name": "id",
+        "position": 1,
+        "type": "uuid",
+        "notNull": true,
+        "identity": "",
+        "generated": "",
+        "default": "gen_random_uuid()"
+      },
+      {
+        "relation": "resident_otp_challenges",
+        "name": "organization_id",
+        "position": 2,
+        "type": "uuid",
+        "notNull": true,
+        "identity": "",
+        "generated": "",
+        "default": null
+      },
+      {
+        "relation": "resident_otp_challenges",
+        "name": "resident_account_id",
+        "position": 3,
+        "type": "uuid",
+        "notNull": true,
+        "identity": "",
+        "generated": "",
+        "default": null
+      },
+      {
+        "relation": "resident_otp_challenges",
+        "name": "code_hash",
+        "position": 4,
+        "type": "text",
+        "notNull": true,
+        "identity": "",
+        "generated": "",
+        "default": null
+      },
+      {
+        "relation": "resident_otp_challenges",
+        "name": "attempts",
+        "position": 5,
+        "type": "integer",
+        "notNull": true,
+        "identity": "",
+        "generated": "",
+        "default": "0"
+      },
+      {
+        "relation": "resident_otp_challenges",
+        "name": "max_attempts",
+        "position": 6,
+        "type": "integer",
+        "notNull": true,
+        "identity": "",
+        "generated": "",
+        "default": "5"
+      },
+      {
+        "relation": "resident_otp_challenges",
+        "name": "expires_at",
+        "position": 7,
+        "type": "timestamp(6) with time zone",
+        "notNull": true,
+        "identity": "",
+        "generated": "",
+        "default": null
+      },
+      {
+        "relation": "resident_otp_challenges",
+        "name": "consumed_at",
+        "position": 8,
+        "type": "timestamp(6) with time zone",
+        "notNull": false,
+        "identity": "",
+        "generated": "",
+        "default": null
+      },
+      {
+        "relation": "resident_otp_challenges",
+        "name": "invalidated_at",
+        "position": 9,
+        "type": "timestamp(6) with time zone",
+        "notNull": false,
+        "identity": "",
+        "generated": "",
+        "default": null
+      },
+      {
+        "relation": "resident_otp_challenges",
+        "name": "invalidated_reason",
+        "position": 10,
+        "type": "text",
+        "notNull": false,
+        "identity": "",
+        "generated": "",
+        "default": null
+      },
+      {
+        "relation": "resident_otp_challenges",
+        "name": "delivery_status",
+        "position": 11,
+        "type": "text",
+        "notNull": true,
+        "identity": "",
+        "generated": "",
+        "default": "'PENDING'::text"
+      },
+      {
+        "relation": "resident_otp_challenges",
+        "name": "created_at",
+        "position": 12,
+        "type": "timestamp(6) with time zone",
+        "notNull": true,
+        "identity": "",
+        "generated": "",
+        "default": "CURRENT_TIMESTAMP"
+      },
+      {
+        "relation": "resident_sessions",
+        "name": "id",
+        "position": 1,
+        "type": "uuid",
+        "notNull": true,
+        "identity": "",
+        "generated": "",
+        "default": "gen_random_uuid()"
+      },
+      {
+        "relation": "resident_sessions",
+        "name": "token_hash",
+        "position": 2,
+        "type": "text",
+        "notNull": true,
+        "identity": "",
+        "generated": "",
+        "default": null
+      },
+      {
+        "relation": "resident_sessions",
+        "name": "organization_id",
+        "position": 3,
+        "type": "uuid",
+        "notNull": true,
+        "identity": "",
+        "generated": "",
+        "default": null
+      },
+      {
+        "relation": "resident_sessions",
+        "name": "resident_account_id",
+        "position": 4,
+        "type": "uuid",
+        "notNull": true,
+        "identity": "",
+        "generated": "",
+        "default": null
+      },
+      {
+        "relation": "resident_sessions",
+        "name": "created_at",
+        "position": 5,
+        "type": "timestamp(6) with time zone",
+        "notNull": true,
+        "identity": "",
+        "generated": "",
+        "default": "CURRENT_TIMESTAMP"
+      },
+      {
+        "relation": "resident_sessions",
+        "name": "last_seen_at",
+        "position": 6,
+        "type": "timestamp(6) with time zone",
+        "notNull": true,
+        "identity": "",
+        "generated": "",
+        "default": null
+      },
+      {
+        "relation": "resident_sessions",
+        "name": "idle_expires_at",
+        "position": 7,
+        "type": "timestamp(6) with time zone",
+        "notNull": true,
+        "identity": "",
+        "generated": "",
+        "default": null
+      },
+      {
+        "relation": "resident_sessions",
+        "name": "absolute_expires_at",
+        "position": 8,
+        "type": "timestamp(6) with time zone",
+        "notNull": true,
+        "identity": "",
+        "generated": "",
+        "default": null
+      },
+      {
+        "relation": "resident_sessions",
+        "name": "revoked_at",
+        "position": 9,
+        "type": "timestamp(6) with time zone",
+        "notNull": false,
+        "identity": "",
+        "generated": "",
+        "default": null
+      },
+      {
+        "relation": "resident_sessions",
+        "name": "revoked_reason",
+        "position": 10,
+        "type": "text",
+        "notNull": false,
+        "identity": "",
+        "generated": "",
+        "default": null
+      },
+      {
         "relation": "residents",
         "name": "id",
         "position": 1,
@@ -5188,6 +5614,159 @@
         "definition": "PRIMARY KEY (id)"
       },
       {
+        "relation": "resident_accounts",
+        "name": "resident_accounts_created_by_user_id_fkey",
+        "type": "f",
+        "validated": true,
+        "deferrable": false,
+        "deferred": false,
+        "definition": "FOREIGN KEY (created_by_user_id) REFERENCES users(id) ON UPDATE RESTRICT ON DELETE RESTRICT"
+      },
+      {
+        "relation": "resident_accounts",
+        "name": "resident_accounts_organization_id_fkey",
+        "type": "f",
+        "validated": true,
+        "deferrable": false,
+        "deferred": false,
+        "definition": "FOREIGN KEY (organization_id) REFERENCES organizations(id) ON UPDATE RESTRICT ON DELETE RESTRICT"
+      },
+      {
+        "relation": "resident_accounts",
+        "name": "resident_accounts_phone_format",
+        "type": "c",
+        "validated": true,
+        "deferrable": false,
+        "deferred": false,
+        "definition": "CHECK ((phone_e164 ~ '^\\+91[6-9][0-9]{9}$'::text))"
+      },
+      {
+        "relation": "resident_accounts",
+        "name": "resident_accounts_pkey",
+        "type": "p",
+        "validated": true,
+        "deferrable": false,
+        "deferred": false,
+        "definition": "PRIMARY KEY (id)"
+      },
+      {
+        "relation": "resident_accounts",
+        "name": "resident_accounts_resident_id_organization_id_fkey",
+        "type": "f",
+        "validated": true,
+        "deferrable": false,
+        "deferred": false,
+        "definition": "FOREIGN KEY (resident_id, organization_id) REFERENCES residents(id, organization_id) ON UPDATE RESTRICT ON DELETE RESTRICT"
+      },
+      {
+        "relation": "resident_accounts",
+        "name": "resident_accounts_state_consistency",
+        "type": "c",
+        "validated": true,
+        "deferrable": false,
+        "deferred": false,
+        "definition": "CHECK ((((status = 'REVOKED'::\"ResidentAccountStatus\") = (revoked_at IS NOT NULL)) AND ((status = 'SUSPENDED'::\"ResidentAccountStatus\") = (suspended_at IS NOT NULL))))"
+      },
+      {
+        "relation": "resident_auth_throttles",
+        "name": "resident_auth_throttles_pkey",
+        "type": "p",
+        "validated": true,
+        "deferrable": false,
+        "deferred": false,
+        "definition": "PRIMARY KEY (scope, key_hash)"
+      },
+      {
+        "relation": "resident_auth_throttles",
+        "name": "resident_auth_throttles_scope_valid",
+        "type": "c",
+        "validated": true,
+        "deferrable": false,
+        "deferred": false,
+        "definition": "CHECK ((scope = ANY (ARRAY['OTP_REQUEST_PHONE'::text, 'OTP_REQUEST_ADDRESS'::text, 'OTP_COOLDOWN_PHONE'::text, 'OTP_VERIFY_PHONE'::text, 'OTP_VERIFY_ADDRESS'::text])))"
+      },
+      {
+        "relation": "resident_otp_challenges",
+        "name": "resident_otp_challenges_account_organization_fkey",
+        "type": "f",
+        "validated": true,
+        "deferrable": false,
+        "deferred": false,
+        "definition": "FOREIGN KEY (resident_account_id, organization_id) REFERENCES resident_accounts(id, organization_id) ON UPDATE RESTRICT ON DELETE RESTRICT"
+      },
+      {
+        "relation": "resident_otp_challenges",
+        "name": "resident_otp_challenges_attempts_check",
+        "type": "c",
+        "validated": true,
+        "deferrable": false,
+        "deferred": false,
+        "definition": "CHECK (((attempts >= 0) AND ((max_attempts >= 1) AND (max_attempts <= 10)) AND (attempts <= max_attempts)))"
+      },
+      {
+        "relation": "resident_otp_challenges",
+        "name": "resident_otp_challenges_delivery_check",
+        "type": "c",
+        "validated": true,
+        "deferrable": false,
+        "deferred": false,
+        "definition": "CHECK ((delivery_status = ANY (ARRAY['PENDING'::text, 'SENT'::text, 'FAILED'::text])))"
+      },
+      {
+        "relation": "resident_otp_challenges",
+        "name": "resident_otp_challenges_hash_format",
+        "type": "c",
+        "validated": true,
+        "deferrable": false,
+        "deferred": false,
+        "definition": "CHECK ((code_hash ~ '^[0-9a-f]{64}$'::text))"
+      },
+      {
+        "relation": "resident_otp_challenges",
+        "name": "resident_otp_challenges_organization_id_fkey",
+        "type": "f",
+        "validated": true,
+        "deferrable": false,
+        "deferred": false,
+        "definition": "FOREIGN KEY (organization_id) REFERENCES organizations(id) ON UPDATE RESTRICT ON DELETE RESTRICT"
+      },
+      {
+        "relation": "resident_otp_challenges",
+        "name": "resident_otp_challenges_pkey",
+        "type": "p",
+        "validated": true,
+        "deferrable": false,
+        "deferred": false,
+        "definition": "PRIMARY KEY (id)"
+      },
+      {
+        "relation": "resident_sessions",
+        "name": "resident_sessions_account_organization_fkey",
+        "type": "f",
+        "validated": true,
+        "deferrable": false,
+        "deferred": false,
+        "definition": "FOREIGN KEY (resident_account_id, organization_id) REFERENCES resident_accounts(id, organization_id) ON UPDATE RESTRICT ON DELETE RESTRICT"
+      },
+      {
+        "relation": "resident_sessions",
+        "name": "resident_sessions_organization_id_fkey",
+        "type": "f",
+        "validated": true,
+        "deferrable": false,
+        "deferred": false,
+        "definition": "FOREIGN KEY (organization_id) REFERENCES organizations(id) ON UPDATE RESTRICT ON DELETE RESTRICT"
+      },
+      {
+        "relation": "resident_sessions",
+        "name": "resident_sessions_pkey",
+        "type": "p",
+        "validated": true,
+        "deferrable": false,
+        "deferred": false,
+        "definition": "PRIMARY KEY (id)"
+      },
+      {
         "relation": "residents",
         "name": "residents_organization_id_fkey",
         "type": "f",
@@ -6637,6 +7216,141 @@
         "valid": true,
         "ready": true,
         "definition": "CREATE UNIQUE INDEX properties_pkey ON public.properties USING btree (id)"
+      },
+      {
+        "relation": "resident_accounts",
+        "name": "resident_accounts_id_organization_id_key",
+        "unique": true,
+        "primary": false,
+        "valid": true,
+        "ready": true,
+        "definition": "CREATE UNIQUE INDEX resident_accounts_id_organization_id_key ON public.resident_accounts USING btree (id, organization_id)"
+      },
+      {
+        "relation": "resident_accounts",
+        "name": "resident_accounts_one_open_per_phone",
+        "unique": true,
+        "primary": false,
+        "valid": true,
+        "ready": true,
+        "definition": "CREATE UNIQUE INDEX resident_accounts_one_open_per_phone ON public.resident_accounts USING btree (phone_e164) WHERE (status <> 'REVOKED'::\"ResidentAccountStatus\")"
+      },
+      {
+        "relation": "resident_accounts",
+        "name": "resident_accounts_one_open_per_resident",
+        "unique": true,
+        "primary": false,
+        "valid": true,
+        "ready": true,
+        "definition": "CREATE UNIQUE INDEX resident_accounts_one_open_per_resident ON public.resident_accounts USING btree (resident_id) WHERE (status <> 'REVOKED'::\"ResidentAccountStatus\")"
+      },
+      {
+        "relation": "resident_accounts",
+        "name": "resident_accounts_organization_id_resident_id_idx",
+        "unique": false,
+        "primary": false,
+        "valid": true,
+        "ready": true,
+        "definition": "CREATE INDEX resident_accounts_organization_id_resident_id_idx ON public.resident_accounts USING btree (organization_id, resident_id)"
+      },
+      {
+        "relation": "resident_accounts",
+        "name": "resident_accounts_pkey",
+        "unique": true,
+        "primary": true,
+        "valid": true,
+        "ready": true,
+        "definition": "CREATE UNIQUE INDEX resident_accounts_pkey ON public.resident_accounts USING btree (id)"
+      },
+      {
+        "relation": "resident_auth_throttles",
+        "name": "resident_auth_throttles_locked_until_idx",
+        "unique": false,
+        "primary": false,
+        "valid": true,
+        "ready": true,
+        "definition": "CREATE INDEX resident_auth_throttles_locked_until_idx ON public.resident_auth_throttles USING btree (locked_until)"
+      },
+      {
+        "relation": "resident_auth_throttles",
+        "name": "resident_auth_throttles_pkey",
+        "unique": true,
+        "primary": true,
+        "valid": true,
+        "ready": true,
+        "definition": "CREATE UNIQUE INDEX resident_auth_throttles_pkey ON public.resident_auth_throttles USING btree (scope, key_hash)"
+      },
+      {
+        "relation": "resident_otp_challenges",
+        "name": "resident_otp_challenges_expires_at_idx",
+        "unique": false,
+        "primary": false,
+        "valid": true,
+        "ready": true,
+        "definition": "CREATE INDEX resident_otp_challenges_expires_at_idx ON public.resident_otp_challenges USING btree (expires_at)"
+      },
+      {
+        "relation": "resident_otp_challenges",
+        "name": "resident_otp_challenges_one_live_per_account",
+        "unique": true,
+        "primary": false,
+        "valid": true,
+        "ready": true,
+        "definition": "CREATE UNIQUE INDEX resident_otp_challenges_one_live_per_account ON public.resident_otp_challenges USING btree (resident_account_id) WHERE ((consumed_at IS NULL) AND (invalidated_at IS NULL))"
+      },
+      {
+        "relation": "resident_otp_challenges",
+        "name": "resident_otp_challenges_pkey",
+        "unique": true,
+        "primary": true,
+        "valid": true,
+        "ready": true,
+        "definition": "CREATE UNIQUE INDEX resident_otp_challenges_pkey ON public.resident_otp_challenges USING btree (id)"
+      },
+      {
+        "relation": "resident_otp_challenges",
+        "name": "resident_otp_challenges_resident_account_id_created_at_idx",
+        "unique": false,
+        "primary": false,
+        "valid": true,
+        "ready": true,
+        "definition": "CREATE INDEX resident_otp_challenges_resident_account_id_created_at_idx ON public.resident_otp_challenges USING btree (resident_account_id, created_at)"
+      },
+      {
+        "relation": "resident_sessions",
+        "name": "resident_sessions_idle_expires_at_idx",
+        "unique": false,
+        "primary": false,
+        "valid": true,
+        "ready": true,
+        "definition": "CREATE INDEX resident_sessions_idle_expires_at_idx ON public.resident_sessions USING btree (idle_expires_at)"
+      },
+      {
+        "relation": "resident_sessions",
+        "name": "resident_sessions_pkey",
+        "unique": true,
+        "primary": true,
+        "valid": true,
+        "ready": true,
+        "definition": "CREATE UNIQUE INDEX resident_sessions_pkey ON public.resident_sessions USING btree (id)"
+      },
+      {
+        "relation": "resident_sessions",
+        "name": "resident_sessions_resident_account_id_idx",
+        "unique": false,
+        "primary": false,
+        "valid": true,
+        "ready": true,
+        "definition": "CREATE INDEX resident_sessions_resident_account_id_idx ON public.resident_sessions USING btree (resident_account_id)"
+      },
+      {
+        "relation": "resident_sessions",
+        "name": "resident_sessions_token_hash_key",
+        "unique": true,
+        "primary": false,
+        "valid": true,
+        "ready": true,
+        "definition": "CREATE UNIQUE INDEX resident_sessions_token_hash_key ON public.resident_sessions USING btree (token_hash)"
       },
       {
         "relation": "residents",
@@ -10070,6 +10784,21 @@
         "extension": null
       },
       {
+        "signature": "resident_accounts_identity_immutable()",
+        "owner": "nook_ci_full_migrator",
+        "language": "plpgsql",
+        "body": "\nBEGIN\n  IF NEW.resident_id IS DISTINCT FROM OLD.resident_id OR NEW.organization_id IS DISTINCT FROM OLD.organization_id THEN\n    RAISE EXCEPTION 'a resident account cannot be moved to another resident or organization' USING ERRCODE = '23001';\n  END IF;\n  RETURN NEW;\nEND;\n",
+        "library": null,
+        "result": "trigger",
+        "securityDefiner": false,
+        "config": null,
+        "volatility": "v",
+        "parallel": "u",
+        "leakproof": false,
+        "strict": false,
+        "extension": null
+      },
+      {
         "signature": "stay_assignments_immutable_trigger()",
         "owner": "nook_ci_full_migrator",
         "language": "plpgsql",
@@ -10347,6 +11076,14 @@
         "extension": null
       },
       {
+        "name": "ResidentAccountStatus",
+        "type": "e",
+        "category": "E",
+        "owner": "nook_ci_full_migrator",
+        "labels": ["ACTIVE", "SUSPENDED", "REVOKED"],
+        "extension": null
+      },
+      {
         "name": "ResidentStatus",
         "type": "e",
         "category": "E",
@@ -10540,6 +11277,14 @@
       },
       {
         "name": "_PaymentStatus",
+        "type": "b",
+        "category": "A",
+        "owner": "nook_ci_full_migrator",
+        "labels": null,
+        "extension": null
+      },
+      {
+        "name": "_ResidentAccountStatus",
         "type": "b",
         "category": "A",
         "owner": "nook_ci_full_migrator",
@@ -10812,6 +11557,38 @@
       },
       {
         "name": "_properties",
+        "type": "b",
+        "category": "A",
+        "owner": "nook_ci_full_migrator",
+        "labels": null,
+        "extension": null
+      },
+      {
+        "name": "_resident_accounts",
+        "type": "b",
+        "category": "A",
+        "owner": "nook_ci_full_migrator",
+        "labels": null,
+        "extension": null
+      },
+      {
+        "name": "_resident_auth_throttles",
+        "type": "b",
+        "category": "A",
+        "owner": "nook_ci_full_migrator",
+        "labels": null,
+        "extension": null
+      },
+      {
+        "name": "_resident_otp_challenges",
+        "type": "b",
+        "category": "A",
+        "owner": "nook_ci_full_migrator",
+        "labels": null,
+        "extension": null
+      },
+      {
+        "name": "_resident_sessions",
         "type": "b",
         "category": "A",
         "owner": "nook_ci_full_migrator",
@@ -11131,6 +11908,38 @@
         "extension": null
       },
       {
+        "name": "resident_accounts",
+        "type": "c",
+        "category": "C",
+        "owner": "nook_ci_full_migrator",
+        "labels": null,
+        "extension": null
+      },
+      {
+        "name": "resident_auth_throttles",
+        "type": "c",
+        "category": "C",
+        "owner": "nook_ci_full_migrator",
+        "labels": null,
+        "extension": null
+      },
+      {
+        "name": "resident_otp_challenges",
+        "type": "c",
+        "category": "C",
+        "owner": "nook_ci_full_migrator",
+        "labels": null,
+        "extension": null
+      },
+      {
+        "name": "resident_sessions",
+        "type": "c",
+        "category": "C",
+        "owner": "nook_ci_full_migrator",
+        "labels": null,
+        "extension": null
+      },
+      {
         "name": "residents",
         "type": "c",
         "category": "C",
@@ -11325,6 +12134,12 @@
         "name": "payments_snapshot",
         "enabled": "O",
         "definition": "CREATE TRIGGER payments_snapshot BEFORE INSERT ON public.payments FOR EACH ROW EXECUTE FUNCTION finance_snapshot_payment()"
+      },
+      {
+        "relation": "resident_accounts",
+        "name": "resident_accounts_identity_immutable",
+        "enabled": "O",
+        "definition": "CREATE TRIGGER resident_accounts_identity_immutable BEFORE UPDATE ON public.resident_accounts FOR EACH ROW EXECUTE FUNCTION resident_accounts_identity_immutable()"
       },
       {
         "relation": "stay_assignment_replacements",

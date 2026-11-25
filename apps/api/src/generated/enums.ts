@@ -245,3 +245,12 @@ export const TransferType = {
 } as const
 
 export type TransferType = (typeof TransferType)[keyof typeof TransferType]
+
+
+export const ResidentAccountStatus = {
+  ACTIVE: 'ACTIVE',
+  SUSPENDED: 'SUSPENDED',
+  REVOKED: 'REVOKED'
+} as const
+
+export type ResidentAccountStatus = (typeof ResidentAccountStatus)[keyof typeof ResidentAccountStatus]

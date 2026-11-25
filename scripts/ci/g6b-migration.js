@@ -64,9 +64,9 @@ export function assertG6BEnvironment(hosted, env) {
 export function verifyManifest(manifest) {
   assert.equal(manifest.version, 1);
   assert.equal(manifest.provider, 'postgresql');
-  assert.equal(manifest.migrations.length, 24);
+  assert.equal(manifest.migrations.length, 25);
   const names = manifest.migrations.map((m) => m.name);
-  assert.equal(new Set(names).size, 24);
+  assert.equal(new Set(names).size, 25);
   assert.deepEqual(names, [...names].sort());
   assert.equal(names[0], '20261031154500_slice_2_2_foundation');
   for (const m of manifest.migrations) {
